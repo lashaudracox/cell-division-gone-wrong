@@ -531,26 +531,28 @@ nav { background: rgba(26,58,92,.97); backdrop-filter: blur(8px); position: stic
     <h2 class="section-title">What teachers use to facilitate</h2>
     <p class="section-desc">A complete facilitation system, not just prompts. The guide tells the teacher what to do before, during, and after class based on real student data.</p>
 
-    <div class="materials-grid">
+    <!-- align-items:start prevents the two short cards from stretching
+         to fill the height of the taller In-Class Pack card -->
+    <div class="materials-grid" style="align-items: start;">
 
       <div class="mat-card">
-        <div class="mat-card-header">
-          <div class="mat-icon" style="background:#EEF5FB">📋</div>
+        <div class="mat-card-header" style="padding: 14px 18px 10px;">
+          <div class="mat-icon" style="background:#EEF5FB; width:38px; height:38px; font-size:17px;">📋</div>
           <div>
             <div class="mat-type" style="color:var(--navy)">Facilitation Guide</div>
             <h3>Teacher Facilitation Guide</h3>
           </div>
         </div>
-        <div class="mat-card-body">
-          Includes a 50-minute facilitation timeline, exit ticket triage table, discussion prompts organized by Bloom's level with 3-level exemplar responses, struggle signal panels at every step, 4 misconception entries, 5 rapid whole-class detection techniques, and a post-class sorting protocol.
+        <div class="mat-card-body" style="padding: 0 18px 12px;">
+          50-minute timeline, exit ticket triage table, Bloom's-organized discussion prompts with 3-level exemplar responses, struggle signal panels, misconception corrections, and a differentiation matrix.
         </div>
-        <div class="mat-card-features">
+        <div class="mat-card-features" style="padding: 10px 18px;">
           <span class="feature-tag">Struggle signals</span>
           <span class="feature-tag">3-level exemplars</span>
           <span class="feature-tag">50-min timeline</span>
           <span class="feature-tag">Differentiation matrix</span>
         </div>
-        <div class="mat-card-footer">
+        <div class="mat-card-footer" style="padding: 10px 18px;">
           <a href="Teacher_Facilitation_Guide_v2.docx" class="mat-btn primary">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Guide
@@ -559,23 +561,23 @@ nav { background: rgba(26,58,92,.97); backdrop-filter: blur(8px); position: stic
       </div>
 
       <div class="mat-card">
-        <div class="mat-card-header">
-          <div class="mat-icon" style="background:#F5F0FF">📄</div>
+        <div class="mat-card-header" style="padding: 14px 18px 10px;">
+          <div class="mat-icon" style="background:#F5F0FF; width:38px; height:38px; font-size:17px;">📄</div>
           <div>
             <div class="mat-type" style="color:var(--purple)">Leave-Behind Document</div>
             <h3>Design Rationale</h3>
           </div>
         </div>
-        <div class="mat-card-body">
-          A 6-page document explaining the theoretical and empirical foundation behind every design decision in this module — from the objective's Bloom's level to the structure of the simulator scenarios to why Maya appears in every document.
+        <div class="mat-card-body" style="padding: 0 18px 12px;">
+          6-page document explaining the research foundation behind every design decision — from Bloom's level choices to simulator structure to why Maya anchors every document.
         </div>
-        <div class="mat-card-features">
+        <div class="mat-card-features" style="padding: 10px 18px;">
           <span class="feature-tag">Merrill (2002)</span>
           <span class="feature-tag">Sweller (2019)</span>
           <span class="feature-tag">Keller ARCS (1987)</span>
           <span class="feature-tag">Belland et al. (2013)</span>
         </div>
-        <div class="mat-card-footer">
+        <div class="mat-card-footer" style="padding: 10px 18px;">
           <a href="Design_Rationale_Document.docx" class="mat-btn" style="background:var(--purple);color:#fff;flex:1;min-width:0;">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Rationale

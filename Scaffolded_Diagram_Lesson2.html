@@ -108,7 +108,7 @@ h2.section-title {
   display: flex; justify-content: center; margin-bottom: 20px;
 }
 svg.cycle-diagram {
-  width: 100%; max-width: 560px; height: auto;
+  width: 100%; max-width: 840px; height: auto;
 }
 
 /* ── PHASE LEGEND ── */
@@ -293,64 +293,186 @@ svg.cycle-diagram {
     <h2 class="section-title">Where Each Phase Fits</h2>
 
     <div class="diagram-svg-wrap">
-      <svg class="cycle-diagram" viewBox="0 0 560 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cell cycle diagram showing G1, S, G2, M phases and three checkpoints">
+      <!--
+        Coordinate reference (all values pre-calculated):
+        Center: cx=420, cy=315  Ring radius r=190  Stroke-width sw=64
+        Angles measured clockwise from 12 o'clock (top).
+        Point formula: x = cx + r·sin(θ°),  y = cy − r·cos(θ°)
 
-        <!-- Background circle (track) -->
-        <circle cx="280" cy="260" r="195" fill="none" stroke="#D1E4F0" stroke-width="52"/>
+        Phase boundaries:
+          G1  0°→148°   p(0°)=(420,125)   p(148°)=(521,476)
+          S   148°→245° p(245°)=(248,395)
+          G2  245°→302° p(302°)=(259,214)
+          M   302°→360° returns to (420,125)
 
-        <!-- Phase arcs - colors for each phase segment -->
-        <!-- G1 phase ~120° starting at 270° (top), going clockwise -->
-        <path d="M280,65 A195,195 0 0,1 449,358" fill="none" stroke="#0E7C86" stroke-width="52" stroke-linecap="butt"/>
-        <!-- S phase ~90° -->
-        <path d="M449,358 A195,195 0 0,1 280,455" fill="none" stroke="#7C3AED" stroke-width="52" stroke-linecap="butt"/>
-        <!-- G2 phase ~60° -->
-        <path d="M280,455 A195,195 0 0,1 141,358" fill="none" stroke="#1A3A5C" stroke-width="52" stroke-linecap="butt"/>
-        <!-- M phase ~90° -->
-        <path d="M141,358 A195,195 0 0,1 280,65" fill="none" stroke="#C8102E" stroke-width="52" stroke-linecap="butt"/>
+        Arc flags: all arcs ≤180° so large-arc=0; sweep-flag=1 (clockwise)
+      -->
+      <svg class="cycle-diagram"
+           viewBox="0 0 840 630"
+           xmlns="http://www.w3.org/2000/svg"
+           role="img"
+           aria-label="Cell cycle diagram showing G1, S, G2, M phases and three checkpoints">
+        <defs>
+          <!-- Arrowhead for G0 line -->
+          <marker id="arrowG0" markerWidth="8" markerHeight="8"
+                  refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 Z" fill="#C07800"/>
+          </marker>
+          <!-- Arrowhead for clockwise hint -->
+          <marker id="arrowCW" markerWidth="7" markerHeight="7"
+                  refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 Z" fill="#94A3B8"/>
+          </marker>
+          <!-- Connector line arrowhead (subtle) -->
+          <marker id="connDot" markerWidth="4" markerHeight="4"
+                  refX="2" refY="2" orient="auto">
+            <circle cx="2" cy="2" r="2" fill="#D1E4F0"/>
+          </marker>
+        </defs>
 
-        <!-- White overlay for inner circle -->
-        <circle cx="280" cy="260" r="168" fill="white"/>
+        <!-- ── PHASE ARCS ─────────────────────────────────────── -->
+        <!-- G1  0°→148°  teal -->
+        <path d="M 420,125 A 190,190 0 0,1 521,476"
+              fill="none" stroke="#0E7C86" stroke-width="64" stroke-linecap="butt"/>
+        <!-- S  148°→245°  purple -->
+        <path d="M 521,476 A 190,190 0 0,1 248,395"
+              fill="none" stroke="#7C3AED" stroke-width="64" stroke-linecap="butt"/>
+        <!-- G2  245°→302°  navy -->
+        <path d="M 248,395 A 190,190 0 0,1 259,214"
+              fill="none" stroke="#1A3A5C" stroke-width="64" stroke-linecap="butt"/>
+        <!-- M  302°→360°  red -->
+        <path d="M 259,214 A 190,190 0 0,1 420,125"
+              fill="none" stroke="#C8102E" stroke-width="64" stroke-linecap="butt"/>
 
-        <!-- Inner label -->
-        <text x="280" y="248" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="16" font-weight="700" fill="#1A3A5C">Cell Cycle</text>
-        <text x="280" y="270" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#64748B">Continuous process</text>
-        <text x="280" y="288" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#64748B">in dividing cells</text>
+        <!-- ── WHITE INNER CIRCLE ─────────────────────────────── -->
+        <circle cx="420" cy="315" r="155" fill="white"/>
 
-        <!-- PHASE LABELS ON ARCS -->
-        <!-- G1 label -->
-        <text x="388" y="185" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(30 388 185)">G1</text>
-        <text x="395" y="203" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(30 395 203)">Growth &amp; prep</text>
-        <!-- S label -->
-        <text x="418" y="395" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(-30 418 395)">S</text>
-        <text x="408" y="413" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(-30 408 413)">DNA replication</text>
-        <!-- G2 label -->
-        <text x="186" y="430" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(60 186 430)">G2</text>
-        <text x="195" y="446" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(60 195 446)">Final prep</text>
-        <!-- M label -->
-        <text x="155" y="185" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(-30 155 185)">M</text>
-        <text x="155" y="203" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(-30 155 203)">Mitosis</text>
+        <!-- ── CENTER TEXT ────────────────────────────────────── -->
+        <text x="420" y="303" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif" font-size="17" font-weight="700"
+              fill="#1A3A5C">Cell Cycle</text>
+        <text x="420" y="323" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif" font-size="12"
+              fill="#64748B">Continuous process</text>
+        <text x="420" y="340" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif" font-size="12"
+              fill="#64748B">in dividing cells</text>
 
-        <!-- CHECKPOINT MARKERS — diamond shapes at transitions -->
-        <!-- G1/S checkpoint (right, ~3 o'clock area) -->
-        <polygon points="449,310 467,330 449,350 431,330" fill="#F0A500" stroke="white" stroke-width="2"/>
-        <text x="490" y="325" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#1A3A5C">G1/S</text>
-        <text x="490" y="340" font-family="DM Sans, sans-serif" font-size="10" fill="#64748B">Checkpoint ✓</text>
+        <!-- ── CLOCKWISE DIRECTION HINT ───────────────────────── -->
+        <!-- Small arc at top with arrowhead, showing clockwise travel -->
+        <path d="M 382,85 A 238,238 0 0,1 458,85"
+              fill="none" stroke="#94A3B8" stroke-width="1.5"
+              marker-end="url(#arrowCW)"/>
+        <text x="420" y="72" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif" font-size="9.5"
+              fill="#94A3B8">clockwise</text>
 
-        <!-- G2/M checkpoint (bottom-left) -->
-        <polygon points="190,390 208,408 190,426 172,408" fill="#F0A500" stroke="white" stroke-width="2"/>
-        <text x="80" y="400" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#1A3A5C">G2/M</text>
-        <text x="80" y="415" font-family="DM Sans, sans-serif" font-size="10" fill="#64748B">Checkpoint ✓</text>
+        <!-- ══════════════════════════════════════════════════════
+             PHASE LABEL CALLOUTS
+             Each label: connector line from arc midpoint → chip
+             G1  midpoint at 74°: arc=(603,263)  label right
+             S   midpoint at 196.5°: arc=(366,497)  label below
+             G2  midpoint at 273.5°: arc=(230,327)  label left
+             M   midpoint at 330°: arc=(325,151)  label upper-left
+        ══════════════════════════════════════════════════════════ -->
 
-        <!-- Spindle checkpoint (top-left, at G2→M) -->
-        <polygon points="183,142 201,124 219,142 201,160" fill="#F0A500" stroke="white" stroke-width="2"/>
-        <text x="50" y="128" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#1A3A5C">Spindle</text>
-        <text x="50" y="143" font-family="DM Sans, sans-serif" font-size="10" fill="#64748B">Checkpoint ✓</text>
+        <!-- G1 callout — right side -->
+        <line x1="603" y1="263" x2="670" y2="241"
+              stroke="#0E7C86" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <rect x="670" y="222" width="152" height="42" rx="6"
+              fill="#EBF7F8" stroke="#0E7C86" stroke-width="1.2"/>
+        <text x="682" y="237" font-family="DM Sans, Arial, sans-serif"
+              font-size="13" font-weight="700" fill="#0E7C86">G1 — First Gap</text>
+        <text x="682" y="253" font-family="DM Sans, Arial, sans-serif"
+              font-size="10.5" fill="#64748B">Growth · protein synthesis</text>
 
-        <!-- G0 arrow (off G1) -->
-        <path d="M340,95 Q370,40 400,38" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <polygon points="400,38 408,28 412,42" fill="#94A3B8"/>
-        <text x="405" y="32" font-family="DM Sans, sans-serif" font-size="11" fill="#64748B">G0</text>
-        <text x="403" y="45" font-family="DM Sans, sans-serif" font-size="9" fill="#94A3B8">(quiescent)</text>
+        <!-- S callout — bottom -->
+        <line x1="366" y1="497" x2="366" y2="558"
+              stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <rect x="278" y="558" width="176" height="42" rx="6"
+              fill="#F0EBFF" stroke="#7C3AED" stroke-width="1.2"/>
+        <text x="366" y="574" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="13" font-weight="700" fill="#7C3AED">S — Synthesis Phase</text>
+        <text x="366" y="590" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="10.5" fill="#64748B">DNA replication (2N → 4N)</text>
+
+        <!-- G2 callout — left side -->
+        <line x1="230" y1="327" x2="160" y2="327"
+              stroke="#1A3A5C" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <rect x="8" y="308" width="152" height="42" rx="6"
+              fill="#EEF5FB" stroke="#1A3A5C" stroke-width="1.2"/>
+        <text x="84" y="324" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="13" font-weight="700" fill="#1A3A5C">G2 — Second Gap</text>
+        <text x="84" y="340" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="10.5" fill="#64748B">Final prep · DNA check</text>
+
+        <!-- M callout — upper left -->
+        <line x1="325" y1="151" x2="272" y2="110"
+              stroke="#C8102E" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <rect x="120" y="91" width="152" height="42" rx="6"
+              fill="#FDE8EC" stroke="#C8102E" stroke-width="1.2"/>
+        <text x="196" y="107" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="13" font-weight="700" fill="#C8102E">M — Mitosis</text>
+        <text x="196" y="123" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="10.5" fill="#64748B">Chromosome separation</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             CHECKPOINT MARKERS
+             Diamond polygons at phase transition points on outer edge (r=223).
+             G1/S at 148°: (538, 504)
+             G2/M at 302°: (232, 197)
+             Spindle at 330°: (309, 123)
+        ══════════════════════════════════════════════════════════ -->
+
+        <!-- G1/S Checkpoint — lower right -->
+        <polygon points="538,490 552,504 538,518 524,504"
+                 fill="#F0A500" stroke="white" stroke-width="2"/>
+        <text x="558" y="500" font-family="DM Sans, Arial, sans-serif"
+              font-size="11" font-weight="700" fill="#C07800">G1/S Checkpoint</text>
+        <text x="558" y="514" font-family="DM Sans, Arial, sans-serif"
+              font-size="10" fill="#64748B">Restricts entry into S phase</text>
+
+        <!-- G2/M Checkpoint — upper left of ring -->
+        <polygon points="232,183 246,197 232,211 218,197"
+                 fill="#F0A500" stroke="white" stroke-width="2"/>
+        <text x="190" y="189" font-family="DM Sans, Arial, sans-serif"
+              font-size="11" font-weight="700" fill="#C07800"
+              text-anchor="end">G2/M Checkpoint</text>
+        <text x="190" y="203" font-family="DM Sans, Arial, sans-serif"
+              font-size="10" fill="#64748B" text-anchor="end">Verifies DNA replication</text>
+
+        <!-- Spindle Checkpoint — mid-M phase -->
+        <polygon points="309,109 323,123 309,137 295,123"
+                 fill="#F0A500" stroke="white" stroke-width="2"/>
+        <text x="286" y="155" font-family="DM Sans, Arial, sans-serif"
+              font-size="11" font-weight="700" fill="#C07800"
+              text-anchor="middle">Spindle Checkpoint</text>
+        <text x="286" y="168" font-family="DM Sans, Arial, sans-serif"
+              font-size="10" fill="#64748B" text-anchor="middle">All chromosomes attached?</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             G0 INDICATOR
+             Branches off G1 near 22° (outer edge ≈ 503,109)
+             Dashed gold line to label box at upper right
+        ══════════════════════════════════════════════════════════ -->
+        <path d="M 503,109 Q 555,60 610,50"
+              fill="none" stroke="#C07800" stroke-width="2.2"
+              stroke-dasharray="6,4" marker-end="url(#arrowG0)"/>
+        <!-- G0 label box -->
+        <rect x="612" y="32" width="138" height="44" rx="7"
+              fill="#FFF8E8" stroke="#F0A500" stroke-width="1.8"/>
+        <text x="681" y="50" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="13" font-weight="700" fill="#C07800">G0 Phase</text>
+        <text x="681" y="66" text-anchor="middle"
+              font-family="DM Sans, Arial, sans-serif"
+              font-size="10.5" fill="#64748B">Rest / quiescent state</text>
 
       </svg>
     </div>
