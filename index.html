@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cell Division Gone Wrong | STEMM Education &amp; Outreach</title>
+<title>Cell Division Gone Wrong | STEM Education &amp; Outreach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
@@ -823,13 +823,40 @@
     left: 46px;
   }
   .row-label .mtx-tooltip::before { left: 18px; }
-  /* Column tooltip appears below column header, centered */
+  /* Column tooltip appears below column header. Default = centered,
+     but edge columns get left/right anchors so the tooltip never
+     clips past the viewport on either side. */
   .lesson-col .mtx-tooltip {
     top: calc(100% - 2px);
     left: 50%;
     margin-left: -140px;
   }
   .lesson-col .mtx-tooltip::before { left: 50%; margin-left: -5px; }
+
+  /* First lesson column — anchor tooltip to the left edge of the header
+     so it doesn't clip off the left side of the table. */
+  .lesson-col:first-of-type .mtx-tooltip {
+    left: 0;
+    right: auto;
+    margin-left: 0;
+  }
+  .lesson-col:first-of-type .mtx-tooltip::before {
+    left: 24px;
+    margin-left: 0;
+  }
+
+  /* Last lesson column — anchor tooltip to the right edge of the header
+     so it doesn't clip off the right side of the page. */
+  .lesson-col:last-of-type .mtx-tooltip {
+    left: auto;
+    right: 0;
+    margin-left: 0;
+  }
+  .lesson-col:last-of-type .mtx-tooltip::before {
+    left: auto;
+    right: 24px;
+    margin-left: 0;
+  }
   .row-label:hover .mtx-tooltip,
   .row-label:focus-within .mtx-tooltip,
   .lesson-col:hover .mtx-tooltip,
@@ -921,7 +948,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-badge">STEMM Education &amp; Outreach · Grades 9–10</div>
+    <div class="hero-badge">STEM Education &amp; Outreach · Grades 9–10</div>
     <h1>Cell Division<br><span>Gone Wrong</span></h1>
     <p class="hero-sub">Understanding Cancer at the Cellular Level</p>
     <div class="hero-meta">
@@ -943,8 +970,8 @@
 <section id="overview">
   <div class="container">
     <span class="section-label">Module Overview</span>
-    <h2 class="section-title">A standards-aligned module on the<br>biology of cancer</h2>
-    <p class="section-desc">Students learn how mutations in cell cycle checkpoint genes lead to uncontrolled cell division — and why that's the biological basis of cancer — through a flipped classroom sequence grounded in biomedical research and anchored to real patient cases.</p>
+    <h2 class="section-title">An NGSS standards-aligned module on the<br>biology of cancer</h2>
+    <p class="section-desc">Students learn how mutations in cell cycle checkpoint genes lead to uncontrolled cell division and why that's the biological basis of cancer through a flipped classroom sequence grounded in biomedical research and anchored to real patient cases.</p>
 
     <p class="matrix-intro">The matrix below consolidates learning goals, NGSS standards, and the four-lesson sequence into a single curriculum map. Hover or tap any row label or lesson column to reveal its full text and activities.</p>
 
@@ -1117,7 +1144,7 @@
   <div class="container">
     <span class="section-label">Student Materials</span>
     <h2 class="section-title">What students use</h2>
-    <p class="section-desc">Three interactive and print-ready resources for the Lesson 2 flipped classroom experience — grounded in cognitive load theory, Merrill's First Principles, and the ARCS motivation model. All HTML files open in any browser with no login or installation required.</p>
+    <p class="section-desc">Three interactive and print-ready resources for the Lesson 2 flipped classroom experience grounded in cognitive load theory, Merrill's First Principles, and the ARCS motivation model. All HTML files open in any browser with no login or installation required.</p>
 
     <div class="materials-grid">
 
@@ -1185,7 +1212,7 @@
           </div>
         </div>
         <div class="mat-card-body">
-          A structured 4-page note-catcher spanning the full lesson arc — cell cycle diagram, definition boxes, two-hit hypothesis diagram, 4-scenario simulator tracker, Maya case study analysis table, synthesis questions, and a self-check tied directly to the learning objective.
+          A structured 4-page note-catcher spanning the full lesson arc: cell cycle diagram, definition boxes, two-hit hypothesis diagram, 4-scenario simulator tracker, Maya case study analysis table, synthesis questions, and a self-check tied directly to the learning objective.
         </div>
         <div class="mat-card-features">
           <span class="feature-tag">4 pages</span>
@@ -1213,7 +1240,7 @@
   <div class="container">
     <span class="section-label">Teacher Materials</span>
     <h2 class="section-title">What teachers use to facilitate</h2>
-    <p class="section-desc">A complete facilitation system — not just prompts. The guide tells the teacher what to do before, during, and after class based on real student data.</p>
+    <p class="section-desc">A complete facilitation system, not just prompts. The guide tells the teacher what to do before, during, and after class based on real student data.</p>
 
     <div class="materials-grid cols-2">
 
@@ -1278,7 +1305,7 @@
   <div class="container">
     <span class="section-label">Research Connection</span>
     <h2 class="section-title">Every connection is grounded in real science</h2>
-    <p class="section-desc">Every biomedical reference in this module is tied to actual research, real patient biology, and documented clinical outcomes — not generic examples chosen for convenience.</p>
+    <p class="section-desc">Every biomedical reference in this module is tied to actual research, real patient biology, and documented clinical outcomes, not generic examples chosen for convenience.</p>
 
     <div class="stjude-banner">
       <div class="stjude-connection">
@@ -1294,7 +1321,7 @@
       <div class="stjude-connection">
         <div class="conn-label" style="color:#FF8090">Patient Narrative</div>
         <h4>Meet Maya</h4>
-        <p>The case study is built on the real biology of ALL — lymphoblasts, bone marrow, tumor suppressor mutations in lymphocyte development. Fictional patient, fully accurate science grounded in published clinical profiles.</p>
+        <p>The case study is built on the real biology of Acute lymphoblastic leukemia (ALL) — lymphoblasts, bone marrow, tumor suppressor mutations in lymphocyte development. Fictional patient, fully accurate science grounded in published clinical profiles.</p>
       </div>
       <div class="stjude-connection">
         <div class="conn-label" style="color:#C4B5FD">Treatment Bridge</div>
@@ -1320,13 +1347,13 @@
   <div class="container">
     <span class="section-label">Instructional Design</span>
     <h2 class="section-title">Every decision has a reason</h2>
-    <p class="section-desc">Key design choices — and the research that supports them.</p>
+    <p class="section-desc">Key design choices and the research that supports them.</p>
 
     <div class="rationale-grid">
       <div class="rationale-card" style="border-top-color:var(--teal)">
         <div class="r-num">01</div>
-        <h4>Maya is the instructional anchor — not decoration</h4>
-        <p>Merrill's First Principles argue that component skills are acquired most durably when taught in the context of a real problem. Every document connects back to Maya so the summative assessment feels like transfer, not a new task.</p>
+        <h4>Maya is the instructional anchor, not decoration</h4>
+        <p>Merrill's First Principles argue that component skills are acquired most durably when taught in the context of a real problem. Every document connects back to Maya, so the summative assessment feels like transfer, not a new task.</p>
         <div class="cite">Merrill, M.D. (2002). First principles of instruction.</div>
       </div>
       <div class="rationale-card" style="border-top-color:var(--gold)">
@@ -1338,13 +1365,13 @@
       <div class="rationale-card" style="border-top-color:var(--red)">
         <div class="r-num">03</div>
         <h4>The teacher guide treats exit data as instructional input</h4>
-        <p>Harris & Jones define formative assessment as measurement that occurs while there is still time to adjust instruction. The triage table makes that adjustment actionable — the teacher knows what to do before students walk in.</p>
+        <p>Harris & Jones define formative assessment as measurement that occurs while there is still time to adjust instruction. The triage table makes that adjustment actionable. The teacher knows what to do before students walk in.</p>
         <div class="cite">Harris, L. & Jones, M.G. (2021). Measuring student learning.</div>
       </div>
       <div class="rationale-card" style="border-top-color:var(--navy)">
         <div class="r-num">04</div>
         <h4>The simulator is application, not presentation</h4>
-        <p>A video of the cell cycle is Show. The simulator is Do. Merrill is explicit: remembering information is insufficient. Students control the scenario, step through consequences, and encounter real-time outcomes.</p>
+        <p>A video of the cell cycle is "Show." The simulator is "Do." Merrill is explicit: remembering information is insufficient. Students control the scenario, step through consequences, and encounter real-time outcomes.</p>
         <div class="cite">Merrill, M.D. (2002). First principles of instruction.</div>
       </div>
       <div class="rationale-card" style="border-top-color:var(--purple)">
@@ -1356,7 +1383,7 @@
       <div class="rationale-card" style="border-top-color:var(--green)">
         <div class="r-num">06</div>
         <h4>Guided notes scaffold without removing demand</h4>
-        <p>Fill-in frames offload organizational cognitive work without removing conceptual demand. Students must retrieve and apply vocabulary — not copy from a completed answer. Two support levels: vocabulary scaffolds and open analysis rows.</p>
+        <p>Fill-in frames offload organizational cognitive work without removing conceptual demand. Students must retrieve and apply vocabulary, not copy from a completed answer. Two support levels: vocabulary scaffolds and open analysis rows.</p>
         <div class="cite">Belland, Kim & Hannafin (2013). Scaffolds for PBL environments.</div>
       </div>
     </div>
@@ -1376,7 +1403,7 @@
       <div>
         <h3>LaShaudra Cox</h3>
         <div class="role">Instructional Designer</div>
-        <p>This module was designed as part of the STEMM Education & Outreach instructional design challenge at a children's cancer research hospital. Every design decision — from the structure of the digital lesson to the layout of the guided notes to the architecture of the checkpoint simulator — was made intentionally, grounded in published instructional design research, and in service of the learning objective and the students who will encounter it.</p>
+        <p>This module was designed as part of an instructional design challenge for a children's cancer research hospital. Every design decision, from the structure of the digital lesson to the layout of the guided notes to the architecture of the checkpoint simulator, was made intentionally, grounded in published instructional design research, and in service of the learning objective and the students who will encounter it. For any questions or concerns, please get in touch with the designer at coxl2@outlook.com. Designer Portfolio: https://lashaudracoxportfolio.com</p>
       </div>
     </div>
   </div>
@@ -1386,7 +1413,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-left">
-      <p><strong>Cell Division Gone Wrong</strong> · STEMM Education &amp; Outreach</p>
+      <p><strong>Cell Division Gone Wrong</strong> · STEM Education &amp; Outreach</p>
       <p style="margin-top:4px">Grades 9–10 · Biology / Life Science · Flipped Classroom Module</p>
     </div>
     <div class="footer-right">
