@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exit Ticket — When Controls Break Down | Lesson 2</title>
+<style>
+  :root {
+    --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
+    --green:#16A34A; --light:#EEF5FB; --border:#D1E4F0;
+    --dark:#1E293B; --gray:#64748B; --muted:#94A3B8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:var(--dark);padding:20px;}
+
+  .toolbar{background:var(--navy);border-radius:8px;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
+  .btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;}
+  .btn-print{background:var(--red);color:#fff;}
+  .btn-print:hover{background:#A00024;}
+  .save-msg{font-size:11px;color:#7FD4D8;font-style:italic;}
+
+  .ticket{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+
+  /* HEADER */
+  .ticket-header{background:var(--navy);padding:18px 24px;}
+  .header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:3px;text-transform:uppercase;}
+  .ticket-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:2px;}
+  .ticket-sub{font-size:12px;color:#A8C8E8;}
+  .meta-row{display:flex;gap:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);}
+  .meta-f{flex:1;}
+  .meta-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;margin-bottom:3px;}
+  .meta-in{width:100%;background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.2);color:#fff;font-size:13px;padding:3px 0;outline:none;font-family:inherit;}
+  .meta-in::placeholder{color:rgba(255,255,255,.25);}
+  .meta-in:focus{border-bottom-color:var(--teal);}
+
+  /* OBJECTIVE STRIP */
+  .obj-strip{background:#EBF7F8;border-left:4px solid var(--teal);padding:9px 18px;font-size:12.5px;line-height:1.6;color:var(--dark);}
+  .obj-strip strong{color:var(--teal);}
+
+  /* INSTRUCTIONS */
+  .instr-bar{background:var(--light);padding:8px 20px;font-size:11.5px;color:var(--gray);border-bottom:1px solid var(--border);}
+  .instr-bar strong{color:var(--navy);}
+
+  /* QUESTIONS */
+  .q-section{padding:18px 24px;}
+  .q-block{margin-bottom:24px;}
+  .q-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+  .q-text{font-size:14px;font-weight:600;color:var(--dark);line-height:1.5;margin-bottom:14px;}
+
+  /* MC options */
+  .options{display:flex;flex-direction:column;gap:6px;}
+  .opt{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--dark);line-height:1.4;}
+  .opt:hover{border-color:var(--teal);background:#F0FAFA;}
+  .opt.selected{border-color:var(--teal);background:#EBF7F8;}
+  .opt-letter{width:22px;height:22px;border-radius:50%;background:var(--light);border:1.5px solid var(--border);font-size:11px;font-weight:700;color:var(--gray);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s;}
+  .opt.selected .opt-letter{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  /* Short answer */
+  .sa-area{width:100%;min-height:90px;border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;font-size:13px;font-family:inherit;color:var(--dark);resize:vertical;outline:none;line-height:1.6;transition:border-color .15s;}
+  .sa-area:focus{border-color:var(--teal);}
+  .sa-prompt{font-size:11px;color:var(--muted);margin-top:6px;font-style:italic;}
+
+  /* DIVIDER */
+  .q-divider{height:1px;background:var(--border);margin:0 24px;}
+
+  /* FOOTER */
+  .ticket-footer{padding:12px 24px;background:var(--light);border-top:1px solid var(--border);font-size:10.5px;color:var(--muted);font-style:italic;text-align:center;}
+
+  /* CUT LINE for teacher version */
+  .cut-line{border-top:1.5px dashed #CBD5E1;text-align:center;font-size:9.5px;color:var(--muted);padding:6px 0;margin:20px 0 0;letter-spacing:1px;}
+
+  /* TEACHER NOTE SECTION */
+  .teacher-block{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);margin-top:0;}
+  .teacher-header{background:#0D2D47;padding:10px 20px;display:flex;align-items:center;gap:10px;}
+  .teacher-header span{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;}
+  .teacher-body{padding:16px 20px;}
+  .triage-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+  .triage-table th{background:var(--navy);color:#fff;padding:6px 10px;font-size:10.5px;font-weight:600;text-align:left;}
+  .triage-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
+  .triage-table tr:last-child td{border-bottom:none;}
+  .triage-table tr:nth-child(even) td{background:#F8FBFF;}
+  .pattern-pill{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+  .p-green{background:#D1FAE5;color:#065F46;}
+  .p-gold{background:#FEF3C7;color:#92400E;}
+  .p-red{background:#FEE2E2;color:#991B1B;}
+
+  /* PRINT */
+  @media print {
+    body{background:#fff;padding:0;}
+    .toolbar{display:none !important;}
+    .cut-line{display:block;}
+    .ticket,.teacher-block{box-shadow:none;border-radius:0;}
+    .meta-in{border-bottom:1px solid #aaa !important;background:transparent !important;}
+    .sa-area{border:none !important;border-bottom:1px solid #ccc !important;min-height:0 !important;}
+    .opt{border:1px solid #ccc !important;}
+    .opt.selected{border-color:#0E7C86 !important;background:#EBF7F8 !important;}
+    .obj-strip,.instr-bar,.teacher-header,.triage-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    @page{margin:0.65in;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="tb-left">📋 Exit Ticket — When Controls Break Down · Lesson 2</div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <span class="save-msg" id="saveMsg"></span>
+    <button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+</div>
+
+<!-- STUDENT TICKET -->
+<div class="ticket">
+
+  <div class="ticket-header">
+    <div class="header-top">
+      <div>
+        <span class="badge">Lesson 2 · Exit Ticket</span>
+        <div class="ticket-title" style="margin-top:6px;">When Controls Break Down</div>
+        <div class="ticket-sub">Complete after the online module — before your next class session</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:#4A7A9B;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Due</div>
+        <input class="meta-in" id="f-due" placeholder="Before class" style="width:130px;text-align:right;">
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-f"><div class="meta-lbl">Name</div><input class="meta-in" id="f-name" placeholder="Your name"></div>
+      <div class="meta-f"><div class="meta-lbl">Date</div><input class="meta-in" id="f-date" type="date"></div>
+      <div class="meta-f"><div class="meta-lbl">Period / Class</div><input class="meta-in" id="f-period" placeholder="e.g. Period 3"></div>
+    </div>
+  </div>
+
+  <div class="obj-strip">
+    <strong>Objective:</strong> Students will <strong style="color:var(--teal)">analyze</strong> how mutations in cell cycle checkpoint genes lead to uncontrolled cell division and <strong style="color:var(--teal)">explain</strong> why this is the biological basis of cancer.
+  </div>
+
+  <div class="instr-bar">
+    <strong>Instructions:</strong> Answer all three questions honestly. Your teacher will review these before class to plan tomorrow's warm-up. There are no trick questions — write what you actually think.
+  </div>
+
+  <div class="q-section">
+
+    <!-- Q1 -->
+    <div class="q-block">
+      <div class="q-label">Question 1 of 3 · Multiple Choice</div>
+      <div class="q-text">A cell's G1 checkpoint detects significant DNA damage. Under normal conditions, what is the most likely outcome?</div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,'q1')" data-val="A">
+          <div class="opt-letter">A</div>
+          <span>The cell ignores the damage and proceeds to the S phase immediately</span>
+        </div>
+        <div class="opt" onclick="selectOpt(this,'q1')" data-val="B">
+          <div class="opt-letter">B</div>
+          <span>p53 is activated, the cell cycle pauses, and DNA repair mechanisms are triggered — or the cell undergoes apoptosis if the damage is irreparable</span>
+        </div>
+        <div class="opt" onclick="selectOpt(this,'q1')" data-val="C">
+          <div class="opt-letter">C</div>
+          <span>The cell skips G1 entirely and enters the M phase directly</span>
+        </div>
+        <div class="opt" onclick="selectOpt(this,'q1')" data-val="D">
+          <div class="opt-letter">D</div>
+          <span>The G2 checkpoint is notified but G1 continues normally</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <!-- Q2 -->
+    <div class="q-block" style="margin-top:24px;">
+      <div class="q-label">Question 2 of 3 · Multiple Choice</div>
+      <div class="q-text">Which combination of mutations would be most likely to result in uncontrolled cell division?</div>
+      <div class="options">
+        <div class="opt" onclick="selectOpt(this,'q2')" data-val="A">
+          <div class="opt-letter">A</div>
+          <span>A mutation that slightly slows DNA replication during S phase</span>
+        </div>
+        <div class="opt" onclick="selectOpt(this,'q2')" data-val="B">
+          <div class="opt-letter">B</div>
+          <span>A single mutated copy of a tumor suppressor gene</span>
+        </div>
+        <div class="opt" onclick="selectOpt(this,'q2')" data-val="C">
+          <div class="opt-letter">C</div>
+          <span>A mutation in a non-coding region with no effect on protein production</span>
+        </div>
+        <div class="opt" onclick="selectOpt(this,'q2')" data-val="D">
+          <div class="opt-letter">D</div>
+          <span>An activated oncogene (always-on growth signal) <strong>and</strong> loss of both copies of a tumor suppressor gene</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <!-- Q3 SHORT ANSWER -->
+    <div class="q-block" style="margin-top:24px;">
+      <div class="q-label">Question 3 of 3 · Short Answer</div>
+      <div class="q-text">Name one gene or protein that acts as a cell cycle checkpoint regulator. If this gene were to mutate and stop working, predict what might happen to the cell. Use evidence from what you learned in this module.</div>
+      <textarea class="sa-area" id="q3-sa" placeholder="Name the gene/protein, describe what it normally does, then predict the consequence of its mutation…"></textarea>
+      <div class="sa-prompt">💡 Think about: Which gene? What does it normally do? What happens if both copies are mutated? Use vocabulary from the Word Bank.</div>
+    </div>
+
+  </div><!-- end q-section -->
+
+  <div class="ticket-footer">
+    Lesson 2 of 4 · Cell Division Gone Wrong · STEMM Education &amp; Outreach · Grades 9–10
+  </div>
+
+</div><!-- end student ticket -->
+
+<!-- CUT LINE -->
+<div class="cut-line">✂ &nbsp; &nbsp; TEACHER COPY — Triage Guide &nbsp; &nbsp; ✂</div>
+
+<!-- TEACHER TRIAGE GUIDE -->
+<div class="teacher-block" style="margin-top:0;">
+  <div class="teacher-header">
+    <span>Teacher Copy · Exit Ticket Triage Guide</span>
+  </div>
+  <div class="teacher-body">
+    <p style="font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.6;">
+      Review exit tickets <strong>before class</strong>. Sort into 3 piles using the guide below. Use Q3 short answers as your primary signal — the MC questions confirm or complicate what you see there. Spend the first 7 minutes of class responding to what you found.
+    </p>
+
+    <p style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">Answer Key</p>
+    <div style="display:flex;gap:12px;margin-bottom:14px;font-size:12px;">
+      <div style="background:var(--light);border-radius:5px;padding:7px 12px;flex:1;"><strong>Q1 correct:</strong> B</div>
+      <div style="background:var(--light);border-radius:5px;padding:7px 12px;flex:1;"><strong>Q2 correct:</strong> D</div>
+      <div style="background:var(--light);border-radius:5px;padding:7px 12px;flex:2;"><strong>Q3 look for:</strong> Specific gene named (p53/TP53, Rb, ATM) + mechanism + consequence</div>
+    </div>
+
+    <p style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">Triage Table</p>
+    <table class="triage-table">
+      <thead>
+        <tr><th>Pattern You See</th><th>Pile</th><th>First 7 Minutes of Class</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Both MC correct <em>and</em> Q3 names a specific gene with mechanism + consequence</td>
+          <td><span class="pattern-pill p-green">Proficient ✓</span></td>
+          <td>Assign Maya case study immediately — they're ready. While others warm up, give them the extension prompt: "What second mutation would make Scenario 3 (RAS only) become cancer?"</td>
+        </tr>
+        <tr>
+          <td>MC correct but Q3 only restates the question or uses vague language ("the gene that stops cancer")</td>
+          <td><span class="pattern-pill p-gold">Partial</span></td>
+          <td>Warm-up: "Look at your Word Bank. Point to one gene. Write one sentence: what does it do when it's working correctly?" Then cold-call before Maya case begins.</td>
+        </tr>
+        <tr>
+          <td>One or both MC wrong <em>or</em> Q3 is blank / shows fundamental confusion (e.g., "mutations are always bad")</td>
+          <td><span class="pattern-pill p-red">Needs Support</span></td>
+          <td>Do NOT start Maya case yet. Run a 5-minute Fist-to-Five on the car analogy: "Hold up fingers for how confident you are about the brakes/accelerator model." Then re-teach in 2 minutes before grouping.</td>
+        </tr>
+        <tr>
+          <td>Q1 correct but Q2 wrong (chose B — single copy) — common misconception</td>
+          <td><span class="pattern-pill p-gold">Partial</span></td>
+          <td>Targeted question for the class: "How many copies of a tumor suppressor gene does a cell have? What has to happen to BOTH copies?" Draw the two-hit diagram on the board.</td>
+        </tr>
+        <tr>
+          <td>Q3 short answer contradicts a correct MC answer (shows guessing on MC)</td>
+          <td><span class="pattern-pill p-red">Needs Support</span></td>
+          <td>Pair these students with Proficient students for the Maya case. Give them a specific job: "Your partner explains the gene mutation clue. You explain what that means for the checkpoint."</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const KEY = 'exit_ticket_l2';
+const FIELDS = ['f-name','f-date','f-period','f-due','q3-sa'];
+
+function selectOpt(el, qid) {
+  document.querySelectorAll(`.opt[data-q="${qid}"]`).forEach(o => {
+    o.classList.remove('selected');
+  });
+  // Mark all opts in same question group
+  el.closest('.options').querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.setAttribute('data-q', qid);
+  save(true);
+}
+
+function save(quiet) {
+  const data = {};
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data[id] = el.value;
+  });
+  // Save MC selections
+  ['q1','q2'].forEach(qid => {
+    const sel = document.querySelector(`.opt.selected[data-q="${qid}"]`);
+    data[qid] = sel ? sel.dataset.val : '';
+  });
+  try {
+    localStorage.setItem(KEY, JSON.stringify(data));
+    if (!quiet) {
+      const m = document.getElementById('saveMsg');
+      m.textContent = '✓ Saved';
+      setTimeout(() => m.textContent = '', 2000);
+    }
+  } catch(e) {}
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] != null) el.value = data[id];
+    });
+    // Restore MC
+    ['q1','q2'].forEach(qid => {
+      if (data[qid]) {
+        const opt = document.querySelector(`.opt[data-val="${data[qid]}"]`);
+        if (opt) { opt.classList.add('selected'); opt.setAttribute('data-q', qid); }
+      }
+    });
+  } catch(e) {}
+}
+
+// Auto-save on input
+let timer;
+document.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => save(true), 1500); });
+window.addEventListener('load', load);
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Overview — When Controls Break Down | Lesson 2</title>
+<style>
+  :root {
+    --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
+    --green:#16A34A; --light:#EEF5FB; --border:#D1E4F0;
+    --dark:#1E293B; --gray:#64748B; --muted:#94A3B8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:var(--dark);padding:16px 16px 40px;}
+
+  /* TOOLBAR */
+  .toolbar{background:var(--navy);border-radius:8px;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .tb-label{font-size:12px;color:#A8C8E8;font-weight:600;}
+  .btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;}
+  .btn-print{background:var(--teal);color:#fff;} .btn-print:hover{background:#0A6870;}
+
+  /* PAGE */
+  .page{max-width:760px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+
+  /* HEADER */
+  .doc-header{background:var(--navy);padding:20px 26px;position:relative;overflow:hidden;}
+  .doc-header::after{content:'';position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.04);}
+  .badge{background:var(--teal);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;text-transform:uppercase;display:inline-block;margin-bottom:8px;}
+  .doc-header h1{font-size:21px;font-weight:700;color:#fff;margin-bottom:3px;}
+  .doc-header .sub{font-size:12.5px;color:#A8C8E8;}
+  .meta-row{display:flex;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);}
+  .meta-f{flex:1;}
+  .meta-lbl{font-size:8.5px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;margin-bottom:3px;}
+  .meta-in{width:100%;background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.18);color:#fff;font-size:12.5px;padding:2px 0;outline:none;font-family:inherit;}
+  .meta-in::placeholder{color:rgba(255,255,255,.22);}
+  .meta-in:focus{border-bottom-color:var(--teal);}
+
+  /* BODY */
+  .body{padding:18px 22px;}
+
+  /* OBJECTIVE */
+  .obj-box{background:#EBF7F8;border-left:4px solid var(--teal);padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:16px;font-size:13px;line-height:1.6;}
+  .obj-box .obj-label{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--teal);text-transform:uppercase;margin-bottom:5px;}
+  .obj-box strong{color:var(--teal);}
+
+  /* WHY THIS MATTERS */
+  .why-box{background:var(--navy);border-radius:8px;padding:14px 16px;margin-bottom:16px;position:relative;overflow:hidden;}
+  .why-box::before{content:'';position:absolute;right:-15px;top:-15px;width:90px;height:90px;border-radius:50%;background:rgba(200,16,46,.15);}
+  .why-label{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;margin-bottom:8px;}
+  .why-body{font-size:12.5px;color:#A8C8E8;line-height:1.65;}
+  .why-body strong{color:#fff;}
+  .why-question{margin-top:10px;padding:8px 12px;background:rgba(200,16,46,.15);border-radius:5px;font-size:12px;color:#FF8090;font-style:italic;}
+
+  /* TWO-COL GRID */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+
+  /* ACTIVITY CARDS */
+  .act-card{border:1.5px solid var(--border);border-radius:8px;overflow:hidden;}
+  .act-head{padding:8px 12px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;gap:7px;}
+  .act-head.online{background:var(--teal);}
+  .act-head.inclass{background:var(--navy);}
+  .act-body{padding:10px 12px;background:var(--light);}
+  .act-item{display:flex;gap:8px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--dark);line-height:1.4;}
+  .act-item:last-child{border-bottom:none;}
+  .act-icon{font-size:13px;flex-shrink:0;margin-top:1px;}
+  .act-note{font-size:10.5px;color:var(--muted);padding:6px 0 0;font-style:italic;}
+
+  /* VOCAB TABLE */
+  .vocab-section{margin-bottom:16px;}
+  .section-label{font-size:9.5px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+  .vocab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+  .vocab-chip{background:var(--light);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-size:12px;}
+  .vocab-term{font-weight:700;color:var(--navy);margin-bottom:2px;font-size:12px;}
+  .vocab-hint{font-size:10.5px;color:var(--gray);line-height:1.3;}
+
+  /* BLOOM'S ARC */
+  .blooms-row{display:flex;gap:4px;margin-bottom:16px;}
+  .bloom-pill{flex:1;text-align:center;padding:6px 4px;border-radius:5px;font-size:10.5px;font-weight:700;}
+  .bloom-pill.active{background:var(--teal);color:#fff;}
+  .bloom-pill.dim{background:var(--light);color:var(--muted);}
+  .bloom-arrow{display:flex;align-items:center;color:var(--muted);font-size:12px;}
+
+  /* ASSESSMENT PREVIEW */
+  .assess-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .assess-card{border:1.5px solid var(--border);border-radius:7px;padding:10px 12px;}
+  .assess-card .ac-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+  .assess-card .ac-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+  .assess-card p{font-size:11.5px;color:var(--gray);line-height:1.5;}
+
+  /* SELF-READINESS */
+  .ready-box{background:#FFF9EC;border:1.5px solid var(--gold);border-radius:7px;padding:12px 14px;}
+  .ready-label{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#8A6000;text-transform:uppercase;margin-bottom:8px;}
+  .ready-list{list-style:none;padding:0;}
+  .ready-list li{display:flex;align-items:flex-start;gap:9px;padding:5px 0;border-bottom:1px solid #F0D878;font-size:12.5px;line-height:1.4;}
+  .ready-list li:last-child{border-bottom:none;}
+  .ready-list input[type=checkbox]{width:15px;height:15px;margin-top:2px;accent-color:var(--teal);cursor:pointer;flex-shrink:0;}
+
+  /* FOOTER */
+  .doc-footer{text-align:center;font-size:10px;color:var(--muted);font-style:italic;padding:10px 20px;border-top:1px solid var(--border);}
+
+  /* PRINT */
+  @media print {
+    body{background:#fff;padding:0;}
+    .toolbar{display:none !important;}
+    .page{box-shadow:none;border-radius:0;}
+    .meta-in{border-bottom:1px solid #aaa !important;background:transparent !important;}
+    .doc-header,.why-box,.act-head,.bloom-pill.active{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    @page{margin:0.65in;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="tb-label">📄 Student Lesson Overview — Lesson 2 · When Controls Break Down</span>
+  <button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <span class="badge">Lesson 2 of 4 · Advance Organizer</span>
+    <h1>When Controls Break Down</h1>
+    <p class="sub">Your guide to Lesson 2 — read this <em>before</em> you open the online module</p>
+    <div class="meta-row">
+      <div class="meta-f"><div class="meta-lbl">Name</div><input class="meta-in" id="f-name" placeholder="Your name"></div>
+      <div class="meta-f"><div class="meta-lbl">Date</div><input class="meta-in" id="f-date" type="date"></div>
+      <div class="meta-f"><div class="meta-lbl">Period / Class</div><input class="meta-in" id="f-period" placeholder="e.g. Period 3"></div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- OBJECTIVE -->
+    <div class="obj-box">
+      <div class="obj-label">Learning Objective — What you will be able to do by the end of this lesson</div>
+      I will be able to <strong>analyze</strong> how mutations in cell cycle checkpoint genes lead to uncontrolled cell division and <strong>explain</strong> why this is the biological basis of cancer.
+    </div>
+
+    <!-- WHY THIS MATTERS -->
+    <div class="why-box">
+      <div class="why-label">Why this matters</div>
+      <div class="why-body">
+        In the last lesson, you learned how a healthy cell divides. But cell division goes wrong millions of times per year in human bodies — and when the systems that control it fail, the result is cancer.
+        <br><br>
+        <strong>Meet Maya.</strong> Maya is 12 years old. She was recently diagnosed with Acute Lymphoblastic Leukemia (ALL) — a cancer of the white blood cells. Her genetic panel shows a mutation in a tumor suppressor gene. To understand what happened in her cells, you need to understand what checkpoint proteins do — and what happens when they don't.
+      </div>
+      <div class="why-question">🔎 Keep this question in mind: <em>Which checkpoint failed in Maya's cells — and what does the evidence tell you?</em></div>
+    </div>
+
+    <!-- WHAT YOU WILL DO -->
+    <div class="section-label">What you will do</div>
+    <div class="two-col" style="margin-top:8px;">
+      <div class="act-card">
+        <div class="act-head online">🖥 Online — Before Class</div>
+        <div class="act-body">
+          <div class="act-item"><span class="act-icon">📖</span><span><strong>5-section digital lesson</strong> — Read and complete all embedded questions</span></div>
+          <div class="act-item"><span class="act-icon">💻</span><span><strong>Checkpoint Simulator</strong> — Run all 4 mutation scenarios; record in your guided notes</span></div>
+          <div class="act-item"><span class="act-icon">📝</span><span><strong>Guided Notes</strong> — Fill in as you go through the lesson and simulator</span></div>
+          <div class="act-item"><span class="act-icon">📋</span><span><strong>Exit Ticket</strong> — Complete the 3-question ticket at the end before class</span></div>
+          <div class="act-note">⏱ Estimated time: 35–45 minutes</div>
+        </div>
+      </div>
+      <div class="act-card">
+        <div class="act-head inclass">👥 In Class — Next Session</div>
+        <div class="act-body">
+          <div class="act-item"><span class="act-icon">🔥</span><span><strong>Warm-up</strong> — Based on your exit ticket responses (7 min)</span></div>
+          <div class="act-item"><span class="act-icon">👤</span><span><strong>Maya case study</strong> — Small group analysis: diagnose what went wrong in Maya's cells</span></div>
+          <div class="act-item"><span class="act-icon">💬</span><span><strong>Whole-class debrief</strong> — Build toward the full explanation together</span></div>
+          <div class="act-item"><span class="act-icon">🎥</span><span><strong>Researcher video</strong> — 2-min clip from a pediatric cancer researcher</span></div>
+          <div class="act-note">⏱ Class time: 50 minutes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOOM'S ARC -->
+    <div class="section-label">How your thinking will grow across this lesson</div>
+    <div class="blooms-row" style="margin-top:8px;">
+      <div class="bloom-pill active">Remember<br><span style="font-size:9px;font-weight:400;">Name the phases &amp; checkpoints</span></div>
+      <div class="bloom-arrow">→</div>
+      <div class="bloom-pill active">Understand<br><span style="font-size:9px;font-weight:400;">Explain what mutations do</span></div>
+      <div class="bloom-arrow">→</div>
+      <div class="bloom-pill active">Analyze<br><span style="font-size:9px;font-weight:400;">Diagnose Maya's case</span></div>
+      <div class="bloom-arrow">→</div>
+      <div class="bloom-pill dim">Evaluate<br><span style="font-size:9px;font-weight:400;">Lessons 3–4</span></div>
+    </div>
+
+    <!-- KEY VOCABULARY -->
+    <div class="vocab-section">
+      <div class="section-label">Key vocabulary — preview before you begin</div>
+      <div class="vocab-grid" style="margin-top:8px;">
+        <div class="vocab-chip"><div class="vocab-term">Cell Cycle Checkpoint</div><div class="vocab-hint">A pause point where the cell verifies conditions before advancing</div></div>
+        <div class="vocab-chip"><div class="vocab-term">Tumor Suppressor Gene</div><div class="vocab-hint">A gene coding for "brakes" — slows or stops division</div></div>
+        <div class="vocab-chip"><div class="vocab-term">Oncogene</div><div class="vocab-hint">A mutated gene that sends constant "divide now" signals</div></div>
+        <div class="vocab-chip"><div class="vocab-term">p53 / TP53</div><div class="vocab-hint">The G1 checkpoint protein — the "guardian of the genome"</div></div>
+        <div class="vocab-chip"><div class="vocab-term">Two-Hit Hypothesis</div><div class="vocab-hint">Both copies of a tumor suppressor must mutate to lose function</div></div>
+        <div class="vocab-chip"><div class="vocab-term">Apoptosis</div><div class="vocab-hint">Programmed cell death — a safety valve that cancer bypasses</div></div>
+      </div>
+    </div>
+
+    <!-- ASSESSMENT PREVIEW -->
+    <div class="section-label">How you will be assessed</div>
+    <div class="assess-row" style="margin-top:8px;">
+      <div class="assess-card">
+        <div class="ac-label" style="color:var(--teal);">Formative — During This Lesson</div>
+        <div class="ac-title">Exit Ticket + Case Study Analysis</div>
+        <p>Your exit ticket tells your teacher where to focus class time. The Maya case study group work is observed with a structured rubric. Can you name a specific gene? Can you connect it to a checkpoint?</p>
+      </div>
+      <div class="assess-card">
+        <div class="ac-label" style="color:var(--red);">Summative — End of Module</div>
+        <div class="ac-title">The Research Brief</div>
+        <p>You'll receive a new patient profile — not Maya — with a specific mutation. You'll write a structured brief: what went wrong at the cellular level, what treatment approach could target it, and what a researcher would want to know next.</p>
+      </div>
+    </div>
+
+    <!-- SELF-READINESS CHECKLIST -->
+    <div class="ready-box">
+      <div class="ready-label">📚 Before you open the online module — check your readiness</div>
+      <ul class="ready-list">
+        <li><input type="checkbox" id="r1"><label for="r1">I can name the 4 phases of the cell cycle and roughly describe what happens in each (from Lesson 1)</label></li>
+        <li><input type="checkbox" id="r2"><label for="r2">I understand that DNA carries the instructions for building proteins — and that mutations change those instructions</label></li>
+        <li><input type="checkbox" id="r3"><label for="r3">I have my guided notes document open and ready to fill in as I go</label></li>
+        <li><input type="checkbox" id="r4"><label for="r4">I have the simulator reference guide open in a second tab</label></li>
+        <li><input type="checkbox" id="r5"><label for="r5">I know I need to complete the exit ticket at the end — before class tomorrow</label></li>
+      </ul>
+    </div>
+
+  </div><!-- end body -->
+
+  <div class="doc-footer">
+    Lesson 2 of 4 · Cell Division Gone Wrong · STEMM Education &amp; Outreach · Grades 9–10
+  </div>
+
+</div><!-- end page -->
+
+<script>
+// Save checkbox states
+function save() {
+  const data = {};
+  ['f-name','f-date','f-period'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data[id] = el.value;
+  });
+  ['r1','r2','r3','r4','r5'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data[id] = el.checked;
+  });
+  try { localStorage.setItem('lesson_overview_l2', JSON.stringify(data)); } catch(e) {}
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem('lesson_overview_l2');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    ['f-name','f-date','f-period'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] != null) el.value = data[id];
+    });
+    ['r1','r2','r3','r4','r5'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] != null) el.checked = data[id];
+    });
+  } catch(e) {}
+}
+
+document.addEventListener('input', save);
+document.addEventListener('change', save);
+window.addEventListener('load', load);
+</script>
+</body>
+</html>
