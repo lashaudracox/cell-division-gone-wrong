@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scaffolded Cell Cycle Diagram | Lesson 2 Support</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A3A5C; --teal: #0E7C86; --red: #C8102E; --gold: #F0A500;
+  --green: #16A34A; --purple: #7C3AED;
+  --white: #fff; --light: #EEF5FB; --bg: #F4F7FB;
+  --dark: #1E293B; --gray: #64748B; --muted: #94A3B8;
+  --border: #D1E4F0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); }
+
+/* ── NAV ── */
+.top-bar {
+  background: var(--navy);
+  padding: 12px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.top-bar-brand { font-size: 13px; font-weight: 700; color: #A8C8E8; }
+.print-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--teal); color: #fff;
+  font-size: 13px; font-weight: 600;
+  padding: 8px 18px; border-radius: 7px; border: none;
+  cursor: pointer; transition: background .15s;
+  font-family: inherit;
+}
+.print-btn:hover { background: #0A6870; }
+
+/* ── PAGE ── */
+.page {
+  max-width: 860px; margin: 0 auto; padding: 32px 24px 48px;
+}
+
+/* ── HEADER ── */
+.page-header {
+  background: var(--navy); border-radius: 12px;
+  padding: 28px 32px; margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.page-header::after {
+  content: ''; position: absolute; right: -20px; top: -20px;
+  width: 140px; height: 140px; border-radius: 50%;
+  background: rgba(14,124,134,.25);
+}
+.scaffold-badge {
+  display: inline-block;
+  background: var(--gold); color: var(--dark);
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  padding: 4px 12px; border-radius: 4px; margin-bottom: 12px;
+}
+.page-header h1 { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.page-header p { font-size: 13.5px; color: #A8C8E8; line-height: 1.6; max-width: 560px; }
+
+/* ── INFO BOX ── */
+.info-box {
+  background: #FFF8E8; border: 1.5px solid var(--gold);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 24px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.info-box .icon { font-size: 20px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+.info-box p { font-size: 13px; color: var(--dark); line-height: 1.65; }
+.info-box strong { color: var(--navy); }
+
+/* ── NAME ROW ── */
+.name-row {
+  display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.name-field {
+  display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 180px;
+}
+.name-field label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.name-field input {
+  border: none; border-bottom: 2px solid var(--border);
+  padding: 6px 0; font-size: 14px; font-family: inherit;
+  background: transparent; color: var(--dark); outline: none;
+  transition: border-color .15s;
+}
+.name-field input:focus { border-color: var(--teal); }
+
+/* ── SECTION HEADING ── */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 8px;
+}
+h2.section-title {
+  font-size: 20px; font-weight: 700; color: var(--navy);
+  margin-bottom: 14px; line-height: 1.3;
+}
+
+/* ── DIAGRAM ── */
+.diagram-container {
+  background: #fff; border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  padding: 32px 24px 24px;
+  margin-bottom: 28px;
+  position: relative;
+}
+.diagram-svg-wrap {
+  display: flex; justify-content: center; margin-bottom: 20px;
+}
+svg.cycle-diagram {
+  width: 100%; max-width: 560px; height: auto;
+}
+
+/* ── PHASE LEGEND ── */
+.phase-legend {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px; margin-top: 8px;
+}
+.phase-item {
+  background: var(--light); border-radius: 10px;
+  padding: 14px 16px; border: 1.5px solid var(--border);
+}
+.phase-item .phase-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.phase-dot {
+  width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+}
+.phase-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+.phase-tag {
+  font-size: 10px; font-weight: 600; letter-spacing: .5px;
+  padding: 2px 8px; border-radius: 6px; margin-left: auto;
+}
+.phase-desc { font-size: 12px; color: var(--gray); line-height: 1.55; }
+
+/* ── CHECKPOINT TABLE ── */
+.checkpoint-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+  background: #fff; border-radius: 12px;
+  overflow: hidden; border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  margin-bottom: 28px;
+}
+.checkpoint-table thead th {
+  background: var(--navy); color: rgba(255,255,255,.8);
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 11px 16px; text-align: left;
+}
+.checkpoint-table tbody tr { border-bottom: 1px solid var(--border); }
+.checkpoint-table tbody tr:last-child { border-bottom: none; }
+.checkpoint-table tbody tr:nth-child(even) { background: #FAFCFF; }
+.checkpoint-table td { padding: 12px 16px; vertical-align: top; color: var(--dark); line-height: 1.55; }
+.cp-name { font-weight: 700; color: var(--teal); }
+.cp-genes { font-size: 11.5px; color: var(--muted); font-style: italic; }
+.write-line {
+  display: block; width: 100%; height: 1px;
+  background: var(--border); margin: 6px 0;
+}
+
+/* ── KEY ANALOGY ── */
+.analogy-box {
+  background: var(--navy); border-radius: 12px; padding: 24px 28px;
+  margin-bottom: 28px; color: #fff;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+@media (max-width: 560px) { .analogy-box { grid-template-columns: 1fr; } }
+.analogy-side { }
+.analogy-side .a-type {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.analogy-side h4 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.analogy-side p { font-size: 12.5px; color: #A8C8E8; line-height: 1.6; }
+.analogy-write {
+  margin-top: 10px; padding: 10px 12px;
+  background: rgba(255,255,255,.08); border-radius: 8px;
+  font-size: 12px; color: #7FD4D8;
+}
+.analogy-write input[type="text"] {
+  background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-family: inherit; font-size: 13px;
+  width: 100%; outline: none; padding: 3px 0; margin-top: 4px;
+}
+.analogy-write input[type="text"]::placeholder { color: rgba(255,255,255,.3); }
+
+/* ── TWO-HIT ── */
+.two-hit-section {
+  background: #fff; border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  padding: 24px 28px; margin-bottom: 28px;
+}
+.two-hit-steps {
+  display: flex; gap: 0; align-items: stretch;
+  margin: 16px 0 12px; position: relative;
+}
+.two-hit-steps::before {
+  content: ''; position: absolute; top: 28px; left: 0; right: 0; height: 2px;
+  background: var(--border); z-index: 0;
+}
+.th-step {
+  flex: 1; text-align: center; position: relative; z-index: 1;
+  padding: 0 8px;
+}
+.th-num {
+  width: 56px; height: 56px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: #fff;
+  margin: 0 auto 10px;
+}
+.th-label { font-size: 12px; font-weight: 600; color: var(--dark); line-height: 1.4; }
+.th-sub { font-size: 11px; color: var(--gray); margin-top: 3px; }
+.two-hit-write {
+  background: var(--light); border-radius: 8px; padding: 14px 16px;
+}
+.two-hit-write p { font-size: 12.5px; color: var(--gray); margin-bottom: 8px; }
+.write-field {
+  width: 100%; border: none; border-bottom: 1.5px solid var(--border);
+  padding: 6px 0; font-size: 13px; font-family: inherit;
+  background: transparent; color: var(--dark); outline: none;
+  transition: border-color .15s; display: block; margin-bottom: 8px;
+}
+.write-field:focus { border-color: var(--teal); }
+
+/* ── SELF CHECK ── */
+.self-check {
+  background: #F0FAF0; border: 1.5px solid var(--green);
+  border-radius: 10px; padding: 18px 20px; margin-bottom: 28px;
+}
+.self-check h3 { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 12px; }
+.check-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0; border-bottom: 1px solid rgba(22,163,74,.15);
+}
+.check-row:last-child { border-bottom: none; }
+.check-row input[type="checkbox"] {
+  width: 17px; height: 17px; accent-color: var(--green); flex-shrink: 0; cursor: pointer;
+}
+.check-row label { font-size: 12.5px; color: var(--dark); cursor: pointer; line-height: 1.45; }
+
+/* ── PRINT STYLES ── */
+@media print {
+  .top-bar, .print-btn, .info-box { display: none !important; }
+  body { background: #fff; }
+  .page { padding: 12px; max-width: 100%; }
+  .diagram-container, .two-hit-section, .checkpoint-table {
+    box-shadow: none; border-color: #ccc;
+  }
+  .analogy-box { background: #1A3A5C !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .phase-item { break-inside: avoid; }
+  .write-field { border-bottom-color: #999 !important; }
+  .name-field input { border-bottom-color: #999 !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <span class="top-bar-brand">Cell Division Gone Wrong · Lesson 2 Support · Scaffolded Diagram</span>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+    Print / Save PDF
+  </button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="scaffold-badge">SCAFFOLDED SUPPORT — LESSON 2</div>
+    <h1>Cell Cycle Checkpoint Diagram</h1>
+    <p>Phases and checkpoints are labeled for you. Use this reference alongside your case study to identify which checkpoint failed — and why it matters.</p>
+  </div>
+
+  <!-- INFO -->
+  <div class="info-box">
+    <div class="icon">💡</div>
+    <p><strong>How to use this sheet:</strong> The cell cycle diagram below has phase labels already filled in. Your job is to use the checkpoint table and two-hit diagram to analyze Maya's case. Fill in the write-lines as you work — they'll help you prepare for the exit ticket.</p>
+  </div>
+
+  <!-- NAME ROW -->
+  <div class="name-row">
+    <div class="name-field"><label>Name</label><input type="text" placeholder="Your name"></div>
+    <div class="name-field"><label>Date</label><input type="text" placeholder="Today's date"></div>
+    <div class="name-field"><label>Period</label><input type="text" placeholder="Class period"></div>
+  </div>
+
+  <!-- DIAGRAM -->
+  <div class="diagram-container">
+    <span class="section-label">The Cell Cycle — Labeled Reference</span>
+    <h2 class="section-title">Where Each Phase Fits</h2>
+
+    <div class="diagram-svg-wrap">
+      <svg class="cycle-diagram" viewBox="0 0 560 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cell cycle diagram showing G1, S, G2, M phases and three checkpoints">
+
+        <!-- Background circle (track) -->
+        <circle cx="280" cy="260" r="195" fill="none" stroke="#D1E4F0" stroke-width="52"/>
+
+        <!-- Phase arcs - colors for each phase segment -->
+        <!-- G1 phase ~120° starting at 270° (top), going clockwise -->
+        <path d="M280,65 A195,195 0 0,1 449,358" fill="none" stroke="#0E7C86" stroke-width="52" stroke-linecap="butt"/>
+        <!-- S phase ~90° -->
+        <path d="M449,358 A195,195 0 0,1 280,455" fill="none" stroke="#7C3AED" stroke-width="52" stroke-linecap="butt"/>
+        <!-- G2 phase ~60° -->
+        <path d="M280,455 A195,195 0 0,1 141,358" fill="none" stroke="#1A3A5C" stroke-width="52" stroke-linecap="butt"/>
+        <!-- M phase ~90° -->
+        <path d="M141,358 A195,195 0 0,1 280,65" fill="none" stroke="#C8102E" stroke-width="52" stroke-linecap="butt"/>
+
+        <!-- White overlay for inner circle -->
+        <circle cx="280" cy="260" r="168" fill="white"/>
+
+        <!-- Inner label -->
+        <text x="280" y="248" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="16" font-weight="700" fill="#1A3A5C">Cell Cycle</text>
+        <text x="280" y="270" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#64748B">Continuous process</text>
+        <text x="280" y="288" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#64748B">in dividing cells</text>
+
+        <!-- PHASE LABELS ON ARCS -->
+        <!-- G1 label -->
+        <text x="388" y="185" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(30 388 185)">G1</text>
+        <text x="395" y="203" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(30 395 203)">Growth &amp; prep</text>
+        <!-- S label -->
+        <text x="418" y="395" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(-30 418 395)">S</text>
+        <text x="408" y="413" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(-30 408 413)">DNA replication</text>
+        <!-- G2 label -->
+        <text x="186" y="430" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(60 186 430)">G2</text>
+        <text x="195" y="446" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(60 195 446)">Final prep</text>
+        <!-- M label -->
+        <text x="155" y="185" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="15" font-weight="700" fill="white" transform="rotate(-30 155 185)">M</text>
+        <text x="155" y="203" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.85)" transform="rotate(-30 155 203)">Mitosis</text>
+
+        <!-- CHECKPOINT MARKERS — diamond shapes at transitions -->
+        <!-- G1/S checkpoint (right, ~3 o'clock area) -->
+        <polygon points="449,310 467,330 449,350 431,330" fill="#F0A500" stroke="white" stroke-width="2"/>
+        <text x="490" y="325" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#1A3A5C">G1/S</text>
+        <text x="490" y="340" font-family="DM Sans, sans-serif" font-size="10" fill="#64748B">Checkpoint ✓</text>
+
+        <!-- G2/M checkpoint (bottom-left) -->
+        <polygon points="190,390 208,408 190,426 172,408" fill="#F0A500" stroke="white" stroke-width="2"/>
+        <text x="80" y="400" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#1A3A5C">G2/M</text>
+        <text x="80" y="415" font-family="DM Sans, sans-serif" font-size="10" fill="#64748B">Checkpoint ✓</text>
+
+        <!-- Spindle checkpoint (top-left, at G2→M) -->
+        <polygon points="183,142 201,124 219,142 201,160" fill="#F0A500" stroke="white" stroke-width="2"/>
+        <text x="50" y="128" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#1A3A5C">Spindle</text>
+        <text x="50" y="143" font-family="DM Sans, sans-serif" font-size="10" fill="#64748B">Checkpoint ✓</text>
+
+        <!-- G0 arrow (off G1) -->
+        <path d="M340,95 Q370,40 400,38" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="400,38 408,28 412,42" fill="#94A3B8"/>
+        <text x="405" y="32" font-family="DM Sans, sans-serif" font-size="11" fill="#64748B">G0</text>
+        <text x="403" y="45" font-family="DM Sans, sans-serif" font-size="9" fill="#94A3B8">(quiescent)</text>
+
+      </svg>
+    </div>
+
+    <!-- Phase legend -->
+    <div class="phase-legend">
+      <div class="phase-item">
+        <div class="phase-header">
+          <div class="phase-dot" style="background:#0E7C86"></div>
+          <span class="phase-name">G1 — First Gap</span>
+          <span class="phase-tag" style="background:#EBF7F8;color:#0E7C86">INTERPHASE</span>
+        </div>
+        <p class="phase-desc">Cell grows, makes proteins, checks for DNA damage. Most cells spend the majority of their cycle here. <strong>Key genes:</strong> Cyclin D, CDK4/6, Rb (retinoblastoma protein).</p>
+      </div>
+      <div class="phase-item">
+        <div class="phase-header">
+          <div class="phase-dot" style="background:#7C3AED"></div>
+          <span class="phase-name">S — Synthesis</span>
+          <span class="phase-tag" style="background:#F0EBFF;color:#7C3AED">INTERPHASE</span>
+        </div>
+        <p class="phase-desc">DNA is replicated — every chromosome is copied. The cell goes from 2N to 4N. Any replication errors are flagged for repair. <strong>Key genes:</strong> Cyclin E, CDK2.</p>
+      </div>
+      <div class="phase-item">
+        <div class="phase-header">
+          <div class="phase-dot" style="background:#1A3A5C"></div>
+          <span class="phase-name">G2 — Second Gap</span>
+          <span class="phase-tag" style="background:#EEF5FB;color:#1A3A5C">INTERPHASE</span>
+        </div>
+        <p class="phase-desc">Cell checks that DNA was copied correctly and prepares the machinery for division. Damage here triggers TP53-mediated arrest. <strong>Key genes:</strong> Cyclin B, CDK1, TP53.</p>
+      </div>
+      <div class="phase-item">
+        <div class="phase-header">
+          <div class="phase-dot" style="background:#C8102E"></div>
+          <span class="phase-name">M — Mitosis</span>
+          <span class="phase-tag" style="background:#FDE8EC;color:#C8102E">DIVISION</span>
+        </div>
+        <p class="phase-desc">Chromosomes condense, align on the spindle, and separate into two daughter cells. The spindle checkpoint verifies every chromosome is attached. <strong>Stages:</strong> Prophase → Metaphase → Anaphase → Telophase → Cytokinesis.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKPOINT TABLE -->
+  <span class="section-label">Checkpoint Reference</span>
+  <h2 class="section-title">The Three Quality-Control Checkpoints</h2>
+  <table class="checkpoint-table">
+    <thead>
+      <tr>
+        <th>Checkpoint</th>
+        <th>Location</th>
+        <th>What it checks</th>
+        <th>Key genes involved</th>
+        <th>What goes wrong in cancer?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="cp-name">G1/S Checkpoint</span><br><span class="cp-genes">Also called "Restriction Point"</span></td>
+        <td>Late G1 before entering S phase</td>
+        <td>Is the cell large enough? Is DNA undamaged? Are growth signals present?</td>
+        <td>TP53, Rb, Cyclin D, CDK4/6, p21</td>
+        <td>
+          Cells skip the check and enter S without meeting requirements.
+          <span class="write-line"></span>
+          <em style="font-size:11px;color:#94A3B8">In Maya's case, write what specific mutation bypassed this checkpoint:</em>
+          <input class="write-field" type="text" placeholder="Your answer...">
+        </td>
+      </tr>
+      <tr>
+        <td><span class="cp-name">G2/M Checkpoint</span></td>
+        <td>Late G2 before entering mitosis</td>
+        <td>Was DNA fully and accurately replicated? Are repair proteins done?</td>
+        <td>TP53, Cyclin B, CDK1, ATM, BRCA1</td>
+        <td>Damaged DNA enters mitosis → mutations passed to both daughter cells.</td>
+      </tr>
+      <tr>
+        <td><span class="cp-name">Spindle Checkpoint</span><br><span class="cp-genes">Also called SAC</span></td>
+        <td>Metaphase during mitosis</td>
+        <td>Is every chromosome properly attached to the spindle fibers?</td>
+        <td>MAD2, BUB1, APC/C</td>
+        <td>Chromosomes split unevenly → aneuploidy (wrong number of chromosomes in daughter cells).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ANALOGY BOX -->
+  <div class="analogy-box">
+    <div class="analogy-side">
+      <div class="a-type" style="color:#F0A500">ONCOGENE</div>
+      <h4>Stuck Accelerator</h4>
+      <p>A normal proto-oncogene promotes cell growth when signaled. A mutation can turn it permanently "on" — like a gas pedal stuck to the floor. The cell divides even when it shouldn't.</p>
+      <p style="margin-top:8px;font-size:12px;color:#7FD4D8">Example: RAS oncogene mutation — growth signal is always active.</p>
+      <div class="analogy-write">
+        <div>Name one oncogene from your module:</div>
+        <input type="text" placeholder="Gene name...">
+      </div>
+    </div>
+    <div class="analogy-side">
+      <div class="a-type" style="color:#7FD4D8">TUMOR SUPPRESSOR</div>
+      <h4>Lost Brake</h4>
+      <p>A tumor suppressor normally slows or stops the cell cycle when damage is detected. Mutation or deletion removes the "brake." Both copies must be lost for the effect to show (two-hit).</p>
+      <p style="margin-top:8px;font-size:12px;color:#7FD4D8">Example: TP53 mutation — apoptosis signal is silenced.</p>
+      <div class="analogy-write">
+        <div>Name one tumor suppressor from your module:</div>
+        <input type="text" placeholder="Gene name...">
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO-HIT HYPOTHESIS -->
+  <div class="two-hit-section">
+    <span class="section-label">Two-Hit Hypothesis</span>
+    <h2 class="section-title">Both Copies Must Be Lost</h2>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:8px;line-height:1.65">Most tumor suppressor genes exist in two copies (one per chromosome). Cancer requires <em>both</em> copies to be inactivated. This is Knudson's two-hit hypothesis.</p>
+
+    <div class="two-hit-steps">
+      <div class="th-step">
+        <div class="th-num" style="background:#0E7C86">1</div>
+        <div class="th-label">Normal Cell</div>
+        <div class="th-sub">2 working copies of TSG</div>
+      </div>
+      <div class="th-step">
+        <div class="th-num" style="background:#F0A500">2</div>
+        <div class="th-label">First Hit</div>
+        <div class="th-sub">1 copy mutated or deleted</div>
+      </div>
+      <div class="th-step">
+        <div class="th-num" style="background:#C8102E">3</div>
+        <div class="th-label">Second Hit</div>
+        <div class="th-sub">Second copy also lost</div>
+      </div>
+      <div class="th-step">
+        <div class="th-num" style="background:#1A3A5C">4</div>
+        <div class="th-label">Loss of Function</div>
+        <div class="th-sub">No brakes → uncontrolled division</div>
+      </div>
+    </div>
+
+    <div class="two-hit-write">
+      <p>Apply this to Maya's case. Does her genetic panel finding fit the two-hit model? How?</p>
+      <input class="write-field" type="text" placeholder="Your explanation...">
+      <p style="margin-top:6px">What does this tell you about whether her cancer might be hereditary or sporadic?</p>
+      <input class="write-field" type="text" placeholder="Your prediction...">
+    </div>
+  </div>
+
+  <!-- SELF-CHECK -->
+  <div class="self-check">
+    <h3>✓ Before You Turn This In — Self-Check</h3>
+    <div class="check-row"><input type="checkbox" id="c1"><label for="c1">I can name the four phases of the cell cycle and describe what happens in each.</label></div>
+    <div class="check-row"><input type="checkbox" id="c2"><label for="c2">I can explain the difference between an oncogene and a tumor suppressor gene in my own words.</label></div>
+    <div class="check-row"><input type="checkbox" id="c3"><label for="c3">I can describe what the G1/S checkpoint does and name at least one gene involved.</label></div>
+    <div class="check-row"><input type="checkbox" id="c4"><label for="c4">I can explain the two-hit hypothesis and say why both copies of a tumor suppressor gene must be inactivated.</label></div>
+    <div class="check-row"><input type="checkbox" id="c5"><label for="c5">I can connect Maya's genetic panel finding to a specific checkpoint failure.</label></div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);text-align:center">Cell Division Gone Wrong · STEM Education &amp; Outreach · Lesson 2 of 4 · Grades 9–10</p>
+
+</div>
+</body>
+</html>

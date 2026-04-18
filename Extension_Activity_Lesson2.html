@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extension Activity: TP53 Across Cancers | Lesson 2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A3A5C; --teal: #0E7C86; --red: #C8102E; --gold: #F0A500;
+  --green: #16A34A; --purple: #7C3AED;
+  --white: #fff; --light: #EEF5FB; --bg: #F4F7FB;
+  --dark: #1E293B; --gray: #64748B; --muted: #94A3B8;
+  --border: #D1E4F0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); }
+
+.top-bar {
+  background: var(--navy); padding: 12px 32px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+}
+.top-bar-brand { font-size: 13px; font-weight: 700; color: #A8C8E8; }
+.print-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--purple); color: #fff; font-size: 13px; font-weight: 600;
+  padding: 8px 18px; border-radius: 7px; border: none; cursor: pointer;
+  transition: background .15s; font-family: inherit;
+}
+.print-btn:hover { background: #6328C8; }
+
+.page { max-width: 860px; margin: 0 auto; padding: 32px 24px 56px; }
+
+/* HEADER */
+.page-header {
+  background: linear-gradient(135deg, #1A3A5C 0%, #2A1A5C 100%);
+  border-radius: 12px; padding: 28px 32px; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.page-header::after {
+  content: ''; position: absolute; right: -30px; top: -30px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: rgba(124,58,237,.25);
+}
+.ext-badge {
+  display: inline-block; background: var(--purple); color: #fff;
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  padding: 4px 12px; border-radius: 4px; margin-bottom: 12px;
+}
+.page-header h1 { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.page-header p { font-size: 13.5px; color: #C0B8E8; line-height: 1.6; max-width: 580px; }
+
+/* NAME ROW */
+.name-row { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.name-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 180px; }
+.name-field label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.name-field input {
+  border: none; border-bottom: 2px solid var(--border); padding: 6px 0;
+  font-size: 14px; font-family: inherit; background: transparent; color: var(--dark);
+  outline: none; transition: border-color .15s;
+}
+.name-field input:focus { border-color: var(--purple); }
+
+/* SECTION */
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin-bottom: 8px; display: block; }
+h2.section-title { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 14px; }
+
+/* CONTEXT CARD */
+.context-card {
+  background: #fff; border-radius: 14px; border: 1px solid var(--border);
+  box-shadow: 0 2px 10px rgba(0,0,0,.05); padding: 24px 28px; margin-bottom: 24px;
+}
+.context-card p { font-size: 13.5px; color: var(--gray); line-height: 1.7; margin-bottom: 10px; }
+.context-card p:last-child { margin-bottom: 0; }
+.context-card strong { color: var(--navy); }
+
+/* DATA TABLE */
+.data-table-wrap {
+  background: #fff; border-radius: 14px; border: 1px solid var(--border);
+  box-shadow: 0 2px 10px rgba(0,0,0,.05); overflow: hidden; margin-bottom: 24px;
+}
+.data-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.data-table thead th {
+  background: var(--navy); color: rgba(255,255,255,.8);
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 12px 16px; text-align: left;
+}
+.data-table tbody tr { border-bottom: 1px solid var(--border); }
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody tr:nth-child(even) { background: #FAFCFF; }
+.data-table td { padding: 12px 16px; vertical-align: middle; color: var(--dark); }
+.cancer-name { font-weight: 700; color: var(--navy); }
+.cancer-type { font-size: 11px; color: var(--muted); display: block; }
+.rate-bar-wrap { display: flex; align-items: center; gap: 10px; }
+.rate-bar {
+  height: 10px; border-radius: 5px; background: var(--purple);
+  flex-shrink: 0; transition: width .3s;
+}
+.rate-text { font-weight: 700; font-size: 13px; white-space: nowrap; }
+.rate-text.low { color: var(--teal); }
+.rate-text.mid { color: var(--gold); }
+.rate-text.high { color: var(--red); }
+.age-badge {
+  display: inline-block; font-size: 10.5px; font-weight: 600;
+  padding: 3px 9px; border-radius: 6px;
+}
+.note-cell { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+/* QUESTIONS */
+.questions { margin-bottom: 24px; }
+.q-block {
+  background: #fff; border-radius: 12px; border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.04); padding: 20px 24px; margin-bottom: 16px;
+}
+.q-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px; }
+.q-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--purple); color: #fff; font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.q-text { font-size: 14px; font-weight: 600; color: var(--dark); line-height: 1.45; padding-top: 4px; }
+.bloom-chip {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .5px;
+  padding: 2px 10px; border-radius: 8px; margin-bottom: 10px;
+}
+.write-area {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; font-size: 13px; font-family: inherit;
+  color: var(--dark); background: var(--light); resize: vertical;
+  outline: none; transition: border-color .15s; min-height: 72px;
+  line-height: 1.6;
+}
+.write-area:focus { border-color: var(--purple); background: #fff; }
+.write-area::placeholder { color: var(--muted); }
+.hint {
+  font-size: 12px; color: var(--muted); font-style: italic;
+  margin-top: 6px; line-height: 1.5;
+}
+
+/* SYNTHESIS BOX */
+.synthesis-box {
+  background: var(--navy); border-radius: 12px;
+  padding: 24px 28px; margin-bottom: 24px; color: #fff;
+}
+.synthesis-box h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.synthesis-box p { font-size: 13px; color: #A8C8E8; line-height: 1.7; margin-bottom: 12px; }
+.synthesis-box .cloud-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(14,124,134,.3); border: 1px solid rgba(14,124,134,.5);
+  color: #7FD4D8; font-size: 12.5px; font-weight: 600;
+  padding: 8px 16px; border-radius: 8px;
+  text-decoration: none; transition: background .15s;
+}
+.synthesis-box .cloud-link:hover { background: rgba(14,124,134,.5); }
+.synthesis-write {
+  margin-top: 14px; background: rgba(255,255,255,.08);
+  border-radius: 8px; padding: 14px;
+}
+.synthesis-write label { display: block; font-size: 12px; color: #7FD4D8; margin-bottom: 6px; }
+.synthesis-write textarea {
+  width: 100%; background: transparent; border: none;
+  border-bottom: 1px solid rgba(255,255,255,.2); color: #fff;
+  font-family: inherit; font-size: 13px; resize: none;
+  outline: none; padding: 4px 0; line-height: 1.6; min-height: 56px;
+}
+.synthesis-write textarea::placeholder { color: rgba(255,255,255,.3); }
+
+/* SELF CHECK */
+.self-check {
+  background: #F0FAF0; border: 1.5px solid var(--green);
+  border-radius: 10px; padding: 18px 20px; margin-bottom: 28px;
+}
+.self-check h3 { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 12px; }
+.check-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 6px 0; border-bottom: 1px solid rgba(22,163,74,.15);
+}
+.check-row:last-child { border-bottom: none; }
+.check-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--green); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+.check-row label { font-size: 12.5px; color: var(--dark); cursor: pointer; line-height: 1.5; }
+
+@media print {
+  .top-bar, .print-btn { display: none !important; }
+  body { background: #fff; }
+  .page { padding: 12px; max-width: 100%; }
+  .page-header { background: #1A3A5C !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .synthesis-box { background: #1A3A5C !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .write-area { background: #fff !important; }
+  .q-block, .data-table-wrap, .context-card { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-brand">Cell Division Gone Wrong · Lesson 2 Extension · TP53 Across Cancer Types</span>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+    Print / Save PDF
+  </button>
+</div>
+
+<div class="page">
+
+  <div class="page-header">
+    <div class="ext-badge">EXTENSION ACTIVITY — LESSON 2</div>
+    <h1>TP53 Mutation Rates Across Cancer Types</h1>
+    <p>You identified a TP53-related checkpoint failure in Maya's case. Now go further: How does TP53 mutation frequency differ between pediatric ALL and adult cancers — and what does that tell us about how childhood cancer works?</p>
+  </div>
+
+  <div class="name-row">
+    <div class="name-field"><label>Name</label><input type="text" placeholder="Your name"></div>
+    <div class="name-field"><label>Date</label><input type="text" placeholder="Today's date"></div>
+    <div class="name-field"><label>Period</label><input type="text" placeholder="Class period"></div>
+  </div>
+
+  <!-- CONTEXT -->
+  <span class="section-label">Background</span>
+  <h2 class="section-title">Understanding the Data</h2>
+  <div class="context-card">
+    <p>TP53 is often called the <strong>"guardian of the genome"</strong> — it's a tumor suppressor gene that triggers either DNA repair or programmed cell death (apoptosis) when a cell's DNA is damaged. It's the most commonly mutated gene across all human cancers.</p>
+    <p>But here's what's interesting: TP53 mutation rates are <strong>not the same across all cancer types</strong>. Adult cancers that develop over decades — like lung, colon, and ovarian cancer — tend to have very high TP53 mutation rates. Pediatric cancers like ALL often have relatively lower rates. This difference tells us something important about <em>how</em> those cancers develop.</p>
+    <p>The table below shows TP53 mutation frequency across several cancer types. Analyze the patterns and answer the questions that follow.</p>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="data-table-wrap">
+    <table class="data-table" aria-label="TP53 mutation rates across cancer types">
+      <thead>
+        <tr>
+          <th>Cancer Type</th>
+          <th>Typical Patient Age</th>
+          <th>TP53 Mutation Rate</th>
+          <th>Mutation Rate (visual)</th>
+          <th>Key notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="cancer-name">Pediatric ALL</span>
+            <span class="cancer-type">Acute lymphoblastic leukemia</span>
+          </td>
+          <td><span class="age-badge" style="background:#EEF5FB;color:#1A3A5C">Childhood (peak 2–5 yrs)</span></td>
+          <td><span class="rate-text low">~3–5%</span></td>
+          <td>
+            <div class="rate-bar-wrap">
+              <div class="rate-bar" style="width:16px;background:#0E7C86"></div>
+              <span style="font-size:11px;color:#94A3B8">low</span>
+            </div>
+          </td>
+          <td class="note-cell">ALL often driven by chromosomal translocations (e.g., t(9;22) Philadelphia chromosome) rather than TP53 mutation. Different mechanism than adult cancers.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="cancer-name">Ovarian Cancer</span>
+            <span class="cancer-type">Epithelial (serous type)</span>
+          </td>
+          <td><span class="age-badge" style="background:#FDE8EC;color:#C8102E">Adult (avg 63 yrs)</span></td>
+          <td><span class="rate-text high">~96%</span></td>
+          <td>
+            <div class="rate-bar-wrap">
+              <div class="rate-bar" style="width:192px;background:#C8102E"></div>
+              <span style="font-size:11px;color:#94A3B8">very high</span>
+            </div>
+          </td>
+          <td class="note-cell">High-grade serous ovarian carcinoma (HGSOC) has near-universal TP53 mutation — the highest of any cancer type.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="cancer-name">Lung Cancer</span>
+            <span class="cancer-type">Non-small cell (NSCLC)</span>
+          </td>
+          <td><span class="age-badge" style="background:#FDE8EC;color:#C8102E">Adult (avg 70 yrs)</span></td>
+          <td><span class="rate-text high">~50–60%</span></td>
+          <td>
+            <div class="rate-bar-wrap">
+              <div class="rate-bar" style="width:120px;background:#C8102E"></div>
+            </div>
+          </td>
+          <td class="note-cell">Strongly associated with tobacco exposure — carcinogens in smoke create specific TP53 mutation "signatures." Accumulates over decades.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="cancer-name">Colorectal Cancer</span>
+            <span class="cancer-type">Adenocarcinoma</span>
+          </td>
+          <td><span class="age-badge" style="background:#FDE8EC;color:#C8102E">Adult (avg 67 yrs)</span></td>
+          <td><span class="rate-text high">~43–50%</span></td>
+          <td>
+            <div class="rate-bar-wrap">
+              <div class="rate-bar" style="width:100px;background:#C8102E"></div>
+            </div>
+          </td>
+          <td class="note-cell">TP53 mutation tends to occur later in colorectal cancer progression — after adenoma forms. Part of the Vogelstein model of stepwise cancer development.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="cancer-name">Pediatric Medulloblastoma</span>
+            <span class="cancer-type">Brain cancer (children)</span>
+          </td>
+          <td><span class="age-badge" style="background:#EEF5FB;color:#1A3A5C">Childhood (avg 7 yrs)</span></td>
+          <td><span class="rate-text mid">~10–15%</span></td>
+          <td>
+            <div class="rate-bar-wrap">
+              <div class="rate-bar" style="width:30px;background:#F0A500"></div>
+              <span style="font-size:11px;color:#94A3B8">low-mid</span>
+            </div>
+          </td>
+          <td class="note-cell">One pediatric subtype (WNT) has very low TP53 mutation rates. Another (p53-mutant MB) has high rates and worse prognosis.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="cancer-name">Li-Fraumeni Syndrome</span>
+            <span class="cancer-type">Hereditary cancer syndrome</span>
+          </td>
+          <td><span class="age-badge" style="background:#F0EBFF;color:#7C3AED">Any age (inherited)</span></td>
+          <td><span class="rate-text high">100% (by definition)</span></td>
+          <td>
+            <div class="rate-bar-wrap">
+              <div class="rate-bar" style="width:200px;background:#7C3AED"></div>
+            </div>
+          </td>
+          <td class="note-cell">Germline TP53 mutation — inherited at birth. Only one somatic "hit" needed for loss of function. Dramatically increases cancer risk from childhood onward.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- QUESTIONS -->
+  <span class="section-label">Analysis Questions</span>
+  <h2 class="section-title">Think Like a Researcher</h2>
+  <div class="questions">
+
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">1</div>
+        <div class="q-text">Adult lung cancer and pediatric ALL are both cancers, but their TP53 mutation rates are very different. What does this difference suggest about <em>how</em> each type of cancer develops?</div>
+      </div>
+      <span class="bloom-chip" style="background:#EBF7F8;color:#0E7C86">BLOOM: UNDERSTAND → ANALYZE</span>
+      <textarea class="write-area" placeholder="Think about: What causes TP53 mutations in lung cancer? What drives ALL instead? What does the 'accumulates over decades' note tell you?"></textarea>
+      <p class="hint">Hint: Think about the role of environmental exposure vs. developmental errors. The word "translocations" in the table is a clue.</p>
+    </div>
+
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">2</div>
+        <div class="q-text">Li-Fraumeni Syndrome is listed as 100% TP53 mutation rate "by definition." Why is it defined that way? How does it demonstrate the two-hit hypothesis in a different pattern than sporadic cancers?</div>
+      </div>
+      <span class="bloom-chip" style="background:#EBF7F8;color:#0E7C86">BLOOM: ANALYZE</span>
+      <textarea class="write-area" placeholder="Recall: In Li-Fraumeni, one copy of TP53 is already mutated at birth (germline). How does that change how many more 'hits' are needed? What does 'germline' mean?"></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">3</div>
+        <div class="q-text">Ovarian cancer (96% TP53 mutation) and pediatric ALL (~3–5% TP53 mutation) are both cancers involving out-of-control cell division. If TP53 is the "guardian of the genome" and most responsible for stopping cancer, how can a cancer have LOW TP53 mutation rates? What else could bypass the checkpoint?</div>
+      </div>
+      <span class="bloom-chip" style="background:#FFF3CC;color:#C88800">BLOOM: EVALUATE</span>
+      <textarea class="write-area" placeholder="Use your module knowledge: What are other ways a cell can bypass the G1/S checkpoint without mutating TP53 specifically? Think about oncogenes and other tumor suppressor genes." rows="5"></textarea>
+      <p class="hint">Consider: Could an oncogene force the cell through the checkpoint even if TP53 is working? What about Rb or CDK4/6?</p>
+    </div>
+
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">4</div>
+        <div class="q-text">Researchers who study pediatric cancer argue that childhood cancers "are biologically distinct from adult cancers, not just adult cancers in smaller patients." Based on this data, what's one piece of evidence that supports that claim?</div>
+      </div>
+      <span class="bloom-chip" style="background:#FFF3CC;color:#C88800">BLOOM: EVALUATE</span>
+      <textarea class="write-area" placeholder="Write a specific claim + evidence sentence: 'The data shows that _____ because _____. This supports the idea that _____.'" rows="4"></textarea>
+    </div>
+
+  </div>
+
+  <!-- SYNTHESIS -->
+  <div class="synthesis-box">
+    <h3>🔬 Go Further: Explore Real Data</h3>
+    <p>The data above comes from published cancer genomics databases. If you want to explore actual TP53 mutation frequencies across cancer types, the same data used by researchers is publicly available:</p>
+    <p style="font-size:12.5px;color:#C0B8E8;margin-bottom:14px">The <strong>cBioPortal for Cancer Genomics</strong> (cbioportal.org) and <strong>COSMIC</strong> (cancer.sanger.ac.uk) both contain real mutation data from thousands of tumor samples. These are the same tools pediatric oncology researchers use.</p>
+    <a href="https://www.cbioportal.org" class="cloud-link" target="_blank" rel="noopener">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Visit cBioPortal →
+    </a>
+    <div class="synthesis-write">
+      <label>Synthesis: Based on everything in this activity, write one sentence explaining why childhood cancer research requires specialized focus — not just applying adult cancer findings to younger patients.</label>
+      <textarea placeholder="Your synthesis sentence..."></textarea>
+    </div>
+  </div>
+
+  <!-- SELF CHECK -->
+  <div class="self-check">
+    <h3>✓ Extension Self-Check</h3>
+    <div class="check-row"><input type="checkbox" id="x1"><label for="x1">I can explain why adult cancers often have higher TP53 mutation rates than pediatric cancers.</label></div>
+    <div class="check-row"><input type="checkbox" id="x2"><label for="x2">I can describe how Li-Fraumeni Syndrome demonstrates the two-hit hypothesis differently than sporadic cancers.</label></div>
+    <div class="check-row"><input type="checkbox" id="x3"><label for="x3">I can give an example of how a cancer can bypass checkpoints WITHOUT a TP53 mutation specifically.</label></div>
+    <div class="check-row"><input type="checkbox" id="x4"><label for="x4">I can state one reason why pediatric cancers are biologically distinct from adult cancers, with evidence from the data table.</label></div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);text-align:center">Cell Division Gone Wrong · STEM Education &amp; Outreach · Lesson 2 Extension · Grades 9–10</p>
+
+</div>
+</body>
+</html>
