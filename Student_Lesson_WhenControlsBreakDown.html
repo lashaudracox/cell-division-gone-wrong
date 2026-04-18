@@ -479,13 +479,64 @@
   .exit-q { background: white; border-radius: 8px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
   .exit-q-num { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
   .exit-q p { font-size: 14.5px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  /* STUDENT IDENTITY FIELDS */
+  .student-id-row {
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px;
+    background: white; border-radius: 8px; border: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+  .sid-field { display: flex; flex-direction: column; gap: 5px; }
+  .sid-field.wide { flex: 2; min-width: 180px; }
+  .sid-field.narrow { flex: 1; min-width: 100px; }
+  .sid-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .sid-input {
+    padding: 9px 12px; border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 14px; font-family: inherit;
+    color: var(--dark); outline: none; transition: border-color .15s;
+  }
+  .sid-input:focus { border-color: var(--teal); }
+  .sid-input.error { border-color: var(--red); }
+
+  /* SUBMIT / LOADING */
   .submit-btn {
     width: 100%; padding: 14px; background: var(--red); color: white;
     border: none; border-radius: 8px; font-size: 15px; font-weight: 700;
-    cursor: pointer; transition: background 0.15s; margin-top: 8px;
+    cursor: pointer; transition: background 0.15s, opacity .15s; margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .submit-btn:hover { background: #A00024; }
-  .submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
+  .submit-btn:hover:not(:disabled) { background: #A00024; }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .spinner {
+    width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.35);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin .7s linear infinite; display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .submit-btn.loading .spinner { display: inline-block; }
+  .submit-btn.loading .btn-label { display: none; }
+
+  /* ERROR BANNER */
+  .submit-error {
+    display: none; background: #FDE8EC; border: 1.5px solid var(--red);
+    border-radius: 8px; padding: 12px 16px; margin-top: 10px;
+    font-size: 13px; color: #8B0014; line-height: 1.5;
+  }
+
+  /* COMPLETION — updated to show what was sent */
+  .submitted-summary {
+    background: var(--light); border-radius: 8px; padding: 14px 18px;
+    margin: 16px auto 0; max-width: 500px; text-align: left;
+    border: 1px solid var(--border); font-size: 13px;
+  }
+  .submitted-summary .ss-row { display: flex; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .submitted-summary .ss-row:last-child { border-bottom: none; }
+  .submitted-summary .ss-label { font-weight: 700; color: var(--navy); min-width: 80px; }
+  .submitted-summary .ss-val { color: var(--gray); flex: 1; }
+  .ss-correct { color: #16A34A; font-weight: 700; }
+  .ss-incorrect { color: var(--red); font-weight: 700; }
 
   /* COMPLETE STATE */
   .completion-screen {
@@ -1056,6 +1107,20 @@
           <p>These responses help your teacher know where to focus tomorrow's discussion. There are no trick questions — write what you actually think.</p>
         </div>
 
+        <!-- STUDENT IDENTITY — required for teacher to match responses to students -->
+        <div class="student-id-row">
+          <div class="sid-field wide">
+            <span class="sid-label">Full Name <span style="color:var(--red)">*</span></span>
+            <input class="sid-input" id="student-name" type="text"
+                   placeholder="First Last" autocomplete="name" required>
+          </div>
+          <div class="sid-field narrow">
+            <span class="sid-label">Class Period</span>
+            <input class="sid-input" id="student-period" type="text"
+                   placeholder="e.g. 3rd" autocomplete="off">
+          </div>
+        </div>
+
         <div class="exit-q">
           <div class="exit-q-num">Multiple Choice · Question 1 of 2</div>
           <p>A cell's G1 checkpoint detects significant DNA damage. Under normal conditions, what is the most likely outcome?</p>
@@ -1111,14 +1176,25 @@
           <div class="char-count" id="char-count">0 / minimum 40 characters recommended</div>
         </div>
 
-        <button class="submit-btn" id="submit-btn" onclick="submitExitTicket()">Submit Exit Ticket →</button>
+        <button class="submit-btn" id="submit-btn" onclick="submitExitTicket()">
+          <span class="spinner" id="submit-spinner"></span>
+          <span class="btn-label">Submit Exit Ticket →</span>
+        </button>
+        <div class="submit-error" id="submit-error">
+          Could not reach the server. Please check your connection and try again —
+          or copy the text below and paste it in an email to your teacher:
+          <pre id="fallback-text" style="margin-top:8px;font-size:12px;white-space:pre-wrap;background:#fff;padding:8px;border-radius:5px;border:1px solid #fca5a5;"></pre>
+        </div>
 
         <div id="completion-wrap" style="display:none;">
           <div class="completion-screen">
             <div class="completion-icon">✅</div>
             <h2>Exit Ticket Submitted!</h2>
-            <p>Great work completing this module. Your teacher will review your responses tonight. Come to class tomorrow ready to dig deeper into the "Meet Maya" case study.</p>
-            <div class="remind-box">
+            <p>Your teacher will review these responses before class tomorrow. The table below shows exactly what was sent.</p>
+            <div class="submitted-summary" id="submitted-summary">
+              <!-- Filled in by JS after submission -->
+            </div>
+            <div class="remind-box" style="margin-top:20px;">
               <h4>📋 What to Expect in Class Tomorrow</h4>
               <ul>
                 <li>🔬 <span>You'll analyze a real pediatric cancer case study</span></li>
@@ -1169,7 +1245,7 @@ function goSlide(n) {
 
 function checkQuiz(id, el, chosen, correct) {
   if (answered[id]) return;
-  answered[id] = true;
+  answered[id] = chosen;
   const opts = document.querySelectorAll('#' + id + '-opts .quiz-opt');
   opts.forEach(o => o.classList.add('disabled'));
   const fb = document.getElementById(id + '-fb');
@@ -1178,49 +1254,177 @@ function checkQuiz(id, el, chosen, correct) {
     el.classList.add('correct');
     fb.className = 'quiz-feedback correct';
     const msgs = {
-      'q0': '✅ Correct! DNA synthesis (replication) takes place specifically during the S phase — "S" stands for synthesis.',
-      'q1': '✅ Correct! p53 is called the "guardian of the genome." When it detects DNA damage, it halts the cell cycle at the G1 checkpoint.',
-      'q2': '✅ Correct! The two-hit hypothesis explains why having one mutated tumor suppressor copy raises risk but does not guarantee cancer — the second functional copy can compensate.',
-      'q3': '✅ Correct! Different cell types accumulate unique combinations of mutations, meaning each cancer type has distinct biology and often requires different treatments.',
-      'qet1': '✅ Correct! p53 activation leads to cell cycle arrest. If the DNA cannot be repaired, the cell is directed toward apoptosis — programmed cell death.',
-      'qet2': '✅ Correct! This combination removes both "brakes" (tumor suppressor) and adds a permanent "accelerator" (oncogene) — a recipe for uncontrolled growth.',
+      'q0': '✓ Correct! DNA synthesis (replication) takes place specifically during the S phase — "S" stands for synthesis.',
+      'q1': '✓ Correct! p53 is called the "guardian of the genome." When it detects DNA damage, it halts the cell cycle at the G1 checkpoint.',
+      'q2': '✓ Correct! The two-hit hypothesis explains why having one mutated tumor suppressor copy raises risk but does not guarantee cancer — the second functional copy can compensate.',
+      'q3': '✓ Correct! Different cell types accumulate unique combinations of mutations, meaning each cancer type has distinct biology and often requires different treatments.',
+      'qet1': '✓ Correct! p53 activation leads to cell cycle arrest. If the DNA cannot be repaired, the cell is directed toward apoptosis — programmed cell death.',
+      'qet2': '✓ Correct! This combination removes both "brakes" (tumor suppressor) and adds a permanent "accelerator" (oncogene) — a recipe for uncontrolled growth.',
     };
-    fb.innerHTML = msgs[id] || '✅ Correct!';
+    fb.innerHTML = msgs[id] || '✓ Correct!';
   } else {
     el.classList.add('incorrect');
     const correctEl = opts[letters.indexOf(correct)];
     correctEl.classList.add('correct');
     fb.className = 'quiz-feedback incorrect';
     const msgs = {
-      'q0': '❌ Not quite. DNA replication happens in the <strong>S phase</strong> (synthesis). G1 is for cell growth, G2 is for pre-mitotic preparation, and M is for division.',
-      'q1': '❌ Not quite. p53 is a <strong>checkpoint regulator</strong> — its job is to <em>stop</em> the cell cycle when DNA damage is detected, not to speed up replication.',
-      'q2': '❌ Not quite. Remember the <strong>two-hit hypothesis</strong>: tumor suppressors are recessive. You need <em>both</em> copies to be mutated before the cell fully loses checkpoint function.',
-      'q3': '❌ Not quite. Cancer can affect virtually any cell type, and each cancer type involves different mutations, different biology, and often different treatments.',
-      'qet1': '❌ Not quite. A functioning G1 checkpoint would activate <strong>p53</strong>, pause the cycle, and trigger repair — or cause the cell to self-destruct (apoptosis) if repair is impossible.',
-      'qet2': '❌ Not quite. The most dangerous combination is when a cell has an activated growth signal <em>AND</em> has lost both copies of its tumor suppressor "brake."',
+      'q0': '✗ Not quite. DNA replication happens in the <strong>S phase</strong> (synthesis). G1 is for cell growth, G2 is for pre-mitotic preparation, and M is for division.',
+      'q1': '✗ Not quite. p53 is a <strong>checkpoint regulator</strong> — its job is to <em>stop</em> the cell cycle when DNA damage is detected, not to speed up replication.',
+      'q2': '✗ Not quite. Remember the <strong>two-hit hypothesis</strong>: tumor suppressors are recessive. You need <em>both</em> copies to be mutated before the cell fully loses checkpoint function.',
+      'q3': '✗ Not quite. Cancer can affect virtually any cell type, and each cancer type involves different mutations, different biology, and often different treatments.',
+      'qet1': '✗ Not quite. A functioning G1 checkpoint would activate <strong>p53</strong>, pause the cycle, and trigger repair — or cause the cell to self-destruct (apoptosis) if repair is impossible.',
+      'qet2': '✗ Not quite. The most dangerous combination is when a cell has an activated growth signal <em>AND</em> has lost both copies of its tumor suppressor "brake."',
     };
-    fb.innerHTML = msgs[id] || '❌ Incorrect. Review the section and try again next time.';
+    fb.innerHTML = msgs[id] || '✗ Incorrect. Review the section and try again next time.';
   }
   fb.style.display = 'block';
 }
 
 function updateCharCount() {
   const val = document.getElementById('short-ans-input').value;
-  document.getElementById('char-count').textContent = val.length + ' / minimum 40 characters recommended';
+  const len = val.length;
+  const el = document.getElementById('char-count');
+  el.textContent = len + ' / minimum 40 characters recommended';
+  el.style.color = len >= 40 ? '#16A34A' : '#64748B';
 }
 
-function submitExitTicket() {
-  const q1 = answered['qet1'];
-  const q2 = answered['qet2'];
-  const sa = document.getElementById('short-ans-input').value.trim();
-  if (!q1 || !q2) { alert('Please answer both multiple choice questions first.'); return; }
-  if (sa.length < 20) { alert('Please write a response to the short answer question before submitting.'); return; }
+// ══════════════════════════════════════════════════════════════
+//  EXIT TICKET SUBMISSION
+//
+//  HOW TO ACTIVATE:
+//  ─────────────────
+//  Option A — Google Sheets (recommended for classroom use):
+//    1. In Google Sheets, go to Extensions → Apps Script
+//    2. Paste the Apps Script code from the README or setup guide
+//    3. Deploy as Web App (Execute as: Me, Who can access: Anyone)
+//    4. Copy the deployment URL and paste it below as SUBMIT_URL
+//
+//  Option B — Formspree (simpler, teacher gets email per submission):
+//    1. Create a free account at formspree.io
+//    2. Create a new form, copy the endpoint URL (looks like
+//       https://formspree.io/f/xxxxxxxx)
+//    3. Paste it below as SUBMIT_URL
+//
+//  Leave SUBMIT_URL as '' to use offline/clipboard-copy fallback only.
+// ══════════════════════════════════════════════════════════════
+const SUBMIT_URL = '';   // ← PASTE YOUR URL HERE
+
+async function submitExitTicket() {
+  const nameEl   = document.getElementById('student-name');
+  const periodEl = document.getElementById('student-period');
+  const name     = nameEl.value.trim();
+  const period   = periodEl.value.trim();
+  const q1       = answered['qet1'];
+  const q2       = answered['qet2'];
+  const sa       = document.getElementById('short-ans-input').value.trim();
+
+  // ── Validation ──────────────────────────────────────────────
+  nameEl.classList.remove('error');
+  if (!name) {
+    nameEl.classList.add('error');
+    nameEl.focus();
+    nameEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    alert('Please enter your name so your teacher can match this to you.');
+    return;
+  }
+  if (!q1 || !q2) {
+    alert('Please answer both multiple choice questions before submitting.');
+    return;
+  }
+  if (sa.length < 20) {
+    alert('Please write a short answer response before submitting (at least a sentence).');
+    return;
+  }
+
+  // ── Build payload ────────────────────────────────────────────
+  const payload = {
+    timestamp:   new Date().toLocaleString(),
+    name:        name,
+    period:      period || '—',
+    q1:          q1,
+    q1Correct:   q1 === 'B' ? 'Yes ✓' : 'No ✗',
+    q2:          q2,
+    q2Correct:   q2 === 'D' ? 'Yes ✓' : 'No ✗',
+    shortAnswer: sa,
+    module:      'Lesson 2 — When Controls Break Down'
+  };
+
+  // ── Loading state ────────────────────────────────────────────
+  const btn = document.getElementById('submit-btn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  document.getElementById('submit-error').style.display = 'none';
+
+  // ── Submit or fallback ───────────────────────────────────────
+  if (SUBMIT_URL) {
+    try {
+      await fetch(SUBMIT_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+        // 'no-cors' required for Google Apps Script — the POST goes through
+        // even though the response is opaque (we can't read it back)
+        mode:    SUBMIT_URL.includes('formspree') ? 'cors' : 'no-cors'
+      });
+      showCompletion(payload);
+    } catch (err) {
+      showNetworkError(payload);
+    }
+  } else {
+    // No URL configured — show clipboard fallback immediately
+    showCompletion(payload);
+    console.warn('SUBMIT_URL not set. Data was not sent to a server.');
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+function showCompletion(payload) {
   document.getElementById('submit-btn').style.display = 'none';
   document.getElementById('short-ans-section').style.opacity = '0.6';
   document.getElementById('completion-wrap').style.display = 'block';
   document.getElementById('done-btn').removeAttribute('disabled');
   document.getElementById('prog-bar').style.width = '100%';
   document.getElementById('prog-label').textContent = 'Complete ✓';
+
+  // Populate the "what was sent" summary table
+  const q1Class = payload.q1 === 'B' ? 'ss-correct' : 'ss-incorrect';
+  const q2Class = payload.q2 === 'D' ? 'ss-correct' : 'ss-incorrect';
+  document.getElementById('submitted-summary').innerHTML = `
+    <div class="ss-row"><span class="ss-label">Name</span><span class="ss-val">${payload.name}</span></div>
+    <div class="ss-row"><span class="ss-label">Period</span><span class="ss-val">${payload.period}</span></div>
+    <div class="ss-row"><span class="ss-label">Q1</span><span class="ss-val">Choice ${payload.q1} — <span class="${q1Class}">${payload.q1Correct}</span></span></div>
+    <div class="ss-row"><span class="ss-label">Q2</span><span class="ss-val">Choice ${payload.q2} — <span class="${q2Class}">${payload.q2Correct}</span></span></div>
+    <div class="ss-row"><span class="ss-label">Short Ans.</span><span class="ss-val">${payload.shortAnswer}</span></div>
+    <div class="ss-row"><span class="ss-label">Sent at</span><span class="ss-val">${payload.timestamp}</span></div>`;
+
+  window.scrollTo(0, 0);
+}
+
+function showNetworkError(payload) {
+  const btn = document.getElementById('submit-btn');
+  btn.classList.remove('loading');
+  btn.disabled = false;
+
+  const fallbackText = [
+    `Name: ${payload.name}`,
+    `Period: ${payload.period}`,
+    `Q1: ${payload.q1} (${payload.q1Correct})`,
+    `Q2: ${payload.q2} (${payload.q2Correct})`,
+    `Short Answer: ${payload.shortAnswer}`,
+    `Submitted: ${payload.timestamp}`
+  ].join('\n');
+
+  const errDiv = document.getElementById('submit-error');
+  document.getElementById('fallback-text').textContent = fallbackText;
+  errDiv.style.display = 'block';
+
+  // Auto-copy to clipboard
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(fallbackText).catch(() => {});
+  }
+  errDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 </script>
 </body>
