@@ -11,7 +11,7 @@
     --dark:#1E293B; --gray:#64748B; --muted:#94A3B8;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:var(--dark);padding:20px;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:var(--dark);padding:12px 20px;}
 
   .toolbar{background:var(--navy);border-radius:8px;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
   .tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
@@ -20,7 +20,7 @@
   .btn-print:hover{background:#A00024;}
   .save-msg{font-size:11px;color:#7FD4D8;font-style:italic;}
 
-  .ticket{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+  .ticket{max-width:1100px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
 
   /* HEADER */
   .ticket-header{background:var(--navy);padding:18px 24px;}
@@ -72,7 +72,7 @@
   .cut-line{border-top:1.5px dashed #CBD5E1;text-align:center;font-size:9.5px;color:var(--muted);padding:6px 0;margin:20px 0 0;letter-spacing:1px;}
 
   /* TEACHER NOTE SECTION */
-  .teacher-block{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);margin-top:0;}
+  .teacher-block{max-width:1100px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);margin-top:0;}
   .teacher-header{background:#0D2D47;padding:10px 20px;display:flex;align-items:center;gap:10px;}
   .teacher-header span{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;}
   .teacher-body{padding:16px 20px;}
@@ -100,49 +100,20 @@
     @page{margin:0.65in;}
   }
 
-  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
-  /* Fixed bottom-right: clears every file's top bar & print buttons */
-  #translate-bar {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 99999;
-    background: rgba(26,58,92,.97);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 9px;
-    padding: 6px 10px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.32);
-    backdrop-filter: blur(8px);
-  }
-  #translate-bar .tb-label {
-    font-size: 14px;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  /* Native <select> — scrolls automatically on every OS/browser */
+  /* ── LANGUAGE SELECT — inline in .toolbar ─────────────────────── */
   #lang-select {
-    appearance: none;
-    -webkit-appearance: none;
-    background: rgba(255,255,255,.08);
-    color: #D0E8F8;
-    border: 1px solid rgba(255,255,255,.22);
-    border-radius: 6px;
-    padding: 4px 22px 4px 8px;
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    outline: none;
-    min-width: 130px;
+    appearance: none; -webkit-appearance: none;
+    background: rgba(255,255,255,.10); color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.25); border-radius: 6px;
+    padding: 4px 24px 4px 9px; font-size: 12px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    cursor: pointer; outline: none; min-width: 136px; height: 30px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 7px center;
+    background-repeat: no-repeat; background-position: right 7px center;
   }
   #lang-select:focus { border-color: rgba(14,124,134,.8); }
   #lang-select option { background: #1A3A5C; color: #D0E8F8; }
-  /* Suppress the Google Translate top banner (it shifts page content down) */
+  /* Suppress the Google Translate banner that shifts page content */
   .goog-te-banner-frame.skiptranslate { display: none !important; }
   body { top: 0px !important; }
   #google_translate_element { display: none !important; }
@@ -154,6 +125,29 @@
   <div class="tb-left">📋 Exit Ticket — When Controls Break Down · Lesson 2</div>
   <div style="display:flex;gap:10px;align-items:center;">
     <span class="save-msg" id="saveMsg"></span>
+    <span style="font-size:14px;line-height:1;">🌐</span>
+    <select id="lang-select" aria-label="Select language">
+      <option value="">Language</option>
+      <option value="es">Español</option>
+      <option value="zh-CN">中文 (简体)</option>
+      <option value="zh-TW">中文 (繁體)</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="vi">Tiếng Việt</option>
+      <option value="ko">한국어</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="hi">हिंदी</option>
+      <option value="ht">Kreyòl Ayisyen</option>
+      <option value="tl">Filipino</option>
+      <option value="ja">日本語</option>
+      <option value="de">Deutsch</option>
+      <option value="so">Somali</option>
+      <option value="am">አማርኛ</option>
+      <option value="ur">اردو</option>
+      <option value="bn">বাংলা</option>
+      <option value="fa">فارسی</option>
+    </select>
     <button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
   </div>
 </div>
@@ -375,32 +369,6 @@ document.addEventListener('input', () => { clearTimeout(timer); timer = setTimeo
 window.addEventListener('load', load);
 </script>
 
-<!-- ── LANGUAGE TRANSLATION WIDGET ─────────────────────────── -->
-<div id="translate-bar">
-  <span class="tb-label">🌐</span>
-  <select id="lang-select" aria-label="Select language">
-    <option value="">Language</option>
-    <option value="es">Español</option>
-    <option value="zh-CN">中文 (简体)</option>
-    <option value="zh-TW">中文 (繁體)</option>
-    <option value="ar">العربية</option>
-    <option value="fr">Français</option>
-    <option value="vi">Tiếng Việt</option>
-    <option value="ko">한국어</option>
-    <option value="pt">Português</option>
-    <option value="ru">Русский</option>
-    <option value="hi">हिंदी</option>
-    <option value="ht">Kreyòl Ayisyen</option>
-    <option value="tl">Filipino</option>
-    <option value="ja">日本語</option>
-    <option value="de">Deutsch</option>
-    <option value="so">Somali</option>
-    <option value="am">አማርኛ</option>
-    <option value="ur">اردو</option>
-    <option value="bn">বাংলা</option>
-    <option value="fa">فارسی</option>
-  </select>
-</div>
 
 <!-- Hidden Google Translate init (powers the translation engine) -->
 <div id="google_translate_element"></div>
