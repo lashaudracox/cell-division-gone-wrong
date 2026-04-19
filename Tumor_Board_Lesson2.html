@@ -121,45 +121,52 @@ h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:
   .roles-grid{break-inside:avoid;}
 }
 
-  /* ── GOOGLE TRANSLATE FLOATING WIDGET ─────────────────────── */
+  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
+  /* Fixed bottom-right: clears every file's top bar & print buttons */
   #translate-bar {
     position: fixed;
-    top: 10px;
-    right: 12px;
+    bottom: 16px;
+    right: 16px;
     z-index: 99999;
-    background: rgba(26,58,92,.96);
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 8px;
-    padding: 5px 10px 5px 10px;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
     display: flex;
     align-items: center;
     gap: 7px;
-    box-shadow: 0 3px 14px rgba(0,0,0,.28);
-    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
   }
   #translate-bar .tb-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: .8px;
-    color: #A8C8E8;
-    text-transform: uppercase;
-    white-space: nowrap;
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
     font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
   }
-  .goog-te-gadget-simple {
-    background: transparent !important;
-    border: 1px solid rgba(255,255,255,.2) !important;
-    border-radius: 5px !important;
-    padding: 2px 6px !important;
-    font-size: 11px !important;
-    font-family: 'DM Sans', sans-serif !important;
-  }
-  .goog-te-gadget-simple .goog-te-menu-value span { color: #D0E8F8 !important; }
-  .goog-te-gadget-simple .goog-te-menu-value span:last-child { display: none !important; }
-  .goog-te-gadget-simple img { display: none !important; }
-  /* Suppress the "Translated by Google" banner that shifts page content */
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
   .goog-te-banner-frame.skiptranslate { display: none !important; }
   body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
 </style>
 </head>
 <body>
@@ -411,17 +418,68 @@ h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:
 
 <!-- ── LANGUAGE TRANSLATION WIDGET ─────────────────────────── -->
 <div id="translate-bar">
-  <span class="tb-label">🌐 Language</span>
-  <div id="google_translate_element"></div>
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
 </div>
+
+<!-- Hidden Google Translate init (powers the translation engine) -->
+<div id="google_translate_element"></div>
 <script>
+// Initialise Google Translate silently
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({
     pageLanguage: 'en',
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
     autoDisplay: false
   }, 'google_translate_element');
 }
+
+// Drive translation via the internal goog-te-combo select
+function triggerTranslate(lang) {
+  var combo = document.querySelector('.goog-te-combo');
+  if (!combo) {
+    // Widget not ready yet — retry once after 600 ms
+    setTimeout(function() { triggerTranslate(lang); }, 600);
+    return;
+  }
+  if (lang === '') {
+    // Reset to English
+    combo.value = '';
+    var resetEvt = document.createEvent('HTMLEvents');
+    resetEvt.initEvent('change', false, true);
+    combo.dispatchEvent(resetEvt);
+    document.getElementById('lang-select').value = '';
+    return;
+  }
+  combo.value = lang;
+  var evt = document.createEvent('HTMLEvents');
+  evt.initEvent('change', false, true);
+  combo.dispatchEvent(evt);
+}
+
+document.getElementById('lang-select').addEventListener('change', function() {
+  triggerTranslate(this.value);
+});
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
