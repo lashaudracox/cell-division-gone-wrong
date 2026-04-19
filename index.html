@@ -415,6 +415,7 @@
     background: var(--light);
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
   }
   .mat-btn {
@@ -432,14 +433,14 @@
     text-decoration: none;
     white-space: nowrap;
   }
-  /* Primary action stretches; secondary (PDF) stays compact — guarantees
-     side-by-side layout across all three cards regardless of label width. */
+  /* Primary action stretches to fill available space but never shrinks
+     below its own content width — prevents text clipping at narrow widths. */
   .mat-btn.primary,
   .mat-btn.red,
-  .mat-btn.gold { flex: 1; min-width: 0; }
+  .mat-btn.gold { flex: 1 1 auto; min-width: max-content; }
   .mat-btn.primary { background: var(--teal); color: #fff; }
   .mat-btn.primary:hover { background: #0A6870; }
-  .mat-btn.outline { background: #fff; color: var(--navy); border: 1.5px solid var(--border); flex-shrink: 0; }
+  .mat-btn.outline { background: #fff; color: var(--navy); border: 1.5px solid var(--border); flex: 1 1 auto; min-width: max-content; }
   .mat-btn.outline:hover { border-color: var(--navy); background: var(--light); }
   .mat-btn.red { background: var(--red); color: #fff; }
   .mat-btn.red:hover { background: #A00024; }
@@ -1207,7 +1208,10 @@
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Launch Simulator
           </a>
-          <a href="Simulator_Reference_Guide.pdf" class="mat-btn outline">PDF Guide</a>
+          <a href="Simulator_Reference_Guide.pdf" class="mat-btn outline" download>
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M12 3v12M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+            Reference Guide
+          </a>
         </div>
       </div>
 
