@@ -2,7 +2,7 @@
 ### Understanding Cancer at the Cellular Level
 
 **A flipped classroom instructional module for Grades 9–10**
-Designed for a STEMM Education & Outreach program at a children's cancer research hospital · LaShaudra Cox, Instructional Designer
+Designed for a STEM Education & Outreach program at a children's cancer research hospital · LaShaudra Cox, Instructional Designer
 
 ---
 
