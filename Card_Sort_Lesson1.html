@@ -7,185 +7,321 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --navy:#1A3A5C;--teal:#0E7C86;--red:#C8102E;--gold:#F0A500;
-  --green:#16A34A;--purple:#7C3AED;--light:#EEF5FB;--white:#fff;
-  --gray:#64748B;--dark:#1E293B;--border:#D1E4F0;--bg:#F4F7FB;
+  --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
+  --green:#16A34A; --purple:#7C3AED; --light:#EEF5FB; --white:#fff;
+  --gray:#64748B; --dark:#1E293B; --border:#D1E4F0; --bg:#F4F7FB;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);padding-bottom:60px;
-  padding-bottom: 52px;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);
+  padding-top:76px; padding-bottom:100px;}
 
-/* ── MODULE NAV ── */
+/* MODULE NAV */
 #module-nav{background:#0D2438;padding:0 16px;display:flex;align-items:center;
-  height:38px;gap:0;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+  height:38px;gap:0;position:fixed;top:0;left:0;right:0;z-index:300;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);}
 .mn-home{font-size:11px;font-weight:700;color:#7FD4D8;text-decoration:none;
   white-space:nowrap;margin-right:8px;display:flex;align-items:center;gap:5px;}
-.mn-home:hover{color:#fff;}
 .mn-sep{color:rgba(255,255,255,.25);font-size:12px;margin:0 8px;}
-.mn-lessons{display:flex;gap:2px;align-items:center;}
+.mn-lessons{display:flex;gap:2px;}
 .mn-lesson{font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;
-  text-decoration:none;color:rgba(255,255,255,.5);transition:all .12s;border:1px solid transparent;}
+  text-decoration:none;color:rgba(255,255,255,.5);border:1px solid transparent;}
 .mn-lesson:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.08);}
 .mn-lesson.mn-active{color:#7FD4D8;border-color:#0E7C86;background:rgba(255,255,255,.1);}
-.mn-crumb{color:rgba(255,255,255,.4);font-size:11px;margin-left:auto;white-space:nowrap;}
+.mn-crumb{color:rgba(255,255,255,.4);font-size:11px;margin-left:auto;}
 
-/* ── HEADER ── */
-.page-header{background:linear-gradient(135deg,var(--navy),#0E4D5A);
-  color:#fff;padding:28px 24px 24px;}
-.ph-inner{max-width:860px;margin:0 auto;}
+/* TOOLBAR */
+.toolbar{position:fixed;top:38px;left:0;right:0;z-index:200;background:#0D2240;
+  padding:8px 20px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 10px rgba(0,0,0,.4);}
+.tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
+.tb-right{display:flex;gap:8px;align-items:center;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;
+  font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .15s;
+  white-space:nowrap;font-family:inherit;}
+.btn-print{background:var(--red);color:#fff;}
+.btn-print:hover{background:#A00024;}
+
+/* PAGE */
+.page{max-width:860px;margin:0 auto;padding:20px 16px 40px;}
+
+/* PAGE HEADER */
+.page-header{background:linear-gradient(135deg,#0D2438,#0E4D5A);
+  color:#fff;border-radius:10px;padding:20px 22px;margin-bottom:18px;}
 .ph-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);
   border:1px solid rgba(255,255,255,.2);padding:3px 12px;border-radius:20px;
   font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  color:#7FD4D8;margin-bottom:12px;}
-.ph-title{font-size:24px;font-weight:800;line-height:1.2;margin-bottom:6px;}
+  color:#7FD4D8;margin-bottom:10px;}
+.ph-title{font-size:22px;font-weight:800;margin-bottom:4px;}
 .ph-sub{font-size:13px;color:rgba(255,255,255,.7);}
 
-/* ── NAME ROW ── */
-.name-row{max-width:860px;margin:16px auto 0;display:flex;gap:10px;
-  border:1px solid var(--border);border-radius:6px;background:#fff;
-  padding:8px 16px;align-items:flex-end;}
+/* NAME ROW */
+.name-row{display:flex;gap:10px;margin-bottom:16px;border:1px solid var(--border);
+  border-radius:6px;background:#fff;padding:8px 14px;align-items:flex-end;}
 .nf{flex:2;}.nf-sm{flex:1;}
 .nf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.5px;color:var(--gray);margin-bottom:3px;}
-.nf input{width:100%;border:none;border-bottom:1.5px solid var(--navy);
-  padding:2px 0;font-size:13px;font-family:inherit;outline:none;background:transparent;}
+  letter-spacing:.5px;color:var(--gray);margin-bottom:2px;}
+.nf input{width:100%;border:none;border-bottom:1.5px solid var(--navy);padding:2px 0;
+  font-size:13px;font-family:inherit;outline:none;background:transparent;}
 
-/* ── PAGE ── */
-.page{max-width:860px;margin:24px auto;padding:0 16px;}
+/* ── ANIMATED CELL CYCLE VISUAL ── */
+.cycle-panel{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px;margin-bottom:18px;display:flex;align-items:center;gap:20px;}
+.cycle-svg-wrap{flex-shrink:0;}
+.cycle-legend{flex:1;}
+.cycle-legend .leg-title{font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--gray);margin-bottom:8px;}
+.leg-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12.5px;}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.leg-name{font-weight:700;min-width:28px;}
+.leg-desc{color:var(--gray);}
 
-/* ── INSTRUCTIONS ── */
-.instr-bar{background:var(--navy);color:#fff;border-radius:8px;padding:14px 18px;
-  margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;}
-.ib-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
-.ib-text{font-size:13px;line-height:1.55;}
-.ib-text strong{color:#7FD4D8;}
+/* ── INSTRUCTION BAR ── */
+.instr-bar{background:var(--navy);color:#fff;border-radius:8px;padding:11px 16px;
+  margin-bottom:18px;font-size:13px;line-height:1.5;}
+.instr-bar strong{color:#7FD4D8;}
 
-/* ── ROUND HEADER ── */
-.round-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:24px;}
+/* ── ROUND ── */
+.round-block{margin-bottom:28px;}
+.round-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
 .round-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;
   justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
 .round-title{font-size:17px;font-weight:700;}
 .round-sub{font-size:12px;color:var(--gray);margin-top:1px;}
 
 /* ── CARD BANK ── */
-.card-bank{display:flex;flex-wrap:wrap;gap:8px;
-  background:#fff;border:1.5px solid var(--border);border-radius:8px;
-  padding:12px;margin-bottom:16px;min-height:60px;}
-.card-bank-label{width:100%;font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1px;color:var(--gray);margin-bottom:6px;}
+.bank{background:#fff;border:1.5px solid var(--border);border-radius:8px;
+  padding:12px 14px;margin-bottom:12px;min-height:50px;}
+.bank-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  color:var(--gray);margin-bottom:8px;}
+.bank-cards{display:flex;flex-wrap:wrap;gap:8px;}
 
-/* ── DRAGGABLE CARD ── */
-.card{
-  padding:7px 14px;border-radius:6px;font-size:13px;font-weight:600;
+/* ── CARD ── */
+.card{padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;
   cursor:pointer;user-select:none;transition:all .15s;
-  border:2px solid transparent;display:inline-flex;align-items:center;
-}
-.card:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.15);}
+  border:2px solid transparent;display:inline-flex;align-items:center;gap:6px;}
+.card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.15);}
 .card.selected{box-shadow:0 0 0 3px var(--navy);transform:translateY(-2px);}
-.card.placed{opacity:.4;cursor:default;pointer-events:none;}
-/* Round colors */
+.card.placed{opacity:.35;cursor:default;pointer-events:none;}
+/* Round color themes */
 .card.r1{background:#EEF5FB;color:var(--navy);border-color:#BDD5EA;}
-.card.r2{background:#FFF8EC;color:#7A5200;border-color:#F0A500;}
+.card.r2{background:#FFFBEB;color:#7A5200;border-color:#F0A500;}
 .card.r3{background:#F0FFF4;color:#15803D;border-color:#86EFAC;}
 
 /* ── MATCH GRID ── */
-.match-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.match-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
 .match-row{display:flex;align-items:stretch;gap:8px;}
-.match-row.correct .drop-zone{background:#F0FFF4;border-color:#16A34A;}
-.match-row.incorrect .drop-zone{background:#FFF0F0;border-color:#C8102E;}
+.match-row.correct .drop-zone{background:#F0FFF4;border-color:var(--green);}
+.match-row.incorrect .drop-zone{background:#FFF0F2;border-color:var(--red);}
 
-.match-desc{
-  flex:1;background:#fff;border:1px solid var(--border);border-radius:6px;
-  padding:10px 14px;font-size:13px;line-height:1.45;
-}
-.match-desc .md-label{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.8px;color:var(--teal);margin-bottom:3px;}
-.match-desc .md-text{color:var(--dark);}
-.match-desc .md-sub{font-size:11.5px;color:var(--gray);margin-top:3px;}
+/* ── CLUE BOX (replaces text-heavy desc) ── */
+.clue-box{flex:1;background:#fff;border:1px solid var(--border);border-radius:8px;
+  padding:10px 14px;display:flex;align-items:flex-start;gap:10px;}
+.clue-icon{font-size:22px;flex-shrink:0;margin-top:1px;}
+.clue-content{}
+.clue-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--teal);margin-bottom:3px;}
+.clue-title{font-size:13.5px;font-weight:700;color:var(--dark);margin-bottom:2px;}
+.clue-hint{font-size:12px;color:var(--gray);line-height:1.4;}
 
-.drop-zone{
-  width:130px;flex-shrink:0;background:var(--bg);border:2px dashed var(--border);
-  border-radius:6px;display:flex;align-items:center;justify-content:center;
-  padding:8px;text-align:center;cursor:pointer;transition:all .15s;min-height:52px;
-}
+/* ── DROP ZONE ── */
+.drop-zone{width:126px;flex-shrink:0;background:var(--bg);border:2px dashed var(--border);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  padding:8px;text-align:center;cursor:pointer;transition:all .15s;min-height:52px;}
 .drop-zone:hover{border-color:var(--teal);background:var(--light);}
-.drop-zone.has-card{border-style:solid;border-color:var(--navy);background:#fff;cursor:pointer;}
-.drop-zone .dz-hint{font-size:11px;color:var(--muted);}
-.drop-zone .placed-card{
-  font-size:12.5px;font-weight:700;padding:4px 8px;border-radius:4px;
-  text-align:center;line-height:1.3;
-}
-.drop-zone .correct-label{font-size:10px;font-weight:700;color:#15803D;margin-top:3px;}
-.drop-zone .incorrect-label{font-size:10px;font-weight:700;color:#C8102E;margin-top:3px;}
+.drop-zone.has-card{border-style:solid;border-color:var(--navy);background:#fff;}
+.dz-hint{font-size:11px;color:var(--muted,#94A3B8);}
+.placed-card{font-size:12px;font-weight:700;padding:4px 6px;border-radius:4px;
+  line-height:1.3;text-align:center;}
 
-/* ── CHECK BUTTON ── */
-.check-row{display:flex;align-items:center;gap:12px;margin-top:16px;}
-.check-btn{
-  padding:9px 22px;background:var(--navy);color:#fff;border:none;
-  border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;
-  font-family:inherit;transition:background .15s;
-}
+/* ── CHECK ROW ── */
+.check-row{display:flex;align-items:center;gap:10px;margin-top:4px;}
+.check-btn{padding:8px 20px;background:var(--navy);color:#fff;border:none;
+  border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 .check-btn:hover{background:#0D2438;}
 .check-btn:disabled{background:var(--gray);cursor:default;}
-.check-score{font-size:13px;font-weight:600;color:var(--dark);}
 .reset-btn{padding:7px 14px;background:#fff;color:var(--navy);border:1.5px solid var(--border);
   border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
 .reset-btn:hover{border-color:var(--navy);}
+.score-msg{font-size:13px;font-weight:600;}
 
-/* ── ROUND DIVIDER ── */
-.round-divider{border:none;border-top:2px dashed var(--border);margin:28px 0;}
+.round-divider{border:none;border-top:2px dashed var(--border);margin:6px 0 22px;}
 
 /* ── DISCUSSION ── */
-.disc-section{background:var(--navy);border-radius:10px;padding:20px 22px;margin-top:28px;}
-.disc-title{color:#7FD4D8;font-size:11px;font-weight:700;letter-spacing:1.5px;
+.disc-section{background:var(--navy);border-radius:10px;padding:20px 22px;margin-top:8px;}
+.disc-title{color:#7FD4D8;font-size:10px;font-weight:700;letter-spacing:1.5px;
   text-transform:uppercase;margin-bottom:4px;}
-.disc-heading{color:#fff;font-size:17px;font-weight:700;margin-bottom:14px;}
-.disc-q{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+.disc-heading{color:#fff;font-size:16px;font-weight:700;margin-bottom:14px;}
+.disc-q{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
   border-radius:6px;padding:12px 14px;margin-bottom:10px;}
-.disc-q-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
-  color:#7FD4D8;margin-bottom:4px;}
-.disc-q-text{font-size:13px;color:rgba(255,255,255,.9);margin-bottom:8px;line-height:1.5;}
+.disc-q .dq-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;color:#7FD4D8;margin-bottom:4px;}
+.disc-q .dq-text{font-size:13px;color:rgba(255,255,255,.9);margin-bottom:8px;line-height:1.5;}
 .disc-q textarea{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
   border-radius:5px;padding:9px 11px;font-size:12.5px;font-family:inherit;color:#fff;
-  resize:vertical;min-height:70px;outline:none;line-height:1.5;}
-.disc-q textarea::placeholder{color:rgba(255,255,255,.35);}
+  resize:vertical;min-height:65px;outline:none;line-height:1.5;}
+.disc-q textarea::placeholder{color:rgba(255,255,255,.3);}
 
-/* ── NEXT LESSON CTA ── */
-.next-cta{background:var(--teal);color:#fff;border-radius:8px;padding:16px 20px;
+/* ── NEXT CTA ── */
+.next-cta{background:var(--teal);color:#fff;border-radius:8px;padding:15px 20px;
   margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .nc-text{font-size:13px;line-height:1.4;}
 .nc-text strong{display:block;font-size:15px;margin-bottom:2px;}
 .nc-btn{padding:8px 18px;background:#fff;color:var(--teal);border:none;
   border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;
   white-space:nowrap;display:inline-block;}
-.nc-btn:hover{background:var(--light);}
 
-  #tts-bar{position:fixed;bottom:0;left:0;right:0;background:#1A3A5C;color:#fff;
-    padding:7px 16px;display:flex;align-items:center;gap:8px;z-index:9997;
-    box-shadow:0 -2px 10px rgba(0,0,0,.3);flex-wrap:wrap;min-height:46px;}
-  .tts-icon{font-size:17px;flex-shrink:0;}
-  .tts-label{font-size:10.5px;font-weight:700;letter-spacing:.8px;
-    text-transform:uppercase;color:#7FD4D8;flex-shrink:0;}
-  .tts-btn{border:none;border-radius:5px;padding:5px 12px;font-size:12px;
-    font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
-  .tts-primary{background:#0E7C86;color:#fff;}
-  .tts-primary:hover{background:#0A6870;}
-  .tts-secondary{background:rgba(255,255,255,.12);color:#fff;padding:5px 10px;font-size:13px;}
-  .tts-secondary:hover:not(:disabled){background:rgba(255,255,255,.22);}
-  .tts-secondary:disabled{opacity:.35;cursor:default;}
-  .tts-divider{width:1px;height:20px;background:rgba(255,255,255,.2);flex-shrink:0;}
-  .tts-speed-row{display:flex;align-items:center;gap:4px;flex-shrink:0;}
-  .tts-speed-lbl{font-size:10px;color:#A8C8E8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-  .tts-speed-btn{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:4px;
-    padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;}
-  .tts-speed-btn:hover{background:rgba(255,255,255,.2);}
-  .tts-speed-btn.tts-speed-active{background:#0E7C86;font-weight:700;}
-  .tts-status{font-size:11px;color:#A8C8E8;margin-left:auto;display:flex;align-items:center;gap:5px;}
-  .tts-pulse{width:7px;height:7px;border-radius:50%;background:#16A34A;
-    animation:ttsPulse 1.2s ease-in-out infinite;}
-  @keyframes ttsPulse{0%,100%{opacity:1}50%{opacity:.3}}
-  .tts-reading{outline:2.5px solid #0E7C86!important;outline-offset:4px;border-radius:6px;}
+/* TRANSLATE / TTS (injected from L2) */
+#translate-bar {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 99999;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+  }
+  #translate-bar .tb-label {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+  }
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
 
+/* ── TTS Read-Aloud Bar ─────────────────────────────── */
+  #tts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1A3A5C;
+    color: #fff;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9997;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
+  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
+  .tts-btn {
+    border: none; border-radius: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: background .15s;
+  }
+  .tts-primary { background: #0E7C86; color: #fff; }
+  .tts-primary:hover { background: #0A6870; }
+  .tts-secondary {
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 5px 10px; font-size: 13px;
+  }
+  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .tts-secondary:disabled { opacity: .35; cursor: default; }
+  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
+                   text-transform: uppercase; letter-spacing: .5px; }
+  .tts-speed-btn {
+    background: rgba(255,255,255,.1); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 4px 8px; font-size: 11px; cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: background .12s;
+  }
+  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
+  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
+  .tts-status {
+    font-size: 11px; color: #A8C8E8; margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tts-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* Reading highlight */
+  .tts-reading {
+    outline: 2.5px solid #0E7C86 !important;
+    outline-offset: 4px;
+    border-radius: 6px;
+    transition: outline .2s;
+  }
+
+/* ── Module Nav Bar ─────────────────────────────── */
+  #module-nav {
+    background: #0D2438;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .mn-home {
+    font-size: 11px; font-weight: 700; color: #7FD4D8;
+    text-decoration: none; white-space: nowrap; margin-right: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mn-home:hover { color: #fff; }
+  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
+  .mn-lessons {
+    display: flex; gap: 2px; align-items: center;
+  }
+  .mn-lesson {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
+    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
+    transition: all .12s; border: 1px solid transparent;
+  }
+  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
+  .mn-lesson.mn-active {
+    color: #fff; border-color: rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+  }
+  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
+  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
+  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
+  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
+  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.goog-te-banner-frame.skiptranslate{display:none!important;}
+body{top:0px!important;}
+#google_translate_element{display:none!important;}
+@media print{.toolbar,#tts-bar,#translate-bar,#module-nav{display:none!important;}
+  body{padding:0!important;background:#fff!important;}}
 </style>
 </head>
 <body>
@@ -195,268 +331,447 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);pad
   <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
   <span class="mn-sep">›</span>
   <div class="mn-lessons">
-    <a href="module.html#lesson-1" class="mn-lesson mn-active">L1</a>
-    <a href="module.html#lesson-2" class="mn-lesson">L2</a>
-    <a href="module.html#lesson-3" class="mn-lesson">L3</a>
-    <a href="module.html#lesson-4" class="mn-lesson">L4</a>
+    <a href="module.html#lesson-1" class="mn-lesson mn-active mn-l1">L1</a>
+    <a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a>
+    <a href="module.html#lesson-3" class="mn-lesson mn-l3">L3</a>
+    <a href="module.html#lesson-4" class="mn-lesson mn-l4">L4</a>
   </div>
   <span class="mn-crumb">Lesson 1 · Card Sort</span>
 </nav>
 
-<!-- HEADER -->
-<div class="page-header">
-  <div class="ph-inner">
-    <div class="ph-badge">🃏 In-Class Activity · Lesson 1</div>
-    <div class="ph-title">Card Sort: The Normal Cell Cycle</div>
-    <div class="ph-sub">3 rounds · Work with your group · Match each card to the correct description</div>
-    <div class="name-row">
-      <div class="nf"><label>Full Name</label><input id="f-name" type="text" placeholder="First Last"/></div>
-      <div class="nf-sm"><label>Period / Class</label><input id="f-period" type="text" placeholder="Period 3"/></div>
-      <div class="nf-sm"><label>Date</label><input id="f-date" type="text" placeholder="Today"/></div>
-      <div class="nf-sm"><label>Group #</label><input id="f-group" type="text" placeholder="Group 2"/></div>
-    </div>
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="tb-left">🃏 Card Sort — The Normal Cell Cycle · Lesson 1</div>
+  <div class="tb-right">
+    <button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
   </div>
 </div>
 
 <div class="page">
 
-<!-- INSTRUCTIONS -->
-<div class="instr-bar">
-  <div class="ib-icon">📋</div>
-  <div class="ib-text">
-    <strong>How to use this card sort:</strong> Click a card in the bank to select it (it will highlight), then click the drop zone where it belongs. Click a placed card to return it to the bank. Complete all three rounds, then check your answers before moving to the discussion questions.
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="ph-badge">🃏 In-Class Activity · Lesson 1</div>
+  <div class="ph-title">Card Sort: The Normal Cell Cycle</div>
+  <div class="ph-sub">3 rounds · Work with your group · Match the card to its description</div>
+  <div class="name-row" style="margin-top:14px;margin-bottom:0;">
+    <div class="nf"><label>Full Name</label><input id="f-name" type="text" placeholder="First Last"/></div>
+    <div class="nf-sm"><label>Period</label><input id="f-period" type="text" placeholder="Period 3"/></div>
+    <div class="nf-sm"><label>Date</label><input id="f-date" type="text" placeholder="Today"/></div>
+    <div class="nf-sm"><label>Group #</label><input id="f-group" type="text" placeholder="Group 2"/></div>
   </div>
 </div>
 
-<!-- ══════════ ROUND 1: Cell Cycle Phases ══════════ -->
+<!-- ANIMATED CELL CYCLE VISUAL -->
+<div class="cycle-panel">
+  <div class="cycle-svg-wrap">
+    <svg id="cycle-svg" viewBox="0 0 220 220" width="190" height="190" xmlns="http://www.w3.org/2000/svg">
+      <defs></defs>
+      <!-- Phase arcs -->
+      <!-- G1: ~180deg navy, top-right, 12 o'clock to 6 o'clock clockwise -->
+      <path id="arc-g1" d="M110,20 A90,90 0 0,1 200,110" fill="none" stroke="#1A3A5C" stroke-width="30" stroke-linecap="butt"/>
+      <path id="arc-s"  d="M200,110 A90,90 0 0,1 110,200" fill="none" stroke="#0E7C86" stroke-width="30" stroke-linecap="butt"/>
+      <path id="arc-g2" d="M110,200 A90,90 0 0,1 20,110"  fill="none" stroke="#F0A500" stroke-width="30" stroke-linecap="butt"/>
+      <path id="arc-m"  d="M20,110 A90,90 0 0,1 110,20"   fill="none" stroke="#C8102E" stroke-width="30" stroke-linecap="butt"/>
+      <!-- Dividers -->
+      <line x1="110" y1="110" x2="110" y2="20"  stroke="white" stroke-width="2"/>
+      <line x1="110" y1="110" x2="200" y2="110" stroke="white" stroke-width="2"/>
+      <line x1="110" y1="110" x2="110" y2="200" stroke="white" stroke-width="2"/>
+      <line x1="110" y1="110" x2="20"  y2="110" stroke="white" stroke-width="2"/>
+      <!-- Labels -->
+      <text x="163" y="75"  text-anchor="middle" fill="white" font-size="14" font-weight="800" font-family="Arial">G1</text>
+      <text x="163" y="155" text-anchor="middle" fill="white" font-size="14" font-weight="800" font-family="Arial">S</text>
+      <text x="58"  y="155" text-anchor="middle" fill="white" font-size="14" font-weight="800" font-family="Arial">G2</text>
+      <text x="58"  y="75"  text-anchor="middle" fill="white" font-size="14" font-weight="800" font-family="Arial">M</text>
+      <!-- Center cell -->
+      <circle cx="110" cy="110" r="52" fill="#F8FBFF" stroke="#D1E4F0" stroke-width="2"/>
+      <!-- Animated nucleus -->
+      <circle id="nucleus" cx="110" cy="110" r="18" fill="#1A3A5C" opacity="0.15"/>
+      <!-- Phase label in center -->
+      <text id="phase-lbl" x="110" y="104" text-anchor="middle" fill="#1A3A5C"
+        font-size="11" font-weight="800" font-family="Arial"></text>
+      <text id="phase-sub" x="110" y="118" text-anchor="middle" fill="#64748B"
+        font-size="9" font-family="Arial"></text>
+      <!-- Clock-hand needle: line from center to outer ring -->
+      <line id="anim-needle" x1="110" y1="110" x2="200" y2="110"
+            stroke="#1A3A5C" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+      <!-- Pivot circle at center -->
+      <circle cx="110" cy="110" r="4" fill="#1A3A5C"/>
+      <!-- Outer indicator: white fill + phase-colored stroke — always visible on white bg -->
+      <circle id="anim-dot" cx="200" cy="110" r="7"
+              fill="white" stroke="#1A3A5C" stroke-width="3"/>
+    </svg>
+  </div>
+  <div class="cycle-legend">
+    <div class="leg-title">Reference — Active Phase</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1A3A5C;"></div><span class="leg-name">G1</span><span class="leg-desc">Growth &amp; prep · ~11 hrs</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#0E7C86;"></div><span class="leg-name">S</span><span class="leg-desc">DNA synthesis · ~8 hrs</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#F0A500;"></div><span class="leg-name">G2</span><span class="leg-desc">Pre-division check · ~4 hrs</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#C8102E;"></div><span class="leg-name">M</span><span class="leg-desc">Mitosis &amp; division · ~1 hr</span></div>
+    <div style="margin-top:8px;font-size:11.5px;color:var(--gray);line-height:1.5;">
+      The dot traces the cycle continuously. Use it to orient your cards — each phase the dot enters lights up.
+    </div>
+  </div>
+</div>
+
+<!-- INSTRUCTIONS -->
+<div class="instr-bar">
+  <strong>How it works:</strong> Click a card to select it (it highlights), then click the box where it belongs. Click a filled box to return a card. Cards are shuffled — order may differ each time.
+</div>
+
+<!-- ══ ROUND 1 ══ -->
+<div class="round-block">
 <div class="round-hdr">
   <div class="round-num" style="background:var(--navy);">1</div>
   <div>
     <div class="round-title" style="color:var(--navy);">Round 1 — Cell Cycle Phases</div>
-    <div class="round-sub">Match each phase name to what happens during that phase</div>
+    <div class="round-sub">Match each phase name to what the cell is doing</div>
   </div>
 </div>
 
-<div class="card-bank" id="bank-r1">
-  <div class="card-bank-label">Phase Cards — Click to select, then click a box below</div>
-  <div class="card r1" id="c-g1" data-round="1" data-val="G1" onclick="selectCard(this)">G1 Phase</div>
-  <div class="card r1" id="c-s"  data-round="1" data-val="S"  onclick="selectCard(this)">S Phase</div>
-  <div class="card r1" id="c-g2" data-round="1" data-val="G2" onclick="selectCard(this)">G2 Phase</div>
-  <div class="card r1" id="c-m"  data-round="1" data-val="M"  onclick="selectCard(this)">M Phase</div>
+<div class="bank" id="bank-r1">
+  <div class="bank-label">Phase Cards</div>
+  <div class="bank-cards" id="bank-cards-r1">
+    <!-- Shuffled on load by JS -->
+  </div>
 </div>
 
 <div class="match-grid" id="grid-r1">
   <div class="match-row" data-answer="G1">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">The cell grows larger, checks that nutrient levels are adequate, and produces proteins needed for DNA copying. If conditions aren't right, the cell pauses here.</div>
-      <div class="md-sub">⏱ ~11 hours · Longest phase of the cycle</div>
+    <div class="clue-box">
+      <div class="clue-icon">🌱</div>
+      <div class="clue-content">
+        <div class="clue-label">What is this phase?</div>
+        <div class="clue-title">Grow &amp; prepare</div>
+        <div class="clue-hint">Longest phase · Cell grows, checks nutrients, gets growth signals</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
   <div class="match-row" data-answer="S">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">DNA is replicated — every chromosome is copied exactly once. Each chromosome becomes two identical sister chromatids joined at the centromere.</div>
-      <div class="md-sub">⏱ ~8 hours · "S" stands for synthesis</div>
+    <div class="clue-box">
+      <div class="clue-icon">🧬</div>
+      <div class="clue-content">
+        <div class="clue-label">What is this phase?</div>
+        <div class="clue-title">Copy the DNA</div>
+        <div class="clue-hint">Every chromosome duplicated exactly once · Makes sister chromatids</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
   <div class="match-row" data-answer="G2">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">The cell verifies that DNA replication was accurate and checks for any double-strand breaks. It continues growing and assembles the proteins needed for cell division.</div>
-      <div class="md-sub">⏱ ~4 hours · Final preparation before division</div>
+    <div class="clue-box">
+      <div class="clue-icon">🔍</div>
+      <div class="clue-content">
+        <div class="clue-label">What is this phase?</div>
+        <div class="clue-title">Verify &amp; finalize</div>
+        <div class="clue-hint">Double-checks replication · Preps proteins for division</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
   <div class="match-row" data-answer="M">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">The cell physically divides into two daughter cells. The nucleus divides first (mitosis), then the cytoplasm splits (cytokinesis). Each daughter cell receives one complete copy of the genome.</div>
-      <div class="md-sub">⏱ ~1 hour · "M" stands for mitosis</div>
+    <div class="clue-box">
+      <div class="clue-icon">✂️</div>
+      <div class="clue-content">
+        <div class="clue-label">What is this phase?</div>
+        <div class="clue-title">Divide into two</div>
+        <div class="clue-hint">Nucleus splits first, then cytoplasm · Result: 2 identical daughter cells</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
 </div>
 <div class="check-row">
-  <button class="check-btn" onclick="checkRound(1)" id="check-r1">Check Round 1</button>
-  <button class="reset-btn" onclick="resetRound(1)">Reset</button>
-  <span class="check-score" id="score-r1"></span>
+  <button class="check-btn" id="check-r1" onclick="checkRound(1)">Check Round 1</button>
+  <button class="reset-btn" onclick="resetRound(1)">↺ Reset</button>
+  <span class="score-msg" id="score-r1"></span>
+</div>
 </div>
 
 <hr class="round-divider"/>
 
-<!-- ══════════ ROUND 2: Mitosis Phases ══════════ -->
+<!-- ══ ROUND 2 ══ -->
+<div class="round-block">
 <div class="round-hdr">
-  <div class="round-num" style="background:var(--gold);color:var(--dark);">2</div>
+  <div class="round-num" style="background:var(--gold);color:#7A5200;">2</div>
   <div>
     <div class="round-title" style="color:#92400E;">Round 2 — Phases of Mitosis</div>
-    <div class="round-sub">The M phase has 4 sub-phases — match each to what happens</div>
+    <div class="round-sub">The M phase has 4 sub-steps — match each to what happens</div>
   </div>
 </div>
 
-<div class="card-bank" id="bank-r2">
-  <div class="card-bank-label">Mitosis Phase Cards</div>
-  <div class="card r2" id="c-pro"  data-round="2" data-val="Prophase"             onclick="selectCard(this)">Prophase</div>
-  <div class="card r2" id="c-meta" data-round="2" data-val="Metaphase"            onclick="selectCard(this)">Metaphase</div>
-  <div class="card r2" id="c-ana"  data-round="2" data-val="Anaphase"             onclick="selectCard(this)">Anaphase</div>
-  <div class="card r2" id="c-telo" data-round="2" data-val="Telophase/Cytokinesis" onclick="selectCard(this)">Telophase &amp; Cytokinesis</div>
+<div class="bank" id="bank-r2">
+  <div class="bank-label">Mitosis Cards</div>
+  <div class="bank-cards" id="bank-cards-r2"></div>
 </div>
 
 <div class="match-grid" id="grid-r2">
   <div class="match-row" data-answer="Prophase">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">Chromosomes condense and become visible under a microscope. The nuclear envelope breaks down. The mitotic spindle — made of microtubule fibers — begins to form from the centrosomes.</div>
+    <div class="clue-box">
+      <div class="clue-icon">🌀</div>
+      <div class="clue-content">
+        <div class="clue-label">Which mitosis step?</div>
+        <div class="clue-title">Chromosomes condense, spindle forms</div>
+        <div class="clue-hint">Nuclear envelope breaks down · Chromosomes become visible</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
   <div class="match-row" data-answer="Metaphase">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">All chromosomes line up precisely along the cell's equator (the metaphase plate). Spindle fibers from opposite poles attach to each chromosome's centromere. This alignment is checked before the cell can proceed.</div>
+    <div class="clue-box">
+      <div class="clue-icon">⚖️</div>
+      <div class="clue-content">
+        <div class="clue-label">Which mitosis step?</div>
+        <div class="clue-title">Chromosomes line up at the center</div>
+        <div class="clue-hint">Spindle fibers attach · Spindle checkpoint operates here</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
   <div class="match-row" data-answer="Anaphase">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">Sister chromatids are pulled apart. Spindle fibers shorten and drag one copy of each chromosome to opposite poles. By the end, each pole has a complete set of chromosomes.</div>
+    <div class="clue-box">
+      <div class="clue-icon">↔️</div>
+      <div class="clue-content">
+        <div class="clue-label">Which mitosis step?</div>
+        <div class="clue-title">Sister chromatids pulled apart</div>
+        <div class="clue-hint">One copy moves to each pole · Cell elongates</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
-  <div class="match-row" data-answer="Telophase/Cytokinesis">
-    <div class="match-desc">
-      <div class="md-label">What happens here?</div>
-      <div class="md-text">Nuclear envelopes reform around each set of chromosomes. Chromosomes de-condense. The cytoplasm divides (cytokinesis) — in animal cells, a contractile ring pinches the cell in two, producing two identical daughter cells.</div>
+  <div class="match-row" data-answer="Telophase">
+    <div class="clue-box">
+      <div class="clue-icon">🔵</div>
+      <div class="clue-content">
+        <div class="clue-label">Which mitosis step?</div>
+        <div class="clue-title">Two nuclei reform, cell splits</div>
+        <div class="clue-hint">Nuclear envelopes rebuild · Cytokinesis pinches cell in two</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
 </div>
 <div class="check-row">
-  <button class="check-btn" onclick="checkRound(2)" id="check-r2">Check Round 2</button>
-  <button class="reset-btn" onclick="resetRound(2)">Reset</button>
-  <span class="check-score" id="score-r2"></span>
+  <button class="check-btn" id="check-r2" onclick="checkRound(2)">Check Round 2</button>
+  <button class="reset-btn" onclick="resetRound(2)">↺ Reset</button>
+  <span class="score-msg" id="score-r2"></span>
+</div>
 </div>
 
 <hr class="round-divider"/>
 
-<!-- ══════════ ROUND 3: Checkpoints ══════════ -->
+<!-- ══ ROUND 3 ══ -->
+<div class="round-block">
 <div class="round-hdr">
   <div class="round-num" style="background:var(--green);">3</div>
   <div>
-    <div class="round-title" style="color:#15803D;">Round 3 — Cell Cycle Checkpoints</div>
-    <div class="round-sub">Match each checkpoint to what it verifies and its key protein</div>
+    <div class="round-title" style="color:#15803D;">Round 3 — Checkpoints &amp; Proteins</div>
+    <div class="round-sub">Match each checkpoint to what it checks and its key protein</div>
   </div>
 </div>
 
-<div class="card-bank" id="bank-r3">
-  <div class="card-bank-label">Checkpoint Cards</div>
-  <div class="card r3" id="c-g1s"     data-round="3" data-val="G1/S Checkpoint"      onclick="selectCard(this)">G1/S Checkpoint</div>
-  <div class="card r3" id="c-g2m"     data-round="3" data-val="G2/M Checkpoint"      onclick="selectCard(this)">G2/M Checkpoint</div>
-  <div class="card r3" id="c-spindle" data-round="3" data-val="Spindle Checkpoint"   onclick="selectCard(this)">Spindle Checkpoint</div>
+<div class="bank" id="bank-r3">
+  <div class="bank-label">Checkpoint Cards</div>
+  <div class="bank-cards" id="bank-cards-r3"></div>
 </div>
 
 <div class="match-grid" id="grid-r3">
-  <div class="match-row" data-answer="G1/S Checkpoint">
-    <div class="match-desc">
-      <div class="md-label">What does this checkpoint verify?</div>
-      <div class="md-text">Is the cell large enough? Is DNA undamaged? Are nutrients and growth factors available? If DNA damage is detected, p53 halts the cycle and activates repair — or triggers apoptosis if repair fails.</div>
-      <div class="md-sub">🔑 Key proteins: p53 (TP53), Rb protein · Location: end of G1</div>
+  <div class="match-row" data-answer="G1/S">
+    <div class="clue-box">
+      <div class="clue-icon">🛑</div>
+      <div class="clue-content">
+        <div class="clue-label">Which checkpoint?</div>
+        <div class="clue-title">Is the DNA undamaged before copying?</div>
+        <div class="clue-hint">Key protein: p53 · Guards entry into S phase</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop checkpoint here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
-  <div class="match-row" data-answer="G2/M Checkpoint">
-    <div class="match-desc">
-      <div class="md-label">What does this checkpoint verify?</div>
-      <div class="md-text">Was all DNA replicated correctly? Are there any double-strand breaks remaining? Only if DNA is complete and intact does the cell receive permission to enter mitosis.</div>
-      <div class="md-sub">🔑 Key proteins: ATM/ATR kinase · Location: end of G2</div>
+  <div class="match-row" data-answer="G2/M">
+    <div class="clue-box">
+      <div class="clue-icon">🔬</div>
+      <div class="clue-content">
+        <div class="clue-label">Which checkpoint?</div>
+        <div class="clue-title">Was replication accurate and complete?</div>
+        <div class="clue-hint">Key protein: ATM/ATR · Guards entry into mitosis</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop checkpoint here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
-  <div class="match-row" data-answer="Spindle Checkpoint">
-    <div class="match-desc">
-      <div class="md-label">What does this checkpoint verify?</div>
-      <div class="md-text">Are all chromosomes properly attached to spindle fibers at both kinetochores? If even one chromosome is unattached, this checkpoint prevents anaphase — ensuring each daughter cell gets exactly one copy of every chromosome.</div>
-      <div class="md-sub">🔑 Key protein: MAD2 · Location: during M phase (metaphase)</div>
+  <div class="match-row" data-answer="Spindle">
+    <div class="clue-box">
+      <div class="clue-icon">🕸️</div>
+      <div class="clue-content">
+        <div class="clue-label">Which checkpoint?</div>
+        <div class="clue-title">Are all chromosomes attached to spindle fibers?</div>
+        <div class="clue-hint">Key protein: MAD2 · Prevents anaphase until all chromosomes secured</div>
+      </div>
     </div>
-    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop checkpoint here</span></div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop here</span></div>
   </div>
 </div>
 <div class="check-row">
-  <button class="check-btn" onclick="checkRound(3)" id="check-r3">Check Round 3</button>
-  <button class="reset-btn" onclick="resetRound(3)">Reset</button>
-  <span class="check-score" id="score-r3"></span>
+  <button class="check-btn" id="check-r3" onclick="checkRound(3)">Check Round 3</button>
+  <button class="reset-btn" onclick="resetRound(3)">↺ Reset</button>
+  <span class="score-msg" id="score-r3"></span>
+</div>
 </div>
 
 <hr class="round-divider"/>
 
-<!-- ══════════ DISCUSSION QUESTIONS ══════════ -->
+<!-- DISCUSSION -->
 <div class="disc-section">
   <div class="disc-title">Group Discussion</div>
-  <div class="disc-heading">After completing all three rounds, discuss and record your group's answers:</div>
-
+  <div class="disc-heading">After completing all three rounds, discuss and record:</div>
   <div class="disc-q">
-    <div class="disc-q-label">Q1 · Understand</div>
-    <div class="disc-q-text">The cell cycle has three major checkpoints — at G1/S, G2/M, and during M phase. Why do you think all three exist? What would happen if the cell only had the G1/S checkpoint?</div>
-    <textarea id="dq1" placeholder="Your group's response here..."></textarea>
+    <div class="dq-label">Q1 · Understand</div>
+    <div class="dq-text">Why does the cell need three separate checkpoints instead of one big check at the end? What specific problem does each one catch?</div>
+    <textarea placeholder="Your group's response..."></textarea>
   </div>
   <div class="disc-q">
-    <div class="disc-q-label">Q2 · Apply</div>
-    <div class="disc-q-text">A scientist uses a drug that blocks all cells in metaphase. Based on what you learned in Round 3, which checkpoint is this drug targeting, and what protein is it likely affecting?</div>
-    <textarea id="dq2" placeholder="Your group's response here..."></textarea>
+    <div class="dq-label">Q2 · Apply</div>
+    <div class="dq-text">A drug blocks all cells in metaphase. Based on Round 3, which checkpoint does this drug target — and which protein is it likely affecting?</div>
+    <textarea placeholder="Your group's response..."></textarea>
   </div>
   <div class="disc-q">
-    <div class="disc-q-label">Q3 · Analyze — Bridge to Lesson 2</div>
-    <div class="disc-q-text">Imagine the p53 protein stopped working in a cell. Walk through the cell cycle — at which checkpoint would the first problem appear? What would the cell do that it shouldn't? Where might this lead?</div>
-    <textarea id="dq3" placeholder="Your group's response here..."></textarea>
+    <div class="dq-label">Q3 · Bridge to Lesson 2</div>
+    <div class="dq-text">If p53 stopped working, trace what would happen step by step. At which checkpoint does the first problem occur? What does the cell do that it shouldn't?</div>
+    <textarea placeholder="Your group's response..."></textarea>
   </div>
 </div>
 
-<!-- NEXT LESSON CTA -->
 <a class="next-cta" href="Student_Lesson_WhenControlsBreakDown.html">
   <div class="nc-text">
     <strong>Up Next → Lesson 2: When Controls Break Down</strong>
-    In Lesson 2 you'll see what happens when p53 and other checkpoint proteins mutate — and meet Maya, a 12-year-old diagnosed with leukemia whose case you'll diagnose.
+    You've mapped the normal cell cycle. Next you'll discover what happens when p53 and other checkpoint proteins mutate — and diagnose Maya's case.
   </div>
   <span class="nc-btn">Start Lesson 2 →</span>
 </a>
 
 </div><!-- /page -->
 
+<!-- TTS BAR -->
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon" title="Read Aloud">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
+  <div class="tts-divider"></div>
+
+<!-- GT -->
+<div id="google_translate_element" style="display:none"></div>
+<div id="translate-bar">
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
+</div>
+
 <script>
+/* ══ CARD DATA (shuffled on init) ══════════════════════════════════════════ */
+var ROUNDS = {
+  1: [
+    {id:'c-g1',  val:'G1',      label:'G1 Phase',   cls:'r1'},
+    {id:'c-s',   val:'S',       label:'S Phase',    cls:'r1'},
+    {id:'c-g2',  val:'G2',      label:'G2 Phase',   cls:'r1'},
+    {id:'c-m',   val:'M',       label:'M Phase',    cls:'r1'},
+  ],
+  2: [
+    {id:'c-pro',  val:'Prophase',  label:'Prophase',           cls:'r2'},
+    {id:'c-meta', val:'Metaphase', label:'Metaphase',          cls:'r2'},
+    {id:'c-ana',  val:'Anaphase',  label:'Anaphase',           cls:'r2'},
+    {id:'c-telo', val:'Telophase', label:'Telophase / Cytokinesis', cls:'r2'},
+  ],
+  3: [
+    {id:'c-g1s',  val:'G1/S',    label:'G1/S Checkpoint',    cls:'r3'},
+    {id:'c-g2m',  val:'G2/M',    label:'G2/M Checkpoint',    cls:'r3'},
+    {id:'c-spin', val:'Spindle', label:'Spindle Checkpoint',  cls:'r3'},
+  ]
+};
+
+/* Shuffle array (Fisher-Yates) */
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+/* Build card banks with shuffled order */
+function initBanks() {
+  [1, 2, 3].forEach(function(r) {
+    var bank = document.getElementById('bank-cards-r' + r);
+    bank.innerHTML = '';
+    shuffle(ROUNDS[r]).forEach(function(card) {
+      var el = document.createElement('div');
+      el.className = 'card ' + card.cls;
+      el.id = card.id;
+      el.dataset.round = r;
+      el.dataset.val = card.val;
+      el.textContent = card.label;
+      el.onclick = function() { selectCard(this); };
+      bank.appendChild(el);
+    });
+  });
+}
+
+/* ══ INTERACTION ════════════════════════════════════════════════════════════ */
 var selectedCard = null;
 
 function selectCard(card) {
   if (card.classList.contains('placed')) return;
+  if (selectedCard === card) {
+    card.classList.remove('selected');
+    selectedCard = null;
+    return;
+  }
   if (selectedCard) selectedCard.classList.remove('selected');
-  if (selectedCard === card) { selectedCard = null; return; }
   selectedCard = card;
   card.classList.add('selected');
 }
 
 function dropCard(zone) {
   if (!selectedCard) {
-    // Click on occupied zone returns card to bank
-    if (zone.classList.contains('has-card')) {
-      returnToBank(zone);
-    }
+    if (zone.classList.contains('has-card')) returnToBank(zone);
     return;
   }
   var round = selectedCard.dataset.round;
-  var zoneRow = zone.closest('.match-row');
-  // Check same round
-  if (zoneRow && zoneRow.closest('.match-grid').id !== 'grid-r' + round) return;
+  var zoneGrid = zone.closest('.match-grid');
+  if (!zoneGrid || zoneGrid.id !== 'grid-r' + round) return;
 
-  // If zone already has a card, return that card first
-  if (zone.classList.contains('has-card')) {
-    returnToBank(zone);
-  }
+  if (zone.classList.contains('has-card')) returnToBank(zone);
 
-  // Place card
-  zone.innerHTML = '<span class="placed-card" style="background:var(--bg);color:var(--dark);">' +
-    selectedCard.textContent + '</span>';
+  /* Place */
+  var pc = document.createElement('span');
+  pc.className = 'placed-card';
+  pc.style.background = round == 1 ? '#EEF5FB' : round == 2 ? '#FFFBEB' : '#F0FFF4';
+  pc.style.color = round == 1 ? 'var(--navy)' : round == 2 ? '#7A5200' : '#15803D';
+  pc.textContent = selectedCard.textContent;
+  zone.innerHTML = '';
+  zone.appendChild(pc);
   zone.classList.add('has-card');
   zone.dataset.placed = selectedCard.dataset.val;
 
@@ -467,18 +782,12 @@ function dropCard(zone) {
 
 function returnToBank(zone) {
   var val = zone.dataset.placed;
-  var card = document.getElementById('c-' + val.toLowerCase().replace(/[^a-z]/g,''));
-  if (!card) {
-    // Find by data-val
-    card = document.querySelector('[data-val="' + val + '"]');
-  }
-  if (card) {
-    card.classList.remove('placed');
-  }
-  zone.innerHTML = '<span class="dz-hint">Drop ' + (zone.dataset.placed ? 'here' : 'here') + '</span>';
+  var card = document.querySelector('[data-val="' + val + '"]');
+  if (card) card.classList.remove('placed');
+  zone.innerHTML = '<span class="dz-hint">Drop here</span>';
   zone.classList.remove('has-card');
   delete zone.dataset.placed;
-  zone.closest('.match-row').classList.remove('correct','incorrect');
+  zone.closest('.match-row').classList.remove('correct', 'incorrect');
 }
 
 function checkRound(n) {
@@ -486,42 +795,34 @@ function checkRound(n) {
   var rows = grid.querySelectorAll('.match-row');
   var correct = 0;
   rows.forEach(function(row) {
-    var answer = row.dataset.answer;
     var zone = row.querySelector('.drop-zone');
     if (!zone.classList.contains('has-card')) return;
-    var placed = zone.dataset.placed;
-    row.classList.remove('correct','incorrect');
-    if (placed === answer) {
-      row.classList.add('correct');
-      zone.querySelector('.placed-card').style.color = 'var(--green)';
-      correct++;
-    } else {
-      row.classList.add('incorrect');
-      zone.querySelector('.placed-card').style.color = 'var(--red)';
-    }
+    row.classList.remove('correct', 'incorrect');
+    var ok = zone.dataset.placed === row.dataset.answer;
+    row.classList.add(ok ? 'correct' : 'incorrect');
+    if (ok) { correct++; zone.querySelector('.placed-card').style.color = '#15803D'; }
+    else     { zone.querySelector('.placed-card').style.color = 'var(--red)'; }
   });
   var total = rows.length;
-  var btn = document.getElementById('check-r' + n);
   var score = document.getElementById('score-r' + n);
+  var btn = document.getElementById('check-r' + n);
   if (correct === total) {
     score.textContent = '✓ All ' + total + ' correct!';
     score.style.color = 'var(--green)';
     btn.disabled = true;
   } else {
-    score.textContent = correct + ' of ' + total + ' correct — try again';
+    score.textContent = correct + ' of ' + total + ' — try again';
     score.style.color = 'var(--red)';
   }
 }
 
 function resetRound(n) {
   var grid = document.getElementById('grid-r' + n);
-  var rows = grid.querySelectorAll('.match-row');
-  rows.forEach(function(row) {
-    row.classList.remove('correct','incorrect');
+  grid.querySelectorAll('.match-row').forEach(function(row) {
+    row.classList.remove('correct', 'incorrect');
     var zone = row.querySelector('.drop-zone');
     if (zone.classList.contains('has-card')) {
-      var val = zone.dataset.placed;
-      var card = document.querySelector('[data-val="' + val + '"]');
+      var card = document.querySelector('[data-val="' + zone.dataset.placed + '"]');
       if (card) card.classList.remove('placed');
       zone.innerHTML = '<span class="dz-hint">Drop here</span>';
       zone.classList.remove('has-card');
@@ -531,27 +832,91 @@ function resetRound(n) {
   document.getElementById('score-r' + n).textContent = '';
   document.getElementById('check-r' + n).disabled = false;
 }
-</script>
 
-<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
-  <span class="tts-icon">&#128266;</span>
-  <span class="tts-label">Read Aloud</span>
-  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()">&#9654; Play</button>
-  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled>&#9646;&#9646;</button>
-  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled>&#9632;</button>
-  <div class="tts-divider"></div>
-  <div class="tts-speed-row">
-    <span class="tts-speed-lbl">Speed</span>
-    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&times;</button>
-    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&times;</button>
-    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&times;</button>
-    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&times;</button>
-  </div>
-  <div class="tts-status" id="tts-status" style="display:none">
-    <div class="tts-pulse"></div>
-    <span id="tts-status-text">Reading&hellip;</span>
-  </div>
-</div>
+/* ══ CELL CYCLE ANIMATION ═══════════════════════════════════════════════════ */
+(function() {
+  var cx = 110, cy = 110;
+  var rArc    = 90;   /* arc center radius — used for arc pulse only */
+  var rOuter  = 112;  /* orbit radius — just outside the arc, on white background */
+  var phases = [
+    {name:'G1', sub:'Gap 1 · ~11 hrs',       color:'#1A3A5C'},
+    {name:'S',  sub:'Synthesis · ~8 hrs',     color:'#0E7C86'},
+    {name:'G2', sub:'Gap 2 · ~4 hrs',         color:'#F0A500'},
+    {name:'M',  sub:'Mitosis · ~1 hr',        color:'#C8102E'},
+  ];
+  var totalDuration = 8000;
+  var startTime = null;
+  var dot    = document.getElementById('anim-dot');
+  var needle = document.getElementById('anim-needle');
+  var pivot  = document.querySelector('#cycle-svg circle[r="4"]');
+  var lbl    = document.getElementById('phase-lbl');
+  var sub    = document.getElementById('phase-sub');
+  var arcs   = {G1:'arc-g1', S:'arc-s', G2:'arc-g2', M:'arc-m'};
+
+  function degToRad(d) { return d * Math.PI / 180; }
+  function polarToXY(deg, radius) {
+    var rad = degToRad(deg - 90);
+    return {x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad)};
+  }
+
+  function getPhase(deg) {
+    var d = ((deg % 360) + 360) % 360;
+    if (d >= 270 || d < 90)  return phases[0]; /* G1 */
+    if (d >= 90  && d < 180) return phases[1]; /* S  */
+    if (d >= 180 && d < 270) return phases[2]; /* G2 */
+    return phases[3];                           /* M  */
+  }
+
+  var lastPhase = null;
+  function animate(ts) {
+    if (!startTime) startTime = ts;
+    var deg = ((ts - startTime) / totalDuration) * 360;
+
+    /* Outer indicator position (always on white background) */
+    var outerPos = polarToXY(deg, rOuter);
+
+    /* Move dot to outer ring */
+    dot.setAttribute('cx', outerPos.x);
+    dot.setAttribute('cy', outerPos.y);
+
+    /* Move needle from center to outer ring */
+    needle.setAttribute('x2', outerPos.x);
+    needle.setAttribute('y2', outerPos.y);
+
+    /* Update center label */
+    var ph = getPhase(deg);
+    lbl.textContent = ph.name;
+    sub.textContent = ph.sub;
+
+    /* Phase transition — update colors */
+    if (ph !== lastPhase) {
+      /* Needle + pivot */
+      needle.setAttribute('stroke', ph.color);
+      dot.setAttribute('stroke', ph.color);
+      if (pivot) pivot.setAttribute('fill', ph.color);
+
+      /* Arc pulse: dim all, brighten active */
+      Object.values(arcs).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) { el.setAttribute('stroke-opacity', '0.45'); el.setAttribute('stroke-width', '28'); }
+      });
+      var activeArc = document.getElementById(arcs[ph.name]);
+      if (activeArc) {
+        activeArc.setAttribute('stroke-opacity', '1');
+        activeArc.setAttribute('stroke-width', '32');
+      }
+
+      lastPhase = ph;
+    }
+
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
+
+/* ══ INIT ON LOAD ═══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', initBanks);
+</script>
 
 <script>
 /* ═══ Read-Aloud Engine v2 ═══════════════════════════════════════════════ */
@@ -723,12 +1088,39 @@ function resetRound(n) {
   });
 })();
 </script>
+
 <script>
+/* TTS sections for card sort */
 window._ttsGetSections = function() {
-  return Array.from(document.querySelectorAll('.round-hdr,.match-desc,.disc-q')).filter(function(e) {
-    return (e.textContent||'').trim().length > 15;
+  return Array.from(document.querySelectorAll(
+    '.round-hdr, .clue-box, .disc-q'
+  )).filter(function(el) {
+    return (el.textContent || '').trim().length > 15;
   });
 };
 </script>
-</body>
-</html>
+
+<script>
+/* Google Translate */
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage:'en',autoDisplay:false},'google_translate_element');
+}
+function triggerTranslate(lang){
+  var combo=document.querySelector('.goog-te-combo');
+  if(!combo){setTimeout(function(){triggerTranslate(lang);},600);return;}
+  if(lang===''){
+    combo.value='';var e=document.createEvent('HTMLEvents');
+    e.initEvent('change',false,true);combo.dispatchEvent(e);
+    document.getElementById('lang-select').value='';return;
+  }
+  combo.value=lang;var e=document.createEvent('HTMLEvents');
+  e.initEvent('change',false,true);combo.dispatchEvent(e);
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var s=document.getElementById('lang-select');
+  if(s)s.addEventListener('change',function(){triggerTranslate(this.value);});
+});
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body></html>
