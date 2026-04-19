@@ -1458,55 +1458,107 @@ document.getElementById('lang-select').addEventListener('change', function() {
   </div>
 </div>
 
+
+
+
 <script>
-/* ═══ Read-Aloud Engine ═══════════════════════════════════════════════════ */
+/* ═══ Read-Aloud Engine v2 ═══════════════════════════════════════════════ */
 (function() {
-  var synth  = window.speechSynthesis;
-  var _rate  = 1.0;
+  var synth    = window.speechSynthesis;
+  var _rate    = 1.0;
   var _playing = false;
   var _paused  = false;
   var _sections = [];
-  var _idx = 0;
-  var _utt = null;
+  var _idx     = 0;
+  var _utt     = null;
+  var _timer   = null;
 
-  /* Default section finder — override per file below */
-  window._ttsGetSections = function() {
-    return Array.from(document.querySelectorAll('.page > *')).filter(function(el) {
-      return el.offsetParent !== null && (el.innerText || el.textContent || '').trim().length > 20;
-    });
-  };
+  /* DOM walker: builds text with proper punctuation after every block element */
+  window._ttsExtract = function(rootEl) {
+    if (!rootEl) return '';
+    var clone = rootEl.cloneNode(true);
 
-  function extractText(el) {
-    var clone = el.cloneNode(true);
-    ['button','select','input','svg','script','style','#tts-bar',
-     '.tts-bar','.top-bar','.toolbar','.tb-right'].forEach(function(sel) {
+    var skipSels = [
+      'button','select','svg','script','style',
+      'input[type=submit]','input[type=button]','input[type=reset]',
+      '#tts-bar','.tts-bar','#translate-bar','.toolbar','.top-bar',
+      '.tb-right','[aria-hidden="true"]'
+    ];
+    skipSels.forEach(function(sel) {
       try {
         clone.querySelectorAll(sel).forEach(function(n) {
           if (n.parentNode) n.parentNode.removeChild(n);
         });
       } catch(e) {}
     });
-    return ((clone.innerText || clone.textContent) || '').replace(/\s+/g, ' ').trim();
+
+    var BLOCK = {
+      DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,
+      LI:1,DT:1,DD:1,TD:1,TH:1,TR:1,CAPTION:1,
+      SECTION:1,ARTICLE:1,BLOCKQUOTE:1,FIGURE:1,FIGCAPTION:1,
+      LABEL:1,LEGEND:1,SUMMARY:1
+    };
+
+    var parts = [];
+    function walk(node) {
+      if (node.nodeType === 3) {
+        var t = node.nodeValue.replace(/\s+/g,' ');
+        if (t.trim()) parts.push(t);
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      var tag = node.tagName;
+      if (tag === 'BR') { parts.push(' '); return; }
+      var before = parts.length;
+      var c = node.childNodes;
+      for (var i = 0; i < c.length; i++) walk(c[i]);
+      if (BLOCK[tag] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) {
+          if (!/[.!?:;\u2014\u2013,]$/.test(seg)) seg += '.';
+          parts.push(seg + ' ');
+        }
+      }
+    }
+    walk(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  };
+
+  window._ttsGetSections = function() {
+    var page = document.querySelector('.page, main, [role=main]') || document.body;
+    return Array.from(page.children).filter(function(el) {
+      return (el.textContent || '').trim().length > 15;
+    });
+  };
+
+  function clearHL() {
+    document.querySelectorAll('.tts-reading').forEach(function(el) {
+      el.classList.remove('tts-reading');
+    });
   }
 
   function readAt(idx) {
+    clearTimeout(_timer);
     if (idx >= _sections.length) { onDone(); return; }
     _idx = idx;
-
-    // scroll into view
-    try { _sections[idx].scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e) {}
-
-    // highlight
     clearHL();
-    _sections[idx].classList.add('tts-reading');
-
-    var txt = extractText(_sections[idx]);
-    if (!txt) { readAt(idx + 1); return; }
+    var sec = _sections[idx];
+    if (sec.parentNode) {
+      sec.classList.add('tts-reading');
+      try { sec.scrollIntoView({behavior:'smooth',block:'nearest'}); } catch(e) {}
+    }
+    var txt = window._ttsExtract(sec);
+    if (!txt.trim()) { readAt(idx + 1); return; }
 
     _utt = new SpeechSynthesisUtterance(txt);
     _utt.rate = _rate;
     _utt.lang = document.documentElement.lang || 'en-US';
-    _utt.onend = function() { readAt(idx + 1); };
+    _utt.onend = function() {
+      if (!_playing) return;
+      _timer = setTimeout(function() {
+        if (_playing && !_paused) readAt(idx + 1);
+      }, 500);
+    };
     _utt.onerror = function(e) {
       if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
     };
@@ -1515,23 +1567,17 @@ document.getElementById('lang-select').addEventListener('change', function() {
     updateUI(_idx + 1, _sections.length);
   }
 
-  function clearHL() {
-    document.querySelectorAll('.tts-reading').forEach(function(el) {
-      el.classList.remove('tts-reading');
-    });
-  }
-
   function onDone() {
     _playing = false; _paused = false;
-    clearHL(); updateUI(0, 0);
+    clearHL(); clearTimeout(_timer); updateUI(0,0);
   }
 
   function updateUI(cur, total) {
-    var play  = document.getElementById('tts-play');
+    var play = document.getElementById('tts-play');
     var pause = document.getElementById('tts-pause');
     var stop  = document.getElementById('tts-stop');
-    var status  = document.getElementById('tts-status');
-    var statusTxt = document.getElementById('tts-status-text');
+    var status = document.getElementById('tts-status');
+    var stxt   = document.getElementById('tts-status-text');
     if (!play) return;
     if (_playing) {
       play.innerHTML  = '&#8635; Restart';
@@ -1539,75 +1585,64 @@ document.getElementById('lang-select').addEventListener('change', function() {
       pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
       pause.title     = _paused ? 'Resume' : 'Pause';
       stop.disabled   = false;
-      status.style.display = 'flex';
-      if (statusTxt) statusTxt.textContent = _paused
-        ? 'Paused'
-        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading…');
+      if (status) status.style.display = 'flex';
+      if (stxt) stxt.textContent = _paused ? 'Paused'
+        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading\u2026');
     } else {
       play.innerHTML  = '&#9654; Play';
       pause.disabled  = true;
       pause.innerHTML = '&#9646;&#9646;';
       stop.disabled   = true;
-      status.style.display = 'none';
+      if (status) status.style.display = 'none';
     }
   }
 
   window.ttsPlay = function() {
-    synth.cancel();
+    synth.cancel(); clearTimeout(_timer);
     _sections = window._ttsGetSections();
     if (!_sections.length) return;
+    _playing = true; _paused = false;
     readAt(0);
   };
-
   window.ttsPauseResume = function() {
     if (!_playing) return;
     if (_paused) { synth.resume(); _paused = false; }
     else         { synth.pause();  _paused = true;  }
     updateUI(_idx + 1, _sections.length);
   };
-
   window.ttsStop = function() {
-    synth.cancel();
+    synth.cancel(); clearTimeout(_timer);
     _playing = false; _paused = false;
-    clearHL(); updateUI(0, 0);
+    clearHL(); updateUI(0,0);
   };
-
   window.ttsSetRate = function(r) {
     _rate = r;
     document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
       b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
     });
     if (_playing && !_paused) {
-      var resumeIdx = _idx;
-      synth.cancel();
+      var ri = _idx; synth.cancel(); clearTimeout(_timer);
       _sections = window._ttsGetSections();
-      setTimeout(function() { readAt(resumeIdx); }, 80);
+      _timer = setTimeout(function() { readAt(ri); }, 100);
     }
   };
-
-  /* Stop reading when page visibility changes (tab switch) */
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) window.ttsStop();
   });
 })();
-/* ════════════════════════════════════════════════════════════════════════ */
 </script>
 
 <script>
+/* TTS: Simulator - visible children of center panel */
 window._ttsGetSections = function() {
-  /* Read center-panel visible content (changes with each step) */
   var center = document.querySelector('.center-panel');
   if (!center) return [];
-  /* Collect visible text blocks inside center panel */
-  var blocks = Array.from(center.querySelectorAll(
-    '.onboard-banner, .step-view, .phase-view, .outcome-card, #discussion-section, .think-block'
-  )).filter(function(el) {
-    return el.offsetParent !== null &&
-           (el.innerText || el.textContent || '').trim().length > 10;
+  var kids = Array.from(center.children).filter(function(el) {
+    return (el.textContent||'').trim().length > 15;
   });
-  /* If nothing specific is visible, fall back to entire center panel */
-  return blocks.length ? blocks : [center];
+  return kids.length ? kids : [center];
 };
 </script>
+
 </body>
 </html>
