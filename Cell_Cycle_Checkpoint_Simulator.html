@@ -230,6 +230,30 @@
   @media (max-width: 900px) { .right-panel { display: none; } }
   @media (max-width: 680px) { .left-panel { width: 240px; } }
 
+  /* ── PRINT STYLES ──────────────────────────────────────────── */
+  @media print {
+    .app-header, .app-body, #translate-bar,
+    button, select { display: none !important; }
+    #discussion-section {
+      display: block !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 12px !important;
+    }
+    #discussion-section textarea {
+      border: 1px solid #ccc !important;
+      min-height: 80px !important;
+      background: white !important;
+      color: black !important;
+    }
+    #discussion-section [style*="background:linear-gradient"],
+    #discussion-section [style*="background:var(--navy)"] {
+      background: #f0f4f8 !important;
+      color: black !important;
+      border: 1px solid #ccc !important;
+    }
+  }
+
   /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
   /* Fixed bottom-right: clears every file's top bar & print buttons */
   #translate-bar {
@@ -288,18 +312,40 @@
       <div class="app-subtitle">Explore how mutations disrupt cell division control</div>
     </div>
   </div>
-  <button class="reset-btn" onclick="resetSim()">↺ Reset</button>
 </div>
 
 <div class="app-body">
 
   <!-- LEFT: CONTROLS -->
   <div class="left-panel">
+    <!-- STUDENT INFO — collected with discussion responses -->
+    <div class="panel-section" style="margin-bottom:16px;">
+      <div class="panel-label">Your Information</div>
+      <input id="student-name" type="text" placeholder="Full Name"
+        style="width:100%;background:#1A2D42;border:1.5px solid rgba(255,255,255,.12);border-radius:6px;
+               padding:7px 10px;font-size:12px;color:white;font-family:inherit;margin-bottom:6px;outline:none;
+               transition:border-color .15s;"
+        onfocus="this.style.borderColor='#0E7C86'" onblur="this.style.borderColor='rgba(255,255,255,.12)'">
+      <input id="student-period" type="text" placeholder="Class Period (e.g. 3rd)"
+        style="width:100%;background:#1A2D42;border:1.5px solid rgba(255,255,255,.12);border-radius:6px;
+               padding:7px 10px;font-size:12px;color:white;font-family:inherit;outline:none;
+               transition:border-color .15s;"
+        onfocus="this.style.borderColor='#0E7C86'" onblur="this.style.borderColor='rgba(255,255,255,.12)'">
+    </div>
+
     <div class="panel-section">
       <div class="panel-label" style="color:#7FD4D8;display:flex;align-items:center;gap:8px;">
         <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#0E7C86;color:white;font-size:10px;font-weight:800;animation:pulse 1.8s infinite;">1</span>
         START HERE — Choose a Scenario
       </div>
+
+      <div id="progress-badge" style="
+        font-size:11px; font-weight:700; color:#F0A500;
+        border:1.5px solid #F0A500; border-radius:6px;
+        padding:5px 10px; text-align:center; margin-bottom:10px;
+        background:rgba(240,165,0,0.10); letter-spacing:0.3px;
+        transition: all 0.3s;
+      ">0 / 4 scenarios completed</div>
 
       <div class="mutation-card" id="mc-normal" onclick="selectMutation('normal')">
         <div class="mutation-name">✅  Healthy Cell</div>
@@ -353,6 +399,10 @@
     </button>
     <button class="sim-btn danger" id="adv-btn" onclick="advanceStep()" style="display:none">
       ⏭ Next Step
+    </button>
+    <button class="reset-btn" onclick="resetSim()"
+      style="width:100%;margin-top:4px;text-align:center;font-size:11px;padding:7px;">
+      ↺ Reset All &amp; Start Over
     </button>
   </div>
 
@@ -479,6 +529,144 @@
           <text x="260" y="263" fill="#7C3AED" font-size="12" font-weight="700" font-family="Arial" text-anchor="middle">Apoptosis — Cell Self-Destructs</text>
           <text x="260" y="283" fill="#94A3B8" font-size="11" font-family="Arial" text-anchor="middle">Damaged DNA detected — controlled cell death triggered</text>
         </g>
+
+        <!-- ── G1 PHASE — healthy growing cell ── -->
+        <g id="view-g1" style="display:none">
+          <circle cx="260" cy="155" r="88" fill="url(#cellGrad)" stroke="#1A3A5C" stroke-width="2.5" opacity="0.92"/>
+          <!-- Organelles (mitochondria-like) -->
+          <ellipse cx="194" cy="136" rx="11" ry="5" fill="#A8C8E8" stroke="#70A0C8" stroke-width="1" opacity="0.65"/>
+          <ellipse cx="326" cy="172" rx="10" ry="5" fill="#A8C8E8" stroke="#70A0C8" stroke-width="1" opacity="0.6"/>
+          <ellipse cx="208" cy="202" rx="9"  ry="4" fill="#A8C8E8" stroke="#70A0C8" stroke-width="1" opacity="0.5"/>
+          <!-- Nucleus with relaxed chromatin -->
+          <ellipse cx="260" cy="150" rx="37" ry="35" fill="url(#nucGrad)" stroke="#4A7AA0" stroke-width="2"/>
+          <circle  cx="256" cy="146" r="13"  fill="#5A8AB8" opacity="0.65"/>
+          <circle  cx="268" cy="157" r="4"   fill="#3A6A98" opacity="0.45"/>
+          <circle  cx="252" cy="158" r="3"   fill="#3A6A98" opacity="0.38"/>
+          <!-- G1 status label -->
+          <rect x="172" y="256" width="176" height="20" rx="4" fill="#EEF5FB" stroke="#D1E4F0"/>
+          <text x="260" y="270" fill="#1A3A5C" font-size="11" font-weight="700" font-family="Arial" text-anchor="middle">G1 Phase — Growing</text>
+          <text x="260" y="295" fill="#94A3B8" font-size="10" font-family="Arial" text-anchor="middle">Nucleus intact · Checkpoints on standby</text>
+        </g>
+
+        <!-- ── G1 WITH DAMAGE — checkpoint protein absent or non-functional ── -->
+        <g id="view-g1-damage" style="display:none">
+          <circle cx="260" cy="155" r="88" fill="#FFF4F4" stroke="#C8102E" stroke-width="2" opacity="0.9"/>
+          <ellipse cx="194" cy="136" rx="11" ry="5" fill="#A8C8E8" stroke="#70A0C8" stroke-width="1" opacity="0.5"/>
+          <ellipse cx="326" cy="172" rx="10" ry="5" fill="#A8C8E8" stroke="#70A0C8" stroke-width="1" opacity="0.5"/>
+          <!-- Nucleus with DNA damage markers -->
+          <ellipse cx="260" cy="150" rx="37" ry="35" fill="#E8B8B8" stroke="#C8102E" stroke-width="1.5" opacity="0.75"/>
+          <!-- DNA damage squiggles inside nucleus -->
+          <path d="M242,130 Q252,138 242,146 Q252,154 242,162" fill="none" stroke="#C8102E" stroke-width="2" stroke-dasharray="3,2" opacity="0.8"/>
+          <path d="M268,138 Q278,146 268,154 Q278,162 268,170" fill="none" stroke="#C8102E" stroke-width="2" stroke-dasharray="3,2" opacity="0.7"/>
+          <!-- Warning symbol -->
+          <text x="302" y="122" fill="#C8102E" font-size="18" font-weight="700" font-family="Arial">⚠</text>
+          <!-- Status label -->
+          <rect x="152" y="256" width="216" height="20" rx="4" fill="#FDE8EC" stroke="#C8102E" stroke-width="1"/>
+          <text x="260" y="270" fill="#C8102E" font-size="11" font-weight="700" font-family="Arial" text-anchor="middle">G1 Phase — DNA Damage Present</text>
+          <text x="260" y="295" fill="#94A3B8" font-size="10" font-family="Arial" text-anchor="middle">p53 should detect &amp; pause cycle · but won't</text>
+        </g>
+
+        <!-- ── CHECKPOINT PASSED — green scan confirms clearance ── -->
+        <g id="view-checkpoint-ok" style="display:none">
+          <circle cx="260" cy="155" r="88" fill="url(#cellGrad)" stroke="#16A34A" stroke-width="3" opacity="0.92"/>
+          <ellipse cx="260" cy="150" rx="37" ry="35" fill="url(#nucGrad)" stroke="#4A7AA0" stroke-width="2"/>
+          <circle  cx="256" cy="146" r="13"  fill="#5A8AB8" opacity="0.65"/>
+          <!-- Green scan lines radiating from nucleus -->
+          <line x1="260" y1="115" x2="260" y2="86"  stroke="#16A34A" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+          <line x1="297" y1="155" x2="348" y2="155" stroke="#16A34A" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+          <line x1="223" y1="155" x2="172" y2="155" stroke="#16A34A" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+          <!-- Large ✓ badge -->
+          <circle cx="260" cy="155" r="30" fill="#16A34A" opacity="0.18"/>
+          <text x="260" y="163" fill="#16A34A" font-size="30" font-weight="700" font-family="Arial" text-anchor="middle">✓</text>
+          <!-- Status label -->
+          <rect x="168" y="256" width="184" height="20" rx="4" fill="#D1FAE5" stroke="#16A34A" stroke-width="1"/>
+          <text x="260" y="270" fill="#16A34A" font-size="11" font-weight="700" font-family="Arial" text-anchor="middle">Checkpoint PASSED</text>
+          <text x="260" y="295" fill="#94A3B8" font-size="10" font-family="Arial" text-anchor="middle">DNA verified · Cleared to advance</text>
+        </g>
+
+        <!-- ── CHECKPOINT BYPASSED — damage ignored, cell proceeds ── -->
+        <g id="view-checkpoint-fail" style="display:none">
+          <circle cx="260" cy="155" r="88" fill="#FFF4F4" stroke="#C8102E" stroke-width="3" opacity="0.9"/>
+          <ellipse cx="260" cy="150" rx="37" ry="35" fill="#E8B8B8" stroke="#C8102E" stroke-width="1.5" opacity="0.75"/>
+          <!-- DNA damage still visible -->
+          <path d="M245,133 Q255,141 245,149 Q255,157 245,165" fill="none" stroke="#C8102E" stroke-width="1.8" stroke-dasharray="3,2" opacity="0.75"/>
+          <!-- Large ✗ badge -->
+          <circle cx="260" cy="155" r="30" fill="#C8102E" opacity="0.14"/>
+          <text x="260" y="163" fill="#C8102E" font-size="30" font-weight="700" font-family="Arial" text-anchor="middle">✗</text>
+          <!-- Arrow showing cell proceeding anyway -->
+          <path d="M 350,155 L 375,155" fill="none" stroke="#C8102E" stroke-width="2.5" marker-end="url(#failArrow)"/>
+          <defs>
+            <marker id="failArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <polygon points="0,0 0,8 8,4" fill="#C8102E"/>
+            </marker>
+          </defs>
+          <text x="362" y="148" fill="#C8102E" font-size="9" font-weight="700" font-family="Arial" text-anchor="middle">proceeds</text>
+          <!-- Status label -->
+          <rect x="148" y="256" width="224" height="20" rx="4" fill="#FDE8EC" stroke="#C8102E" stroke-width="1"/>
+          <text x="260" y="270" fill="#C8102E" font-size="11" font-weight="700" font-family="Arial" text-anchor="middle">Checkpoint BYPASSED — Damage Ignored</text>
+          <text x="260" y="295" fill="#94A3B8" font-size="10" font-family="Arial" text-anchor="middle">Damaged cell advancing to next phase</text>
+        </g>
+
+        <!-- ── S PHASE — DNA replication in progress ── -->
+        <g id="view-s-normal" style="display:none">
+          <circle cx="260" cy="155" r="90" fill="url(#cellGrad)" stroke="#0E7C86" stroke-width="2.5" opacity="0.92"/>
+          <!-- Nucleus, larger (cell is bigger now) -->
+          <ellipse cx="260" cy="148" rx="52" ry="46" fill="#C8E4F4" stroke="#4A8AB0" stroke-width="1.5" opacity="0.7"/>
+          <!-- Original DNA double helix (navy) — left strand pair -->
+          <path d="M237,114 C248,122 228,130 238,138 C248,146 228,154 238,162 C248,170 228,178 238,186" fill="none" stroke="#1A3A5C" stroke-width="1.8" opacity="0.8"/>
+          <path d="M246,114 C236,122 255,130 246,138 C236,146 255,154 246,162 C236,170 255,178 246,186" fill="none" stroke="#1A3A5C" stroke-width="1.8" opacity="0.8"/>
+          <!-- Base pair rungs (original) -->
+          <line x1="237" y1="122" x2="246" y2="122" stroke="#1A3A5C" stroke-width="1.2" opacity="0.4"/>
+          <line x1="238" y1="138" x2="246" y2="138" stroke="#1A3A5C" stroke-width="1.2" opacity="0.4"/>
+          <line x1="238" y1="154" x2="246" y2="154" stroke="#1A3A5C" stroke-width="1.2" opacity="0.4"/>
+          <line x1="238" y1="170" x2="246" y2="170" stroke="#1A3A5C" stroke-width="1.2" opacity="0.4"/>
+          <!-- Replication fork -->
+          <path d="M 246,150 L 265,142" fill="none" stroke="#F0A500" stroke-width="2.2" opacity="0.9"/>
+          <path d="M 246,150 L 265,158" fill="none" stroke="#F0A500" stroke-width="2.2" opacity="0.9"/>
+          <!-- New DNA strand (teal) — right strand pair, shorter (still forming) -->
+          <path d="M269,142 C280,150 260,158 270,166 C280,174 260,182 270,190" fill="none" stroke="#0E7C86" stroke-width="1.8"/>
+          <path d="M278,142 C267,150 288,158 278,166 C267,174 288,182 278,190" fill="none" stroke="#0E7C86" stroke-width="1.8"/>
+          <line x1="269" y1="150" x2="278" y2="150" stroke="#0E7C86" stroke-width="1.2" opacity="0.5"/>
+          <line x1="270" y1="166" x2="278" y2="166" stroke="#0E7C86" stroke-width="1.2" opacity="0.5"/>
+          <line x1="270" y1="182" x2="278" y2="182" stroke="#0E7C86" stroke-width="1.2" opacity="0.5"/>
+          <!-- Legend -->
+          <rect x="140" y="210" width="12" height="5" fill="#1A3A5C"/>
+          <text x="157" y="216" fill="#64748B" font-size="8.5" font-family="Arial">Original</text>
+          <rect x="195" y="210" width="12" height="5" fill="#0E7C86"/>
+          <text x="212" y="216" fill="#64748B" font-size="8.5" font-family="Arial">New copy</text>
+          <rect x="248" y="210" width="12" height="5" fill="#F0A500"/>
+          <text x="265" y="216" fill="#64748B" font-size="8.5" font-family="Arial">Replication fork</text>
+          <!-- Status label -->
+          <rect x="160" y="256" width="200" height="20" rx="4" fill="#EBF7F8" stroke="#0E7C86" stroke-width="1"/>
+          <text x="260" y="270" fill="#0E7C86" font-size="11" font-weight="700" font-family="Arial" text-anchor="middle">S Phase — DNA Replication</text>
+          <text x="260" y="295" fill="#94A3B8" font-size="10" font-family="Arial" text-anchor="middle">Each chromosome being duplicated exactly</text>
+        </g>
+
+        <!-- ── S PHASE WITH DAMAGE — copying damaged template ── -->
+        <g id="view-s-damage" style="display:none">
+          <circle cx="260" cy="155" r="90" fill="#FFF4F4" stroke="#C8102E" stroke-width="2" opacity="0.9"/>
+          <ellipse cx="260" cy="148" rx="52" ry="46" fill="#F4C8C8" stroke="#C8102E" stroke-width="1.5" opacity="0.65"/>
+          <!-- Damaged original DNA (red tint, squiggles) -->
+          <path d="M237,114 C248,122 228,130 238,138 C248,146 228,154 238,162 C248,170 228,178 238,186" fill="none" stroke="#C8102E" stroke-width="1.8" opacity="0.75" stroke-dasharray="4,2"/>
+          <path d="M246,114 C236,122 255,130 246,138 C236,146 255,154 246,162 C236,170 255,178 246,186" fill="none" stroke="#C8102E" stroke-width="1.8" opacity="0.75" stroke-dasharray="4,2"/>
+          <!-- Damage marks on original -->
+          <text x="232" y="136" fill="#C8102E" font-size="9" font-weight="700" font-family="Arial">✗</text>
+          <text x="240" y="162" fill="#C8102E" font-size="9" font-weight="700" font-family="Arial">✗</text>
+          <!-- Replication fork -->
+          <path d="M 246,150 L 265,142" fill="none" stroke="#F0A500" stroke-width="2.2" opacity="0.9"/>
+          <path d="M 246,150 L 265,158" fill="none" stroke="#F0A500" stroke-width="2.2" opacity="0.9"/>
+          <!-- New copy also picking up damage (red-teal blend) -->
+          <path d="M269,142 C280,150 260,158 270,166 C280,174 260,182 270,190" fill="none" stroke="#E07070" stroke-width="1.8" stroke-dasharray="4,2"/>
+          <path d="M278,142 C267,150 288,158 278,166 C267,174 288,182 278,190" fill="none" stroke="#E07070" stroke-width="1.8" stroke-dasharray="4,2"/>
+          <text x="270" y="158" fill="#C8102E" font-size="9" font-weight="700" font-family="Arial">✗</text>
+          <!-- Warning -->
+          <text x="300" y="125" fill="#C8102E" font-size="18" font-family="Arial">⚠</text>
+          <!-- Status label -->
+          <rect x="136" y="256" width="248" height="20" rx="4" fill="#FDE8EC" stroke="#C8102E" stroke-width="1"/>
+          <text x="260" y="270" fill="#C8102E" font-size="11" font-weight="700" font-family="Arial" text-anchor="middle">S Phase — Copying Damaged DNA</text>
+          <text x="260" y="295" fill="#94A3B8" font-size="10" font-family="Arial" text-anchor="middle">Mutations being replicated into the new strand</text>
+        </g>
+
       </svg>
     </div>
 
@@ -593,11 +781,120 @@
 
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════
+     STEP 5 — SYNTHESIS DISCUSSION QUESTIONS
+     Hidden on load. Revealed by advanceStep() after all simulation
+     phases complete. Scrolls into view automatically.
+══════════════════════════════════════════════════════════════ -->
+<div id="discussion-section" style="display:none; max-width:1080px; margin:32px auto 0; padding:0 24px 56px;">
+
+  <div style="background:var(--navy); border-radius:14px; padding:24px 28px; margin-bottom:24px; border:1px solid rgba(255,255,255,.08);">
+    <div style="font-size:9px; font-weight:700; letter-spacing:2px; color:#16A34A; text-transform:uppercase; margin-bottom:8px;">Step 5 of 5 · Synthesis — All 4 Scenarios Complete ✓</div>
+    <h2 style="font-size:20px; font-weight:700; color:var(--white); margin-bottom:6px;">Discussion Questions</h2>
+    <p style="font-size:13px; color:#A8C8E8; line-height:1.6;">
+      You've completed all four scenarios. Use your observations to answer the questions below.
+      Reference specific scenarios, checkpoint names, and proteins where possible.
+      These questions connect the simulator directly to Maya's case.
+    </p>
+  </div>
+
+  <!-- Q1 — Analyze (compare scenarios) -->
+  <div style="background:#fff; border-radius:12px; border:1px solid var(--border); border-left:4px solid var(--teal); padding:20px 22px; margin-bottom:16px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+      <span style="background:var(--teal); color:#fff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:5px; letter-spacing:.5px;">ANALYZE</span>
+      <span style="font-size:11px; font-weight:700; color:var(--muted);">Question 1 of 4</span>
+    </div>
+    <p style="font-size:14px; font-weight:600; color:var(--dark); line-height:1.55; margin-bottom:12px;">
+      Compare the Healthy Cell and TP53 Mutation scenarios step by step. At the G1 checkpoint, what did the healthy cell's p53 protein do that the mutated cell's p53 could not? What was the consequence for each cell at the end of the simulation?
+    </p>
+    <textarea style="width:100%; min-height:80px; border:1.5px solid var(--border); border-radius:7px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; outline:none; color:var(--dark); background:var(--light); line-height:1.55;" id="disc-q1" placeholder="Compare the two scenarios — what p53 did (or didn't do), and the final outcome of each..."></textarea>
+  </div>
+
+  <!-- Q2 — Apply (connect to Maya) -->
+  <div style="background:#fff; border-radius:12px; border:1px solid var(--border); border-left:4px solid var(--red); padding:20px 22px; margin-bottom:16px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+      <span style="background:var(--red); color:#fff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:5px; letter-spacing:.5px;">APPLY</span>
+      <span style="font-size:11px; font-weight:700; color:var(--muted);">Question 2 of 4</span>
+    </div>
+    <p style="font-size:14px; font-weight:600; color:var(--dark); line-height:1.55; margin-bottom:12px;">
+      Maya's genetic panel shows an inactivated tumor suppressor gene AND an activated oncogene. Which simulator scenario most closely matches her cell biology? Use at least two specific details from that scenario to justify your choice.
+    </p>
+    <textarea style="width:100%; min-height:80px; border:1.5px solid var(--border); border-radius:7px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; outline:none; color:var(--dark); background:var(--light); line-height:1.55;" id="disc-q2" placeholder="Name the scenario and explain why it matches Maya's case..."></textarea>
+  </div>
+
+  <!-- Q3 — Evaluate (the apoptosis escape question) -->
+  <div style="background:#fff; border-radius:12px; border:1px solid var(--border); border-left:4px solid #7C3AED; padding:20px 22px; margin-bottom:16px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+      <span style="background:#7C3AED; color:#fff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:5px; letter-spacing:.5px;">EVALUATE</span>
+      <span style="font-size:11px; font-weight:700; color:var(--muted);">Question 3 of 4</span>
+    </div>
+    <p style="font-size:14px; font-weight:600; color:var(--dark); line-height:1.55; margin-bottom:12px;">
+      In the TP53 Mutation scenario, the G2 checkpoint triggered apoptosis — a protective outcome. But the TP53 + RAS scenario ended in uncontrolled division instead.
+      What specific difference between the two scenarios explains why one ended in apoptosis and the other didn't?
+    </p>
+    <textarea style="width:100%; min-height:80px; border:1.5px solid var(--border); border-radius:7px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; outline:none; color:var(--dark); background:var(--light); line-height:1.55;" id="disc-q3" placeholder="Identify the key difference between the TP53-only and combined mutation scenarios..."></textarea>
+  </div>
+
+  <!-- Q4 — Create / Synthesize -->
+  <div style="background:#fff; border-radius:12px; border:1px solid var(--border); border-left:4px solid var(--gold); padding:20px 22px; margin-bottom:24px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+      <span style="background:var(--gold); color:#fff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:5px; letter-spacing:.5px;">SYNTHESIZE</span>
+      <span style="font-size:11px; font-weight:700; color:var(--muted);">Question 4 of 4</span>
+    </div>
+    <p style="font-size:14px; font-weight:600; color:var(--dark); line-height:1.55; margin-bottom:12px;">
+      A classmate says: <em>"Cancer is just one bad mutation that makes cells divide too much."</em>
+      Using evidence from at least two different simulator scenarios, write a 2–3 sentence response that explains why this statement is incomplete.
+      Name at least one specific checkpoint and one specific protein in your answer.
+    </p>
+    <textarea style="width:100%; min-height:100px; border:1.5px solid var(--border); border-radius:7px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; outline:none; color:var(--dark); background:var(--light); line-height:1.55;" id="disc-q4" placeholder="Write your response here. Use evidence from at least two scenarios and name a specific checkpoint and protein..."></textarea>
+  </div>
+
+  <!-- Submit + Print actions -->
+  <div style="background:linear-gradient(135deg,var(--navy),#0E2A44); border-radius:12px; padding:24px 28px; border:1px solid rgba(255,255,255,.08);">
+    <h3 style="font-size:16px; font-weight:700; color:var(--white); margin-bottom:6px;">Submit Your Responses</h3>
+    <p style="font-size:12.5px; color:#A8C8E8; margin-bottom:18px; line-height:1.6;">
+      Make sure your name and class period are filled in on the left panel, then click Submit.
+      Your teacher will review your responses before class.
+    </p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="submit-disc-btn" onclick="submitResponses()"
+        style="flex:1; min-width:160px; padding:12px 18px; background:var(--teal); color:white;
+               border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;
+               font-family:inherit; transition:background .15s;"
+        onmouseover="this.style.background='#0A6870'" onmouseout="this.style.background='var(--teal)'">
+        ↑ Submit Responses
+      </button>
+      <button onclick="printDiscussion()"
+        style="flex:1; min-width:140px; padding:12px 18px; background:transparent; color:#A8C8E8;
+               border:1.5px solid rgba(255,255,255,.22); border-radius:8px; font-size:14px;
+               font-weight:700; cursor:pointer; font-family:inherit; transition:all .15s;"
+        onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background='transparent'">
+        🖨 Print / Save PDF
+      </button>
+    </div>
+    <div id="submit-disc-msg" style="display:none; margin-top:12px; font-size:13px; font-weight:600;
+         padding:10px 14px; border-radius:7px; background:rgba(255,255,255,.05);"></div>
+  </div>
+
+</div>
+
+
 <script>
 let selectedMutation = null;
 let simRunning = false;
 let simPhase = 0;
 let simSteps = [];
+// Tracks which of the 4 scenarios have been fully completed
+const completedScenarios = new Set();
+const REQUIRED_SCENARIOS = ['normal', 'tp53', 'ras', 'both'];
+
+// ── DATA COLLECTION CONFIG ─────────────────────────────────────
+// To activate: paste your Google Apps Script Web App URL below.
+// Setup: Google Sheet → Extensions → Apps Script → paste doPost()
+// function → Deploy as Web App (Execute as: Me, Anyone) → copy URL.
+// Leave empty to use clipboard-copy fallback only.
+const SUBMIT_URL = '';
+// ──────────────────────────────────────────────────────────────
 
 const scenarios = {
   normal: {
@@ -605,10 +902,10 @@ const scenarios = {
     g1: "INTACT", g2: "INTACT", ras: "NORMAL", apo: "AVAILABLE",
     g1color: "ok", g2color: "ok", rascolor: "ok", apocolor: "ok",
     steps: [
-      { phase: 0, label: "G1 Phase", checkpoint: null, view: "idle", titleColor: "#0E7C86", title: "G1 Phase: Cell Growth", body: "The cell enters G1 and begins growing. It receives growth signals from the environment. The <strong>RAS protein</strong> relays this signal: 'conditions are right to divide.' The cell starts preparing resources for DNA replication.", question: "What would happen if the cell received NO growth signal — would it still enter G1?" },
-      { phase: 1, label: "G1 Checkpoint", checkpoint: 1, checkColor: "ok", view: "blocked-briefly", titleColor: "#16A34A", title: "✓ G1 Checkpoint Passed", body: "The <strong>p53 protein</strong> scans the DNA. No damage detected. The Rb protein receives an 'all clear' signal and releases the transcription factors needed to move into S phase. The cell cycle continues.", question: "The cell 'decided' it was safe to proceed. What gene product made that decision?" },
-      { phase: 2, label: "S Phase", checkpoint: null, view: "idle", titleColor: "#0E7C86", title: "S Phase: DNA Replication", body: "DNA synthesis is underway. The cell makes an exact copy of all 46 chromosomes. Specialized proteins proofread as they go — catching most copying errors before they become permanent mutations.", question: "If a copying error slips through here, which checkpoint comes next to catch it?" },
-      { phase: 3, label: "G2 Checkpoint ✓", checkpoint: 2, checkColor: "ok", view: "idle", titleColor: "#16A34A", title: "✓ G2 Checkpoint Passed", body: "After DNA replication, the <strong>G2 checkpoint</strong> verifies that all DNA was replicated completely and no double-strand breaks remain. Clearance granted — the cell enters mitosis.", question: null },
+      { phase: 0, label: "G1 Phase", checkpoint: null, view: "g1", titleColor: "#0E7C86", title: "G1 Phase: Cell Growth", body: "The cell enters G1 and begins growing. It receives growth signals from the environment. The <strong>RAS protein</strong> relays this signal: 'conditions are right to divide.' The cell starts preparing resources for DNA replication.", question: "What would happen if the cell received NO growth signal — would it still enter G1?" },
+      { phase: 1, label: "G1 Checkpoint", checkpoint: 1, checkColor: "ok", view: "checkpoint-ok", titleColor: "#16A34A", title: "✓ G1 Checkpoint Passed", body: "The <strong>p53 protein</strong> scans the DNA. No damage detected. The Rb protein receives an 'all clear' signal and releases the transcription factors needed to move into S phase. The cell cycle continues.", question: "The cell 'decided' it was safe to proceed. What gene product made that decision?" },
+      { phase: 2, label: "S Phase", checkpoint: null, view: "s-normal", titleColor: "#0E7C86", title: "S Phase: DNA Replication", body: "DNA synthesis is underway. The cell makes an exact copy of all 46 chromosomes. Specialized proteins proofread as they go — catching most copying errors before they become permanent mutations.", question: "If a copying error slips through here, which checkpoint comes next to catch it?" },
+      { phase: 3, label: "G2 Checkpoint ✓", checkpoint: 2, checkColor: "ok", view: "checkpoint-ok", titleColor: "#16A34A", title: "✓ G2 Checkpoint Passed", body: "After DNA replication, the <strong>G2 checkpoint</strong> verifies that all DNA was replicated completely and no double-strand breaks remain. Clearance granted — the cell enters mitosis.", question: null },
       { phase: 4, label: "M Phase → Division", checkpoint: 3, checkColor: "ok", view: "divided", titleColor: "#16A34A", title: "✓ Division Complete — Two Healthy Daughter Cells", body: "<span class='ok-text'>Normal outcome.</span> The cell divided correctly. Both daughter cells received identical, undamaged copies of the genome. They are now independent cells, ready to begin their own cell cycles — or to differentiate into specialized cells.", question: "What would you expect these daughter cells to do next in normal tissue?" },
     ]
   },
@@ -617,9 +914,9 @@ const scenarios = {
     g1: "MUTATED", g2: "INTACT", ras: "NORMAL", apo: "IMPAIRED",
     g1color: "mutated", g2color: "ok", rascolor: "ok", apocolor: "warning",
     steps: [
-      { phase: 0, label: "G1 Phase", checkpoint: null, view: "idle", titleColor: "#0E7C86", title: "G1 Phase — DNA Damage Present", body: "The cell enters G1. Importantly: <strong>the cell has accumulated DNA damage</strong> — perhaps from a replication error or environmental exposure. Under normal circumstances, p53 would now detect this damage and pause the cell cycle.", question: "In a healthy cell, which protein would be activated right now?" },
-      { phase: 1, label: "G1 Checkpoint ✗", checkpoint: 1, checkColor: "fail", view: "idle", titleColor: "#C8102E", title: "✗ G1 Checkpoint BYPASSED", body: "<span class='danger-text'>TP53 is mutated — p53 protein is non-functional.</span> Even though DNA damage is present, the checkpoint proteins cannot detect it properly. The 'all clear' is issued incorrectly. The damaged cell proceeds into S phase — carrying its errors forward.", question: "What should have happened here? What did p53 fail to do?" },
-      { phase: 2, label: "S Phase — Damaged DNA", checkpoint: null, view: "idle", titleColor: "#C8102E", title: "S Phase — Copying Damaged DNA", body: "<span class='danger-text'>The damaged DNA is now being replicated.</span> Any mutations present in the original strand will be copied into the new strand. If these mutations affect other checkpoint or growth-control genes, the cell is accumulating multiple problems — moving it closer to uncontrolled division.", question: "What does it mean that the mutation is now being 'passed forward'?" },
+      { phase: 0, label: "G1 Phase", checkpoint: null, view: "g1-damage", titleColor: "#0E7C86", title: "G1 Phase — DNA Damage Present", body: "The cell enters G1. Importantly: <strong>the cell has accumulated DNA damage</strong> — perhaps from a replication error or environmental exposure. Under normal circumstances, p53 would now detect this damage and pause the cell cycle.", question: "In a healthy cell, which protein would be activated right now?" },
+      { phase: 1, label: "G1 Checkpoint ✗", checkpoint: 1, checkColor: "fail", view: "checkpoint-fail", titleColor: "#C8102E", title: "✗ G1 Checkpoint BYPASSED", body: "<span class='danger-text'>TP53 is mutated — p53 protein is non-functional.</span> Even though DNA damage is present, the checkpoint proteins cannot detect it properly. The 'all clear' is issued incorrectly. The damaged cell proceeds into S phase — carrying its errors forward.", question: "What should have happened here? What did p53 fail to do?" },
+      { phase: 2, label: "S Phase — Damaged DNA", checkpoint: null, view: "s-damage", titleColor: "#C8102E", title: "S Phase — Copying Damaged DNA", body: "<span class='danger-text'>The damaged DNA is now being replicated.</span> Any mutations present in the original strand will be copied into the new strand. If these mutations affect other checkpoint or growth-control genes, the cell is accumulating multiple problems — moving it closer to uncontrolled division.", question: "What does it mean that the mutation is now being 'passed forward'?" },
       { phase: 3, label: "G2 → Apoptosis", checkpoint: 2, checkColor: "fail", view: "apoptosis", titleColor: "#7C3AED", title: "G2 Checkpoint: Severe Damage Detected → Apoptosis", body: "<span class='highlight'>In this scenario, the G2 checkpoint detects severe DNA damage</span> and triggers <strong>apoptosis</strong> (programmed cell death). The cell self-destructs in a controlled way rather than dividing and passing the mutations on. <em>This is actually a good outcome — the backup system worked.</em>", question: "Apoptosis sounds bad, but here it's actually beneficial. Why? What would have happened without it?" },
       { phase: 4, label: "Outcome: Apoptosis", checkpoint: null, view: "apoptosis", titleColor: "#7C3AED", title: "Outcome: Cell Death — A Backup System Succeeded", body: "The cell self-destructed rather than dividing. This is the body's backup mechanism. <span class='highlight'>However:</span> if the cell had also accumulated a mutation that blocks apoptosis signaling, <em>this escape route would be gone</em> — and the cell would divide with its damage intact. This is why cancer requires multiple mutations working together.", question: "What additional mutation would allow a TP53-mutant cell to escape apoptosis AND divide uncontrollably?" },
     ]
@@ -629,9 +926,9 @@ const scenarios = {
     g1: "INTACT", g2: "INTACT", ras: "ALWAYS ON ⚠", apo: "AVAILABLE",
     g1color: "ok", g2color: "ok", rascolor: "mutated", apocolor: "ok",
     steps: [
-      { phase: 0, label: "G1 Phase", checkpoint: null, view: "idle", titleColor: "#F0A500", title: "G1 Phase — Constant Growth Signal", body: "Normally, a cell needs external growth signals before entering the cell cycle. Here, the <strong>RAS oncogene</strong> has a gain-of-function mutation — it is permanently locked in the 'active' state. The cell receives a constant 'divide now' signal even without growth factors from the environment.", question: "Normally, what external signal would activate RAS? Why does this mutation bypass that requirement?" },
-      { phase: 1, label: "G1 Checkpoint — Passed", checkpoint: 1, checkColor: "ok", view: "idle", titleColor: "#F0A500", title: "G1 Checkpoint: Passes — But With Artificially Boosted Signals", body: "The p53 checkpoint checks DNA integrity — not whether growth signals are appropriate. Since the DNA itself is undamaged, the checkpoint passes. <span class='highlight'>This is an important limitation of the checkpoint system:</span> it cannot distinguish between a legitimate growth signal and a fraudulent one from a mutated RAS protein.", question: "What does this tell you about the limits of the checkpoint system?" },
-      { phase: 2, label: "S Phase — Repeated", checkpoint: null, view: "idle", titleColor: "#F0A500", title: "S Phase: Normal Replication — But Accelerated Cycling", body: "DNA replication proceeds normally. However, <strong>the cell returns to G1 more quickly than normal</strong> — the constant RAS signal keeps pushing it to begin another cycle. Over time, faster cycling means more opportunities for DNA replication errors.", question: "How does faster cycling increase the cell's overall mutation risk over time?" },
+      { phase: 0, label: "G1 Phase", checkpoint: null, view: "g1", titleColor: "#F0A500", title: "G1 Phase — Constant Growth Signal", body: "Normally, a cell needs external growth signals before entering the cell cycle. Here, the <strong>RAS oncogene</strong> has a gain-of-function mutation — it is permanently locked in the 'active' state. The cell receives a constant 'divide now' signal even without growth factors from the environment.", question: "Normally, what external signal would activate RAS? Why does this mutation bypass that requirement?" },
+      { phase: 1, label: "G1 Checkpoint — Passed", checkpoint: 1, checkColor: "ok", view: "checkpoint-ok", titleColor: "#F0A500", title: "G1 Checkpoint: Passes — But With Artificially Boosted Signals", body: "The p53 checkpoint checks DNA integrity — not whether growth signals are appropriate. Since the DNA itself is undamaged, the checkpoint passes. <span class='highlight'>This is an important limitation of the checkpoint system:</span> it cannot distinguish between a legitimate growth signal and a fraudulent one from a mutated RAS protein.", question: "What does this tell you about the limits of the checkpoint system?" },
+      { phase: 2, label: "S Phase — Repeated", checkpoint: null, view: "s-normal", titleColor: "#F0A500", title: "S Phase: Normal Replication — But Accelerated Cycling", body: "DNA replication proceeds normally. However, <strong>the cell returns to G1 more quickly than normal</strong> — the constant RAS signal keeps pushing it to begin another cycle. Over time, faster cycling means more opportunities for DNA replication errors.", question: "How does faster cycling increase the cell's overall mutation risk over time?" },
       { phase: 3, label: "G2 ✓ → Division", checkpoint: 2, checkColor: "ok", view: "divided", titleColor: "#F0A500", title: "Division Occurs — Cycle Repeats Faster Than Normal", body: "<span class='highlight'>The cell divides — and immediately begins another cycle due to constant RAS signaling.</span> Both daughter cells inherit the RAS mutation and begin their own accelerated cycles. Over many generations, these rapidly dividing cells are more likely to accumulate secondary mutations in tumor suppressors.", question: "These cells aren't 'cancerous' yet. What additional mutation would push them over the edge into true uncontrolled growth?" },
       { phase: 4, label: "Outcome: Elevated Risk", checkpoint: null, view: "divided", titleColor: "#F0A500", title: "Outcome: Increased Division Rate — Elevated Cancer Risk", body: "The RAS oncogene alone has not yet caused cancer — the checkpoint systems (especially p53) still provide some protection. But the accelerated division rate significantly increases the chance of accumulating a second 'hit' — like a TP53 mutation — that would remove the remaining brakes.", question: "RAS mutation alone is dangerous but not cancer yet. What does this tell you about why cancer is described as a 'multi-step' process?" },
     ]
@@ -641,9 +938,9 @@ const scenarios = {
     g1: "MUTATED", g2: "INTACT", ras: "ALWAYS ON ⚠", apo: "IMPAIRED",
     g1color: "mutated", g2color: "ok", rascolor: "mutated", apocolor: "warning",
     steps: [
-      { phase: 0, label: "G1 — No Brakes + Full Gas", checkpoint: null, view: "idle", titleColor: "#C8102E", title: "G1 Phase — Constant Growth Signal, No DNA Damage Detection", body: "<span class='danger-text'>Two mutations are present simultaneously.</span> RAS is permanently 'on' — the accelerator is stuck. TP53 is inactivated — the brakes are gone. The cell enters G1 with a continuous growth signal and no functional mechanism to pause if problems are detected.", question: "Which mutation acts as the 'accelerator' here? Which mutation disabled the 'brakes'?" },
-      { phase: 1, label: "G1 Checkpoint — BYPASSED", checkpoint: 1, checkColor: "fail", view: "idle", titleColor: "#C8102E", title: "✗ G1 Checkpoint Completely Bypassed", body: "<span class='danger-text'>The G1 checkpoint is functionally absent.</span> Without p53, even significant DNA damage goes undetected. The constant RAS signal drives the cell forward regardless. The cell enters S phase without any quality control inspection.", question: "In the TP53-only scenario, apoptosis was a backup. Why might that backup also fail in this combined scenario?" },
-      { phase: 2, label: "S Phase — Unchecked", checkpoint: null, view: "idle", titleColor: "#C8102E", title: "S Phase — Replication Proceeds Without Oversight", body: "<span class='danger-text'>DNA is replicated, including any accumulated damage.</span> Any new copying errors are not flagged. The RAS signal is already pushing toward the next division. The cell is accumulating mutations — and has no remaining checkpoint mechanism in G1 to catch them.", question: null },
+      { phase: 0, label: "G1 — No Brakes + Full Gas", checkpoint: null, view: "g1-damage", titleColor: "#C8102E", title: "G1 Phase — Constant Growth Signal, No DNA Damage Detection", body: "<span class='danger-text'>Two mutations are present simultaneously.</span> RAS is permanently 'on' — the accelerator is stuck. TP53 is inactivated — the brakes are gone. The cell enters G1 with a continuous growth signal and no functional mechanism to pause if problems are detected.", question: "Which mutation acts as the 'accelerator' here? Which mutation disabled the 'brakes'?" },
+      { phase: 1, label: "G1 Checkpoint — BYPASSED", checkpoint: 1, checkColor: "fail", view: "checkpoint-fail", titleColor: "#C8102E", title: "✗ G1 Checkpoint Completely Bypassed", body: "<span class='danger-text'>The G1 checkpoint is functionally absent.</span> Without p53, even significant DNA damage goes undetected. The constant RAS signal drives the cell forward regardless. The cell enters S phase without any quality control inspection.", question: "In the TP53-only scenario, apoptosis was a backup. Why might that backup also fail in this combined scenario?" },
+      { phase: 2, label: "S Phase — Unchecked", checkpoint: null, view: "s-damage", titleColor: "#C8102E", title: "S Phase — Replication Proceeds Without Oversight", body: "<span class='danger-text'>DNA is replicated, including any accumulated damage.</span> Any new copying errors are not flagged. The RAS signal is already pushing toward the next division. The cell is accumulating mutations — and has no remaining checkpoint mechanism in G1 to catch them.", question: null },
       { phase: 3, label: "G2 → BYPASSED", checkpoint: 2, checkColor: "fail", view: "cancer", titleColor: "#C8102E", title: "✗ G2 Checkpoint Also Overwhelmed — Uncontrolled Division Begins", body: "<span class='danger-text'>UNCONTROLLED DIVISION.</span> The combination of permanent growth signals and absent damage-response pathways causes the cell to divide repeatedly without restriction. Each daughter cell inherits both mutations. The cell colony expands rapidly — this is the hallmark of cancer.", question: "Look at the visualization. Why is each new daughter cell just as dangerous as the parent cell?" },
       { phase: 4, label: "OUTCOME: Cancer", checkpoint: null, view: "cancer", titleColor: "#C8102E", title: "⚠ Outcome: Uncontrolled Growth — Tumor Formation", body: "<span class='danger-text'>This is the biology of cancer.</span> A cell has acquired: (1) a permanent growth signal from the RAS oncogene, and (2) inactivated tumor suppressor p53 that would normally halt division or trigger cell death. Without any functioning 'brake,' the cell divides indefinitely — forming a tumor. This combination pattern is found in real pediatric cancers studied at children's cancer research hospitals.", question: "Researchers studying a child's cancer would want to know which specific mutations are present. Why does this information matter for designing targeted treatment?" },
     ]
@@ -706,9 +1003,31 @@ function advanceStep() {
   } else {
     document.getElementById('adv-btn').disabled = true;
     document.getElementById('adv-btn').textContent = '✓ Complete';
-    setStepState(4, 'done'); setStepState(5, 'active');
+    setStepState(4, 'done'); setStepState(5, 'pending');
     setStepText(4, 'Simulation complete');
-    setStepText(5, 'Answer the discussion questions below');
+
+    // Mark this scenario as completed and update its card
+    completedScenarios.add(selectedMutation);
+    markScenarioComplete(selectedMutation);
+    updateProgressBadge();
+
+    const allDone = REQUIRED_SCENARIOS.every(s => completedScenarios.has(s));
+    if (allDone) {
+      setStepState(5, 'active');
+      setStepText(5, 'All 4 done — see questions below');
+      const disc = document.getElementById('discussion-section');
+      if (disc) {
+        disc.style.display = 'block';
+        setTimeout(function() {
+          disc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 200);
+      }
+    } else {
+      const remaining = REQUIRED_SCENARIOS.filter(s => !completedScenarios.has(s)).length;
+      setStepText(5, remaining + (remaining > 1 ? ' scenarios' : ' scenario') + ' still to run');
+      // Soft-reset so the student can pick the next scenario immediately
+      setTimeout(readyForNextScenario, 800);
+    }
   }
 }
 
@@ -743,21 +1062,75 @@ function showStep(i) {
   document.getElementById('result-body').innerHTML = body;
 
   if (i === steps.length - 1) {
-    document.getElementById('adv-btn').textContent = '✓ Simulation Complete';
-    document.getElementById('adv-btn').disabled = true;
+    // Keep enabled so the student can advance to step 5 (discussion questions)
+    document.getElementById('adv-btn').textContent = '✓ Finish Scenario';
+    document.getElementById('adv-btn').disabled = false;
   } else {
     document.getElementById('adv-btn').textContent = '⏭ Next Step';
     document.getElementById('adv-btn').disabled = false;
   }
 }
 
+function markScenarioComplete(id) {
+  const card = document.getElementById('mc-' + id);
+  if (!card) return;
+  // Add completion badge to the card if not already there
+  if (!card.querySelector('.complete-badge')) {
+    const badge = document.createElement('div');
+    badge.className = 'complete-badge';
+    badge.textContent = '✓';
+    badge.style.cssText = [
+      'position:absolute', 'top:8px', 'right:8px',
+      'width:22px', 'height:22px', 'border-radius:50%',
+      'background:#16A34A', 'color:white',
+      'font-size:12px', 'font-weight:700',
+      'display:flex', 'align-items:center', 'justify-content:center',
+      'box-shadow:0 0 0 2px rgba(22,163,74,0.3)'
+    ].join(';');
+    // Cards need relative positioning for the badge
+    card.style.position = 'relative';
+    card.appendChild(badge);
+  }
+}
+
+function updateProgressBadge() {
+  const done = completedScenarios.size;
+  const total = REQUIRED_SCENARIOS.length;
+  const badge = document.getElementById('progress-badge');
+  if (!badge) return;
+  badge.textContent = done + ' / ' + total + ' completed';
+  badge.style.color = done === total ? '#16A34A' : '#F0A500';
+  badge.style.borderColor = done === total ? '#16A34A' : '#F0A500';
+  badge.style.background = done === total ? 'rgba(22,163,74,0.12)' : 'rgba(240,165,0,0.12)';
+  if (done === total) {
+    badge.textContent = '✓ All 4 scenarios complete — scroll down';
+    badge.style.animation = 'none';
+  }
+}
+
 function showView(name) {
-  const views = ['view-idle','view-divided','view-blocked','view-cancer','view-apoptosis'];
-  views.forEach(v => document.getElementById(v).style.display = 'none');
-  if (name === 'divided') document.getElementById('view-divided').style.display = 'block';
-  else if (name === 'cancer') document.getElementById('view-cancer').style.display = 'block';
-  else if (name === 'apoptosis') document.getElementById('view-apoptosis').style.display = 'block';
-  else document.getElementById('view-idle').style.display = 'block';
+  const allViews = [
+    'view-idle','view-divided','view-blocked','view-cancer','view-apoptosis',
+    'view-g1','view-g1-damage','view-checkpoint-ok','view-checkpoint-fail',
+    'view-s-normal','view-s-damage'
+  ];
+  allViews.forEach(v => { const el = document.getElementById(v); if(el) el.style.display = 'none'; });
+  const map = {
+    'divided':          'view-divided',
+    'cancer':           'view-cancer',
+    'apoptosis':        'view-apoptosis',
+    'blocked':          'view-blocked',
+    'blocked-briefly':  'view-checkpoint-ok',
+    'g1':               'view-g1',
+    'g1-damage':        'view-g1-damage',
+    'checkpoint-ok':    'view-checkpoint-ok',
+    'checkpoint-fail':  'view-checkpoint-fail',
+    's-normal':         'view-s-normal',
+    's-damage':         'view-s-damage',
+  };
+  const target = map[name] || 'view-idle';
+  const el = document.getElementById(target);
+  if (el) el.style.display = 'block';
 }
 
 function setPhaseState(id, state) {
@@ -770,6 +1143,139 @@ function setStepState(n, state) {
   document.getElementById('st-' + n).className = 'step-text ' + state;
 }
 function setStepText(n, text) { document.getElementById('st-' + n).textContent = text; }
+
+function readyForNextScenario() {
+  // Soft-reset: clears visualization + step state but keeps completion badges
+  simRunning = false; simPhase = 0;
+  selectedMutation = null;
+  // Deselect all scenario cards (checkmarks stay)
+  document.querySelectorAll('.mutation-card').forEach(c => {
+    c.classList.remove('selected');
+  });
+  // Reset phase bar
+  ['g1','s','g2','m','div'].forEach(p => setPhaseState('ph-' + p, 'default'));
+  ['ca-1','ca-2','ca-3','ca-4'].forEach(c => {
+    const el = document.getElementById(c);
+    el.className = 'checkpoint-arrow';
+    el.textContent = (c === 'ca-4') ? '▶ ÷' : '▶ ✓';
+  });
+  showView('idle');
+  // Restore Run button, hide Advance
+  document.getElementById('run-btn').style.display = 'block';
+  document.getElementById('run-btn').disabled = true;
+  document.getElementById('adv-btn').style.display = 'none';
+  document.getElementById('adv-btn').disabled = false;
+  document.getElementById('adv-btn').textContent = '⏭ Next Step';
+  // Reset step tracker (keep step 5 text showing remaining count)
+  setStepState(1, 'pending'); setStepText(1, 'Choose a scenario');
+  setStepState(2, 'pending'); setStepText(2, 'Check status panel');
+  setStepState(3, 'pending'); setStepText(3, 'Run the cell cycle');
+  setStepState(4, 'pending'); setStepText(4, 'Observe the outcome');
+  // Result panel
+  document.getElementById('result-title').textContent = 'Ready for Next Scenario';
+  document.getElementById('result-title').style.color = '#16A34A';
+  document.getElementById('result-body').innerHTML =
+    '<div style="padding:8px 0;color:#A8C8E8;font-size:13px;line-height:1.7;">' +
+    '✓ Scenario complete — <strong style="color:white;">pick another scenario card</strong> on the left to continue.<br>' +
+    '<span style="color:#4A7A9B;font-size:12px;">Completed scenarios show a green ✓ badge.</span></div>';
+  // Reset status box to defaults
+  document.getElementById('st-g1').textContent = 'INTACT';
+  document.getElementById('st-g1').className = 'status-val ok';
+  document.getElementById('st-g2').textContent = 'INTACT';
+  document.getElementById('st-g2').className = 'status-val ok';
+  document.getElementById('st-ras').textContent = 'NORMAL';
+  document.getElementById('st-ras').className = 'status-val ok';
+  document.getElementById('st-apo').textContent = 'AVAILABLE';
+  document.getElementById('st-apo').className = 'status-val ok';
+}
+
+// ── SUBMIT RESPONSES ──────────────────────────────────────────
+async function submitResponses() {
+  const name   = (document.getElementById('student-name')  || {}).value || '';
+  const period = (document.getElementById('student-period') || {}).value || '';
+  const q1 = (document.getElementById('disc-q1') || {}).value || '';
+  const q2 = (document.getElementById('disc-q2') || {}).value || '';
+  const q3 = (document.getElementById('disc-q3') || {}).value || '';
+  const q4 = (document.getElementById('disc-q4') || {}).value || '';
+
+  const btn = document.getElementById('submit-disc-btn');
+  const msg = document.getElementById('submit-disc-msg');
+
+  if (!name.trim()) {
+    msg.textContent = 'Please enter your name before submitting.';
+    msg.style.color = '#C8102E';
+    msg.style.display = 'block';
+    document.getElementById('student-name').focus();
+    return;
+  }
+
+  const payload = {
+    timestamp:  new Date().toLocaleString(),
+    name:       name.trim(),
+    period:     period.trim() || '—',
+    module:     'Lesson 2 — Cell Cycle Checkpoint Simulator',
+    scenariosCompleted: Array.from(completedScenarios).join(', '),
+    q1_analyze:   q1,
+    q2_apply:     q2,
+    q3_evaluate:  q3,
+    q4_synthesize: q4,
+  };
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  msg.style.display = 'none';
+
+  if (SUBMIT_URL) {
+    try {
+      await fetch(SUBMIT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        mode: SUBMIT_URL.includes('formspree') ? 'cors' : 'no-cors',
+      });
+      btn.textContent = '✓ Submitted';
+      btn.style.background = '#16A34A';
+      msg.textContent = 'Your responses were sent to your teacher.';
+      msg.style.color = '#16A34A';
+      msg.style.display = 'block';
+    } catch (err) {
+      showSubmitFallback(payload, btn, msg);
+    }
+  } else {
+    // No URL configured — show clipboard fallback
+    showSubmitFallback(payload, btn, msg);
+    console.warn('SUBMIT_URL not configured. Responses were not sent.');
+  }
+}
+
+function showSubmitFallback(payload, btn, msg) {
+  btn.disabled = false;
+  btn.textContent = '↓ Copy Responses';
+  const text = [
+    'CELL CYCLE CHECKPOINT SIMULATOR — RESPONSES',
+    '───────────────────────────────────────────',
+    'Name: '       + payload.name,
+    'Period: '     + payload.period,
+    'Submitted: '  + payload.timestamp,
+    'Scenarios completed: ' + payload.scenariosCompleted,
+    '',
+    'Q1 (Analyze): ' + payload.q1_analyze,
+    'Q2 (Apply): '   + payload.q2_apply,
+    'Q3 (Evaluate): '+ payload.q3_evaluate,
+    'Q4 (Synthesize): ' + payload.q4_synthesize,
+  ].join('\n');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      msg.innerHTML = 'Copied to clipboard — paste into an email to your teacher.';
+      msg.style.color = '#F0A500';
+      msg.style.display = 'block';
+    });
+  }
+}
+
+function printDiscussion() {
+  window.print();
+}
 
 function resetSim() {
   selectedMutation = null; simRunning = false; simPhase = 0;
