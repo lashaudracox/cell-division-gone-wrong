@@ -160,7 +160,7 @@ Each submission adds a row with: timestamp, student name, class period, Q1 answe
 
 ## About the Designer
 
-**LaShaudra Cox** is an instructional designer and early-stage doctoral candidate in Instructional Design & Technology at the University of Memphis. This module was created as a standards-aligned instructional design challenge for a STEMM Education & Outreach program at a children's cancer research hospital.
+**LaShaudra Cox** is an instructional designer and early-stage doctoral candidate in Instructional Design & Technology at the University of Memphis. This module was created as a standards-aligned instructional design challenge for a STEM Education & Outreach program at a children's cancer research hospital.
 
 - Email: [coxl2@outlook.com](mailto:coxl2@outlook.com)
 - Portfolio: [lashaudracoxportfolio.com](https://lashaudracoxportfolio.com)
