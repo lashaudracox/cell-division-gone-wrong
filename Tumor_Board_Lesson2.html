@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tumor Board: The Maya Case | Lesson 2 Group Activity</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
+  --green:#16A34A; --purple:#7C3AED;
+  --white:#fff; --light:#EEF5FB; --bg:#F4F7FB;
+  --dark:#1E293B; --gray:#64748B; --muted:#94A3B8; --border:#D1E4F0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);}
+
+/* TOP BAR */
+.top-bar{background:var(--navy);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.top-bar-brand{font-size:13px;font-weight:700;color:#A8C8E8;}
+.print-btn{display:inline-flex;align-items:center;gap:7px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;padding:8px 18px;border-radius:7px;border:none;cursor:pointer;transition:background .15s;font-family:inherit;}
+.print-btn:hover{background:#0A6870;}
+
+/* PAGE */
+.page{max-width:900px;margin:0 auto;padding:32px 24px 56px;}
+
+/* HEADER */
+.page-header{background:var(--navy);border-radius:12px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;}
+.page-header::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(14,124,134,.2);}
+.page-header::after{content:'';position:absolute;right:60px;bottom:-60px;width:150px;height:150px;border-radius:50%;background:rgba(200,16,46,.15);}
+.tb-badge{display:inline-block;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:4px;margin-bottom:12px;}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:28px;color:#fff;margin-bottom:6px;position:relative;}
+.page-header h1 span{color:#7FD4D8;font-style:italic;}
+.page-header p{font-size:13.5px;color:#A8C8E8;line-height:1.6;max-width:580px;position:relative;}
+
+/* WHAT IS BOX */
+.what-is-box{background:#fff;border-radius:10px;border:1px solid var(--border);padding:18px 22px;margin-bottom:24px;display:flex;gap:16px;align-items:flex-start;}
+.wi-icon{font-size:28px;line-height:1;flex-shrink:0;}
+.wi-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:4px;}
+.wi-text{font-size:13.5px;color:var(--gray);line-height:1.65;}
+
+/* NAME ROW */
+.name-row{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+.name-field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:160px;}
+.name-field label{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.name-field input{border:none;border-bottom:2px solid var(--border);padding:6px 0;font-size:14px;font-family:inherit;background:transparent;color:var(--dark);outline:none;transition:border-color .15s;}
+.name-field input:focus{border-color:var(--teal);}
+
+/* SECTION */
+.section-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;display:block;}
+h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:14px;}
+
+/* CASE SUMMARY */
+.case-summary{background:var(--navy);border-radius:12px;padding:24px 28px;margin-bottom:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:560px){.case-summary{grid-template-columns:1fr;}}
+.case-clue{position:relative;}
+.clue-label{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+.clue-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:5px;}
+.clue-text{font-size:12px;color:#A8C8E8;line-height:1.6;}
+.clue-divider{position:absolute;bottom:-8px;left:0;right:0;height:1px;background:rgba(255,255,255,.1);}
+
+/* ROLES GRID */
+.roles-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+@media(max-width:560px){.roles-grid{grid-template-columns:1fr;}}
+
+.role-card{border-radius:12px;border:1.5px solid var(--border);overflow:hidden;background:#fff;}
+.role-header{padding:14px 18px 12px;display:flex;align-items:flex-start;gap:12px;}
+.role-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.role-name{font-size:13px;font-weight:700;color:var(--navy);line-height:1.3;}
+.role-title{font-size:10.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-top:2px;}
+.role-body{padding:0 18px 14px;}
+.role-focus{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:10px;}
+.role-question{font-size:13px;font-weight:600;color:var(--dark);line-height:1.5;margin-bottom:8px;padding:10px 12px;border-radius:7px;}
+.role-write{width:100%;border:none;border-bottom:1.5px solid var(--border);padding:5px 0;font-size:13px;font-family:inherit;background:transparent;color:var(--dark);outline:none;transition:border-color .15s;display:block;margin-bottom:6px;}
+.role-write:focus{border-color:var(--teal);}
+.write-area{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:8px 12px;font-size:12.5px;font-family:inherit;color:var(--dark);background:var(--light);resize:vertical;outline:none;transition:border-color .15s;min-height:68px;line-height:1.55;}
+.write-area:focus{border-color:var(--teal);background:#fff;}
+.write-area::placeholder{color:var(--muted);}
+
+/* CONSENSUS */
+.consensus-card{background:#fff;border-radius:12px;border:1.5px solid var(--navy);box-shadow:0 2px 12px rgba(26,58,92,.08);overflow:hidden;margin-bottom:28px;}
+.consensus-header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:10px;}
+.consensus-header h3{font-size:14px;font-weight:700;color:#fff;}
+.consensus-body{padding:20px;}
+.consensus-row{margin-bottom:18px;}
+.consensus-row:last-child{margin-bottom:0;}
+.consensus-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.vote-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.vote-opt{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;background:var(--light);border:1.5px solid var(--border);cursor:pointer;font-size:12.5px;font-weight:600;color:var(--navy);transition:all .15s;user-select:none;}
+.vote-opt input{accent-color:var(--teal);}
+.vote-opt:has(input:checked){background:#EBF7F8;border-color:var(--teal);color:var(--teal);}
+.evidence-area{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;font-family:inherit;color:var(--dark);background:var(--light);resize:vertical;outline:none;transition:border-color .15s;min-height:56px;line-height:1.6;}
+.evidence-area:focus{border-color:var(--teal);background:#fff;}
+.evidence-area::placeholder{color:var(--muted);}
+
+/* DISCUSSION */
+.discussion-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:20px 24px;margin-bottom:28px;}
+.disc-q{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);}
+.disc-q:last-child{border-bottom:none;}
+.disc-num{width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.disc-text{font-size:13.5px;font-weight:600;color:var(--dark);line-height:1.45;flex:1;}
+.bloom-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;vertical-align:middle;}
+
+/* SELF CHECK */
+.self-check{background:#F0FAF0;border:1.5px solid var(--green);border-radius:10px;padding:16px 20px;margin-bottom:28px;}
+.self-check h3{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;}
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:5px 0;border-bottom:1px solid rgba(22,163,74,.15);}
+.check-row:last-child{border-bottom:none;}
+.check-row input[type="checkbox"]{width:17px;height:17px;accent-color:var(--green);flex-shrink:0;margin-top:2px;cursor:pointer;}
+.check-row label{font-size:12.5px;color:var(--dark);cursor:pointer;line-height:1.45;}
+
+@media print{
+  .top-bar,.print-btn{display:none!important;}
+  body{background:#fff;}
+  .page{padding:12px;max-width:100%;}
+  .page-header,.consensus-card,.role-card{box-shadow:none;}
+  .case-summary{background:#1A3A5C!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .consensus-header{background:#1A3A5C!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .write-area,.evidence-area{background:#fff!important;}
+  .roles-grid{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-brand">Cell Division Gone Wrong · Lesson 2 Group Activity · Tumor Board</span>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+    Print / Save PDF
+  </button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="tb-badge">GROUP ACTIVITY — LESSON 2</div>
+    <h1>Tumor Board: <span>The Maya Case</span></h1>
+    <p>A real hospital's Tumor Board is a meeting where specialists from different fields review a patient's case together and reach a consensus on diagnosis and treatment. Today your group is Maya's Tumor Board.</p>
+  </div>
+
+  <!-- WHAT IS A TUMOR BOARD -->
+  <div class="what-is-box">
+    <div class="wi-icon">🏥</div>
+    <div>
+      <div class="wi-label">Real-World Connection</div>
+      <div class="wi-text">At children's cancer research hospitals, every complex case is reviewed by a Tumor Board — a team that includes oncologists, pathologists, genetic counselors, researchers, and patient advocates. No single specialist makes the call alone. Your job today mirrors that process exactly.</div>
+    </div>
+  </div>
+
+  <!-- NAME ROW -->
+  <div class="name-row">
+    <div class="name-field"><label>Your Name</label><input type="text" placeholder="First Last"></div>
+    <div class="name-field"><label>Your Role</label><input type="text" placeholder="See your role card below"></div>
+    <div class="name-field"><label>Date / Period</label><input type="text" placeholder="Date · Period"></div>
+  </div>
+
+  <!-- CASE SUMMARY -->
+  <span class="section-label">Maya's Case — Evidence Summary</span>
+  <h2 class="section-title">Review Before You Begin</h2>
+  <div class="case-summary">
+    <div class="case-clue">
+      <div class="clue-label" style="color:#7FD4D8;">Clue 1 — Lab Report</div>
+      <div class="clue-title">Bone Marrow Biopsy Result</div>
+      <div class="clue-text">Lymphoblast count: <strong style="color:#7FD4D8;">72% of bone marrow cells.</strong> Normal is under 5%. Rapid proliferation with no signs of apoptosis signaling.</div>
+      <div class="clue-divider"></div>
+    </div>
+    <div class="case-clue">
+      <div class="clue-label" style="color:#F0A500;">Clue 2 — Biopsy Analysis</div>
+      <div class="clue-title">Cell Cycle Observation</div>
+      <div class="clue-text">Cells are dividing without completing G1 requirements. <strong style="color:#F0A500;">Cyclin D1 is overexpressed.</strong> G1/S checkpoint appears to be bypassed.</div>
+      <div class="clue-divider"></div>
+    </div>
+    <div class="case-clue">
+      <div class="clue-label" style="color:#FF8090;">Clue 3 — Genetic Panel</div>
+      <div class="clue-title">Molecular Finding</div>
+      <div class="clue-text"><strong style="color:#FF8090;">Both copies of a tumor suppressor gene are inactivated.</strong> Consistent with a two-hit event. Loss of checkpoint arrest and apoptosis signaling confirmed.</div>
+    </div>
+    <div class="case-clue">
+      <div class="clue-label" style="color:#C4B5FD;">Clue 4 — Guiding Question</div>
+      <div class="clue-title">Your Board's Task</div>
+      <div class="clue-text">Which checkpoint failed? What gene(s) are involved? What type of mutation — oncogene, tumor suppressor, or both? What treatment approach does the evidence support?</div>
+    </div>
+  </div>
+
+  <!-- ROLE CARDS -->
+  <span class="section-label">Your Role</span>
+  <h2 class="section-title">Four Specialists, One Patient</h2>
+  <p style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.65;">Each person on the board has a specific lens. Read your role, answer your questions individually, then share with the group.</p>
+
+  <div class="roles-grid">
+
+    <!-- Role 1: Molecular Biologist -->
+    <div class="role-card">
+      <div class="role-header">
+        <div class="role-icon" style="background:#EBF7F8;">🔬</div>
+        <div>
+          <div class="role-name">Molecular Biologist</div>
+          <div class="role-title" style="color:var(--teal);">Gene & Mutation Analysis</div>
+        </div>
+      </div>
+      <div class="role-body">
+        <p class="role-focus">You interpret the genetic data. Your job is to identify exactly which gene failed and explain the molecular mechanism.</p>
+        <div class="role-question" style="background:#EBF7F8;color:var(--teal);">
+          Which gene or genes does Clue 3 point to? What type of mutation is this — gain-of-function or loss-of-function? Name the specific checkpoint it affects.
+        </div>
+        <textarea class="write-area" placeholder="Name the gene(s), classify the mutation type, and identify the checkpoint phase (G1/S, G2/M, or Spindle)..."></textarea>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Sentence starter: <em>"The genetic panel points to _____ because both copies are inactivated, which means the cell lost its _____ function at the _____ checkpoint."</em></div>
+      </div>
+    </div>
+
+    <!-- Role 2: Pathologist -->
+    <div class="role-card">
+      <div class="role-header">
+        <div class="role-icon" style="background:#FDE8EC;">🧫</div>
+        <div>
+          <div class="role-name">Pathologist</div>
+          <div class="role-title" style="color:var(--red);">Tissue & Lab Interpretation</div>
+        </div>
+      </div>
+      <div class="role-body">
+        <p class="role-focus">You interpret what the physical samples reveal. Your job is to connect the lab numbers and biopsy findings to what's happening at the cellular level.</p>
+        <div class="role-question" style="background:#FDE8EC;color:var(--red);">
+          What does a lymphoblast count of 72% tell you? Using Clues 1 and 2, explain what the G1/S checkpoint should have done — and clearly didn't.
+        </div>
+        <textarea class="write-area" placeholder="Describe what the bone marrow data means, and explain what a functioning checkpoint would have done instead..."></textarea>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Sentence starter: <em>"A lymphoblast count of 72% indicates _____ because under normal conditions, the G1/S checkpoint would have _____."</em></div>
+      </div>
+    </div>
+
+    <!-- Role 3: Oncologist -->
+    <div class="role-card">
+      <div class="role-header">
+        <div class="role-icon" style="background:#EEF5FB;">💊</div>
+        <div>
+          <div class="role-name">Oncologist</div>
+          <div class="role-title" style="color:var(--navy);">Treatment Strategy</div>
+        </div>
+      </div>
+      <div class="role-body">
+        <p class="role-focus">You design the treatment plan. Your job is to use the molecular findings to recommend a targeted approach — not just general chemotherapy.</p>
+        <div class="role-question" style="background:#EEF5FB;color:var(--navy);">
+          Based on the mutation identified, what type of treatment would specifically target it? What's the biological mechanism your treatment would need to interrupt in Maya's cell cycle?
+        </div>
+        <textarea class="write-area" placeholder="Describe a treatment strategy and explain which step in the mutation → cancer chain it would interrupt..."></textarea>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Sentence starter: <em>"Because Maya's cells show _____, a targeted therapy would need to _____ in order to restore _____ in the cell cycle."</em></div>
+      </div>
+    </div>
+
+    <!-- Role 4: Patient Advocate -->
+    <div class="role-card">
+      <div class="role-header">
+        <div class="role-icon" style="background:#FFF3CC;">🤝</div>
+        <div>
+          <div class="role-name">Patient Advocate</div>
+          <div class="role-title" style="color:var(--gold);">Patient & Family Perspective</div>
+        </div>
+      </div>
+      <div class="role-body">
+        <p class="role-focus">You speak for Maya and her family. Your job is to ask the questions a 12-year-old and her parents would need answered — and ensure the board considers the full human impact.</p>
+        <div class="role-question" style="background:#FFF3CC;color:#9A6B00;">
+          What are the three most important questions Maya's family would ask the Tumor Board? How would you explain — in plain language — what went wrong in her cells?
+        </div>
+        <textarea class="write-area" placeholder="Write 2–3 questions Maya's family would ask, and draft a plain-language explanation of her diagnosis..."></textarea>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Sentence starter: <em>"Maya's family would want to know _____, _____, and _____. In everyday terms, what happened is that her cells _____."</em></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONSENSUS FORM -->
+  <div class="consensus-card">
+    <div class="consensus-header">
+      <span style="font-size:20px;">🗳</span>
+      <h3>Board Consensus — After Group Discussion</h3>
+    </div>
+    <div class="consensus-body">
+
+      <div class="consensus-row">
+        <div class="consensus-label">1. Which checkpoint failed in Maya's case?</div>
+        <div class="vote-row">
+          <label class="vote-opt"><input type="radio" name="cp" value="g1s"> G1/S Checkpoint</label>
+          <label class="vote-opt"><input type="radio" name="cp" value="g2m"> G2/M Checkpoint</label>
+          <label class="vote-opt"><input type="radio" name="cp" value="both"> Both</label>
+          <label class="vote-opt"><input type="radio" name="cp" value="spindle"> Spindle Checkpoint</label>
+        </div>
+        <textarea class="evidence-area" placeholder="Evidence that supports this consensus decision (cite at least one specific clue)..." rows="2"></textarea>
+      </div>
+
+      <div class="consensus-row">
+        <div class="consensus-label">2. Mutation type in Maya's case</div>
+        <div class="vote-row">
+          <label class="vote-opt"><input type="radio" name="mut" value="onco"> Oncogene only</label>
+          <label class="vote-opt"><input type="radio" name="mut" value="tsg"> Tumor suppressor only</label>
+          <label class="vote-opt"><input type="radio" name="mut" value="both"> Both types</label>
+        </div>
+        <textarea class="evidence-area" placeholder="Which clue(s) support this? Name the specific gene if you can..." rows="2"></textarea>
+      </div>
+
+      <div class="consensus-row">
+        <div class="consensus-label">3. Does Maya's case fit the Two-Hit Hypothesis?</div>
+        <div class="vote-row">
+          <label class="vote-opt"><input type="radio" name="twohit" value="yes"> Yes — explain below</label>
+          <label class="vote-opt"><input type="radio" name="twohit" value="partial"> Partially — explain below</label>
+          <label class="vote-opt"><input type="radio" name="twohit" value="no"> No — explain below</label>
+        </div>
+        <textarea class="evidence-area" placeholder="Explain how the two-hit hypothesis does or doesn't apply to Maya's genetic panel finding..." rows="2"></textarea>
+      </div>
+
+      <div class="consensus-row">
+        <div class="consensus-label">4. Group Treatment Recommendation</div>
+        <textarea class="evidence-area" placeholder="What treatment approach does your board recommend? What is the biological target? Which specialist's reasoning most influenced the group?" rows="3"></textarea>
+      </div>
+
+      <div class="consensus-row">
+        <div class="consensus-label">5. One thing your group disagrees about (or found difficult to agree on)</div>
+        <textarea class="evidence-area" placeholder="Real Tumor Boards don't always agree. What was the hardest question for your group?" rows="2"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DISCUSSION PROMPTS -->
+  <span class="section-label">Whole-Class Debrief</span>
+  <h2 class="section-title">Discussion Questions</h2>
+  <div class="discussion-card">
+    <div class="disc-q">
+      <div class="disc-num">1</div>
+      <div class="disc-text">
+        Did every group reach the same consensus on which checkpoint failed? If groups disagreed, what evidence led to different conclusions?
+        <span class="bloom-tag" style="background:#EBF7F8;color:var(--teal);">ANALYZE</span>
+      </div>
+    </div>
+    <div class="disc-q">
+      <div class="disc-num">2</div>
+      <div class="disc-text">
+        The Oncologist had to propose a treatment without knowing all the details yet. What would they need to learn in Lesson 4 to make a more specific recommendation?
+        <span class="bloom-tag" style="background:#EEF5FB;color:var(--navy);">EVALUATE</span>
+      </div>
+    </div>
+    <div class="disc-q">
+      <div class="disc-num">3</div>
+      <div class="disc-text">
+        The Patient Advocate's role doesn't require knowing gene names — but the board can't work without them. What does that tell you about how science is actually communicated in medicine?
+        <span class="bloom-tag" style="background:#FFF3CC;color:#9A6B00;">EVALUATE</span>
+      </div>
+    </div>
+    <div class="disc-q">
+      <div class="disc-num">4</div>
+      <div class="disc-text">
+        If Maya's mother also had one inactivated copy of the same tumor suppressor gene from birth, how would that change the Molecular Biologist's analysis? What term from your module describes this scenario?
+        <span class="bloom-tag" style="background:#FDE8EC;color:var(--red);">APPLY</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELF CHECK -->
+  <div class="self-check">
+    <h3>✓ Tumor Board Self-Check</h3>
+    <div class="check-row"><input type="checkbox" id="c1"><label for="c1">I can name the specific checkpoint that failed in Maya's case and cite evidence from at least two clues.</label></div>
+    <div class="check-row"><input type="checkbox" id="c2"><label for="c2">I can explain the two-hit hypothesis and say how it applies (or doesn't) to Maya's genetic panel finding.</label></div>
+    <div class="check-row"><input type="checkbox" id="c3"><label for="c3">I understand why targeted therapy requires knowing which specific gene is mutated — not just that "cancer" is present.</label></div>
+    <div class="check-row"><input type="checkbox" id="c4"><label for="c4">I can explain the purpose of a Tumor Board and why multiple specialists review each case.</label></div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);text-align:center;">Cell Division Gone Wrong · STEM Education &amp; Outreach · Lesson 2 of 4 · Grades 9–10 · Tumor Board Group Activity</p>
+
+</div>
+</body>
+</html>
