@@ -37,7 +37,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--d
 
 /* ── PAGE ── */
 .page {
-  max-width: 860px; margin: 0 auto; padding: 32px 24px 48px;
+  max-width: 1200px; margin: 0 auto; padding: 24px 32px 48px;
 }
 
 /* ── HEADER ── */
@@ -241,7 +241,7 @@ svg.cycle-diagram {
 
 /* ── PRINT STYLES ── */
 @media print {
-  .top-bar, .print-btn, .info-box { display: none !important; }
+  .top-bar, .info-box { display: none !important; }
   body { background: #fff; }
   .page { padding: 12px; max-width: 100%; }
   .diagram-container, .two-hit-section, .checkpoint-table {
@@ -253,29 +253,8 @@ svg.cycle-diagram {
   .name-field input { border-bottom-color: #999 !important; }
 }
 
-  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
-  /* Fixed bottom-right: clears every file's top bar & print buttons */
-  #translate-bar {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 99999;
-    background: rgba(26,58,92,.97);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 9px;
-    padding: 6px 10px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.32);
-    backdrop-filter: blur(8px);
-  }
-  #translate-bar .tb-label {
-    font-size: 14px;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  /* Native <select> — scrolls automatically on every OS/browser */
+  /* ── LANGUAGE SELECT — lives inside .top-bar ─────────────────── */
+  /* (no fixed positioning needed — select is inline in the header) */
   #lang-select {
     appearance: none;
     -webkit-appearance: none;
@@ -306,10 +285,35 @@ svg.cycle-diagram {
 <!-- TOP BAR -->
 <div class="top-bar">
   <span class="top-bar-brand">Cell Division Gone Wrong · Lesson 2 Support · Scaffolded Diagram</span>
-  <button class="print-btn" onclick="window.print()">
-    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
-    Print / Save PDF
-  </button>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="font-size:14px;line-height:1;">🌐</span>
+    <select id="lang-select" aria-label="Select language">
+      <option value="">Language</option>
+      <option value="es">Español</option>
+      <option value="zh-CN">中文 (简体)</option>
+      <option value="zh-TW">中文 (繁體)</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="vi">Tiếng Việt</option>
+      <option value="ko">한국어</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="hi">हिंदी</option>
+      <option value="ht">Kreyòl Ayisyen</option>
+      <option value="tl">Filipino</option>
+      <option value="ja">日本語</option>
+      <option value="de">Deutsch</option>
+      <option value="so">Somali</option>
+      <option value="am">አማርኛ</option>
+      <option value="ur">اردو</option>
+      <option value="bn">বাংলা</option>
+      <option value="fa">فارسী</option>
+    </select>
+    <button class="print-btn" onclick="window.print()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+      Print / Save PDF
+    </button>
+  </div>
 </div>
 
 <div class="page">
@@ -680,31 +684,7 @@ svg.cycle-diagram {
 </div>
 
 <!-- ── LANGUAGE TRANSLATION WIDGET ─────────────────────────── -->
-<div id="translate-bar">
-  <span class="tb-label">🌐</span>
-  <select id="lang-select" aria-label="Select language">
-    <option value="">Language</option>
-    <option value="es">Español</option>
-    <option value="zh-CN">中文 (简体)</option>
-    <option value="zh-TW">中文 (繁體)</option>
-    <option value="ar">العربية</option>
-    <option value="fr">Français</option>
-    <option value="vi">Tiếng Việt</option>
-    <option value="ko">한국어</option>
-    <option value="pt">Português</option>
-    <option value="ru">Русский</option>
-    <option value="hi">हिंदी</option>
-    <option value="ht">Kreyòl Ayisyen</option>
-    <option value="tl">Filipino</option>
-    <option value="ja">日本語</option>
-    <option value="de">Deutsch</option>
-    <option value="so">Somali</option>
-    <option value="am">አማርኛ</option>
-    <option value="ur">اردو</option>
-    <option value="bn">বাংলা</option>
-    <option value="fa">فارسی</option>
-  </select>
-</div>
+
 
 <!-- Hidden Google Translate init (powers the translation engine) -->
 <div id="google_translate_element"></div>
