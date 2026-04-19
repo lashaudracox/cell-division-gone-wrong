@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Card Sort — The Normal Cell Cycle · Lesson 1</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#1A3A5C;--teal:#0E7C86;--red:#C8102E;--gold:#F0A500;
+  --green:#16A34A;--purple:#7C3AED;--light:#EEF5FB;--white:#fff;
+  --gray:#64748B;--dark:#1E293B;--border:#D1E4F0;--bg:#F4F7FB;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);padding-bottom:60px;
+  padding-bottom: 52px;}
+
+/* ── MODULE NAV ── */
+#module-nav{background:#0D2438;padding:0 16px;display:flex;align-items:center;
+  height:38px;gap:0;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.mn-home{font-size:11px;font-weight:700;color:#7FD4D8;text-decoration:none;
+  white-space:nowrap;margin-right:8px;display:flex;align-items:center;gap:5px;}
+.mn-home:hover{color:#fff;}
+.mn-sep{color:rgba(255,255,255,.25);font-size:12px;margin:0 8px;}
+.mn-lessons{display:flex;gap:2px;align-items:center;}
+.mn-lesson{font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;
+  text-decoration:none;color:rgba(255,255,255,.5);transition:all .12s;border:1px solid transparent;}
+.mn-lesson:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.08);}
+.mn-lesson.mn-active{color:#7FD4D8;border-color:#0E7C86;background:rgba(255,255,255,.1);}
+.mn-crumb{color:rgba(255,255,255,.4);font-size:11px;margin-left:auto;white-space:nowrap;}
+
+/* ── HEADER ── */
+.page-header{background:linear-gradient(135deg,var(--navy),#0E4D5A);
+  color:#fff;padding:28px 24px 24px;}
+.ph-inner{max-width:860px;margin:0 auto;}
+.ph-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);padding:3px 12px;border-radius:20px;
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:#7FD4D8;margin-bottom:12px;}
+.ph-title{font-size:24px;font-weight:800;line-height:1.2;margin-bottom:6px;}
+.ph-sub{font-size:13px;color:rgba(255,255,255,.7);}
+
+/* ── NAME ROW ── */
+.name-row{max-width:860px;margin:16px auto 0;display:flex;gap:10px;
+  border:1px solid var(--border);border-radius:6px;background:#fff;
+  padding:8px 16px;align-items:flex-end;}
+.nf{flex:2;}.nf-sm{flex:1;}
+.nf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--gray);margin-bottom:3px;}
+.nf input{width:100%;border:none;border-bottom:1.5px solid var(--navy);
+  padding:2px 0;font-size:13px;font-family:inherit;outline:none;background:transparent;}
+
+/* ── PAGE ── */
+.page{max-width:860px;margin:24px auto;padding:0 16px;}
+
+/* ── INSTRUCTIONS ── */
+.instr-bar{background:var(--navy);color:#fff;border-radius:8px;padding:14px 18px;
+  margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;}
+.ib-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.ib-text{font-size:13px;line-height:1.55;}
+.ib-text strong{color:#7FD4D8;}
+
+/* ── ROUND HEADER ── */
+.round-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:24px;}
+.round-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
+.round-title{font-size:17px;font-weight:700;}
+.round-sub{font-size:12px;color:var(--gray);margin-top:1px;}
+
+/* ── CARD BANK ── */
+.card-bank{display:flex;flex-wrap:wrap;gap:8px;
+  background:#fff;border:1.5px solid var(--border);border-radius:8px;
+  padding:12px;margin-bottom:16px;min-height:60px;}
+.card-bank-label{width:100%;font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--gray);margin-bottom:6px;}
+
+/* ── DRAGGABLE CARD ── */
+.card{
+  padding:7px 14px;border-radius:6px;font-size:13px;font-weight:600;
+  cursor:pointer;user-select:none;transition:all .15s;
+  border:2px solid transparent;display:inline-flex;align-items:center;
+}
+.card:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.15);}
+.card.selected{box-shadow:0 0 0 3px var(--navy);transform:translateY(-2px);}
+.card.placed{opacity:.4;cursor:default;pointer-events:none;}
+/* Round colors */
+.card.r1{background:#EEF5FB;color:var(--navy);border-color:#BDD5EA;}
+.card.r2{background:#FFF8EC;color:#7A5200;border-color:#F0A500;}
+.card.r3{background:#F0FFF4;color:#15803D;border-color:#86EFAC;}
+
+/* ── MATCH GRID ── */
+.match-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.match-row{display:flex;align-items:stretch;gap:8px;}
+.match-row.correct .drop-zone{background:#F0FFF4;border-color:#16A34A;}
+.match-row.incorrect .drop-zone{background:#FFF0F0;border-color:#C8102E;}
+
+.match-desc{
+  flex:1;background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:10px 14px;font-size:13px;line-height:1.45;
+}
+.match-desc .md-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--teal);margin-bottom:3px;}
+.match-desc .md-text{color:var(--dark);}
+.match-desc .md-sub{font-size:11.5px;color:var(--gray);margin-top:3px;}
+
+.drop-zone{
+  width:130px;flex-shrink:0;background:var(--bg);border:2px dashed var(--border);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  padding:8px;text-align:center;cursor:pointer;transition:all .15s;min-height:52px;
+}
+.drop-zone:hover{border-color:var(--teal);background:var(--light);}
+.drop-zone.has-card{border-style:solid;border-color:var(--navy);background:#fff;cursor:pointer;}
+.drop-zone .dz-hint{font-size:11px;color:var(--muted);}
+.drop-zone .placed-card{
+  font-size:12.5px;font-weight:700;padding:4px 8px;border-radius:4px;
+  text-align:center;line-height:1.3;
+}
+.drop-zone .correct-label{font-size:10px;font-weight:700;color:#15803D;margin-top:3px;}
+.drop-zone .incorrect-label{font-size:10px;font-weight:700;color:#C8102E;margin-top:3px;}
+
+/* ── CHECK BUTTON ── */
+.check-row{display:flex;align-items:center;gap:12px;margin-top:16px;}
+.check-btn{
+  padding:9px 22px;background:var(--navy);color:#fff;border:none;
+  border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:background .15s;
+}
+.check-btn:hover{background:#0D2438;}
+.check-btn:disabled{background:var(--gray);cursor:default;}
+.check-score{font-size:13px;font-weight:600;color:var(--dark);}
+.reset-btn{padding:7px 14px;background:#fff;color:var(--navy);border:1.5px solid var(--border);
+  border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+.reset-btn:hover{border-color:var(--navy);}
+
+/* ── ROUND DIVIDER ── */
+.round-divider{border:none;border-top:2px dashed var(--border);margin:28px 0;}
+
+/* ── DISCUSSION ── */
+.disc-section{background:var(--navy);border-radius:10px;padding:20px 22px;margin-top:28px;}
+.disc-title{color:#7FD4D8;font-size:11px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:4px;}
+.disc-heading{color:#fff;font-size:17px;font-weight:700;margin-bottom:14px;}
+.disc-q{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:12px 14px;margin-bottom:10px;}
+.disc-q-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:#7FD4D8;margin-bottom:4px;}
+.disc-q-text{font-size:13px;color:rgba(255,255,255,.9);margin-bottom:8px;line-height:1.5;}
+.disc-q textarea{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:5px;padding:9px 11px;font-size:12.5px;font-family:inherit;color:#fff;
+  resize:vertical;min-height:70px;outline:none;line-height:1.5;}
+.disc-q textarea::placeholder{color:rgba(255,255,255,.35);}
+
+/* ── NEXT LESSON CTA ── */
+.next-cta{background:var(--teal);color:#fff;border-radius:8px;padding:16px 20px;
+  margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.nc-text{font-size:13px;line-height:1.4;}
+.nc-text strong{display:block;font-size:15px;margin-bottom:2px;}
+.nc-btn{padding:8px 18px;background:#fff;color:var(--teal);border:none;
+  border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;
+  white-space:nowrap;display:inline-block;}
+.nc-btn:hover{background:var(--light);}
+
+  #tts-bar{position:fixed;bottom:0;left:0;right:0;background:#1A3A5C;color:#fff;
+    padding:7px 16px;display:flex;align-items:center;gap:8px;z-index:9997;
+    box-shadow:0 -2px 10px rgba(0,0,0,.3);flex-wrap:wrap;min-height:46px;}
+  .tts-icon{font-size:17px;flex-shrink:0;}
+  .tts-label{font-size:10.5px;font-weight:700;letter-spacing:.8px;
+    text-transform:uppercase;color:#7FD4D8;flex-shrink:0;}
+  .tts-btn{border:none;border-radius:5px;padding:5px 12px;font-size:12px;
+    font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .tts-primary{background:#0E7C86;color:#fff;}
+  .tts-primary:hover{background:#0A6870;}
+  .tts-secondary{background:rgba(255,255,255,.12);color:#fff;padding:5px 10px;font-size:13px;}
+  .tts-secondary:hover:not(:disabled){background:rgba(255,255,255,.22);}
+  .tts-secondary:disabled{opacity:.35;cursor:default;}
+  .tts-divider{width:1px;height:20px;background:rgba(255,255,255,.2);flex-shrink:0;}
+  .tts-speed-row{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+  .tts-speed-lbl{font-size:10px;color:#A8C8E8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+  .tts-speed-btn{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:4px;
+    padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;}
+  .tts-speed-btn:hover{background:rgba(255,255,255,.2);}
+  .tts-speed-btn.tts-speed-active{background:#0E7C86;font-weight:700;}
+  .tts-status{font-size:11px;color:#A8C8E8;margin-left:auto;display:flex;align-items:center;gap:5px;}
+  .tts-pulse{width:7px;height:7px;border-radius:50%;background:#16A34A;
+    animation:ttsPulse 1.2s ease-in-out infinite;}
+  @keyframes ttsPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .tts-reading{outline:2.5px solid #0E7C86!important;outline-offset:4px;border-radius:6px;}
+
+</style>
+</head>
+<body>
+
+<!-- MODULE NAV -->
+<nav id="module-nav">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons">
+    <a href="module.html#lesson-1" class="mn-lesson mn-active">L1</a>
+    <a href="module.html#lesson-2" class="mn-lesson">L2</a>
+    <a href="module.html#lesson-3" class="mn-lesson">L3</a>
+    <a href="module.html#lesson-4" class="mn-lesson">L4</a>
+  </div>
+  <span class="mn-crumb">Lesson 1 · Card Sort</span>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="ph-inner">
+    <div class="ph-badge">🃏 In-Class Activity · Lesson 1</div>
+    <div class="ph-title">Card Sort: The Normal Cell Cycle</div>
+    <div class="ph-sub">3 rounds · Work with your group · Match each card to the correct description</div>
+    <div class="name-row">
+      <div class="nf"><label>Full Name</label><input id="f-name" type="text" placeholder="First Last"/></div>
+      <div class="nf-sm"><label>Period / Class</label><input id="f-period" type="text" placeholder="Period 3"/></div>
+      <div class="nf-sm"><label>Date</label><input id="f-date" type="text" placeholder="Today"/></div>
+      <div class="nf-sm"><label>Group #</label><input id="f-group" type="text" placeholder="Group 2"/></div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- INSTRUCTIONS -->
+<div class="instr-bar">
+  <div class="ib-icon">📋</div>
+  <div class="ib-text">
+    <strong>How to use this card sort:</strong> Click a card in the bank to select it (it will highlight), then click the drop zone where it belongs. Click a placed card to return it to the bank. Complete all three rounds, then check your answers before moving to the discussion questions.
+  </div>
+</div>
+
+<!-- ══════════ ROUND 1: Cell Cycle Phases ══════════ -->
+<div class="round-hdr">
+  <div class="round-num" style="background:var(--navy);">1</div>
+  <div>
+    <div class="round-title" style="color:var(--navy);">Round 1 — Cell Cycle Phases</div>
+    <div class="round-sub">Match each phase name to what happens during that phase</div>
+  </div>
+</div>
+
+<div class="card-bank" id="bank-r1">
+  <div class="card-bank-label">Phase Cards — Click to select, then click a box below</div>
+  <div class="card r1" id="c-g1" data-round="1" data-val="G1" onclick="selectCard(this)">G1 Phase</div>
+  <div class="card r1" id="c-s"  data-round="1" data-val="S"  onclick="selectCard(this)">S Phase</div>
+  <div class="card r1" id="c-g2" data-round="1" data-val="G2" onclick="selectCard(this)">G2 Phase</div>
+  <div class="card r1" id="c-m"  data-round="1" data-val="M"  onclick="selectCard(this)">M Phase</div>
+</div>
+
+<div class="match-grid" id="grid-r1">
+  <div class="match-row" data-answer="G1">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">The cell grows larger, checks that nutrient levels are adequate, and produces proteins needed for DNA copying. If conditions aren't right, the cell pauses here.</div>
+      <div class="md-sub">⏱ ~11 hours · Longest phase of the cycle</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+  <div class="match-row" data-answer="S">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">DNA is replicated — every chromosome is copied exactly once. Each chromosome becomes two identical sister chromatids joined at the centromere.</div>
+      <div class="md-sub">⏱ ~8 hours · "S" stands for synthesis</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+  <div class="match-row" data-answer="G2">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">The cell verifies that DNA replication was accurate and checks for any double-strand breaks. It continues growing and assembles the proteins needed for cell division.</div>
+      <div class="md-sub">⏱ ~4 hours · Final preparation before division</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+  <div class="match-row" data-answer="M">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">The cell physically divides into two daughter cells. The nucleus divides first (mitosis), then the cytoplasm splits (cytokinesis). Each daughter cell receives one complete copy of the genome.</div>
+      <div class="md-sub">⏱ ~1 hour · "M" stands for mitosis</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+</div>
+<div class="check-row">
+  <button class="check-btn" onclick="checkRound(1)" id="check-r1">Check Round 1</button>
+  <button class="reset-btn" onclick="resetRound(1)">Reset</button>
+  <span class="check-score" id="score-r1"></span>
+</div>
+
+<hr class="round-divider"/>
+
+<!-- ══════════ ROUND 2: Mitosis Phases ══════════ -->
+<div class="round-hdr">
+  <div class="round-num" style="background:var(--gold);color:var(--dark);">2</div>
+  <div>
+    <div class="round-title" style="color:#92400E;">Round 2 — Phases of Mitosis</div>
+    <div class="round-sub">The M phase has 4 sub-phases — match each to what happens</div>
+  </div>
+</div>
+
+<div class="card-bank" id="bank-r2">
+  <div class="card-bank-label">Mitosis Phase Cards</div>
+  <div class="card r2" id="c-pro"  data-round="2" data-val="Prophase"             onclick="selectCard(this)">Prophase</div>
+  <div class="card r2" id="c-meta" data-round="2" data-val="Metaphase"            onclick="selectCard(this)">Metaphase</div>
+  <div class="card r2" id="c-ana"  data-round="2" data-val="Anaphase"             onclick="selectCard(this)">Anaphase</div>
+  <div class="card r2" id="c-telo" data-round="2" data-val="Telophase/Cytokinesis" onclick="selectCard(this)">Telophase &amp; Cytokinesis</div>
+</div>
+
+<div class="match-grid" id="grid-r2">
+  <div class="match-row" data-answer="Prophase">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">Chromosomes condense and become visible under a microscope. The nuclear envelope breaks down. The mitotic spindle — made of microtubule fibers — begins to form from the centrosomes.</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+  <div class="match-row" data-answer="Metaphase">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">All chromosomes line up precisely along the cell's equator (the metaphase plate). Spindle fibers from opposite poles attach to each chromosome's centromere. This alignment is checked before the cell can proceed.</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+  <div class="match-row" data-answer="Anaphase">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">Sister chromatids are pulled apart. Spindle fibers shorten and drag one copy of each chromosome to opposite poles. By the end, each pole has a complete set of chromosomes.</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+  <div class="match-row" data-answer="Telophase/Cytokinesis">
+    <div class="match-desc">
+      <div class="md-label">What happens here?</div>
+      <div class="md-text">Nuclear envelopes reform around each set of chromosomes. Chromosomes de-condense. The cytoplasm divides (cytokinesis) — in animal cells, a contractile ring pinches the cell in two, producing two identical daughter cells.</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop phase here</span></div>
+  </div>
+</div>
+<div class="check-row">
+  <button class="check-btn" onclick="checkRound(2)" id="check-r2">Check Round 2</button>
+  <button class="reset-btn" onclick="resetRound(2)">Reset</button>
+  <span class="check-score" id="score-r2"></span>
+</div>
+
+<hr class="round-divider"/>
+
+<!-- ══════════ ROUND 3: Checkpoints ══════════ -->
+<div class="round-hdr">
+  <div class="round-num" style="background:var(--green);">3</div>
+  <div>
+    <div class="round-title" style="color:#15803D;">Round 3 — Cell Cycle Checkpoints</div>
+    <div class="round-sub">Match each checkpoint to what it verifies and its key protein</div>
+  </div>
+</div>
+
+<div class="card-bank" id="bank-r3">
+  <div class="card-bank-label">Checkpoint Cards</div>
+  <div class="card r3" id="c-g1s"     data-round="3" data-val="G1/S Checkpoint"      onclick="selectCard(this)">G1/S Checkpoint</div>
+  <div class="card r3" id="c-g2m"     data-round="3" data-val="G2/M Checkpoint"      onclick="selectCard(this)">G2/M Checkpoint</div>
+  <div class="card r3" id="c-spindle" data-round="3" data-val="Spindle Checkpoint"   onclick="selectCard(this)">Spindle Checkpoint</div>
+</div>
+
+<div class="match-grid" id="grid-r3">
+  <div class="match-row" data-answer="G1/S Checkpoint">
+    <div class="match-desc">
+      <div class="md-label">What does this checkpoint verify?</div>
+      <div class="md-text">Is the cell large enough? Is DNA undamaged? Are nutrients and growth factors available? If DNA damage is detected, p53 halts the cycle and activates repair — or triggers apoptosis if repair fails.</div>
+      <div class="md-sub">🔑 Key proteins: p53 (TP53), Rb protein · Location: end of G1</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop checkpoint here</span></div>
+  </div>
+  <div class="match-row" data-answer="G2/M Checkpoint">
+    <div class="match-desc">
+      <div class="md-label">What does this checkpoint verify?</div>
+      <div class="md-text">Was all DNA replicated correctly? Are there any double-strand breaks remaining? Only if DNA is complete and intact does the cell receive permission to enter mitosis.</div>
+      <div class="md-sub">🔑 Key proteins: ATM/ATR kinase · Location: end of G2</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop checkpoint here</span></div>
+  </div>
+  <div class="match-row" data-answer="Spindle Checkpoint">
+    <div class="match-desc">
+      <div class="md-label">What does this checkpoint verify?</div>
+      <div class="md-text">Are all chromosomes properly attached to spindle fibers at both kinetochores? If even one chromosome is unattached, this checkpoint prevents anaphase — ensuring each daughter cell gets exactly one copy of every chromosome.</div>
+      <div class="md-sub">🔑 Key protein: MAD2 · Location: during M phase (metaphase)</div>
+    </div>
+    <div class="drop-zone" onclick="dropCard(this)"><span class="dz-hint">Drop checkpoint here</span></div>
+  </div>
+</div>
+<div class="check-row">
+  <button class="check-btn" onclick="checkRound(3)" id="check-r3">Check Round 3</button>
+  <button class="reset-btn" onclick="resetRound(3)">Reset</button>
+  <span class="check-score" id="score-r3"></span>
+</div>
+
+<hr class="round-divider"/>
+
+<!-- ══════════ DISCUSSION QUESTIONS ══════════ -->
+<div class="disc-section">
+  <div class="disc-title">Group Discussion</div>
+  <div class="disc-heading">After completing all three rounds, discuss and record your group's answers:</div>
+
+  <div class="disc-q">
+    <div class="disc-q-label">Q1 · Understand</div>
+    <div class="disc-q-text">The cell cycle has three major checkpoints — at G1/S, G2/M, and during M phase. Why do you think all three exist? What would happen if the cell only had the G1/S checkpoint?</div>
+    <textarea id="dq1" placeholder="Your group's response here..."></textarea>
+  </div>
+  <div class="disc-q">
+    <div class="disc-q-label">Q2 · Apply</div>
+    <div class="disc-q-text">A scientist uses a drug that blocks all cells in metaphase. Based on what you learned in Round 3, which checkpoint is this drug targeting, and what protein is it likely affecting?</div>
+    <textarea id="dq2" placeholder="Your group's response here..."></textarea>
+  </div>
+  <div class="disc-q">
+    <div class="disc-q-label">Q3 · Analyze — Bridge to Lesson 2</div>
+    <div class="disc-q-text">Imagine the p53 protein stopped working in a cell. Walk through the cell cycle — at which checkpoint would the first problem appear? What would the cell do that it shouldn't? Where might this lead?</div>
+    <textarea id="dq3" placeholder="Your group's response here..."></textarea>
+  </div>
+</div>
+
+<!-- NEXT LESSON CTA -->
+<a class="next-cta" href="Student_Lesson_WhenControlsBreakDown.html">
+  <div class="nc-text">
+    <strong>Up Next → Lesson 2: When Controls Break Down</strong>
+    In Lesson 2 you'll see what happens when p53 and other checkpoint proteins mutate — and meet Maya, a 12-year-old diagnosed with leukemia whose case you'll diagnose.
+  </div>
+  <span class="nc-btn">Start Lesson 2 →</span>
+</a>
+
+</div><!-- /page -->
+
+<script>
+var selectedCard = null;
+
+function selectCard(card) {
+  if (card.classList.contains('placed')) return;
+  if (selectedCard) selectedCard.classList.remove('selected');
+  if (selectedCard === card) { selectedCard = null; return; }
+  selectedCard = card;
+  card.classList.add('selected');
+}
+
+function dropCard(zone) {
+  if (!selectedCard) {
+    // Click on occupied zone returns card to bank
+    if (zone.classList.contains('has-card')) {
+      returnToBank(zone);
+    }
+    return;
+  }
+  var round = selectedCard.dataset.round;
+  var zoneRow = zone.closest('.match-row');
+  // Check same round
+  if (zoneRow && zoneRow.closest('.match-grid').id !== 'grid-r' + round) return;
+
+  // If zone already has a card, return that card first
+  if (zone.classList.contains('has-card')) {
+    returnToBank(zone);
+  }
+
+  // Place card
+  zone.innerHTML = '<span class="placed-card" style="background:var(--bg);color:var(--dark);">' +
+    selectedCard.textContent + '</span>';
+  zone.classList.add('has-card');
+  zone.dataset.placed = selectedCard.dataset.val;
+
+  selectedCard.classList.add('placed');
+  selectedCard.classList.remove('selected');
+  selectedCard = null;
+}
+
+function returnToBank(zone) {
+  var val = zone.dataset.placed;
+  var card = document.getElementById('c-' + val.toLowerCase().replace(/[^a-z]/g,''));
+  if (!card) {
+    // Find by data-val
+    card = document.querySelector('[data-val="' + val + '"]');
+  }
+  if (card) {
+    card.classList.remove('placed');
+  }
+  zone.innerHTML = '<span class="dz-hint">Drop ' + (zone.dataset.placed ? 'here' : 'here') + '</span>';
+  zone.classList.remove('has-card');
+  delete zone.dataset.placed;
+  zone.closest('.match-row').classList.remove('correct','incorrect');
+}
+
+function checkRound(n) {
+  var grid = document.getElementById('grid-r' + n);
+  var rows = grid.querySelectorAll('.match-row');
+  var correct = 0;
+  rows.forEach(function(row) {
+    var answer = row.dataset.answer;
+    var zone = row.querySelector('.drop-zone');
+    if (!zone.classList.contains('has-card')) return;
+    var placed = zone.dataset.placed;
+    row.classList.remove('correct','incorrect');
+    if (placed === answer) {
+      row.classList.add('correct');
+      zone.querySelector('.placed-card').style.color = 'var(--green)';
+      correct++;
+    } else {
+      row.classList.add('incorrect');
+      zone.querySelector('.placed-card').style.color = 'var(--red)';
+    }
+  });
+  var total = rows.length;
+  var btn = document.getElementById('check-r' + n);
+  var score = document.getElementById('score-r' + n);
+  if (correct === total) {
+    score.textContent = '✓ All ' + total + ' correct!';
+    score.style.color = 'var(--green)';
+    btn.disabled = true;
+  } else {
+    score.textContent = correct + ' of ' + total + ' correct — try again';
+    score.style.color = 'var(--red)';
+  }
+}
+
+function resetRound(n) {
+  var grid = document.getElementById('grid-r' + n);
+  var rows = grid.querySelectorAll('.match-row');
+  rows.forEach(function(row) {
+    row.classList.remove('correct','incorrect');
+    var zone = row.querySelector('.drop-zone');
+    if (zone.classList.contains('has-card')) {
+      var val = zone.dataset.placed;
+      var card = document.querySelector('[data-val="' + val + '"]');
+      if (card) card.classList.remove('placed');
+      zone.innerHTML = '<span class="dz-hint">Drop here</span>';
+      zone.classList.remove('has-card');
+      delete zone.dataset.placed;
+    }
+  });
+  document.getElementById('score-r' + n).textContent = '';
+  document.getElementById('check-r' + n).disabled = false;
+}
+</script>
+
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled>&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled>&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&times;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&times;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&times;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&times;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none">
+    <div class="tts-pulse"></div>
+    <span id="tts-status-text">Reading&hellip;</span>
+  </div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 ═══════════════════════════════════════════════ */
+(function() {
+  var synth    = window.speechSynthesis;
+  var _rate    = 1.0;
+  var _playing = false;
+  var _paused  = false;
+  var _sections = [];
+  var _idx     = 0;
+  var _utt     = null;
+  var _timer   = null;
+
+  /* DOM walker: builds text with proper punctuation after every block element */
+  window._ttsExtract = function(rootEl) {
+    if (!rootEl) return '';
+    var clone = rootEl.cloneNode(true);
+
+    var skipSels = [
+      'button','select','svg','script','style',
+      'input[type=submit]','input[type=button]','input[type=reset]',
+      '#tts-bar','.tts-bar','#translate-bar','.toolbar','.top-bar',
+      '.tb-right','[aria-hidden="true"]'
+    ];
+    skipSels.forEach(function(sel) {
+      try {
+        clone.querySelectorAll(sel).forEach(function(n) {
+          if (n.parentNode) n.parentNode.removeChild(n);
+        });
+      } catch(e) {}
+    });
+
+    var BLOCK = {
+      DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,
+      LI:1,DT:1,DD:1,TD:1,TH:1,TR:1,CAPTION:1,
+      SECTION:1,ARTICLE:1,BLOCKQUOTE:1,FIGURE:1,FIGCAPTION:1,
+      LABEL:1,LEGEND:1,SUMMARY:1
+    };
+
+    var parts = [];
+    function walk(node) {
+      if (node.nodeType === 3) {
+        var t = node.nodeValue.replace(/\s+/g,' ');
+        if (t.trim()) parts.push(t);
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      var tag = node.tagName;
+      if (tag === 'BR') { parts.push(' '); return; }
+      var before = parts.length;
+      var c = node.childNodes;
+      for (var i = 0; i < c.length; i++) walk(c[i]);
+      if (BLOCK[tag] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) {
+          if (!/[.!?:;\u2014\u2013,]$/.test(seg)) seg += '.';
+          parts.push(seg + ' ');
+        }
+      }
+    }
+    walk(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  };
+
+  window._ttsGetSections = function() {
+    var page = document.querySelector('.page, main, [role=main]') || document.body;
+    return Array.from(page.children).filter(function(el) {
+      return (el.textContent || '').trim().length > 15;
+    });
+  };
+
+  function clearHL() {
+    document.querySelectorAll('.tts-reading').forEach(function(el) {
+      el.classList.remove('tts-reading');
+    });
+  }
+
+  function readAt(idx) {
+    clearTimeout(_timer);
+    if (idx >= _sections.length) { onDone(); return; }
+    _idx = idx;
+    clearHL();
+    var sec = _sections[idx];
+    if (sec.parentNode) {
+      sec.classList.add('tts-reading');
+      try { sec.scrollIntoView({behavior:'smooth',block:'nearest'}); } catch(e) {}
+    }
+    var txt = window._ttsExtract(sec);
+    if (!txt.trim()) { readAt(idx + 1); return; }
+
+    _utt = new SpeechSynthesisUtterance(txt);
+    _utt.rate = _rate;
+    _utt.lang = document.documentElement.lang || 'en-US';
+    _utt.onend = function() {
+      if (!_playing) return;
+      _timer = setTimeout(function() {
+        if (_playing && !_paused) readAt(idx + 1);
+      }, 500);
+    };
+    _utt.onerror = function(e) {
+      if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
+    };
+    synth.speak(_utt);
+    _playing = true; _paused = false;
+    updateUI(_idx + 1, _sections.length);
+  }
+
+  function onDone() {
+    _playing = false; _paused = false;
+    clearHL(); clearTimeout(_timer); updateUI(0,0);
+  }
+
+  function updateUI(cur, total) {
+    var play = document.getElementById('tts-play');
+    var pause = document.getElementById('tts-pause');
+    var stop  = document.getElementById('tts-stop');
+    var status = document.getElementById('tts-status');
+    var stxt   = document.getElementById('tts-status-text');
+    if (!play) return;
+    if (_playing) {
+      play.innerHTML  = '&#8635; Restart';
+      pause.disabled  = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      pause.title     = _paused ? 'Resume' : 'Pause';
+      stop.disabled   = false;
+      if (status) status.style.display = 'flex';
+      if (stxt) stxt.textContent = _paused ? 'Paused'
+        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading\u2026');
+    } else {
+      play.innerHTML  = '&#9654; Play';
+      pause.disabled  = true;
+      pause.innerHTML = '&#9646;&#9646;';
+      stop.disabled   = true;
+      if (status) status.style.display = 'none';
+    }
+  }
+
+  window.ttsPlay = function() {
+    synth.cancel(); clearTimeout(_timer);
+    _sections = window._ttsGetSections();
+    if (!_sections.length) return;
+    _playing = true; _paused = false;
+    readAt(0);
+  };
+  window.ttsPauseResume = function() {
+    if (!_playing) return;
+    if (_paused) { synth.resume(); _paused = false; }
+    else         { synth.pause();  _paused = true;  }
+    updateUI(_idx + 1, _sections.length);
+  };
+  window.ttsStop = function() {
+    synth.cancel(); clearTimeout(_timer);
+    _playing = false; _paused = false;
+    clearHL(); updateUI(0,0);
+  };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
+      b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
+    });
+    if (_playing && !_paused) {
+      var ri = _idx; synth.cancel(); clearTimeout(_timer);
+      _sections = window._ttsGetSections();
+      _timer = setTimeout(function() { readAt(ri); }, 100);
+    }
+  };
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) window.ttsStop();
+  });
+})();
+</script>
+<script>
+window._ttsGetSections = function() {
+  return Array.from(document.querySelectorAll('.round-hdr,.match-desc,.disc-q')).filter(function(e) {
+    return (e.textContent||'').trim().length > 15;
+  });
+};
+</script>
+</body>
+</html>

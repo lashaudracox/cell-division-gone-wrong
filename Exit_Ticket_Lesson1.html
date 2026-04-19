@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Exit Ticket — Lesson 1</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#1A3A5C;--teal:#0E7C86;--green:#16A34A;
+  --light:#EEF5FB;--gray:#64748B;--dark:#1E293B;--border:#D1E4F0;--bg:#F4F7FB;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);padding:38px 0 60px;
+  padding-bottom: 52px;}
+.ticket{max-width:680px;margin:16px auto;padding:0 16px;}
+.ticket-header{background:linear-gradient(135deg,var(--navy),#064E3B);color:#fff;
+  border-radius:8px;padding:18px 22px;margin-bottom:14px;}
+.th-kicker{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:#7FD4D8;margin-bottom:5px;}
+.th-title{font-size:20px;font-weight:800;margin-bottom:3px;}
+.th-sub{font-size:12.5px;color:rgba(255,255,255,.7);}
+.meta-row{display:flex;gap:10px;margin-bottom:12px;}
+.meta-f{flex:1;}.meta-f label{display:block;font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin-bottom:2px;}
+.meta-f input{width:100%;border:none;border-bottom:1.5px solid var(--navy);padding:2px 0;
+  font-size:13px;font-family:inherit;outline:none;background:transparent;}
+.instr-bar{background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:10px 14px;font-size:13px;color:var(--gray);margin-bottom:12px;}
+.q-section{background:#fff;border:1.5px solid var(--border);border-radius:8px;
+  padding:14px 16px;margin-bottom:10px;}
+.q-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  color:var(--teal);margin-bottom:6px;}
+.q-text{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4;}
+.opts{display:flex;flex-direction:column;gap:5px;}
+.opt{display:flex;align-items:flex-start;gap:9px;padding:8px 11px;
+  border:1.5px solid var(--border);border-radius:6px;cursor:pointer;
+  background:#fff;font-size:13px;line-height:1.4;transition:all .12s;}
+.opt:hover{border-color:var(--teal);background:var(--light);}
+.opt.correct{background:#F0FFF4;border-color:var(--green);color:#15803D;}
+.opt.incorrect{background:#FFF0F2;border-color:#C8102E;color:#C8102E;}
+.opt.disabled{cursor:default;pointer-events:none;}
+.opt-ltr{width:21px;height:21px;border-radius:50%;background:var(--border);
+  color:var(--navy);font-size:10.5px;font-weight:700;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px;}
+.opt.correct .opt-ltr{background:var(--green);color:#fff;}
+.opt.incorrect .opt-ltr{background:#C8102E;color:#fff;}
+.fb{font-size:12.5px;padding:9px 12px;border-radius:5px;margin-top:8px;
+  display:none;line-height:1.5;}
+.fb.show{display:block;}
+.fb-ok{background:#F0FFF4;color:#15803D;border:1px solid #86EFAC;}
+.fb-no{background:#FFF0F2;color:#C8102E;border:1px solid #FECACA;}
+.sa-box{width:100%;border:1.5px solid var(--border);border-radius:6px;
+  padding:9px 11px;font-size:13px;font-family:inherit;resize:vertical;
+  min-height:75px;outline:none;line-height:1.5;}
+.sa-box:focus{border-color:var(--teal);}
+.submit-btn{width:100%;padding:11px;background:var(--teal);color:#fff;border:none;
+  border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;
+  font-family:inherit;margin-top:8px;transition:background .15s;}
+.submit-btn:hover{background:#0A6870;}
+
+  #tts-bar{position:fixed;bottom:0;left:0;right:0;background:#1A3A5C;color:#fff;
+    padding:7px 16px;display:flex;align-items:center;gap:8px;z-index:9997;
+    box-shadow:0 -2px 10px rgba(0,0,0,.3);flex-wrap:wrap;min-height:46px;}
+  .tts-icon{font-size:17px;flex-shrink:0;}
+  .tts-label{font-size:10.5px;font-weight:700;letter-spacing:.8px;
+    text-transform:uppercase;color:#7FD4D8;flex-shrink:0;}
+  .tts-btn{border:none;border-radius:5px;padding:5px 12px;font-size:12px;
+    font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .tts-primary{background:#0E7C86;color:#fff;}
+  .tts-primary:hover{background:#0A6870;}
+  .tts-secondary{background:rgba(255,255,255,.12);color:#fff;padding:5px 10px;font-size:13px;}
+  .tts-secondary:hover:not(:disabled){background:rgba(255,255,255,.22);}
+  .tts-secondary:disabled{opacity:.35;cursor:default;}
+  .tts-divider{width:1px;height:20px;background:rgba(255,255,255,.2);flex-shrink:0;}
+  .tts-speed-row{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+  .tts-speed-lbl{font-size:10px;color:#A8C8E8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+  .tts-speed-btn{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:4px;
+    padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;}
+  .tts-speed-btn:hover{background:rgba(255,255,255,.2);}
+  .tts-speed-btn.tts-speed-active{background:#0E7C86;font-weight:700;}
+  .tts-status{font-size:11px;color:#A8C8E8;margin-left:auto;display:flex;align-items:center;gap:5px;}
+  .tts-pulse{width:7px;height:7px;border-radius:50%;background:#16A34A;
+    animation:ttsPulse 1.2s ease-in-out infinite;}
+  @keyframes ttsPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .tts-reading{outline:2.5px solid #0E7C86!important;outline-offset:4px;border-radius:6px;}
+
+</style></head><body>
+<nav id="module-nav" style="background:#0D2438;padding:0 16px;display:flex;align-items:center;height:38px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.3);">
+  <a href="module.html" style="font-size:11px;font-weight:700;color:#7FD4D8;text-decoration:none;margin-right:8px;">🔬 Cell Division</a>
+  <span style="color:rgba(255,255,255,.25);margin:0 8px;">›</span>
+  <a href="module.html#lesson-1" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:#7FD4D8;border:1px solid #0E7C86;background:rgba(255,255,255,.1);">L1</a>
+  <a href="module.html#lesson-2" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:rgba(255,255,255,.5);margin-left:3px;">L2</a>
+  <a href="module.html#lesson-3" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:rgba(255,255,255,.5);margin-left:3px;">L3</a>
+  <a href="module.html#lesson-4" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:rgba(255,255,255,.5);margin-left:3px;">L4</a>
+  <span style="font-size:11px;color:rgba(255,255,255,.4);margin-left:auto;">Lesson 1 · Exit Ticket</span>
+</nav>
+<div class="ticket">
+<div class="ticket-header">
+  <div class="th-kicker">Lesson 1 · Exit Ticket</div>
+  <div class="th-title">The Normal Cell Cycle</div>
+  <div class="th-sub">Complete before your next class · Responses go to your teacher</div>
+</div>
+<div class="meta-row">
+  <div class="meta-f"><label>Full Name</label><input id="et-name" type="text" placeholder="First Last"/></div>
+  <div class="meta-f"><label>Period</label><input id="et-period" type="text" placeholder="Period 3"/></div>
+  <div class="meta-f"><label>Date</label><input id="et-date" type="text" placeholder="Today"/></div>
+</div>
+<div class="instr-bar">Write what you actually think — there are no trick questions. Blank is better than a guess because it tells your teacher where to spend time tomorrow.</div>
+
+<div class="q-section">
+  <div class="q-label">Question 1 of 3 · Multiple Choice</div>
+  <div class="q-text">A cell reaches the end of G2 with several unrepaired double-strand DNA breaks. Under normal conditions, what happens?</div>
+  <div class="opts" id="qet1-opts">
+    <div class="opt" onclick="answerET('qet1',0,false)"><span class="opt-ltr">A</span>The cell proceeds into mitosis — DNA breaks can be repaired during M phase</div>
+    <div class="opt" onclick="answerET('qet1',1,true)"><span class="opt-ltr">B</span>ATM/ATR kinase detects the breaks and the G2/M checkpoint halts the cycle until repair is complete</div>
+    <div class="opt" onclick="answerET('qet1',2,false)"><span class="opt-ltr">C</span>The G1/S checkpoint activates and sends the cell back to G1 to redo replication</div>
+    <div class="opt" onclick="answerET('qet1',3,false)"><span class="opt-ltr">D</span>p53 detects the breaks and forces the cell to skip directly to cytokinesis</div>
+  </div>
+  <div class="fb fb-ok" id="qet1-fb-ok">✓ Correct. ATM/ATR is the G2/M checkpoint sensor — it detects double-strand breaks after replication and halts the cell cycle until repair is possible.</div>
+  <div class="fb fb-no" id="qet1-fb-no">The G2/M checkpoint — using ATM/ATR kinase — monitors DNA integrity after replication. p53 operates earlier, at G1/S.</div>
+</div>
+
+<div class="q-section">
+  <div class="q-label">Question 2 of 3 · Multiple Choice</div>
+  <div class="q-text">What is the function of MAD2, and during which phase of mitosis does it operate?</div>
+  <div class="opts" id="qet2-opts">
+    <div class="opt" onclick="answerET('qet2',0,false)"><span class="opt-ltr">A</span>MAD2 repairs double-strand DNA breaks during prophase</div>
+    <div class="opt" onclick="answerET('qet2',1,true)"><span class="opt-ltr">B</span>MAD2 signals the cell to wait during metaphase if any chromosome is not properly attached to spindle fibers</div>
+    <div class="opt" onclick="answerET('qet2',2,false)"><span class="opt-ltr">C</span>MAD2 activates apoptosis in G1 when DNA damage is detected by p53</div>
+    <div class="opt" onclick="answerET('qet2',3,false)"><span class="opt-ltr">D</span>MAD2 initiates cytokinesis by triggering the contractile ring during telophase</div>
+  </div>
+  <div class="fb fb-ok" id="qet2-fb-ok">✓ Correct. MAD2 is the Spindle Assembly Checkpoint sensor — it operates during metaphase to ensure all chromosomes are attached before anaphase begins.</div>
+  <div class="fb fb-no" id="qet2-fb-no">MAD2 is the key protein of the Spindle Assembly Checkpoint, which operates during metaphase. It blocks anaphase until every chromosome is attached to spindle fibers at both kinetochores.</div>
+</div>
+
+<div class="q-section">
+  <div class="q-label">Question 3 of 3 · Short Answer</div>
+  <div class="q-text">The p53 protein is sometimes called the "guardian of the genome." Based on what you learned in this module, explain why this nickname is accurate. What does p53 guard against, at what checkpoint, and what does it do when it detects a problem?</div>
+  <textarea class="sa-box" id="et-sa" placeholder="p53 acts as a guardian because..."></textarea>
+</div>
+
+<button class="submit-btn" onclick="submitET()">Submit Exit Ticket →</button>
+</div>
+
+<script>
+function answerET(qid, idx, correct) {
+  var opts = document.querySelectorAll('#' + qid + '-opts .opt');
+  opts.forEach(function(o) { o.classList.add('disabled'); });
+  opts[idx].classList.add(correct ? 'correct' : 'incorrect');
+  document.getElementById(qid + '-fb-ok').classList.toggle('show', correct);
+  document.getElementById(qid + '-fb-no').classList.toggle('show', !correct);
+}
+function submitET() {
+  alert('Exit ticket submitted! See you in class for the card sort.');
+}
+</script>
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled>&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled>&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&times;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&times;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&times;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&times;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none">
+    <div class="tts-pulse"></div>
+    <span id="tts-status-text">Reading&hellip;</span>
+  </div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 ═══════════════════════════════════════════════ */
+(function() {
+  var synth    = window.speechSynthesis;
+  var _rate    = 1.0;
+  var _playing = false;
+  var _paused  = false;
+  var _sections = [];
+  var _idx     = 0;
+  var _utt     = null;
+  var _timer   = null;
+
+  /* DOM walker: builds text with proper punctuation after every block element */
+  window._ttsExtract = function(rootEl) {
+    if (!rootEl) return '';
+    var clone = rootEl.cloneNode(true);
+
+    var skipSels = [
+      'button','select','svg','script','style',
+      'input[type=submit]','input[type=button]','input[type=reset]',
+      '#tts-bar','.tts-bar','#translate-bar','.toolbar','.top-bar',
+      '.tb-right','[aria-hidden="true"]'
+    ];
+    skipSels.forEach(function(sel) {
+      try {
+        clone.querySelectorAll(sel).forEach(function(n) {
+          if (n.parentNode) n.parentNode.removeChild(n);
+        });
+      } catch(e) {}
+    });
+
+    var BLOCK = {
+      DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,
+      LI:1,DT:1,DD:1,TD:1,TH:1,TR:1,CAPTION:1,
+      SECTION:1,ARTICLE:1,BLOCKQUOTE:1,FIGURE:1,FIGCAPTION:1,
+      LABEL:1,LEGEND:1,SUMMARY:1
+    };
+
+    var parts = [];
+    function walk(node) {
+      if (node.nodeType === 3) {
+        var t = node.nodeValue.replace(/\s+/g,' ');
+        if (t.trim()) parts.push(t);
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      var tag = node.tagName;
+      if (tag === 'BR') { parts.push(' '); return; }
+      var before = parts.length;
+      var c = node.childNodes;
+      for (var i = 0; i < c.length; i++) walk(c[i]);
+      if (BLOCK[tag] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) {
+          if (!/[.!?:;\u2014\u2013,]$/.test(seg)) seg += '.';
+          parts.push(seg + ' ');
+        }
+      }
+    }
+    walk(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  };
+
+  window._ttsGetSections = function() {
+    var page = document.querySelector('.page, main, [role=main]') || document.body;
+    return Array.from(page.children).filter(function(el) {
+      return (el.textContent || '').trim().length > 15;
+    });
+  };
+
+  function clearHL() {
+    document.querySelectorAll('.tts-reading').forEach(function(el) {
+      el.classList.remove('tts-reading');
+    });
+  }
+
+  function readAt(idx) {
+    clearTimeout(_timer);
+    if (idx >= _sections.length) { onDone(); return; }
+    _idx = idx;
+    clearHL();
+    var sec = _sections[idx];
+    if (sec.parentNode) {
+      sec.classList.add('tts-reading');
+      try { sec.scrollIntoView({behavior:'smooth',block:'nearest'}); } catch(e) {}
+    }
+    var txt = window._ttsExtract(sec);
+    if (!txt.trim()) { readAt(idx + 1); return; }
+
+    _utt = new SpeechSynthesisUtterance(txt);
+    _utt.rate = _rate;
+    _utt.lang = document.documentElement.lang || 'en-US';
+    _utt.onend = function() {
+      if (!_playing) return;
+      _timer = setTimeout(function() {
+        if (_playing && !_paused) readAt(idx + 1);
+      }, 500);
+    };
+    _utt.onerror = function(e) {
+      if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
+    };
+    synth.speak(_utt);
+    _playing = true; _paused = false;
+    updateUI(_idx + 1, _sections.length);
+  }
+
+  function onDone() {
+    _playing = false; _paused = false;
+    clearHL(); clearTimeout(_timer); updateUI(0,0);
+  }
+
+  function updateUI(cur, total) {
+    var play = document.getElementById('tts-play');
+    var pause = document.getElementById('tts-pause');
+    var stop  = document.getElementById('tts-stop');
+    var status = document.getElementById('tts-status');
+    var stxt   = document.getElementById('tts-status-text');
+    if (!play) return;
+    if (_playing) {
+      play.innerHTML  = '&#8635; Restart';
+      pause.disabled  = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      pause.title     = _paused ? 'Resume' : 'Pause';
+      stop.disabled   = false;
+      if (status) status.style.display = 'flex';
+      if (stxt) stxt.textContent = _paused ? 'Paused'
+        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading\u2026');
+    } else {
+      play.innerHTML  = '&#9654; Play';
+      pause.disabled  = true;
+      pause.innerHTML = '&#9646;&#9646;';
+      stop.disabled   = true;
+      if (status) status.style.display = 'none';
+    }
+  }
+
+  window.ttsPlay = function() {
+    synth.cancel(); clearTimeout(_timer);
+    _sections = window._ttsGetSections();
+    if (!_sections.length) return;
+    _playing = true; _paused = false;
+    readAt(0);
+  };
+  window.ttsPauseResume = function() {
+    if (!_playing) return;
+    if (_paused) { synth.resume(); _paused = false; }
+    else         { synth.pause();  _paused = true;  }
+    updateUI(_idx + 1, _sections.length);
+  };
+  window.ttsStop = function() {
+    synth.cancel(); clearTimeout(_timer);
+    _playing = false; _paused = false;
+    clearHL(); updateUI(0,0);
+  };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
+      b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
+    });
+    if (_playing && !_paused) {
+      var ri = _idx; synth.cancel(); clearTimeout(_timer);
+      _sections = window._ttsGetSections();
+      _timer = setTimeout(function() { readAt(ri); }, 100);
+    }
+  };
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) window.ttsStop();
+  });
+})();
+</script>
+<script>
+window._ttsGetSections = function() {
+  var s = [];
+  var h = document.querySelector('.ticket-header');
+  if (h) s.push(h);
+  document.querySelectorAll('.q-section').forEach(function(e) { s.push(e); });
+  return s;
+};
+</script>
+</body></html>

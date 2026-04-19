@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>When Controls Work — The Normal Cell Cycle · Lesson 1</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#1A3A5C;--teal:#0E7C86;--red:#C8102E;--gold:#F0A500;
+  --green:#16A34A;--purple:#7C3AED;--light:#EEF5FB;--white:#fff;
+  --gray:#64748B;--dark:#1E293B;--border:#D1E4F0;--bg:#F4F7FB;
+  --l1:#0E7C86;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);
+  padding-bottom:60px;padding-top:38px;
+  padding-bottom: 52px;}
+
+/* MODULE NAV */
+#module-nav{background:#0D2438;padding:0 16px;display:flex;align-items:center;
+  height:38px;gap:0;position:fixed;top:0;left:0;right:0;z-index:200;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.mn-home{font-size:11px;font-weight:700;color:#7FD4D8;text-decoration:none;
+  white-space:nowrap;margin-right:8px;display:flex;align-items:center;gap:5px;}
+.mn-home:hover{color:#fff;}
+.mn-sep{color:rgba(255,255,255,.25);font-size:12px;margin:0 8px;}
+.mn-lessons{display:flex;gap:2px;align-items:center;}
+.mn-lesson{font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;
+  text-decoration:none;color:rgba(255,255,255,.5);transition:all .12s;border:1px solid transparent;}
+.mn-lesson:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.08);}
+.mn-lesson.mn-active{color:#7FD4D8;border-color:#0E7C86;background:rgba(255,255,255,.1);}
+.mn-crumb{color:rgba(255,255,255,.4);font-size:11px;margin-left:auto;white-space:nowrap;}
+
+/* SLIDE SYSTEM */
+.slide-card{display:none;max-width:760px;margin:0 auto;padding:16px;}
+.slide-card.active{display:block;}
+.slide-header{background:linear-gradient(135deg,var(--navy),#0E4D5A);
+  color:#fff;border-radius:10px 10px 0 0;padding:20px 24px;}
+.slide-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:#7FD4D8;margin-bottom:6px;}
+.slide-title{font-size:22px;font-weight:800;line-height:1.2;}
+.slide-sub{font-size:13px;color:rgba(255,255,255,.7);margin-top:5px;}
+.slide-body{background:#fff;border:1px solid var(--border);border-top:none;
+  border-radius:0 0 10px 10px;padding:20px 24px;}
+
+/* NAME ROW */
+.name-row{display:flex;gap:10px;border:1px solid var(--border);border-radius:6px;
+  background:var(--light);padding:8px 14px;align-items:flex-end;margin-bottom:16px;}
+.nf{flex:2;}.nf-sm{flex:1;}
+.nf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--gray);margin-bottom:2px;}
+.nf input{width:100%;border:none;border-bottom:1.5px solid var(--navy);padding:2px 0;
+  font-size:13px;font-family:inherit;outline:none;background:transparent;}
+
+/* CONTENT BLOCKS */
+.section-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--teal);border-bottom:1px solid var(--border);
+  padding-bottom:6px;margin-bottom:12px;}
+p{font-size:14px;line-height:1.65;margin-bottom:10px;}
+p:last-child{margin-bottom:0;}
+strong{color:var(--navy);}
+
+/* INFO CARD */
+.info-card{background:var(--light);border-left:3px solid var(--teal);
+  border-radius:0 6px 6px 0;padding:12px 16px;margin:12px 0;}
+.info-card.gold{border-left-color:var(--gold);background:#FFFBEB;}
+.info-card.red{border-left-color:var(--red);background:#FFF5F6;}
+.info-card.green{border-left-color:var(--green);background:#F0FFF4;}
+.ic-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--teal);margin-bottom:4px;}
+.info-card.gold .ic-label{color:#92400E;}
+.info-card.red .ic-label{color:var(--red);}
+.info-card.green .ic-label{color:#15803D;}
+.ic-text{font-size:13.5px;line-height:1.55;}
+
+/* PHASE TABLE */
+.phase-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.phase-table th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;font-weight:600;}
+.phase-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.phase-table tr:nth-child(even) td{background:var(--bg);}
+.phase-badge{display:inline-block;padding:2px 8px;border-radius:10px;
+  font-size:11px;font-weight:700;margin-right:4px;}
+
+/* CELL CYCLE VISUAL */
+.cycle-visual{display:flex;justify-content:center;margin:14px 0;}
+.cycle-visual svg{width:200px;height:200px;}
+
+/* TWO-COL */
+.two-col{display:flex;gap:12px;margin:12px 0;}
+.two-col>div{flex:1;border:1px solid var(--border);border-radius:6px;padding:12px;}
+.col-head{font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:6px;}
+.col-body{font-size:13px;line-height:1.5;}
+
+/* PROTEIN CARDS */
+.protein-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.pcard{border:1px solid var(--border);border-radius:6px;padding:10px 12px;
+  background:#fff;flex:0 0 calc(50% - 4px);min-width:0;}
+.pcard .pname{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.pcard .pgene{font-size:11px;color:var(--gray);margin-bottom:4px;}
+.pcard .pdesc{font-size:12.5px;line-height:1.4;color:var(--dark);}
+.pbadge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;
+  border-radius:10px;margin-top:4px;text-transform:uppercase;}
+.ts{background:var(--light);color:var(--navy);}
+.g2{background:#F0FFF4;color:#15803D;}
+.mc{background:#F5F3FF;color:var(--purple);}
+
+/* QUIZ */
+.quiz-block{background:var(--bg);border:1.5px solid var(--border);
+  border-radius:8px;padding:16px;margin:14px 0;}
+.quiz-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--red);margin-bottom:6px;}
+.quiz-q{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4;}
+.quiz-opts{display:flex;flex-direction:column;gap:6px;}
+.quiz-opt{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;
+  border:1.5px solid var(--border);border-radius:6px;cursor:pointer;
+  background:#fff;font-size:13.5px;line-height:1.45;transition:all .12s;}
+.quiz-opt:hover{border-color:var(--navy);background:var(--light);}
+.quiz-opt.correct{background:#F0FFF4;border-color:var(--green);color:#15803D;}
+.quiz-opt.incorrect{background:#FFF0F2;border-color:var(--red);color:var(--red);}
+.quiz-opt.disabled{cursor:default;pointer-events:none;}
+.opt-letter{width:22px;height:22px;border-radius:50%;background:var(--border);
+  color:var(--navy);font-size:11px;font-weight:700;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px;}
+.quiz-opt.correct .opt-letter{background:var(--green);color:#fff;}
+.quiz-opt.incorrect .opt-letter{background:var(--red);color:#fff;}
+.quiz-feedback{margin-top:10px;font-size:13px;padding:10px 12px;
+  border-radius:6px;display:none;line-height:1.5;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.fb-correct{background:#F0FFF4;color:#15803D;border:1px solid #86EFAC;}
+.quiz-feedback.fb-incorrect{background:#FFF0F2;color:var(--red);border:1px solid #FECACA;}
+
+/* WHY BOX */
+.why-box{background:#FFFBEB;border-left:3px solid var(--gold);
+  border-radius:0 6px 6px 0;padding:12px 16px;margin:12px 0;}
+.why-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:#92400E;margin-bottom:4px;}
+
+/* PROGRESS DOTS */
+.progress-bar{display:flex;justify-content:center;gap:6px;padding:12px 0;}
+.pb-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .2s;}
+.pb-dot.active{background:var(--teal);transform:scale(1.2);}
+.pb-dot.done{background:var(--navy);}
+
+/* NAV BUTTONS */
+.nav-row{display:flex;justify-content:space-between;align-items:center;
+  margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
+.nav-btn{padding:9px 22px;border:none;border-radius:6px;font-size:13.5px;
+  font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+.nav-next{background:var(--teal);color:#fff;}
+.nav-next:hover{background:#0A6870;}
+.nav-prev{background:#fff;color:var(--navy);border:1.5px solid var(--border);}
+.nav-prev:hover{border-color:var(--navy);}
+.nav-prev:disabled{opacity:.4;cursor:default;}
+
+/* LEARN BOX */
+.learn-box{background:var(--light);border:1px solid var(--border);
+  border-radius:6px;padding:12px 14px;margin-bottom:14px;}
+.lb-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--teal);margin-bottom:6px;}
+.lb-item{display:flex;align-items:flex-start;gap:7px;font-size:13px;
+  line-height:1.45;margin-bottom:4px;}
+.lb-item:last-child{margin-bottom:0;}
+.lb-check{color:var(--teal);font-size:14px;flex-shrink:0;margin-top:1px;}
+
+/* EXIT TICKET */
+.et-q{border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;}
+.et-qlbl{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--teal);margin-bottom:6px;}
+.et-qtext{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4;}
+textarea.et-ans{width:100%;border:1.5px solid var(--border);border-radius:6px;
+  padding:10px;font-size:13px;font-family:inherit;resize:vertical;
+  min-height:80px;outline:none;line-height:1.5;}
+textarea.et-ans:focus{border-color:var(--teal);}
+
+/* PREVIEW CARD */
+.preview-card{background:linear-gradient(135deg,#1A0A14,#3D1520);
+  color:#fff;border-radius:8px;padding:16px 20px;margin-top:16px;}
+.pc-kicker{font-size:10px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:#FCA5A5;margin-bottom:6px;}
+.pc-title{font-size:17px;font-weight:700;margin-bottom:6px;}
+.pc-desc{font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;}
+.pc-btn{display:inline-block;margin-top:12px;padding:8px 18px;background:var(--red);
+  color:#fff;border-radius:6px;text-decoration:none;font-size:13px;font-weight:700;}
+
+  #tts-bar{position:fixed;bottom:0;left:0;right:0;background:#1A3A5C;color:#fff;
+    padding:7px 16px;display:flex;align-items:center;gap:8px;z-index:9997;
+    box-shadow:0 -2px 10px rgba(0,0,0,.3);flex-wrap:wrap;min-height:46px;}
+  .tts-icon{font-size:17px;flex-shrink:0;}
+  .tts-label{font-size:10.5px;font-weight:700;letter-spacing:.8px;
+    text-transform:uppercase;color:#7FD4D8;flex-shrink:0;}
+  .tts-btn{border:none;border-radius:5px;padding:5px 12px;font-size:12px;
+    font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .tts-primary{background:#0E7C86;color:#fff;}
+  .tts-primary:hover{background:#0A6870;}
+  .tts-secondary{background:rgba(255,255,255,.12);color:#fff;padding:5px 10px;font-size:13px;}
+  .tts-secondary:hover:not(:disabled){background:rgba(255,255,255,.22);}
+  .tts-secondary:disabled{opacity:.35;cursor:default;}
+  .tts-divider{width:1px;height:20px;background:rgba(255,255,255,.2);flex-shrink:0;}
+  .tts-speed-row{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+  .tts-speed-lbl{font-size:10px;color:#A8C8E8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+  .tts-speed-btn{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:4px;
+    padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;}
+  .tts-speed-btn:hover{background:rgba(255,255,255,.2);}
+  .tts-speed-btn.tts-speed-active{background:#0E7C86;font-weight:700;}
+  .tts-status{font-size:11px;color:#A8C8E8;margin-left:auto;display:flex;align-items:center;gap:5px;}
+  .tts-pulse{width:7px;height:7px;border-radius:50%;background:#16A34A;
+    animation:ttsPulse 1.2s ease-in-out infinite;}
+  @keyframes ttsPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .tts-reading{outline:2.5px solid #0E7C86!important;outline-offset:4px;border-radius:6px;}
+
+</style>
+</head>
+<body>
+
+<!-- MODULE NAV -->
+<nav id="module-nav">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons">
+    <a href="module.html#lesson-1" class="mn-lesson mn-active">L1</a>
+    <a href="module.html#lesson-2" class="mn-lesson">L2</a>
+    <a href="module.html#lesson-3" class="mn-lesson">L3</a>
+    <a href="module.html#lesson-4" class="mn-lesson">L4</a>
+  </div>
+  <span class="mn-crumb">Lesson 1 · Digital Lesson</span>
+</nav>
+
+<!-- ══ SLIDE 0 — Title & Identity ══ -->
+<div class="slide-card active" id="slide-0">
+  <div class="slide-header">
+    <div class="slide-tag">Lesson 1 of 4 · Online Module</div>
+    <div class="slide-title">When Controls Work</div>
+    <div class="slide-sub">The Normal Cell Cycle · STEM Education &amp; Outreach</div>
+  </div>
+  <div class="slide-body">
+    <div class="name-row">
+      <div class="nf"><label>Full Name</label><input id="student-name" type="text" placeholder="First Last"/></div>
+      <div class="nf-sm"><label>Period / Class</label><input id="student-period" type="text" placeholder="Period 3"/></div>
+      <div class="nf-sm"><label>Date</label><input id="student-date" type="text" placeholder="Today"/></div>
+    </div>
+    <div class="learn-box">
+      <div class="lb-label">What You Will Learn in This Module</div>
+      <div class="lb-item"><span class="lb-check">›</span>Name and describe the four phases of the cell cycle and what happens in each</div>
+      <div class="lb-item"><span class="lb-check">›</span>Explain the four phases of mitosis (PMAT) and why the order matters</div>
+      <div class="lb-item"><span class="lb-check">›</span>Identify the three major cell cycle checkpoints and what each one verifies</div>
+      <div class="lb-item"><span class="lb-check">›</span>Name the key proteins that run each checkpoint and explain why they matter</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Start Here</div>
+      <div class="ic-text">Complete this module before your next class. You will use everything in this lesson to do the Card Sort activity in class — so take the comprehension checks seriously. The exit ticket at the end gives your teacher data to prepare the discussion.</div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn nav-prev" disabled>← Back</button>
+      <button class="nav-btn nav-next" onclick="goToSlide(1)">Section 1: The Cell Cycle →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 1 — The Four Phases ══ -->
+<div class="slide-card" id="slide-1">
+  <div class="slide-header">
+    <div class="slide-tag">Section 1 of 4 · The Normal Cell Cycle</div>
+    <div class="slide-title">The Four Phases</div>
+    <div class="slide-sub">What the cell does before it divides</div>
+  </div>
+  <div class="slide-body">
+    <div class="learn-box">
+      <div class="lb-label">What You Will Learn in This Section</div>
+      <div class="lb-item"><span class="lb-check">›</span>Name the four phases (G1, S, G2, M) and describe what happens in each</div>
+      <div class="lb-item"><span class="lb-check">›</span>Understand why the cell cycle is a highly regulated sequence, not a random process</div>
+    </div>
+    <p>Every cell in your body follows a tightly controlled sequence before it divides. This sequence — the <strong>cell cycle</strong> — ensures that each new cell receives an exact, undamaged copy of the genome. There are about 37 trillion cells in the human body, and this process happens millions of times per second.</p>
+
+    <div class="info-card gold">
+      <div class="ic-label">Why a Cycle?</div>
+      <div class="ic-text">The cell cycle is circular — not linear. Once a cell completes division, the two daughter cells can each enter G1 and begin the cycle again. This is how tissues grow, repair, and renew.</div>
+    </div>
+
+    <table class="phase-table">
+      <tr><th>Phase</th><th>Full Name</th><th>What Happens</th><th>Time</th></tr>
+      <tr>
+        <td><span class="phase-badge" style="background:#EEF5FB;color:var(--navy);">G1</span></td>
+        <td>Gap 1 (Growth)</td>
+        <td>Cell grows larger. Produces proteins and organelles. Checks nutrient levels and receives growth signals. The G1/S checkpoint evaluates whether conditions are right to proceed.</td>
+        <td>~11 hrs</td>
+      </tr>
+      <tr>
+        <td><span class="phase-badge" style="background:#EEF9FA;color:var(--teal);">S</span></td>
+        <td>Synthesis</td>
+        <td>DNA is replicated — every chromosome is copied exactly once. Each chromosome becomes two identical sister chromatids held together at the centromere. DNA replication errors here can become mutations.</td>
+        <td>~8 hrs</td>
+      </tr>
+      <tr>
+        <td><span class="phase-badge" style="background:#FFFBEB;color:#92400E;">G2</span></td>
+        <td>Gap 2 (Prep)</td>
+        <td>Cell continues growing. Verifies that replication was accurate. Checks for double-strand DNA breaks. Assembles proteins needed for cell division. The G2/M checkpoint is the last quality check before mitosis.</td>
+        <td>~4 hrs</td>
+      </tr>
+      <tr>
+        <td><span class="phase-badge" style="background:#FFF0F2;color:var(--red);">M</span></td>
+        <td>Mitosis &amp; Cytokinesis</td>
+        <td>The cell physically divides. The nucleus divides first (mitosis — 4 sub-phases), then the cytoplasm splits (cytokinesis). Result: two genetically identical daughter cells.</td>
+        <td>~1 hr</td>
+      </tr>
+    </table>
+
+    <div class="info-card">
+      <div class="ic-label">The Full Cycle</div>
+      <div class="ic-text">G1 + S + G2 are collectively called <strong>interphase</strong> — the cell is doing preparatory work but is not yet dividing. M phase is the visible division event. Together, the cycle takes ~24 hours in a typical human cell.</div>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz-block">
+      <div class="quiz-label">Check Your Understanding</div>
+      <div class="quiz-q">A cell spends the most time in which phase of the cell cycle, and what is it doing there?</div>
+      <div class="quiz-opts" id="q0-opts">
+        <div class="quiz-opt" id="q0-opts-0" onclick="answerQ('q0',0,false)"><span class="opt-letter">A</span>M phase — the cell is actively dividing and splitting its cytoplasm</div>
+        <div class="quiz-opt" id="q0-opts-1" onclick="answerQ('q0',1,false)"><span class="opt-letter">B</span>S phase — DNA replication is the most time-consuming process</div>
+        <div class="quiz-opt" id="q0-opts-2" onclick="answerQ('q0',2,true)"><span class="opt-letter">C</span>G1 phase — the cell is growing, checking nutrient levels, and preparing for DNA copying</div>
+        <div class="quiz-opt" id="q0-opts-3" onclick="answerQ('q0',3,false)"><span class="opt-letter">D</span>G2 phase — double-checking replication takes the longest</div>
+      </div>
+      <div class="quiz-feedback fb-correct" id="q0-fb-correct">✓ Correct. G1 accounts for roughly half the total cycle time (~11 of 24 hours). During G1, the cell must satisfy multiple criteria — cell size, nutrient availability, growth factor signals — before receiving permission to copy its DNA.</div>
+      <div class="quiz-feedback fb-incorrect" id="q0-fb-incorrect">Not quite. G1 is the longest phase at ~11 hours. M phase (mitosis) is actually the shortest at about 1 hour — the cell spends far more time preparing to divide than actually dividing.</div>
+    </div>
+
+    <div class="why-box">
+      <div class="why-label">Why This Matters</div>
+      <p>Understanding which phase DNA replication happens in is the foundation for everything that follows. When replication goes wrong — when errors slip through — the cell's genetic instructions are corrupted. If those errors aren't caught at a checkpoint, they get copied into every daughter cell. That is how a single mutation becomes thousands.</p>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn nav-prev" onclick="goToSlide(0)">← Back</button>
+      <button class="nav-btn nav-next" onclick="goToSlide(2)">Section 2: Mitosis →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2 — Mitosis ══ -->
+<div class="slide-card" id="slide-2">
+  <div class="slide-header">
+    <div class="slide-tag">Section 2 of 4 · The Normal Cell Cycle</div>
+    <div class="slide-title">Mitosis — The M Phase in Detail</div>
+    <div class="slide-sub">What happens when the cell finally divides</div>
+  </div>
+  <div class="slide-body">
+    <div class="learn-box">
+      <div class="lb-label">What You Will Learn in This Section</div>
+      <div class="lb-item"><span class="lb-check">›</span>Name and describe the four phases of mitosis: Prophase, Metaphase, Anaphase, Telophase</div>
+      <div class="lb-item"><span class="lb-check">›</span>Explain why the order of mitosis phases matters for maintaining genomic integrity</div>
+    </div>
+    <p>Mitosis is the <strong>M phase</strong> of the cell cycle — the moment when one cell physically becomes two. It happens in four ordered phases, each building on the previous one. By the end, every chromosome has been faithfully distributed: each daughter cell gets exactly one complete copy of the genome.</p>
+
+    <div class="section-lbl">The Four Phases of Mitosis — PMAT</div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+      <div class="info-card">
+        <div class="ic-label" style="color:#6D28D9;">① Prophase</div>
+        <div class="ic-text"><strong>Chromosomes condense.</strong> During interphase, DNA exists as loose chromatin. In prophase, it coils tightly into visible, distinct chromosomes. The nuclear envelope begins to break down. The mitotic spindle — made of microtubule protein fibers — starts assembling from structures called centrosomes at each pole of the cell.</div>
+      </div>
+      <div class="info-card" style="border-left-color:#0E7C86;background:#EEF9FA;">
+        <div class="ic-label">② Metaphase</div>
+        <div class="ic-text"><strong>Chromosomes align at the equator.</strong> Spindle fibers attach to a protein complex called the kinetochore at the centromere of each chromosome. The chromosomes are pulled to the center of the cell and line up along the metaphase plate. The Spindle Checkpoint verifies that every chromosome is properly attached before permitting the cell to proceed.</div>
+      </div>
+      <div class="info-card gold">
+        <div class="ic-label">③ Anaphase</div>
+        <div class="ic-text"><strong>Sister chromatids separate.</strong> The cohesion proteins holding sister chromatids together are cleaved. Spindle fibers shorten, dragging one chromatid (now called a chromosome) toward each pole. At the end of anaphase, each pole has a complete, identical set of chromosomes.</div>
+      </div>
+      <div class="info-card green">
+        <div class="ic-label">④ Telophase &amp; Cytokinesis</div>
+        <div class="ic-text"><strong>Two new nuclei form; cytoplasm divides.</strong> Nuclear envelopes reform around each set of chromosomes. Chromosomes de-condense back into chromatin. In cytokinesis (overlapping with telophase), a contractile ring of protein pinches the cell membrane inward until the cell splits into two genetically identical daughter cells.</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-label">Memory Aid</div>
+      <div class="ic-text"><strong>PMAT</strong> — <strong>P</strong>rophase, <strong>M</strong>etaphase, <strong>A</strong>naphase, <strong>T</strong>elophase. A common mnemonic: <em>"People Meet And Talk."</em> The order isn't arbitrary — each phase creates the physical conditions the next phase requires.</div>
+    </div>
+
+    <div class="quiz-block">
+      <div class="quiz-label">Check Your Understanding</div>
+      <div class="quiz-q">During which phase of mitosis does the Spindle Assembly Checkpoint operate, and what would happen if a chromosome were unattached to a spindle fiber?</div>
+      <div class="quiz-opts" id="q1-opts">
+        <div class="quiz-opt" id="q1-opts-0" onclick="answerQ('q1',0,false)"><span class="opt-letter">A</span>Prophase — the checkpoint detects whether chromosomes have condensed properly before spindle assembly begins</div>
+        <div class="quiz-opt" id="q1-opts-1" onclick="answerQ('q1',1,false)"><span class="opt-letter">B</span>Anaphase — if a chromosome is unattached, the cell proceeds anyway and one daughter cell gets an extra chromosome</div>
+        <div class="quiz-opt" id="q1-opts-2" onclick="answerQ('q1',2,true)"><span class="opt-letter">C</span>Metaphase — if any chromosome is unattached, the MAD2 protein signals the cell to pause, preventing anaphase until all chromosomes are properly secured</div>
+        <div class="quiz-opt" id="q1-opts-3" onclick="answerQ('q1',3,false)"><span class="opt-letter">D</span>Telophase — the checkpoint verifies that each new nucleus received the correct number of chromosomes after division</div>
+      </div>
+      <div class="quiz-feedback fb-correct" id="q1-fb-correct">✓ Correct. The Spindle Assembly Checkpoint operates during metaphase, after chromosomes have aligned at the metaphase plate but before anaphase begins. MAD2 is a sensor protein — when even one chromosome is unattached, it generates a "wait" signal that prevents the cohesion proteins from being cleaved. This ensures anaphase only occurs when every chromosome is properly secured.</div>
+      <div class="quiz-feedback fb-incorrect" id="q1-fb-incorrect">Not quite. The Spindle Assembly Checkpoint operates during <em>metaphase</em>, when all chromosomes are supposed to be aligned and attached to spindle fibers at both kinetochores. The MAD2 protein acts as a sensor — if any chromosome is unattached, it blocks the signal that would trigger anaphase. This prevents the cell from dividing with an incorrect chromosome count.</div>
+    </div>
+
+    <div class="why-box">
+      <div class="why-label">Why This Matters</div>
+      <p>If a cell enters anaphase with even one chromosome unattached to a spindle fiber, that chromosome will be lost — one daughter cell gets an extra copy, one gets none. This condition is called <strong>aneuploidy</strong> and is found in most cancer cells. The Spindle Assembly Checkpoint is the cell's last line of defense against this exact error.</p>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn nav-prev" onclick="goToSlide(1)">← Back</button>
+      <button class="nav-btn nav-next" onclick="goToSlide(3)">Section 3: Checkpoints →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3 — Checkpoints ══ -->
+<div class="slide-card" id="slide-3">
+  <div class="slide-header">
+    <div class="slide-tag">Section 3 of 4 · The Normal Cell Cycle</div>
+    <div class="slide-title">Checkpoints — The Cell's Quality Control</div>
+    <div class="slide-sub">Three gates that a cell must pass through before it can divide</div>
+  </div>
+  <div class="slide-body">
+    <div class="learn-box">
+      <div class="lb-label">What You Will Learn in This Section</div>
+      <div class="lb-item"><span class="lb-check">›</span>Explain what a cell cycle checkpoint is and why the cell needs them</div>
+      <div class="lb-item"><span class="lb-check">›</span>Identify the three major checkpoints and describe what each one verifies</div>
+    </div>
+
+    <p>The cell cycle does not run automatically. At three specific points, the cell evaluates itself: Is everything ready? Is anything damaged? Should I proceed — or stop?</p>
+
+    <div class="info-card gold">
+      <div class="ic-label">Analogy — The Factory Floor</div>
+      <div class="ic-text">Think of the cell cycle like a manufacturing process. Before a product moves to the next assembly stage, a quality inspector checks: Is this component correct? Is anything defective? Only if everything passes does the process continue. The cell uses the same logic — with <strong>proteins as inspectors</strong> instead of humans.</div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="col-head" style="color:var(--navy);">G1/S Checkpoint</div>
+        <div class="col-body">Located at the end of G1. Verifies: Is DNA undamaged? Is the cell large enough? Are nutrients and growth factors available?<br/><br/><strong>Key proteins:</strong> p53 (TP53), Rb protein.<br/>If DNA damage is detected, p53 halts the cycle and activates DNA repair. If repair fails, p53 can trigger apoptosis — the cell destroys itself rather than pass on the damaged DNA.</div>
+      </div>
+      <div>
+        <div class="col-head" style="color:var(--teal);">G2/M Checkpoint</div>
+        <div class="col-body">Located at the end of G2. Verifies: Was all DNA replicated correctly? Are there any double-strand breaks remaining?<br/><br/><strong>Key proteins:</strong> ATM/ATR kinase.<br/>ATM and ATR are sensors — they detect double-strand breaks. If breaks are present, they halt the cycle and trigger repair pathways. Only fully intact, completely replicated DNA earns permission to enter mitosis.</div>
+      </div>
+    </div>
+
+    <div class="info-card green">
+      <div class="ic-label">Spindle Assembly Checkpoint (M Phase)</div>
+      <div class="ic-text">Located during metaphase, inside the M phase. Verifies: Are all chromosomes properly attached to spindle fibers at both kinetochores?<br/><br/><strong>Key protein:</strong> MAD2. When even one chromosome is unattached, MAD2 generates a "wait" signal that prevents anaphase. Only when every chromosome is secured does the cell proceed with division. This checkpoint prevents the creation of daughter cells with missing or extra chromosomes.</div>
+    </div>
+
+    <div class="quiz-block">
+      <div class="quiz-label">Check Your Understanding</div>
+      <div class="quiz-q">A mutation inactivates the ATM kinase protein in a cell. Based on the checkpoint system, what is the most likely consequence?</div>
+      <div class="quiz-opts" id="q2-opts">
+        <div class="quiz-opt" id="q2-opts-0" onclick="answerQ('q2',0,false)"><span class="opt-letter">A</span>The cell will divide faster than normal because ATM normally slows down DNA replication</div>
+        <div class="quiz-opt" id="q2-opts-1" onclick="answerQ('q2',1,true)"><span class="opt-letter">B</span>The G2/M checkpoint will fail — cells with DNA double-strand breaks could enter mitosis and divide with damaged DNA</div>
+        <div class="quiz-opt" id="q2-opts-2" onclick="answerQ('q2',2,false)"><span class="opt-letter">C</span>The G1/S checkpoint will fail — p53 depends on ATM to function at the G1 stage</div>
+        <div class="quiz-opt" id="q2-opts-3" onclick="answerQ('q2',3,false)"><span class="opt-letter">D</span>The cell will immediately undergo apoptosis because ATM is required for all normal cell functions</div>
+      </div>
+      <div class="quiz-feedback fb-correct" id="q2-fb-correct">✓ Correct. ATM kinase is the primary sensor at the G2/M checkpoint for double-strand DNA breaks. Without ATM, a cell that has replicated its DNA incorrectly — with breaks remaining — cannot be detected and stopped at G2. That cell proceeds into mitosis, divides, and passes the broken DNA to its daughter cells. This is a key step in the development of many cancers.</div>
+      <div class="quiz-feedback fb-incorrect" id="q2-fb-incorrect">Not quite. ATM kinase is a sensor protein at the <em>G2/M checkpoint</em> — it detects double-strand DNA breaks after replication. Without ATM, the G2/M checkpoint cannot detect these breaks, and cells with damaged DNA can enter mitosis. The G1/S checkpoint uses a different protein (p53, activated via a different pathway) and is not directly dependent on ATM.</div>
+    </div>
+
+    <div class="why-box">
+      <div class="why-label">Why This Matters</div>
+      <p>These three checkpoints are not redundant — each catches a different category of error at a different moment. Remove any one of them and you open a specific vulnerability. In Lesson 2, you will see exactly what happens when the p53 checkpoint fails — and meet a patient whose diagnosis gives you the chance to figure out which checkpoint broke down, and why.</p>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn nav-prev" onclick="goToSlide(2)">← Back</button>
+      <button class="nav-btn nav-next" onclick="goToSlide(4)">Section 4: The Protein Cast →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4 — Protein Cast ══ -->
+<div class="slide-card" id="slide-4">
+  <div class="slide-header">
+    <div class="slide-tag">Section 4 of 4 · The Normal Cell Cycle</div>
+    <div class="slide-title">The Protein Cast</div>
+    <div class="slide-sub">The key proteins that run the checkpoints — and what happens when they break</div>
+  </div>
+  <div class="slide-body">
+    <div class="learn-box">
+      <div class="lb-label">What You Will Learn in This Section</div>
+      <div class="lb-item"><span class="lb-check">›</span>Name the four key checkpoint proteins and which checkpoint each one serves</div>
+      <div class="lb-item"><span class="lb-check">›</span>Understand that these proteins are encoded by genes — and genes can mutate</div>
+    </div>
+
+    <p>Checkpoints don't run themselves — they are run by <strong>proteins</strong>. Proteins are produced from instructions encoded in DNA. If the DNA instructions (the gene) become mutated, the protein may stop working. In Lesson 2, you will learn what happens when these specific proteins fail.</p>
+
+    <div class="protein-grid">
+      <div class="pcard">
+        <div class="pname">p53</div>
+        <div class="pgene">Gene: TP53</div>
+        <div class="pdesc">The G1/S gatekeeper. Detects DNA damage and halts the cycle. If damage is irreparable, p53 triggers apoptosis. Mutated in over 50% of all human cancers — the most commonly mutated gene in cancer.</div>
+        <span class="pbadge ts">G1/S Checkpoint</span>
+      </div>
+      <div class="pcard">
+        <div class="pname">Rb Protein</div>
+        <div class="pgene">Gene: RB1</div>
+        <div class="pdesc">A second G1/S brake. Blocks transcription factors that would push the cell into S phase. Both copies of RB1 must be inactivated to lose function — the first example of the two-hit hypothesis.</div>
+        <span class="pbadge ts">G1/S Checkpoint</span>
+      </div>
+      <div class="pcard">
+        <div class="pname">ATM/ATR Kinase</div>
+        <div class="pgene">Gene: ATM, ATR</div>
+        <div class="pdesc">Sensors at the G2/M checkpoint. Detect double-strand DNA breaks after replication is complete. Activate DNA repair pathways and, if damage is irreparable, trigger apoptosis.</div>
+        <span class="pbadge g2">G2/M Checkpoint</span>
+      </div>
+      <div class="pcard">
+        <div class="pname">MAD2</div>
+        <div class="pgene">Gene: MAD2L1</div>
+        <div class="pdesc">The spindle sentinel. Ensures every chromosome is correctly attached to spindle fibers before anaphase begins. When even one chromosome is unattached, MAD2 generates a "wait" signal.</div>
+        <span class="pbadge mc">Spindle Checkpoint</span>
+      </div>
+    </div>
+
+    <div class="info-card red">
+      <div class="ic-label">Key Concept — Genes → Proteins → Checkpoints</div>
+      <div class="ic-text">Every checkpoint protein is encoded by a gene. A mutation in that gene can alter or destroy the protein's function. When the protein can't do its job, the checkpoint fails. When a checkpoint fails, errors that would normally be caught can accumulate. This chain — gene mutation → protein failure → checkpoint bypass → unchecked division — is the molecular basis of cancer.</div>
+    </div>
+
+    <div class="quiz-block">
+      <div class="quiz-label">Check Your Understanding</div>
+      <div class="quiz-q">Which of the following best explains why p53 is so important in cancer prevention?</div>
+      <div class="quiz-opts" id="q3-opts">
+        <div class="quiz-opt" id="q3-opts-0" onclick="answerQ('q3',0,false)"><span class="opt-letter">A</span>p53 speeds up DNA replication in S phase, so it produces more accurate copies of the genome</div>
+        <div class="quiz-opt" id="q3-opts-1" onclick="answerQ('q3',1,false)"><span class="opt-letter">B</span>p53 is the only protein that can detect DNA damage — without it, no checkpoint functions at all</div>
+        <div class="quiz-opt" id="q3-opts-2" onclick="answerQ('q3',2,true)"><span class="opt-letter">C</span>p53 sits at the G1/S checkpoint — if it fails, damaged DNA is copied in S phase and the errors are inherited by every future daughter cell</div>
+        <div class="quiz-opt" id="q3-opts-3" onclick="answerQ('q3',3,false)"><span class="opt-letter">D</span>p53 is found in every cell type, but it is only relevant in cells that divide very quickly, like skin cells</div>
+      </div>
+      <div class="quiz-feedback fb-correct" id="q3-fb-correct">✓ Correct. p53 operates at the G1/S checkpoint — the gate before DNA replication. If p53 fails, a cell with damaged DNA enters S phase and copies that damage. Every daughter cell of that division inherits the error. Because S phase is where DNA is copied, the G1/S checkpoint is the last chance to stop an error before it becomes permanent and heritable. This is why TP53 mutations appear in such a high proportion of cancers.</div>
+      <div class="quiz-feedback fb-incorrect" id="q3-fb-incorrect">Not quite. p53's importance comes from its position at the <em>G1/S checkpoint</em> — just before DNA replication begins. If p53 is nonfunctional, a cell with DNA damage can enter S phase and replicate that damage into every daughter cell. The G2/M checkpoint (ATM/ATR) and the Spindle Checkpoint (MAD2) are separate — they protect against different types of errors at different moments in the cycle.</div>
+    </div>
+
+    <div class="why-box">
+      <div class="why-label">Looking Ahead — Lesson 2</div>
+      <p>You now know what a working cell cycle looks like. In Lesson 2, you will meet Maya — a 12-year-old with Acute Lymphoblastic Leukemia. Her genetic panel shows a mutation in a tumor suppressor gene. Your job as a member of a tumor board will be to figure out exactly which checkpoint failed, why it happened, and what the evidence says about her diagnosis.</p>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn nav-prev" onclick="goToSlide(3)">← Back</button>
+      <button class="nav-btn nav-next" onclick="goToSlide(5)">Exit Ticket →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 5 — Exit Ticket ══ -->
+<div class="slide-card" id="slide-5">
+  <div class="slide-header" style="background:linear-gradient(135deg,#064E3B,#065F46);">
+    <div class="slide-tag">Section 5 · Exit Ticket</div>
+    <div class="slide-title">Exit Ticket — Complete Before Class</div>
+    <div class="slide-sub">Your responses help your teacher prepare tomorrow's card sort discussion</div>
+  </div>
+  <div class="slide-body">
+    <p style="font-size:13px;color:var(--gray);margin-bottom:14px;">Answer honestly — there are no trick questions. Blank boxes are better than guesses because they tell your teacher exactly where to spend time tomorrow.</p>
+
+    <div class="et-q">
+      <div class="et-qlbl">Question 1 of 3 · Multiple Choice</div>
+      <div class="et-qtext">A cell reaches the end of G2 with several unrepaired double-strand DNA breaks. Under normal conditions, what is the most likely outcome?</div>
+      <div class="quiz-opts" id="qet1-opts">
+        <div class="quiz-opt" id="qet1-opts-0" onclick="answerQ('qet1',0,false)"><span class="opt-letter">A</span>The cell proceeds directly into mitosis because the breaks will be repaired during M phase</div>
+        <div class="quiz-opt" id="qet1-opts-1" onclick="answerQ('qet1',1,true)"><span class="opt-letter">B</span>ATM/ATR kinase detects the breaks, the G2/M checkpoint halts the cell cycle, and DNA repair mechanisms are activated</div>
+        <div class="quiz-opt" id="qet1-opts-2" onclick="answerQ('qet1',2,false)"><span class="opt-letter">C</span>The G1/S checkpoint activates and sends the cell back to G1 to redo DNA replication</div>
+        <div class="quiz-opt" id="qet1-opts-3" onclick="answerQ('qet1',3,false)"><span class="opt-letter">D</span>The cell immediately undergoes mitosis but the Spindle Checkpoint will catch the broken chromosomes later</div>
+      </div>
+      <div class="quiz-feedback fb-correct" id="qet1-fb-correct">✓ Correct. ATM/ATR kinase operates at the G2/M checkpoint specifically to detect double-strand breaks after replication.</div>
+      <div class="quiz-feedback fb-incorrect" id="qet1-fb-incorrect">The G2/M checkpoint — not the G1/S checkpoint — is the one that monitors DNA integrity after replication. ATM/ATR kinase detects double-strand breaks at this stage.</div>
+    </div>
+
+    <div class="et-q">
+      <div class="et-qlbl">Question 2 of 3 · Multiple Choice</div>
+      <div class="et-qtext">In which phase of the cell cycle does DNA replication occur, and what is produced?</div>
+      <div class="quiz-opts" id="qet2-opts">
+        <div class="quiz-opt" id="qet2-opts-0" onclick="answerQ('qet2',0,false)"><span class="opt-letter">A</span>G1 — the cell copies its DNA in preparation for the S phase</div>
+        <div class="quiz-opt" id="qet2-opts-1" onclick="answerQ('qet2',1,true)"><span class="opt-letter">B</span>S phase — each chromosome is copied exactly once, producing two identical sister chromatids joined at the centromere</div>
+        <div class="quiz-opt" id="qet2-opts-2" onclick="answerQ('qet2',2,false)"><span class="opt-letter">C</span>G2 — the cell copies its DNA after checking that conditions are favorable</div>
+        <div class="quiz-opt" id="qet2-opts-3" onclick="answerQ('qet2',3,false)"><span class="opt-letter">D</span>Prophase — chromosomes are replicated as they condense during the start of mitosis</div>
+      </div>
+      <div class="quiz-feedback fb-correct" id="qet2-fb-correct">✓ Correct. S phase (Synthesis phase) is dedicated entirely to DNA replication.</div>
+      <div class="quiz-feedback fb-incorrect" id="qet2-fb-incorrect">DNA replication occurs in S phase — the "S" stands for synthesis. Each chromosome is replicated once, producing two sister chromatids.</div>
+    </div>
+
+    <div class="et-q">
+      <div class="et-qlbl">Question 3 of 3 · Short Answer</div>
+      <div class="et-qtext">Choose ONE cell cycle checkpoint. Name it, identify its key protein, and explain in your own words what would happen to a cell if that protein stopped working.</div>
+      <textarea class="et-ans" id="et-short-ans" placeholder="Example: The G1/S checkpoint uses p53. If p53 stopped working..."></textarea>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button onclick="submitET()" style="padding:10px 24px;background:var(--teal);color:#fff;
+        border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;
+        font-family:inherit;width:100%;">Submit Exit Ticket →</button>
+    </div>
+
+    <div class="preview-card" style="margin-top:16px;">
+      <div class="pc-kicker">Up Next — Lesson 2</div>
+      <div class="pc-title">When Controls Break Down</div>
+      <div class="pc-desc">You now know how a healthy cell cycle works. In Lesson 2, you will meet Maya — a 12-year-old with leukemia. Her genetic panel shows a mutation in a checkpoint gene. Your team will analyze the evidence and diagnose exactly what went wrong at the molecular level.</div>
+      <a class="pc-btn" href="Student_Lesson_WhenControlsBreakDown.html">Start Lesson 2 →</a>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn nav-prev" onclick="goToSlide(4)">← Back</button>
+      <span style="font-size:13px;color:var(--gray);">Module Complete ✓</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS DOTS -->
+<div class="progress-bar" id="progress-bar" style="position:fixed;bottom:52px;left:0;right:0;
+  background:rgba(255,255,255,.95);border-top:1px solid var(--border);z-index:100;">
+  <div class="pb-dot active" id="dot-0"></div>
+  <div class="pb-dot" id="dot-1"></div>
+  <div class="pb-dot" id="dot-2"></div>
+  <div class="pb-dot" id="dot-3"></div>
+  <div class="pb-dot" id="dot-4"></div>
+  <div class="pb-dot" id="dot-5"></div>
+</div>
+
+<script>
+var currentSlide = 0;
+var TOTAL = 6;
+
+function goToSlide(n) {
+  document.getElementById('slide-' + currentSlide).classList.remove('active');
+  for (var i = 0; i < TOTAL; i++) {
+    var dot = document.getElementById('dot-' + i);
+    if (i < n) dot.className = 'pb-dot done';
+    else if (i === n) dot.className = 'pb-dot active';
+    else dot.className = 'pb-dot';
+  }
+  currentSlide = n;
+  document.getElementById('slide-' + n).classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function answerQ(qid, choiceIdx, isCorrect) {
+  var opts = document.querySelectorAll('#' + qid + '-opts .quiz-opt');
+  opts.forEach(function(o) { o.classList.add('disabled'); });
+  opts[choiceIdx].classList.add(isCorrect ? 'correct' : 'incorrect');
+  var fbC = document.getElementById(qid + '-fb-correct');
+  var fbI = document.getElementById(qid + '-fb-incorrect');
+  if (isCorrect) { fbC.classList.add('show'); }
+  else { fbI.classList.add('show'); opts.forEach(function(o,i) {
+    if (o.onclick && o.id === qid + '-opts-' + i) {
+      // highlight correct
+    }
+  }); }
+}
+
+function submitET() {
+  var name = (document.getElementById('student-name') || {}).value || '';
+  var period = (document.getElementById('student-period') || {}).value || '';
+  var sa = (document.getElementById('et-short-ans') || {}).value || '';
+  alert('Exit ticket recorded. See you in class for the card sort!');
+}
+</script>
+
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled>&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled>&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&times;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&times;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&times;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&times;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none">
+    <div class="tts-pulse"></div>
+    <span id="tts-status-text">Reading&hellip;</span>
+  </div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 ═══════════════════════════════════════════════ */
+(function() {
+  var synth    = window.speechSynthesis;
+  var _rate    = 1.0;
+  var _playing = false;
+  var _paused  = false;
+  var _sections = [];
+  var _idx     = 0;
+  var _utt     = null;
+  var _timer   = null;
+
+  /* DOM walker: builds text with proper punctuation after every block element */
+  window._ttsExtract = function(rootEl) {
+    if (!rootEl) return '';
+    var clone = rootEl.cloneNode(true);
+
+    var skipSels = [
+      'button','select','svg','script','style',
+      'input[type=submit]','input[type=button]','input[type=reset]',
+      '#tts-bar','.tts-bar','#translate-bar','.toolbar','.top-bar',
+      '.tb-right','[aria-hidden="true"]'
+    ];
+    skipSels.forEach(function(sel) {
+      try {
+        clone.querySelectorAll(sel).forEach(function(n) {
+          if (n.parentNode) n.parentNode.removeChild(n);
+        });
+      } catch(e) {}
+    });
+
+    var BLOCK = {
+      DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,
+      LI:1,DT:1,DD:1,TD:1,TH:1,TR:1,CAPTION:1,
+      SECTION:1,ARTICLE:1,BLOCKQUOTE:1,FIGURE:1,FIGCAPTION:1,
+      LABEL:1,LEGEND:1,SUMMARY:1
+    };
+
+    var parts = [];
+    function walk(node) {
+      if (node.nodeType === 3) {
+        var t = node.nodeValue.replace(/\s+/g,' ');
+        if (t.trim()) parts.push(t);
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      var tag = node.tagName;
+      if (tag === 'BR') { parts.push(' '); return; }
+      var before = parts.length;
+      var c = node.childNodes;
+      for (var i = 0; i < c.length; i++) walk(c[i]);
+      if (BLOCK[tag] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) {
+          if (!/[.!?:;\u2014\u2013,]$/.test(seg)) seg += '.';
+          parts.push(seg + ' ');
+        }
+      }
+    }
+    walk(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  };
+
+  window._ttsGetSections = function() {
+    var page = document.querySelector('.page, main, [role=main]') || document.body;
+    return Array.from(page.children).filter(function(el) {
+      return (el.textContent || '').trim().length > 15;
+    });
+  };
+
+  function clearHL() {
+    document.querySelectorAll('.tts-reading').forEach(function(el) {
+      el.classList.remove('tts-reading');
+    });
+  }
+
+  function readAt(idx) {
+    clearTimeout(_timer);
+    if (idx >= _sections.length) { onDone(); return; }
+    _idx = idx;
+    clearHL();
+    var sec = _sections[idx];
+    if (sec.parentNode) {
+      sec.classList.add('tts-reading');
+      try { sec.scrollIntoView({behavior:'smooth',block:'nearest'}); } catch(e) {}
+    }
+    var txt = window._ttsExtract(sec);
+    if (!txt.trim()) { readAt(idx + 1); return; }
+
+    _utt = new SpeechSynthesisUtterance(txt);
+    _utt.rate = _rate;
+    _utt.lang = document.documentElement.lang || 'en-US';
+    _utt.onend = function() {
+      if (!_playing) return;
+      _timer = setTimeout(function() {
+        if (_playing && !_paused) readAt(idx + 1);
+      }, 500);
+    };
+    _utt.onerror = function(e) {
+      if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
+    };
+    synth.speak(_utt);
+    _playing = true; _paused = false;
+    updateUI(_idx + 1, _sections.length);
+  }
+
+  function onDone() {
+    _playing = false; _paused = false;
+    clearHL(); clearTimeout(_timer); updateUI(0,0);
+  }
+
+  function updateUI(cur, total) {
+    var play = document.getElementById('tts-play');
+    var pause = document.getElementById('tts-pause');
+    var stop  = document.getElementById('tts-stop');
+    var status = document.getElementById('tts-status');
+    var stxt   = document.getElementById('tts-status-text');
+    if (!play) return;
+    if (_playing) {
+      play.innerHTML  = '&#8635; Restart';
+      pause.disabled  = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      pause.title     = _paused ? 'Resume' : 'Pause';
+      stop.disabled   = false;
+      if (status) status.style.display = 'flex';
+      if (stxt) stxt.textContent = _paused ? 'Paused'
+        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading\u2026');
+    } else {
+      play.innerHTML  = '&#9654; Play';
+      pause.disabled  = true;
+      pause.innerHTML = '&#9646;&#9646;';
+      stop.disabled   = true;
+      if (status) status.style.display = 'none';
+    }
+  }
+
+  window.ttsPlay = function() {
+    synth.cancel(); clearTimeout(_timer);
+    _sections = window._ttsGetSections();
+    if (!_sections.length) return;
+    _playing = true; _paused = false;
+    readAt(0);
+  };
+  window.ttsPauseResume = function() {
+    if (!_playing) return;
+    if (_paused) { synth.resume(); _paused = false; }
+    else         { synth.pause();  _paused = true;  }
+    updateUI(_idx + 1, _sections.length);
+  };
+  window.ttsStop = function() {
+    synth.cancel(); clearTimeout(_timer);
+    _playing = false; _paused = false;
+    clearHL(); updateUI(0,0);
+  };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
+      b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
+    });
+    if (_playing && !_paused) {
+      var ri = _idx; synth.cancel(); clearTimeout(_timer);
+      _sections = window._ttsGetSections();
+      _timer = setTimeout(function() { readAt(ri); }, 100);
+    }
+  };
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) window.ttsStop();
+  });
+})();
+</script>
+<script>
+window._ttsGetSections = function() {
+  var a = document.querySelector('.slide-card.active');
+  return a ? [a] : [];
+};
+</script>
+</body>
+</html>

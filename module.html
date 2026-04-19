@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cell Division Gone Wrong — Full Module</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
+  --green:#16A34A; --purple:#7C3AED; --light:#EEF5FB; --white:#FFFFFF;
+  --gray:#64748B; --dark:#1E293B; --muted:#94A3B8; --border:#D1E4F0;
+  --bg:#F4F7FB;
+  /* Lesson accent colors */
+  --l1:#0E7C86; --l1-light:#EEF9FA;
+  --l2:#C8102E; --l2-light:#FFF0F2;
+  --l3:#F0A500; --l3-light:#FFFBEB;
+  --l4:#7C3AED; --l4-light:#F5F3FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);line-height:1.5;}
+
+/* ── TOP NAV ─────────────────────────────────────────────────── */
+.top-nav{
+  background:var(--navy); color:#fff; padding:10px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.tn-brand{ font-size:13px; font-weight:700; color:#7FD4D8; letter-spacing:.3px;
+           text-decoration:none; display:flex; align-items:center; gap:8px; }
+.tn-brand span{ color:#fff; }
+.tn-links{ display:flex; gap:6px; }
+.tn-link{
+  font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:5px;
+  text-decoration:none; color:rgba(255,255,255,.7); transition:all .15s;
+  border:1px solid transparent;
+}
+.tn-link:hover{ color:#fff; background:rgba(255,255,255,.1); }
+.tn-link.active{ color:#fff; border-color:rgba(255,255,255,.3); background:rgba(255,255,255,.12); }
+
+/* ── HERO ────────────────────────────────────────────────────── */
+.hero{
+  background:linear-gradient(135deg,#0D2438 0%,#1A3A5C 60%,#0E4D5A 100%);
+  color:#fff; padding:52px 24px 48px;
+}
+.hero-inner{ max-width:960px; margin:0 auto; }
+.module-badge{
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+  padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase; color:#7FD4D8; margin-bottom:16px;
+}
+.hero h1{ font-family:'DM Serif Display',serif; font-size:clamp(28px,5vw,44px);
+          line-height:1.1; margin-bottom:8px; }
+.hero p{ font-size:15px; color:rgba(255,255,255,.75); max-width:580px; margin-bottom:20px; }
+.hero-meta{ display:flex; flex-wrap:wrap; gap:8px; }
+.hero-tag{
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15);
+  padding:4px 12px; border-radius:20px; font-size:11.5px; font-weight:600;
+  color:rgba(255,255,255,.85);
+}
+
+/* ── PROGRESS STRIP ─────────────────────────────────────────── */
+.progress-strip{
+  background:#fff; border-bottom:1px solid var(--border);
+  padding:0 24px; max-width:960px; margin:0 auto;
+}
+.progress-tabs{ display:flex; gap:0; }
+.pt{
+  flex:1; text-align:center; padding:12px 8px; border-bottom:3px solid transparent;
+  cursor:pointer; text-decoration:none; transition:all .15s;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+}
+.pt:hover{ background:var(--bg); }
+.pt.active{ border-bottom-color:currentColor; }
+.pt .pt-num{
+  width:24px; height:24px; border-radius:50%; font-size:11px; font-weight:800;
+  display:flex; align-items:center; justify-content:center; margin-bottom:2px;
+}
+.pt .pt-name{ font-size:10px; font-weight:600; }
+.pt .pt-status{ font-size:9.5px; font-weight:500; opacity:.7; }
+.pt.l1{ color:var(--l1); } .pt.l1 .pt-num{ background:var(--l1-light); color:var(--l1); }
+.pt.l2{ color:var(--l2); } .pt.l2 .pt-num{ background:var(--l2-light); color:var(--l2); }
+.pt.l3{ color:var(--l3); } .pt.l3 .pt-num{ background:var(--l3-light); color:#92400E; }
+.pt.l4{ color:var(--l4); } .pt.l4 .pt-num{ background:var(--l4-light); color:var(--l4); }
+.pt.active.l1 .pt-num{ background:var(--l1); color:#fff; }
+.pt.active.l2 .pt-num{ background:var(--l2); color:#fff; }
+.pt.active.l3 .pt-num{ background:var(--l3); color:#fff; }
+.pt.active.l4 .pt-num{ background:var(--l4); color:#fff; }
+
+/* ── MAIN CONTENT ────────────────────────────────────────────── */
+.main{ max-width:960px; margin:0 auto; padding:32px 24px 80px; }
+
+/* ── LESSON BLOCK ────────────────────────────────────────────── */
+.lesson-block{ display:none; }
+.lesson-block.active{ display:block; }
+
+.lesson-header{
+  display:flex; align-items:flex-start; justify-content:space-between;
+  flex-wrap:wrap; gap:12px; margin-bottom:24px; padding-bottom:20px;
+  border-bottom:2px solid var(--border);
+}
+.lh-left .lesson-eyebrow{ font-size:11px; font-weight:700; letter-spacing:1.5px;
+  text-transform:uppercase; margin-bottom:6px; }
+.lh-left h2{ font-family:'DM Serif Display',serif; font-size:28px; line-height:1.2; }
+.lh-left .lesson-objective{
+  font-size:13px; color:var(--gray); margin-top:8px; max-width:520px;
+}
+.lesson-meta{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.lm-tag{
+  padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600;
+  border:1px solid; white-space:nowrap;
+}
+.status-badge{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:6px 14px; border-radius:6px; font-size:12px; font-weight:700;
+  align-self:flex-start; white-space:nowrap;
+}
+.status-complete{ background:#F0FFF4; color:#15803D; border:1.5px solid #86EFAC; }
+.status-progress{ background:#EEF5FB; color:var(--teal); border:1.5px solid #93C5FD; }
+.status-dev{ background:var(--bg); color:var(--gray); border:1.5px solid var(--border); }
+
+/* ── RESOURCE SECTIONS ───────────────────────────────────────── */
+.res-sections{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media(max-width:680px){ .res-sections{ grid-template-columns:1fr; } }
+
+.res-section{
+  background:#fff; border:1px solid var(--border); border-radius:10px;
+  overflow:hidden;
+}
+.res-section-header{
+  padding:12px 16px; font-size:11px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; display:flex; align-items:center; gap:7px;
+  border-bottom:1px solid var(--border);
+}
+.res-section-body{ padding:12px 16px; }
+.res-item{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 0; border-bottom:1px solid var(--bg); gap:10px;
+}
+.res-item:last-child{ border-bottom:none; }
+.ri-info{ flex:1; min-width:0; }
+.ri-name{ font-size:13px; font-weight:600; color:var(--dark); }
+.ri-desc{ font-size:11.5px; color:var(--gray); margin-top:1px; }
+.ri-badge{
+  font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px;
+  white-space:nowrap; flex-shrink:0;
+}
+.badge-html{ background:#EEF5FB; color:var(--teal); }
+.badge-pdf{ background:var(--l2-light); color:var(--red); }
+.badge-docx{ background:#F5F3FF; color:var(--purple); }
+.badge-pptx{ background:#FFF8F0; color:#C45B00; }
+.badge-coming{ background:var(--bg); color:var(--muted); }
+
+.res-link{
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:5px;
+  text-decoration:none; white-space:nowrap; transition:all .15s;
+  flex-shrink:0;
+}
+.rl-primary{ background:var(--navy); color:#fff; }
+.rl-primary:hover{ background:#0D2438; }
+.rl-outline{ background:#fff; color:var(--navy); border:1.5px solid var(--border); }
+.rl-outline:hover{ border-color:var(--navy); background:var(--bg); }
+.rl-disabled{ background:var(--bg); color:var(--muted); cursor:default; pointer-events:none; }
+
+/* ── BLOOMS LADDER ───────────────────────────────────────────── */
+.blooms-row{ display:flex; gap:4px; flex-wrap:wrap; margin-top:16px; }
+.bloom-step{
+  padding:4px 12px; border-radius:4px; font-size:11px; font-weight:600;
+  border:1px solid; opacity:.45;
+}
+.bloom-step.active-bloom{ opacity:1; }
+
+/* ── TIMELINE ────────────────────────────────────────────────── */
+.timeline{
+  background:#fff; border:1px solid var(--border); border-radius:10px;
+  padding:16px 20px; margin-top:20px;
+}
+.tl-title{ font-size:11px; font-weight:700; letter-spacing:1px;
+           text-transform:uppercase; color:var(--gray); margin-bottom:12px; }
+.tl-row{ display:flex; align-items:flex-start; gap:12px; padding:6px 0;
+         border-bottom:1px solid var(--bg); }
+.tl-row:last-child{ border-bottom:none; }
+.tl-time{ font-size:11px; font-weight:700; color:var(--navy); min-width:70px; flex-shrink:0; }
+.tl-label{ font-size:11.5px; font-weight:600; color:var(--dark); }
+.tl-sub{ font-size:11px; color:var(--gray); margin-top:1px; }
+
+/* ── COMING SOON ─────────────────────────────────────────────── */
+.coming-soon{
+  background:#fff; border:2px dashed var(--border); border-radius:10px;
+  padding:40px; text-align:center; margin-top:20px;
+}
+.cs-icon{ font-size:40px; margin-bottom:12px; }
+.cs-title{ font-size:18px; font-weight:700; color:var(--dark); margin-bottom:6px; }
+.cs-desc{ font-size:13px; color:var(--gray); max-width:360px; margin:0 auto; }
+.cs-hint{ margin-top:14px; font-size:12px; color:var(--muted); }
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+footer{
+  background:var(--navy); color:rgba(255,255,255,.6);
+  text-align:center; padding:20px; font-size:12px;
+}
+footer a{ color:rgba(255,255,255,.8); }
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="top-nav">
+  <a href="index.html" class="tn-brand">
+    🔬 <span>Cell Division Gone Wrong</span>
+  </a>
+  <div class="tn-links">
+    <a href="module.html" class="tn-link active">📚 Full Module</a>
+    <a href="index.html" class="tn-link">🏠 Portfolio</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="module-badge">🔬 Full Module · 4 Lessons</div>
+    <h1>Cell Division Gone Wrong</h1>
+    <p>Understanding Cancer at the Cellular Level — A flipped classroom instructional module for Grades 9–10 aligned to NGSS HS-LS1-4 and HS-LS3-2.</p>
+    <div class="hero-meta">
+      <span class="hero-tag">📐 NGSS-Aligned</span>
+      <span class="hero-tag">🔄 Flipped Classroom</span>
+      <span class="hero-tag">🏥 St. Jude STEM Ed &amp; Outreach</span>
+      <span class="hero-tag">📈 Bloom's Levels 1–6</span>
+      <span class="hero-tag">🎓 Grades 9–10</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── LESSON PROGRESS TABS ── -->
+<div style="background:#fff;border-bottom:1px solid var(--border);position:sticky;top:52px;z-index:90;">
+  <div class="progress-tabs" style="max-width:960px;margin:0 auto;padding:0 24px;">
+    <a class="pt l1 active" href="#" onclick="showLesson(1,this);return false;">
+      <div class="pt-num">1</div>
+      <div class="pt-name">Normal Cell Cycle</div>
+      <div class="pt-status">✓ Complete</div>
+    </a>
+    <a class="pt l2" href="#" onclick="showLesson(2,this);return false;">
+      <div class="pt-num">2</div>
+      <div class="pt-name">Controls Break Down</div>
+      <div class="pt-status">✓ Complete ★</div>
+    </a>
+    <a class="pt l3" href="#" onclick="showLesson(3,this);return false;">
+      <div class="pt-num">3</div>
+      <div class="pt-name">Genetics of Cancer</div>
+      <div class="pt-status">In Development</div>
+    </a>
+    <a class="pt l4" href="#" onclick="showLesson(4,this);return false;">
+      <div class="pt-num">4</div>
+      <div class="pt-name">Lab to Patient</div>
+      <div class="pt-status">In Development</div>
+    </a>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- ════════════════════════════════════ LESSON 1 ══ -->
+  <div class="lesson-block active" id="lesson-1">
+    <div class="lesson-header">
+      <div class="lh-left">
+        <div class="lesson-eyebrow" style="color:var(--l1);">Lesson 1 of 4 · Remember → Understand</div>
+        <h2>The Normal Cell Cycle</h2>
+        <div class="lesson-objective">Students will identify the four phases of the cell cycle, describe what occurs in each phase, and explain why cell cycle checkpoints are essential quality-control mechanisms.</div>
+        <div class="lesson-meta">
+          <span class="lm-tag" style="color:var(--l1);border-color:var(--l1);">HS-LS1-4</span>
+          <span class="lm-tag" style="color:var(--l1);border-color:var(--l1);">Cell Cycle</span>
+          <span class="lm-tag" style="color:var(--l1);border-color:var(--l1);">Mitosis</span>
+          <span class="lm-tag" style="color:var(--l1);border-color:var(--l1);">Checkpoints</span>
+        </div>
+      </div>
+      <span class="status-badge status-complete">✓ Complete</span>
+    </div>
+
+    <!-- Bloom's ladder -->
+    <div class="blooms-row">
+      <span class="bloom-step active-bloom" style="color:var(--l1);border-color:var(--l1);background:var(--l1-light);">Remember</span>
+      <span class="bloom-step active-bloom" style="color:var(--l1);border-color:var(--l1);background:var(--l1-light);">Understand</span>
+      <span class="bloom-step" style="color:var(--gray);border-color:var(--border);">Apply</span>
+      <span class="bloom-step" style="color:var(--gray);border-color:var(--border);">Analyze</span>
+      <span class="bloom-step" style="color:var(--gray);border-color:var(--border);">Evaluate</span>
+      <span class="bloom-step" style="color:var(--gray);border-color:var(--border);">Create</span>
+    </div>
+
+    <div class="res-sections" style="margin-top:20px;">
+      <!-- Online Resources -->
+      <div class="res-section">
+        <div class="res-section-header" style="background:var(--l1-light);color:var(--l1);">
+          🖥 Online · Independent (Before Class)
+        </div>
+        <div class="res-section-body">
+          <div class="res-item">
+            <div class="ri-info">
+              <div class="ri-name">Student Digital Lesson</div>
+              <div class="ri-desc">4 sections · cell cycle, mitosis, checkpoints, proteins</div>
+            </div>
+            <span class="ri-badge badge-html">HTML</span>
+            <a href="Student_Lesson_TheNormalCellCycle.html" class="res-link rl-primary">Open →</a>
+          </div>
+          <div class="res-item">
+            <div class="ri-info">
+              <div class="ri-name">Student Guided Notes</div>
+              <div class="ri-desc">5-section note-catcher with diagrams and card sort prep</div>
+            </div>
+            <span class="ri-badge badge-html">HTML</span>
+            <a href="Student_Guided_Notes_Lesson1.html" class="res-link rl-primary">Open →</a>
+          </div>
+          <div class="res-item">
+            <div class="ri-info">
+              <div class="ri-name">Exit Ticket</div>
+              <div class="ri-desc">2 MC + 1 short answer · auto-submits to teacher</div>
+            </div>
+            <span class="ri-badge badge-html">HTML</span>
+            <a href="Exit_Ticket_Lesson1.html" class="res-link rl-primary">Open →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- In-Class Resources -->
+      <div class="res-section">
+        <div class="res-section-header" style="background:#F0FFF4;color:#15803D;">
+          👥 In-Class · Application (During Class)
+        </div>
+        <div class="res-section-body">
+          <div class="res-item">
+            <div class="ri-info">
+              <div class="ri-name">Card Sort Activity</div>
+              <div class="ri-desc">3 rounds · phases, mitosis, checkpoints · group consensus</div>
+            </div>
+            <span class="ri-badge badge-html">HTML</span>
+            <a href="Card_Sort_Lesson1.html" class="res-link rl-primary">Open →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Resources -->
+      <div class="res-section" style="grid-column:1/-1;">
+        <div class="res-section-header" style="background:#F5F3FF;color:var(--purple);">
+          🎓 Teacher Resources
+        </div>
+        <div class="res-section-body" style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+          <div class="res-item" style="padding-right:16px;">
+            <div class="ri-info">
+              <div class="ri-name">Teacher Facilitation Guide</div>
+              <div class="ri-desc">Card sort protocol · triage table · discussion prompts</div>
+            </div>
+            <span class="ri-badge badge-docx">DOCX</span>
+            <a href="Teacher_Facilitation_Guide_Lesson1.docx" class="res-link rl-outline" download>↓</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Class Timeline -->
+    <div class="timeline">
+      <div class="tl-title">50-Minute Class Timeline</div>
+      <div class="tl-row">
+        <div class="tl-time">0–7 min</div>
+        <div><div class="tl-label">Warm-Up — Exit Ticket Triage</div><div class="tl-sub">Clarify misconceptions from exit ticket data before moving to card sort</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">7–10 min</div>
+        <div><div class="tl-label">Card Sort Setup</div><div class="tl-sub">Assign groups, distribute card sort activity, introduce the three rounds</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">10–35 min</div>
+        <div><div class="tl-label">Card Sort — 3 Rounds</div><div class="tl-sub">Round 1: phases · Round 2: mitosis phases · Round 3: checkpoints + proteins</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">35–45 min</div>
+        <div><div class="tl-label">Whole-Class Debrief</div><div class="tl-sub">Bloom's-organized discussion · preview how checkpoints can fail</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">45–50 min</div>
+        <div><div class="tl-label">Preview Lesson 2</div><div class="tl-sub">"What happens when a checkpoint doesn't work?" — Maya teaser</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ LESSON 2 ══ -->
+  <div class="lesson-block" id="lesson-2">
+    <div class="lesson-header">
+      <div class="lh-left">
+        <div class="lesson-eyebrow" style="color:var(--l2);">Lesson 2 of 4 · Understand → Analyze ★ Sample Lesson</div>
+        <h2>When Controls Break Down</h2>
+        <div class="lesson-objective">Students will analyze how mutations in cell cycle checkpoint genes lead to uncontrolled cell division and explain why this is the biological basis of cancer.</div>
+        <div class="lesson-meta">
+          <span class="lm-tag" style="color:var(--l2);border-color:var(--l2);">HS-LS1-4</span>
+          <span class="lm-tag" style="color:var(--l2);border-color:var(--l2);">HS-LS3-2</span>
+          <span class="lm-tag" style="color:var(--l2);border-color:var(--l2);">Checkpoint Mutations</span>
+          <span class="lm-tag" style="color:var(--l2);border-color:var(--l2);">ALL Case Study</span>
+        </div>
+      </div>
+      <span class="status-badge status-complete">✓ Complete ★</span>
+    </div>
+
+    <div class="blooms-row">
+      <span class="bloom-step" style="color:var(--gray);border-color:var(--border);">Remember</span>
+      <span class="bloom-step active-bloom" style="color:var(--l2);border-color:var(--l2);background:var(--l2-light);">Understand</span>
+      <span class="bloom-step active-bloom" style="color:var(--l2);border-color:var(--l2);background:var(--l2-light);">Apply</span>
+      <span class="bloom-step active-bloom" style="color:var(--l2);border-color:var(--l2);background:var(--l2-light);">Analyze</span>
+      <span class="bloom-step" style="color:var(--gray);border-color:var(--border);">Evaluate</span>
+      <span class="bloom-step" style="color:var(--gray);border-color:var(--border);">Create</span>
+    </div>
+
+    <div class="res-sections" style="margin-top:20px;">
+      <div class="res-section">
+        <div class="res-section-header" style="background:var(--l2-light);color:var(--l2);">🖥 Online · Independent</div>
+        <div class="res-section-body">
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Student Digital Lesson</div><div class="ri-desc">5 sections · checkpoints, mutations, cancer, exit ticket</div></div><span class="ri-badge badge-html">HTML</span><a href="Student_Lesson_WhenControlsBreakDown.html" class="res-link rl-primary">Open →</a></div>
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Student Guided Notes</div><div class="ri-desc">7-section note-catcher · ELL starters · self-check</div></div><span class="ri-badge badge-html">HTML</span><a href="Student_Guided_Notes_Lesson2.html" class="res-link rl-primary">Open →</a></div>
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Checkpoint Simulator</div><div class="ri-desc">4 scenarios · 5-step · completion gate · discussion questions</div></div><span class="ri-badge badge-html">HTML</span><a href="Cell_Cycle_Checkpoint_Simulator.html" class="res-link rl-primary">Open →</a></div>
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Exit Ticket</div><div class="ri-desc">2 MC + 1 short answer · auto-submits to Google Sheet</div></div><span class="ri-badge badge-html">HTML</span><a href="Exit_Ticket_Lesson2.html" class="res-link rl-primary">Open →</a></div>
+        </div>
+      </div>
+
+      <div class="res-section">
+        <div class="res-section-header" style="background:#F0FFF4;color:#15803D;">👥 In-Class · Application</div>
+        <div class="res-section-body">
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Tumor Board Activity</div><div class="ri-desc">4 specialist roles · consensus form · Maya ALL case</div></div><span class="ri-badge badge-html">HTML</span><a href="Tumor_Board_Lesson2.html" class="res-link rl-primary">Open →</a></div>
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Scaffolded Diagram</div><div class="ri-desc">Pre-annotated cell cycle · discreet support tool</div></div><span class="ri-badge badge-html">HTML</span><a href="Scaffolded_Diagram_Lesson2.html" class="res-link rl-primary">Open →</a></div>
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Extension Activity</div><div class="ri-desc">TP53 mutation rate data analysis · early finishers</div></div><span class="ri-badge badge-html">HTML</span><a href="Extension_Activity_Lesson2.html" class="res-link rl-primary">Open →</a></div>
+          <div class="res-item"><div class="ri-info"><div class="ri-name">Simulator Reference Guide</div><div class="ri-desc">Static companion PDF · 4 scenarios + synthesis questions</div></div><span class="ri-badge badge-pdf">PDF</span><a href="Simulator_Reference_Guide.pdf" class="res-link rl-outline" download>↓ Guide</a></div>
+        </div>
+      </div>
+
+      <div class="res-section" style="grid-column:1/-1;">
+        <div class="res-section-header" style="background:#F5F3FF;color:var(--purple);">🎓 Teacher Resources</div>
+        <div class="res-section-body" style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+          <div class="res-item" style="padding-right:16px;">
+            <div class="ri-info"><div class="ri-name">Teacher Facilitation Guide v3</div><div class="ri-desc">Tumor Board protocol · triage table · exemplars · signals</div></div>
+            <span class="ri-badge badge-docx">DOCX</span>
+            <a href="Teacher_Facilitation_Guide_v3.docx" class="res-link rl-outline" download>↓</a>
+          </div>
+          <div class="res-item">
+            <div class="ri-info"><div class="ri-name">Teacher Classroom Deck</div><div class="ri-desc">10-slide projector deck · synced to facilitation timeline</div></div>
+            <span class="ri-badge badge-pptx">PPTX</span>
+            <a href="Teacher_Classroom_Deck_Lesson2.pptx" class="res-link rl-outline" download>↓</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ LESSON 3 ══ -->
+  <div class="lesson-block" id="lesson-3">
+    <div class="lesson-header">
+      <div class="lh-left">
+        <div class="lesson-eyebrow" style="color:#92400E;">Lesson 3 of 4 · Analyze → Evaluate</div>
+        <h2>The Genetics of Cancer</h2>
+        <div class="lesson-objective">Students will analyze the genetic basis of oncogene and tumor suppressor mutations, evaluate the two-hit hypothesis with evidence, and model broken DNA repair pathways.</div>
+        <div class="lesson-meta">
+          <span class="lm-tag" style="color:#92400E;border-color:var(--l3);">HS-LS3-2</span>
+          <span class="lm-tag" style="color:#92400E;border-color:var(--l3);">Oncogenes</span>
+          <span class="lm-tag" style="color:#92400E;border-color:var(--l3);">Tumor Suppressors</span>
+        </div>
+      </div>
+      <span class="status-badge status-dev">⏳ In Development</span>
+    </div>
+    <div class="coming-soon">
+      <div class="cs-icon">🧬</div>
+      <div class="cs-title">Lesson 3 Coming Soon</div>
+      <div class="cs-desc">Oncogenes vs. tumor suppressors, the two-hit hypothesis in depth, and a modeling activity where students run a cell with broken DNA repair pathways.</div>
+      <div class="cs-hint">Lessons are built in sequence. Complete Lesson 1 &amp; 2 first.</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ LESSON 4 ══ -->
+  <div class="lesson-block" id="lesson-4">
+    <div class="lesson-header">
+      <div class="lh-left">
+        <div class="lesson-eyebrow" style="color:var(--l4);">Lesson 4 of 4 · Evaluate → Create</div>
+        <h2>Fighting Back: Lab to Patient</h2>
+        <div class="lesson-objective">Students will evaluate targeted therapy strategies based on molecular evidence and design a treatment brief for a new patient profile using real genomic data portals.</div>
+        <div class="lesson-meta">
+          <span class="lm-tag" style="color:var(--l4);border-color:var(--l4);">HS-LS1-4</span>
+          <span class="lm-tag" style="color:var(--l4);border-color:var(--l4);">Targeted Therapy</span>
+          <span class="lm-tag" style="color:var(--l4);border-color:var(--l4);">Genomic Data</span>
+          <span class="lm-tag" style="color:var(--l4);border-color:var(--l4);">CAR-T</span>
+        </div>
+      </div>
+      <span class="status-badge status-dev">⏳ In Development</span>
+    </div>
+    <div class="coming-soon">
+      <div class="cs-icon">💊</div>
+      <div class="cs-title">Lesson 4 Coming Soon</div>
+      <div class="cs-desc">Pediatric cancer researcher video, real genomic data portal exploration, and a Treatment Strategy Designer challenge where students apply all four lessons to a new patient profile.</div>
+      <div class="cs-hint">Lessons are built in sequence. Complete Lessons 1–3 first.</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<footer>
+  Cell Division Gone Wrong &nbsp;·&nbsp; STEM Education &amp; Outreach &nbsp;·&nbsp;
+  Grades 9–10 &nbsp;·&nbsp; NGSS HS-LS1-4 &amp; HS-LS3-2 &nbsp;·&nbsp;
+  <a href="mailto:coxl2@outlook.com">coxl2@outlook.com</a>
+</footer>
+
+<script>
+function showLesson(n, el) {
+  // Update tab states
+  document.querySelectorAll('.pt').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  // Show correct lesson block
+  document.querySelectorAll('.lesson-block').forEach(function(b) { b.classList.remove('active'); });
+  var block = document.getElementById('lesson-' + n);
+  if (block) block.classList.add('active');
+  // Update URL hash
+  window.location.hash = 'lesson-' + n;
+}
+
+// On load, check hash
+(function() {
+  var hash = window.location.hash;
+  if (hash && hash.match(/#lesson-\d/)) {
+    var n = parseInt(hash.replace('#lesson-',''));
+    var tab = document.querySelector('.pt.l' + n);
+    if (tab) showLesson(n, tab);
+  }
+})();
+</script>
+</body>
+</html>
