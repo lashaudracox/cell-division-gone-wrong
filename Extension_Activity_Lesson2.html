@@ -190,6 +190,46 @@ h2.section-title { font-size: 20px; font-weight: 700; color: var(--navy); margin
   .write-area { background: #fff !important; }
   .q-block, .data-table-wrap, .context-card { box-shadow: none; }
 }
+
+  /* ── GOOGLE TRANSLATE FLOATING WIDGET ─────────────────────── */
+  #translate-bar {
+    position: fixed;
+    top: 10px;
+    right: 12px;
+    z-index: 99999;
+    background: rgba(26,58,92,.96);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 8px;
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 3px 14px rgba(0,0,0,.28);
+    backdrop-filter: blur(6px);
+  }
+  #translate-bar .tb-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    color: #A8C8E8;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .goog-te-gadget-simple {
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,.2) !important;
+    border-radius: 5px !important;
+    padding: 2px 6px !important;
+    font-size: 11px !important;
+    font-family: 'DM Sans', sans-serif !important;
+  }
+  .goog-te-gadget-simple .goog-te-menu-value span { color: #D0E8F8 !important; }
+  .goog-te-gadget-simple .goog-te-menu-value span:last-child { display: none !important; }
+  .goog-te-gadget-simple img { display: none !important; }
+  /* Suppress the "Translated by Google" banner that shifts page content */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
 </style>
 </head>
 <body>
@@ -401,5 +441,21 @@ h2.section-title { font-size: 20px; font-weight: 700; color: var(--navy); margin
   <p style="font-size:11px;color:var(--muted);text-align:center">Cell Division Gone Wrong · STEM Education &amp; Outreach · Lesson 2 Extension · Grades 9–10</p>
 
 </div>
+
+<!-- ── LANGUAGE TRANSLATION WIDGET ─────────────────────────── -->
+<div id="translate-bar">
+  <span class="tb-label">🌐 Language</span>
+  <div id="google_translate_element"></div>
+</div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
