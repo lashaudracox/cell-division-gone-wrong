@@ -23,7 +23,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);}
 .print-btn:hover{background:#0A6870;}
 
 /* PAGE */
-.page{max-width:900px;margin:0 auto;padding:32px 24px 56px;}
+.page{max-width:1200px;margin:0 auto;padding:24px 32px 48px;}
 
 /* HEADER */
 .page-header{background:var(--navy);border-radius:12px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;}
@@ -61,7 +61,7 @@ h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:
 .clue-divider{position:absolute;bottom:-8px;left:0;right:0;height:1px;background:rgba(255,255,255,.1);}
 
 /* ROLES GRID */
-.roles-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.roles-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;}
 @media(max-width:560px){.roles-grid{grid-template-columns:1fr;}}
 
 .role-card{border-radius:12px;border:1.5px solid var(--border);overflow:hidden;background:#fff;}
@@ -111,7 +111,7 @@ h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:
 .check-row label{font-size:12.5px;color:var(--dark);cursor:pointer;line-height:1.45;}
 
 @media print{
-  .top-bar,.print-btn{display:none!important;}
+  .top-bar{display:none!important;}
   body{background:#fff;}
   .page{padding:12px;max-width:100%;}
   .page-header,.consensus-card,.role-card{box-shadow:none;}
@@ -121,49 +121,28 @@ h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:
   .roles-grid{break-inside:avoid;}
 }
 
-  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
-  /* Fixed bottom-right: clears every file's top bar & print buttons */
-  #translate-bar {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 99999;
-    background: rgba(26,58,92,.97);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 9px;
-    padding: 6px 10px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.32);
-    backdrop-filter: blur(8px);
-  }
-  #translate-bar .tb-label {
-    font-size: 14px;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  /* Native <select> — scrolls automatically on every OS/browser */
+  /* ── LANGUAGE SELECT — lives inside .top-bar ─────────────────── */
   #lang-select {
     appearance: none;
     -webkit-appearance: none;
-    background: rgba(255,255,255,.08);
+    background: rgba(255,255,255,.10);
     color: #D0E8F8;
-    border: 1px solid rgba(255,255,255,.22);
+    border: 1px solid rgba(255,255,255,.25);
     border-radius: 6px;
-    padding: 4px 22px 4px 8px;
+    padding: 5px 26px 5px 10px;
     font-size: 12px;
     font-family: 'DM Sans', sans-serif;
     cursor: pointer;
     outline: none;
-    min-width: 130px;
+    min-width: 136px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 7px center;
+    background-position: right 8px center;
+    height: 34px;
   }
   #lang-select:focus { border-color: rgba(14,124,134,.8); }
   #lang-select option { background: #1A3A5C; color: #D0E8F8; }
-  /* Suppress the Google Translate top banner (it shifts page content down) */
+  /* Suppress the Google Translate banner that shifts page content */
   .goog-te-banner-frame.skiptranslate { display: none !important; }
   body { top: 0px !important; }
   #google_translate_element { display: none !important; }
@@ -173,10 +152,35 @@ h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:
 
 <div class="top-bar">
   <span class="top-bar-brand">Cell Division Gone Wrong · Lesson 2 Group Activity · Tumor Board</span>
-  <button class="print-btn" onclick="window.print()">
-    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
-    Print / Save PDF
-  </button>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="font-size:14px;line-height:1;">🌐</span>
+    <select id="lang-select" aria-label="Select language">
+      <option value="">Language</option>
+      <option value="es">Español</option>
+      <option value="zh-CN">中文 (简体)</option>
+      <option value="zh-TW">中文 (繁體)</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="vi">Tiếng Việt</option>
+      <option value="ko">한국어</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="hi">हिंदी</option>
+      <option value="ht">Kreyòl Ayisyen</option>
+      <option value="tl">Filipino</option>
+      <option value="ja">日本語</option>
+      <option value="de">Deutsch</option>
+      <option value="so">Somali</option>
+      <option value="am">አማርኛ</option>
+      <option value="ur">اردو</option>
+      <option value="bn">বাংলা</option>
+      <option value="fa">فارسی</option>
+    </select>
+    <button class="print-btn" onclick="window.print()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+      Print / Save PDF
+    </button>
+  </div>
 </div>
 
 <div class="page">
@@ -417,31 +421,7 @@ h2.section-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:
 </div>
 
 <!-- ── LANGUAGE TRANSLATION WIDGET ─────────────────────────── -->
-<div id="translate-bar">
-  <span class="tb-label">🌐</span>
-  <select id="lang-select" aria-label="Select language">
-    <option value="">Language</option>
-    <option value="es">Español</option>
-    <option value="zh-CN">中文 (简体)</option>
-    <option value="zh-TW">中文 (繁體)</option>
-    <option value="ar">العربية</option>
-    <option value="fr">Français</option>
-    <option value="vi">Tiếng Việt</option>
-    <option value="ko">한국어</option>
-    <option value="pt">Português</option>
-    <option value="ru">Русский</option>
-    <option value="hi">हिंदी</option>
-    <option value="ht">Kreyòl Ayisyen</option>
-    <option value="tl">Filipino</option>
-    <option value="ja">日本語</option>
-    <option value="de">Deutsch</option>
-    <option value="so">Somali</option>
-    <option value="am">አማርኛ</option>
-    <option value="ur">اردو</option>
-    <option value="bn">বাংলা</option>
-    <option value="fa">فارسی</option>
-  </select>
-</div>
+
 
 <!-- Hidden Google Translate init (powers the translation engine) -->
 <div id="google_translate_element"></div>
