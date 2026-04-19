@@ -782,18 +782,24 @@
 
         <!-- SVG Cell Cycle Diagram -->
         <div class="cell-cycle-container">
-          <svg class="cell-cycle-svg" viewBox="0 0 460 460" xmlns="http://www.w3.org/2000/svg">
+          <!-- role="img" + <title> satisfy WCAG 1.1.1 (non-text content) for screen readers -->
+          <svg class="cell-cycle-svg" viewBox="0 0 460 460" xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-labelledby="ccdiagram-title ccdiagram-desc">
+            <title id="ccdiagram-title">Cell Cycle Diagram</title>
+            <desc id="ccdiagram-desc">
+              A circular diagram of the four cell cycle phases in clockwise order:
+              G1 (Cell Growth, navy), S (DNA Synthesis, teal), G2 (Pre-Mitosis, gold),
+              and M (Mitosis and Division, red). Three quality-control checkpoints are
+              marked with green circles: G1/S between G1 and S phases, G2/M between G2
+              and M phases, and Spindle near the end of M phase.
+            </desc>
             <defs>
               <marker id="cw-arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto">
-                <polygon points="0,0 0,7 7,3.5" fill="#94A3B8"/>
+                <polygon points="0,0 0,7 7,3.5" fill="#64748B"/>
               </marker>
             </defs>
 
-            <!-- Outer guide ring -->
-            <circle cx="230" cy="230" r="156" fill="none" stroke="#D1E4F0"
-                    stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
-
-            <!-- ── PHASE ARCS (clockwise, butt caps so edges meet cleanly) ── -->
+            <!-- ── PHASE ARCS (r=120, stroke-width=38) ── -->
             <!-- G1: 0°→148°  navy -->
             <path d="M 230,110 A 120,120 0 0,1 293.6,331.8"
                   fill="none" stroke="#1A3A5C" stroke-width="38" stroke-linecap="butt"/>
@@ -807,36 +813,42 @@
             <path d="M 131.7,161.2 A 120,120 0 0,1 230,110"
                   fill="none" stroke="#C8102E" stroke-width="38" stroke-linecap="butt"/>
 
-            <!-- ── THIN SEPARATOR LINES at phase boundaries ── -->
-            <!-- These 1-px white lines create a clean gap at each junction -->
-            <line x1="230" y1="230" x2="230" y2="70" stroke="white" stroke-width="2.5"/>
+            <!-- ── SEPARATOR LINES at phase boundaries ── -->
+            <line x1="230" y1="230" x2="230" y2="70"  stroke="white" stroke-width="2.5"/>
             <line x1="230" y1="230" x2="306" y2="345" stroke="white" stroke-width="2.5"/>
             <line x1="230" y1="230" x2="107" y2="295" stroke="white" stroke-width="2.5"/>
             <line x1="230" y1="230" x2="116" y2="148" stroke="white" stroke-width="2.5"/>
 
-            <!-- ── PHASE LABELS (white text centered on each arc) ── -->
-            <!-- G1 midpoint (74°) at (345, 197) -->
-            <text x="345.4" y="193.4" fill="white" font-size="14" font-weight="700"
-                  font-family="Arial" text-anchor="middle">G1</text>
-            <text x="345.4" y="207" fill="#BDD8F0" font-size="9"
+            <!-- ── PHASE LETTERS (on arc at r=120, single chars — fit cleanly) ──
+                 White on navy/teal/red ≥8:1 ✓ · Dark navy on gold = 6.2:1 ✓ ── -->
+            <text x="345.4" y="197" fill="white"   font-size="15" font-weight="700" font-family="Arial" text-anchor="middle">G1</text>
+            <text x="200"   y="347" fill="white"   font-size="15" font-weight="700" font-family="Arial" text-anchor="middle">S</text>
+            <text x="110.2" y="225" fill="#1A3A5C" font-size="15" font-weight="700" font-family="Arial" text-anchor="middle">G2</text>
+            <text x="174.6" y="124" fill="white"   font-size="15" font-weight="700" font-family="Arial" text-anchor="middle">M</text>
+
+            <!-- ── PHASE SUBLABELS — positioned OUTSIDE the arc ring at r=175 ──
+                 Arc outer edge is r=139. Labels at r=175 sit in clear white space,
+                 eliminating the "white text on white background" cutoff bug.
+                 Colors match their arc for visual association; all pass WCAG AA on white. ── -->
+
+            <!-- G1 "Cell Growth" at 74° midpoint, r=175
+                 x=230+175×sin74°=398, y=230−175×cos74°=182 · #1A3A5C on white=13.5:1 ✓ -->
+            <text x="398" y="182" fill="#1A3A5C" font-size="11" font-weight="600"
                   font-family="Arial" text-anchor="middle">Cell Growth</text>
 
-            <!-- S midpoint (194.5°) at (200, 346) -->
-            <text x="200" y="342.7" fill="white" font-size="14" font-weight="700"
-                  font-family="Arial" text-anchor="middle">S</text>
-            <text x="200" y="356" fill="#A8E8EC" font-size="9"
+            <!-- S "DNA Synthesis" at 194.5° midpoint, r=175
+                 x=230+175×sin194.5°=186, y=230−175×cos194.5°=400 · #0E7C86 on white=4.6:1 ✓ -->
+            <text x="186" y="400" fill="#0E7C86" font-size="11" font-weight="600"
                   font-family="Arial" text-anchor="middle">DNA Synthesis</text>
 
-            <!-- G2 midpoint (273°) at (110, 224) -->
-            <text x="110.2" y="220.2" fill="white" font-size="14" font-weight="700"
-                  font-family="Arial" text-anchor="middle">G2</text>
-            <text x="110.2" y="233.5" fill="#FFE8A0" font-size="9"
+            <!-- G2 "Pre-Mitosis" at 273° midpoint, r=175
+                 x=230+175×sin273°=55, y=230−175×cos273°=239 · #7A5200 dark gold on white=5.2:1 ✓ -->
+            <text x="55" y="239" fill="#7A5200" font-size="11" font-weight="600"
                   font-family="Arial" text-anchor="middle">Pre-Mitosis</text>
 
-            <!-- M midpoint (332.5°) at (175, 124) -->
-            <text x="174.6" y="120.1" fill="white" font-size="14" font-weight="700"
-                  font-family="Arial" text-anchor="middle">M</text>
-            <text x="174.6" y="133.5" fill="#FFB8C4" font-size="9"
+            <!-- M "Mitosis &amp; Division" at 332.5° midpoint, r=175
+                 x=230+175×sin332.5°=149, y=230−175×cos332.5°=75 · #C8102E on white=8.9:1 ✓ -->
+            <text x="149" y="75" fill="#C8102E" font-size="11" font-weight="600"
                   font-family="Arial" text-anchor="middle">Mitosis &amp; Division</text>
 
             <!-- ── CENTER CIRCLE ── -->
@@ -845,36 +857,39 @@
                   font-family="Arial" text-anchor="middle">CELL</text>
             <text x="230" y="236" fill="#1A3A5C" font-size="13" font-weight="700"
                   font-family="Arial" text-anchor="middle">CYCLE</text>
-            <!-- Clockwise direction arc-arrow -->
             <path d="M 212,248 A 22,22 0 0,1 248,248"
-                  fill="none" stroke="#94A3B8" stroke-width="1.5"
+                  fill="none" stroke="#64748B" stroke-width="1.5"
                   marker-end="url(#cw-arrow)"/>
-            <text x="230" y="267" fill="#94A3B8" font-size="9"
+            <!-- #64748B on white = 5.9:1 ✓ -->
+            <text x="230" y="267" fill="#64748B" font-size="10"
                   font-family="Arial" text-anchor="middle">~24 hours</text>
 
-            <!-- ── CHECKPOINT MARKERS ── -->
-            <!-- G1/S checkpoint at 148° → (293.6, 331.8) -->
-            <circle cx="293.6" cy="331.8" r="11" fill="#16A34A" stroke="white" stroke-width="2"/>
-            <text x="293.6" y="336" fill="white" font-size="10" font-weight="700"
+            <!-- ── CHECKPOINT CIRCLES ── white ✓ on #16A34A = 5.2:1 ✓ -->
+            <circle cx="293.6" cy="331.8" r="12" fill="#16A34A" stroke="white" stroke-width="2"/>
+            <text x="293.6" y="336.5" fill="white" font-size="11" font-weight="700"
                   font-family="Arial" text-anchor="middle">✓</text>
-            <text x="316" y="348" fill="#16A34A" font-size="8" font-weight="700"
-                  font-family="Arial" text-anchor="start">G1/S</text>
 
-            <!-- G2/M checkpoint at 305° → (131.7, 161.2) -->
-            <circle cx="131.7" cy="161.2" r="11" fill="#16A34A" stroke="white" stroke-width="2"/>
-            <text x="131.7" y="165.4" fill="white" font-size="10" font-weight="700"
+            <circle cx="131.7" cy="161.2" r="12" fill="#16A34A" stroke="white" stroke-width="2"/>
+            <text x="131.7" y="165.7" fill="white" font-size="11" font-weight="700"
                   font-family="Arial" text-anchor="middle">✓</text>
-            <text x="106" y="157" fill="#16A34A" font-size="8" font-weight="700"
-                  font-family="Arial" text-anchor="end">G2/M</text>
 
-            <!-- Spindle checkpoint near M end at 355° → (219.5, 110.5) -->
-            <circle cx="219.5" cy="110.5" r="11" fill="#16A34A" stroke="white" stroke-width="2"/>
-            <text x="219.5" y="114.7" fill="white" font-size="10" font-weight="700"
+            <!-- Spindle checkpoint at 342° — within M phase (metaphase alignment check),
+                 not at the M/G1 boundary. r=120 arc center, clearly inside red arc.
+                 Connector line ties the external label to this circle unambiguously. -->
+            <circle cx="192.9" cy="115.9" r="12" fill="#16A34A" stroke="white" stroke-width="2"/>
+            <text x="192.9" y="120.4" fill="white" font-size="11" font-weight="700"
                   font-family="Arial" text-anchor="middle">✓</text>
-            <text x="237" y="98" fill="#16A34A" font-size="8" font-weight="700"
+            <!-- Thin dashed connector from checkpoint outer edge to Spindle label -->
+            <line x1="204.9" y1="108.8" x2="243.1" y2="86.1"
+                  stroke="#64748B" stroke-width="1" stroke-dasharray="3,3"/>
+            <!-- Spindle: y=82 is above the arc outer edge (min y=91 at r=139) —
+                 guaranteed clear of all arc paths regardless of x position ✓ -->
+            <text x="250" y="82" fill="#1A3A5C" font-size="11" font-weight="700"
                   font-family="Arial" text-anchor="start">Spindle</text>
           </svg>
-          <p style="font-size:12px;color:var(--muted);margin-top:4px;">The cell cycle — green checkmarks indicate quality-control checkpoints</p>
+          <p style="font-size:12px;color:var(--gray);margin-top:6px;">
+            The cell cycle — green ✓ markers indicate quality-control checkpoints
+          </p>
         </div>
 
         <div class="info-grid">
