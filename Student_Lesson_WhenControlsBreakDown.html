@@ -515,6 +515,10 @@
     animation: spin .7s linear infinite; display: none;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
   .submit-btn.loading .spinner { display: inline-block; }
   .submit-btn.loading .btn-label { display: none; }
 
@@ -611,6 +615,53 @@
   .goog-te-banner-frame.skiptranslate { display: none !important; }
   body { top: 0px !important; }
   #google_translate_element { display: none !important; }
+
+  /* ── FULL-MODULE PRINT ──────────────────────────────────────
+     When body has class 'printing', hide everything except
+     #print-modal which contains the formatted response doc.
+     window.print() is called directly — no popup, no iframe.  */
+  @media print {
+    body.printing > * { display: none !important; }
+    body.printing #print-modal { display: block !important; }
+  }
+  #print-modal {
+    display: none;
+    font-family: Arial, sans-serif;
+    padding: 24px;
+    color: #1E293B;
+  }
+  #print-modal h1  { font-size: 18px; color: #1A3A5C; margin: 0 0 4px; }
+  #print-modal .pm-meta { font-size: 12px; color: #64748B; margin-bottom: 20px; }
+  #print-modal h2  {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #0E7C86;
+    margin: 20px 0 6px; padding-bottom: 4px;
+    border-bottom: 2px solid #0E7C86;
+  }
+  #print-modal table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+  #print-modal td {
+    padding: 10px 12px; border-bottom: 1px solid #E2EAF0;
+    font-size: 12px; vertical-align: top;
+  }
+  #print-modal .pm-qlabel {
+    font-size: 10px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px;
+    white-space: nowrap; width: 90px;
+  }
+  #print-modal .pm-answer { font-weight: 600; color: #1A3A5C; }
+  #print-modal .pm-sa {
+    background: #F8FBFF; border: 1px solid #D1E4F0; border-radius: 6px;
+    padding: 10px 14px; font-size: 12.5px; line-height: 1.6;
+    white-space: pre-wrap; margin-bottom: 8px;
+  }
+  #print-modal .pm-salabel {
+    font-size: 11px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px; margin: 10px 0 5px;
+  }
+  #print-modal .pm-footer {
+    margin-top: 28px; font-size: 10px; color: #94A3B8;
+    border-top: 1px solid #E2EAF0; padding-top: 10px;
+  }
 </style>
 </head>
 <body>
@@ -666,6 +717,41 @@
         <p>Before we understand what goes wrong, we need to understand what's supposed to happen.</p>
       </div>
       <div class="slide-body">
+
+        <!-- ── STUDENT IDENTITY (collected on open, used in print/submit) ── -->
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px;
+                    background:#fff;border:1px solid var(--border);border-radius:10px;
+                    padding:16px 20px;align-items:flex-end;">
+          <div style="flex:2;min-width:160px;">
+            <label for="student-name"
+              style="font-size:10.5px;font-weight:700;letter-spacing:1px;
+                     text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">
+              Full Name <span style="color:var(--red)">*</span>
+            </label>
+            <input id="student-name" type="text" placeholder="First Last"
+              autocomplete="name" required
+              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);
+                     border-radius:7px;font-size:14px;font-family:inherit;
+                     color:var(--dark);outline:none;transition:border-color .15s;"
+              onfocus="this.style.borderColor='var(--teal)'"
+              onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div style="flex:1;min-width:100px;">
+            <label for="student-period"
+              style="font-size:10.5px;font-weight:700;letter-spacing:1px;
+                     text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">
+              Class Period
+            </label>
+            <input id="student-period" type="text" placeholder="e.g. 3rd"
+              autocomplete="off"
+              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);
+                     border-radius:7px;font-size:14px;font-family:inherit;
+                     color:var(--dark);outline:none;transition:border-color .15s;"
+              onfocus="this.style.borderColor='var(--teal)'"
+              onblur="this.style.borderColor='var(--border)'">
+          </div>
+        </div>
+
         <div class="pre-training">
           <div class="pt-label"><span class="pt-icon">📍</span>Start Here</div>
           <h3>What you'll learn in this lesson</h3>
@@ -1202,20 +1288,6 @@
           <p>These responses help your teacher know where to focus tomorrow's discussion. There are no trick questions — write what you actually think.</p>
         </div>
 
-        <!-- STUDENT IDENTITY — required for teacher to match responses to students -->
-        <div class="student-id-row">
-          <div class="sid-field wide">
-            <span class="sid-label">Full Name <span style="color:var(--red)">*</span></span>
-            <input class="sid-input" id="student-name" type="text"
-                   placeholder="First Last" autocomplete="name" required>
-          </div>
-          <div class="sid-field narrow">
-            <span class="sid-label">Class Period</span>
-            <input class="sid-input" id="student-period" type="text"
-                   placeholder="e.g. 3rd" autocomplete="off">
-          </div>
-        </div>
-
         <div class="exit-q">
           <div class="exit-q-num">Multiple Choice · Question 1 of 2</div>
           <p>A cell's G1 checkpoint detects significant DNA damage. Under normal conditions, what is the most likely outcome?</p>
@@ -1298,15 +1370,15 @@
                 <li>🎥 <span>Brief clip from a pediatric cancer researcher (stay curious!)</span></li>
               </ul>
             </div>
-            <!-- Print button — lets students save/print their submitted exit ticket -->
-            <button onclick="window.print()"
+            <!-- Full-module print — captures all responses across all 5 sections -->
+            <button onclick="printFullModule()"
               style="margin-top:20px; display:inline-flex; align-items:center; gap:8px;
                      padding:10px 22px; background:var(--navy); color:white; border:none;
                      border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;
                      font-family:inherit; transition:background .15s;"
               onmouseover="this.style.background='#0E2A44'"
               onmouseout="this.style.background='var(--navy)'">
-              🖨 Print / Save PDF
+              🖨 Print / Save All Responses
             </button>
           </div>
         </div>
@@ -1315,12 +1387,95 @@
       <div class="slide-nav">
         <button class="nav-btn secondary" onclick="goSlide(3)">← Back</button>
         <span class="slide-counter">Section 5 of 5</span>
-        <button class="nav-btn primary" disabled id="done-btn">Done</button>
+        <button class="nav-btn primary" disabled id="done-btn" onclick="showWhatNext()">Done ✓</button>
       </div>
     </div>
 
   </main>
 </div>
+
+<!-- ══ WHAT'S NEXT OVERLAY ══════════════════════════════════════
+     Shown after Done is pressed. Gives the student two paths:
+       1. Return to the module index page
+       2. Go straight to the Checkpoint Simulator
+══════════════════════════════════════════════════════════════ -->
+<div id="whats-next-overlay" style="
+  display:none; position:fixed; inset:0; z-index:99990;
+  background:rgba(13,27,42,.88); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center;">
+
+  <div style="
+    background:#fff; border-radius:16px; padding:36px 40px; max-width:520px;
+    width:90%; box-shadow:0 24px 64px rgba(0,0,0,.4); text-align:center;
+    animation: slideUp .35s ease-out;">
+
+    <div style="font-size:48px; margin-bottom:12px;">🎉</div>
+    <h2 style="font-size:22px; font-weight:700; color:var(--navy); margin-bottom:8px;">
+      Lesson 2 Complete!
+    </h2>
+    <p style="font-size:14px; color:var(--gray); line-height:1.65; margin-bottom:28px;">
+      Your exit ticket has been submitted. Where would you like to go next?
+    </p>
+
+    <!-- Option A — Checkpoint Simulator -->
+    <a href="Cell_Cycle_Checkpoint_Simulator.html"
+      style="display:flex; align-items:center; gap:14px; padding:16px 20px;
+             background:var(--teal); color:#fff; border-radius:10px;
+             text-decoration:none; margin-bottom:12px; transition:background .15s;"
+      onmouseover="this.style.background='#0A6870'"
+      onmouseout="this.style.background='var(--teal)'">
+      <div style="width:40px; height:40px; border-radius:8px; background:rgba(255,255,255,.2);
+                  display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">
+        💻
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:14px; font-weight:700; margin-bottom:2px;">
+          Next: Cell Cycle Checkpoint Simulator
+        </div>
+        <div style="font-size:12px; opacity:.85;">
+          Apply what you just learned — run the cell cycle under 4 mutation conditions
+        </div>
+      </div>
+      <div style="margin-left:auto; font-size:18px; opacity:.8;">→</div>
+    </a>
+
+    <!-- Option B — Module index -->
+    <a href="index.html"
+      style="display:flex; align-items:center; gap:14px; padding:16px 20px;
+             background:var(--light); color:var(--navy); border:1.5px solid var(--border);
+             border-radius:10px; text-decoration:none; transition:background .15s;"
+      onmouseover="this.style.background='#E0ECF8'"
+      onmouseout="this.style.background='var(--light)'">
+      <div style="width:40px; height:40px; border-radius:8px; background:rgba(26,58,92,.1);
+                  display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">
+        🏠
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:14px; font-weight:700; color:var(--navy); margin-bottom:2px;">
+          Return to Module Home
+        </div>
+        <div style="font-size:12px; color:var(--gray);">
+          Go back to the Cell Division Gone Wrong landing page
+        </div>
+      </div>
+      <div style="margin-left:auto; font-size:18px; color:var(--muted);">→</div>
+    </a>
+
+    <!-- Dismiss (stay on page) -->
+    <button onclick="document.getElementById('whats-next-overlay').style.display='none'"
+      style="margin-top:16px; background:none; border:none; color:var(--muted);
+             font-size:12px; cursor:pointer; font-family:inherit; padding:4px 8px;">
+      Stay on this page
+    </button>
+  </div>
+</div>
+
+<script>
+function showWhatNext() {
+  const overlay = document.getElementById('whats-next-overlay');
+  overlay.style.display = 'flex';
+}
+</script>
 
 <script>
 let currentSlide = 0;
@@ -1599,5 +1754,94 @@ document.getElementById('lang-select').addEventListener('change', function() {
 });
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+// ── FULL-MODULE PRINT ─────────────────────────────────────────
+// Injects a #print-modal div, adds class "printing" to <body>
+// so @media print shows ONLY that div, then calls window.print()
+// directly on the main page — no popup, no iframe, never blocked.
+function printFullModule() {
+  const name   = (document.getElementById('student-name')  || {}).value || '(not entered)';
+  const period = (document.getElementById('student-period') || {}).value || '—';
+
+  function getChoice(id) {
+    var opts = document.querySelectorAll('#' + id + '-opts .quiz-opt');
+    var letters = ['A','B','C','D'];
+    for (var i = 0; i < opts.length; i++) {
+      if (opts[i].classList.contains('correct') || opts[i].classList.contains('incorrect')) {
+        var txt = opts[i].querySelector('div:last-child');
+        var isCorrect = opts[i].classList.contains('correct');
+        return letters[i] + '. ' + (txt ? txt.textContent.trim() : '') +
+               (isCorrect ? ' ✓' : ' ✗');
+      }
+    }
+    return '(not answered)';
+  }
+
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function qrow(lbl, q, a) {
+    return '<tr><td class="pm-qlabel">' + lbl + '</td>' +
+           '<td>' + esc(q) + '</td>' +
+           '<td class="pm-answer">' + esc(a) + '</td></tr>';
+  }
+
+  var sa = (document.getElementById('short-ans-input') || {}).value || '(not answered)';
+
+  var inner = [
+    '<h1>When Controls Break Down — Student Responses</h1>',
+    '<div class="pm-meta"><strong>Name:</strong> ' + esc(name) +
+    ' &nbsp;|&nbsp; <strong>Period:</strong> ' + esc(period) +
+    ' &nbsp;|&nbsp; <strong>Printed:</strong> ' + new Date().toLocaleString() + '</div>',
+
+    '<h2>Section 1 · The Normal Cell Cycle</h2><table>',
+    qrow('Q1','During which phase of the cell cycle does DNA replication occur?', getChoice('q0')),
+    '</table>',
+
+    '<h2>Section 2 · Checkpoints: The Cell’s Rules</h2><table>',
+    qrow('Q2','Which of the following best describes the role of the p53 protein?', getChoice('q1')),
+    '</table>',
+
+    '<h2>Section 3 · When Checkpoints Fail</h2><table>',
+    qrow('Q3','A student says: “If someone has one mutated copy of a tumor suppressor gene, they will definitely get cancer.” Is this correct?', getChoice('q2')),
+    '</table>',
+
+    '<h2>Section 4 · Cancer at the Cellular Level</h2><table>',
+    qrow('Q4','Which statement best explains why cancer is described as “many diseases” rather than one?', getChoice('q3')),
+    '</table>',
+
+    '<h2>Section 5 · Exit Ticket</h2><table>',
+    qrow('ET Q1','A cell’s G1 checkpoint detects significant DNA damage. Under normal conditions, what is the most likely outcome?', getChoice('qet1')),
+    qrow('ET Q2','Which combination of mutations would be most likely to result in uncontrolled cell division?', getChoice('qet2')),
+    '</table>',
+    '<div class="pm-salabel">Short Answer</div>',
+    '<div class="pm-sa">' + esc(sa) + '</div>',
+    '<div class="pm-footer">Cell Division Gone Wrong · Lesson 2 · STEM Education &amp; Outreach · Grades 9–10</div>',
+  ].join('');
+
+  // Inject or update the print modal
+  var modal = document.getElementById('print-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'print-modal';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = inner;
+
+  // Show only print modal during printing
+  document.body.classList.add('printing');
+
+  // Restore page after print dialog closes
+  function cleanup() {
+    document.body.classList.remove('printing');
+    window.removeEventListener('afterprint', cleanup);
+  }
+  window.addEventListener('afterprint', cleanup);
+
+  // Open the system print dialog
+  window.print();
+}
+</script>
 </body>
 </html>
