@@ -1,1451 +1,646 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>When Controls Work — The Normal Cell Cycle · Lesson 1</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1: The Normal Cell Cycle | St. Jude STEMM</title>
 <style>
-:root{
+:root {
   --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
-  --green:#16A34A; --purple:#7C3AED; --light:#EEF5FB;
-  --gray:#64748B; --dark:#1E293B; --border:#D1E4F0; --bg:#F4F7FB;
+  --light:#EEF5FB; --border:#D1E4F0; --dark:#1E293B; --gray:#64748B; --muted:#94A3B8;
+  --green:#16A34A; --lightgreen:#DCFCE7; --lightred:#FFF0F2; --lightteal:#EBF7F8; --lightgold:#FFF8E6;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);
-  padding-top:76px; padding-bottom:100px;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: var(--dark); }
 
+/* ════ TOPBAR ════ */
+.topbar {
+  background: var(--navy); color: #fff; padding: 0 28px; display: flex; align-items: center; gap: 14px;
+  height: 54px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.topbar .badge { background: var(--teal); color: #fff; font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
+.topbar .title { font-size: 14px; font-weight: 700; flex: 1; }
+.topbar .pdf-btn {
+  background: var(--gold); color: var(--navy); border: none; padding: 7px 16px; border-radius: 4px;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;
+}
+.topbar .pdf-btn:hover { filter: brightness(0.95); }
 
-.toolbar{position:sticky;top:38px;z-index:150;background:#0D2240;padding:8px 20px;
-  display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.4);}
-.tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
-.tb-right{display:flex;gap:8px;align-items:center;}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;
-  font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .15s;
-  white-space:nowrap;font-family:inherit;}
-.btn-print{background:#C8102E;color:#fff;}.btn-print:hover{background:#A00024;}
+/* ════ MAIN ════ */
+.container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
-#translate-bar {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 99999;
-    background: rgba(26,58,92,.97);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 9px;
-    padding: 6px 10px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.32);
-    backdrop-filter: blur(8px);
-  }
-  #translate-bar .tb-label {
-    font-size: 14px;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  /* Native <select> — scrolls automatically on every OS/browser */
-  #lang-select {
-    appearance: none;
-    -webkit-appearance: none;
-    background: rgba(255,255,255,.08);
-    color: #D0E8F8;
-    border: 1px solid rgba(255,255,255,.22);
-    border-radius: 6px;
-    padding: 4px 22px 4px 8px;
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    outline: none;
-    min-width: 130px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 7px center;
-  }
-  #lang-select:focus { border-color: rgba(14,124,134,.8); }
-  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
-  /* Suppress the Google Translate top banner (it shifts page content down) */
-  .goog-te-banner-frame.skiptranslate { display: none !important; }
-  body { top: 0px !important; }
-  #google_translate_element { display: none !important; }
-/* ── Module Nav Bar ─────────────────────────────── */
-  #module-nav {
-    background: #0D2438;
-    padding: 0 16px;
-    display: flex;
-    align-items: center;
-    height: 38px;
-    gap: 0;
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    box-shadow: 0 1px 4px rgba(0,0,0,.3);
-    flex-shrink: 0;
-  }
-  .mn-home {
-    font-size: 11px; font-weight: 700; color: #7FD4D8;
-    text-decoration: none; white-space: nowrap; margin-right: 8px;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .mn-home:hover { color: #fff; }
-  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
-  .mn-lessons {
-    display: flex; gap: 2px; align-items: center;
-  }
-  .mn-lesson {
-    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
-    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
-    transition: all .12s; border: 1px solid transparent;
-  }
-  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
-  .mn-lesson.mn-active {
-    color: #fff; border-color: rgba(255,255,255,.25);
-    background: rgba(255,255,255,.12);
-  }
-  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
-  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
-  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
-  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
-  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
-              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-/* ── TTS Read-Aloud Bar ─────────────────────────────── */
-  #tts-bar {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: #1A3A5C;
-    color: #fff;
-    padding: 7px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    z-index: 9997;
-    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
-    flex-wrap: wrap;
-    min-height: 46px;
-  }
-  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
-  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
-                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
-  .tts-btn {
-    border: none; border-radius: 5px;
-    padding: 5px 12px; font-size: 12px; font-weight: 600;
-    cursor: pointer; font-family: inherit; white-space: nowrap;
-    transition: background .15s;
-  }
-  .tts-primary { background: #0E7C86; color: #fff; }
-  .tts-primary:hover { background: #0A6870; }
-  .tts-secondary {
-    background: rgba(255,255,255,.12); color: #fff;
-    padding: 5px 10px; font-size: 13px;
-  }
-  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
-  .tts-secondary:disabled { opacity: .35; cursor: default; }
-  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
-  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
-                   text-transform: uppercase; letter-spacing: .5px; }
-  .tts-speed-btn {
-    background: rgba(255,255,255,.1); color: #fff;
-    border: none; border-radius: 4px;
-    padding: 4px 8px; font-size: 11px; cursor: pointer;
-    font-family: inherit; font-weight: 500; transition: background .12s;
-  }
-  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
-  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
-  .tts-status {
-    font-size: 11px; color: #A8C8E8; margin-left: auto;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .tts-pulse {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
-  }
-  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-  /* Reading highlight */
-  .tts-reading {
-    outline: 2.5px solid #0E7C86 !important;
-    outline-offset: 4px;
-    border-radius: 6px;
-    transition: outline .2s;
-  }
+/* ════ PROGRESS BAR ════ */
+.progress-wrapper { margin-bottom: 32px; }
+.progress-label { font-size: 12px; font-weight: 600; color: var(--gray); margin-bottom: 8px; }
+.progress-bar {
+  height: 4px; background: #D1E4F0; border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--teal); transition: width 0.3s ease;
+}
 
-/* ── MODULE NAV ─── */
-#module-nav{background:#0D2438;padding:0 16px;display:flex;align-items:center;
-  height:38px;position:fixed;top:0;left:0;right:0;z-index:300;box-shadow:0 1px 4px rgba(0,0,0,.3);}
-.mn-home{font-size:11px;font-weight:700;color:#7FD4D8;text-decoration:none;
-  margin-right:8px;display:flex;align-items:center;gap:5px;}
-.mn-sep{color:rgba(255,255,255,.25);font-size:12px;margin:0 8px;}
-.mn-lessons{display:flex;gap:2px;}
-.mn-lesson{font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;
-  text-decoration:none;color:rgba(255,255,255,.5);border:1px solid transparent;}
-.mn-lesson:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.08);}
-.mn-lesson.mn-active{color:#7FD4D8;border-color:#0E7C86;background:rgba(255,255,255,.1);}
-.mn-crumb{color:rgba(255,255,255,.4);font-size:11px;margin-left:auto;}
+/* ════ PILLS ════ */
+.pills-wrapper { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.pill {
+  padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 2px solid var(--border); background: #fff; color: var(--gray); transition: 0.2s;
+}
+.pill:hover { border-color: var(--teal); color: var(--teal); }
+.pill.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+.pill.done { background: var(--lightgreen); color: var(--green); border-color: var(--green); }
 
-/* ── SLIDE SYSTEM ── */
-.slide-card{display:none;max-width:820px;margin:0 auto;padding:16px;}
-.slide-card.active{display:block;animation:fadeIn .3s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.slide-header{background:linear-gradient(135deg,var(--navy),#0E4D5A);color:#fff;
-  border-radius:10px 10px 0 0;padding:18px 22px;}
-.slide-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:#7FD4D8;margin-bottom:5px;}
-.slide-title{font-size:21px;font-weight:800;line-height:1.2;}
-.slide-sub{font-size:13px;color:rgba(255,255,255,.7);margin-top:4px;}
-.slide-body{background:#fff;border:1px solid var(--border);border-top:none;
-  border-radius:0 0 10px 10px;padding:20px 22px;}
+/* ════ SECTIONS ════ */
+.section { display: none; animation: fadeIn 0.3s; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ── NAME ROW ── */
-.name-row{display:flex;gap:10px;border:1px solid var(--border);border-radius:6px;
-  background:var(--light);padding:8px 14px;align-items:flex-end;margin-bottom:16px;}
-.nf{flex:2;}.nf-sm{flex:1;}
-.nf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.5px;color:var(--gray);margin-bottom:2px;}
-.nf input{width:100%;border:none;border-bottom:1.5px solid var(--navy);padding:2px 0;
-  font-size:13px;font-family:inherit;outline:none;background:transparent;}
+.sec-tag {
+  display: inline-block; background: var(--lightteal); color: var(--teal); padding: 4px 12px;
+  border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 12px;
+}
 
-/* ── LEARN BOX ── */
-.learn-box{background:var(--light);border-left:3px solid var(--teal);
-  border-radius:0 6px 6px 0;padding:11px 14px;margin-bottom:14px;}
-.lb-label{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1px;color:var(--teal);margin-bottom:5px;}
-.lb-item{display:flex;align-items:flex-start;gap:7px;font-size:13px;
-  line-height:1.45;margin-bottom:4px;}
-.lb-check{color:var(--teal);flex-shrink:0;}
+.sec-title {
+  font-size: 28px; font-weight: 700; color: var(--navy); margin-bottom: 16px; line-height: 1.2;
+}
 
-/* ── TWO-PANEL LAYOUT ── */
-.two-panel{display:flex;gap:18px;align-items:flex-start;}
-.panel-left{flex:0 0 auto;width:290px;}
-.panel-right{flex:1;min-width:0;}
-@media(max-width:650px){.two-panel{flex-direction:column;} .panel-left{width:100%;}}
+.sec-intro {
+  font-size: 15px; line-height: 1.6; color: var(--gray); margin-bottom: 24px;
+}
 
-/* ── YOUTUBE EMBED ── */
-.yt-block{margin:12px 0;}
-.yt-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:var(--gray);margin-bottom:5px;}
-.yt-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;
-  border-radius:8px;background:#000;box-shadow:0 2px 12px rgba(0,0,0,.2);}
-.yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-.yt-cap{font-size:11.5px;color:var(--gray);margin-top:5px;font-style:italic;}
+/* ════ CARDS ════ */
+.card {
+  background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px;
+}
+.card h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+.card p { font-size: 14px; line-height: 1.6; color: var(--gray); margin-bottom: 12px; }
+.card p:last-child { margin-bottom: 0; }
 
-/* ── SECTION LABEL ── */
-.sec-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--teal);border-bottom:1.5px solid var(--border);padding-bottom:5px;
-  margin-bottom:10px;}
+/* ════ PHASE TABLE ════ */
+.phase-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0;
+}
+.phase-table th, .phase-table td {
+  padding: 12px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.phase-table th {
+  background: var(--lightteal); color: var(--teal); font-weight: 700; font-size: 13px;
+}
+.phase-table td { font-size: 14px; color: var(--dark); }
+.phase-table tr:last-child td { border-bottom: none; }
+.phase-table strong { color: var(--navy); font-weight: 700; }
 
-/* ── BODY TEXT ── */
-p{font-size:13.5px;line-height:1.65;margin-bottom:9px;}
-p:last-child{margin-bottom:0;}
-strong{color:var(--navy);}
+/* ════ CHECKPOINT BOXES ════ */
+.checkpoint-box {
+  background: var(--lightteal); border-left: 4px solid var(--teal); padding: 16px; margin: 16px 0; border-radius: 4px;
+}
+.checkpoint-box h4 {
+  font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px;
+}
+.checkpoint-box p {
+  font-size: 14px; line-height: 1.6; color: var(--dark);
+}
 
-/* ── INFO CARD ── */
-.info-card{border-left:3px solid var(--teal);background:var(--light);
-  border-radius:0 6px 6px 0;padding:10px 14px;margin:10px 0;font-size:13px;line-height:1.5;}
-.info-card.gold{border-left-color:var(--gold);background:#FFFBEB;}
-.info-card.green{border-left-color:var(--green);background:#F0FFF4;}
-.info-card.red{border-left-color:var(--red);background:#FFF5F6;}
-.ic-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:var(--teal);margin-bottom:3px;}
-.info-card.gold .ic-label{color:#92400E;}
-.info-card.green .ic-label{color:#15803D;}
-.info-card.red .ic-label{color:var(--red);}
+/* ════ ANALOGY BOX ════ */
+.analogy-box {
+  background: var(--lightgold); border-left: 4px solid var(--gold); padding: 16px; margin: 16px 0; border-radius: 4px;
+}
+.analogy-box strong { color: var(--navy); }
 
-/* ── PHASE TABLE ── */
-.phase-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0;}
-.phase-table th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-size:11.5px;}
-.phase-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
-.phase-table tr:nth-child(even) td{background:var(--bg);}
-.ph-badge{display:inline-block;padding:2px 8px;border-radius:10px;
-  font-size:11px;font-weight:700;}
+/* ════ HIGHLIGHT ════ */
+.highlight {
+  background: var(--lightgreen); border-left: 4px solid var(--green); padding: 16px; margin: 16px 0; border-radius: 4px;
+}
+.highlight strong { color: var(--dark); }
 
-/* ── QUIZ ── */
-.quiz-block{background:var(--bg);border:1.5px solid var(--border);
-  border-radius:8px;padding:14px;margin:14px 0;}
-.quiz-label{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1px;color:var(--red);margin-bottom:6px;}
-.quiz-q{font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4;}
-.quiz-opts{display:flex;flex-direction:column;gap:5px;}
-.quiz-opt{display:flex;align-items:flex-start;gap:9px;padding:8px 11px;
-  border:1.5px solid var(--border);border-radius:6px;cursor:pointer;
-  background:#fff;font-size:13px;line-height:1.4;transition:all .12s;}
-.quiz-opt:hover{border-color:var(--navy);background:var(--light);}
-.quiz-opt.correct{background:#F0FFF4;border-color:var(--green);color:#15803D;}
-.quiz-opt.incorrect{background:#FFF0F2;border-color:var(--red);color:var(--red);}
-.quiz-opt.disabled{cursor:default;pointer-events:none;}
-.opt-letter{width:22px;height:22px;border-radius:50%;background:var(--border);
-  color:var(--navy);font-size:10.5px;font-weight:700;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;}
-.quiz-opt.correct .opt-letter{background:var(--green);color:#fff;}
-.quiz-opt.incorrect .opt-letter{background:var(--red);color:#fff;}
-.quiz-fb{font-size:12.5px;padding:9px 12px;border-radius:6px;margin-top:8px;
-  display:none;line-height:1.5;}
-.quiz-fb.show{display:block;}
-.quiz-fb.fb-ok{background:#F0FFF4;color:#15803D;border:1px solid #86EFAC;}
-.quiz-fb.fb-no{background:#FFF0F2;color:var(--red);border:1px solid #FECACA;}
+/* ════ QUIZ ════ */
+.quiz-block {
+  background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin: 16px 0;
+}
+.quiz-label {
+  font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+}
+.quiz-block p {
+  font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 16px;
+}
+.quiz-opts {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.quiz-opt {
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: 4px; background: #fff; cursor: pointer;
+  font-size: 13px; color: var(--dark); transition: 0.2s;
+}
+.quiz-opt:hover {
+  border-color: var(--teal); background: var(--lightteal);
+}
+.quiz-opt.locked {
+  cursor: not-allowed; opacity: 0.7;
+}
+.quiz-opt.correct {
+  background: var(--lightgreen); border-color: var(--green); color: var(--green); font-weight: 600;
+}
+.quiz-opt.wrong {
+  background: var(--lightred); border-color: var(--red); color: var(--red); font-weight: 600;
+}
+.quiz-feedback {
+  margin-top: 12px; padding: 12px; border-radius: 4px; font-size: 13px; font-weight: 500; display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct { background: var(--lightgreen); color: var(--green); }
+.quiz-feedback.wrong { background: var(--lightred); color: var(--red); }
 
-/* ── WHY BOX ── */
-.why-box{background:#FFFBEB;border-left:3px solid var(--gold);
-  border-radius:0 6px 6px 0;padding:11px 14px;margin:10px 0;}
-.why-label{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1px;color:#92400E;margin-bottom:3px;}
+/* ════ REFLECTION ════ */
+.reflection-block {
+  background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin: 16px 0;
+}
+.reflection-label {
+  font-size: 12px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+}
+.reflection-block p {
+  font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 12px;
+}
+.reflection-block textarea {
+  width: 100%; min-height: 100px; padding: 12px; border: 1px solid var(--border); border-radius: 4px;
+  font-family: inherit; font-size: 13px; color: var(--dark); resize: vertical;
+}
 
-/* ── PMAT ANIMATOR ── */
-.pmat-animator{background:var(--bg);border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;margin:12px 0;}
-.pmat-stage{position:relative;height:220px;}
-.pmat-frame{position:absolute;inset:0;display:flex;align-items:center;
-  justify-content:center;opacity:0;transition:opacity .5s;pointer-events:none;}
-.pmat-frame.active{opacity:1;pointer-events:auto;}
-.pmat-controls{background:#fff;border-top:1px solid var(--border);
-  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.pmat-phase-name{font-size:13px;font-weight:700;color:var(--navy);}
-.pmat-phase-sub{font-size:11.5px;color:var(--gray);margin-top:1px;}
-.pmat-btns{display:flex;gap:8px;}
-.pmat-btn{padding:6px 16px;border:none;border-radius:5px;font-size:12.5px;
-  font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;}
-.pmat-prev{background:#fff;color:var(--navy);border:1.5px solid var(--border);}
-.pmat-next{background:var(--teal);color:#fff;}
-.pmat-next:hover{background:#0A6870;}
-.pmat-dots{display:flex;gap:5px;}
-.pmat-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:.2s;}
-.pmat-dot.active{background:var(--teal);}
+/* ════ NAVIGATION ════ */
+.nav-buttons {
+  display: flex; gap: 12px; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border);
+}
+.btn {
+  padding: 12px 20px; border: none; border-radius: 4px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: 0.2s;
+}
+.btn-back {
+  background: var(--border); color: var(--navy);
+}
+.btn-back:hover { background: #D1E4F0; }
+.btn-next {
+  background: var(--teal); color: #fff; margin-left: auto;
+}
+.btn-next:hover { background: #0a5f67; }
+.btn-finish {
+  background: var(--green); color: #fff; margin-left: auto;
+}
+.btn-finish:hover { background: #15803d; }
+.btn-back:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── CHECKPOINT ANIMATION ── */
-.cp-anim-wrap{background:var(--bg);border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;}
-.cp-anim-label{background:var(--navy);color:#7FD4D8;font-size:10px;font-weight:700;
-  letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;}
+/* ════ COMPLETION ════ */
+.completion-banner {
+  background: var(--lightgreen); border: 2px solid var(--green); border-radius: 8px; padding: 24px; text-align: center; margin-top: 32px;
+}
+.completion-banner h2 {
+  font-size: 24px; font-weight: 700; color: var(--green); margin-bottom: 8px;
+}
+.completion-banner p {
+  font-size: 14px; color: var(--dark); line-height: 1.6;
+}
 
-/* ── PROTEIN CARDS ── */
-.protein-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
-@media(max-width:500px){.protein-grid{grid-template-columns:1fr;}}
-.pcard{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-.pcard-top{padding:10px 12px 8px;}
-.pcard-vis{display:flex;justify-content:center;margin:6px 0;}
-.pcard-name{font-size:14px;font-weight:700;color:var(--navy);}
-.pcard-gene{font-size:11px;color:var(--gray);margin-bottom:3px;}
-.pcard-body{font-size:12.5px;line-height:1.45;color:var(--dark);}
-.pcard-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
-  border-radius:10px;margin-top:5px;text-transform:uppercase;}
-.b-ts{background:var(--light);color:var(--navy);}
-.b-g2{background:#F0FFF4;color:#15803D;}
-.b-mc{background:#F5F3FF;color:var(--purple);}
-
-/* ── EXIT TICKET ── */
-.et-q{border:1.5px solid var(--border);border-radius:8px;padding:13px 15px;margin-bottom:11px;}
-.et-qlbl{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1px;color:var(--teal);margin-bottom:5px;}
-.et-qtext{font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:9px;line-height:1.4;}
-textarea.et-ans{width:100%;border:1.5px solid var(--border);border-radius:6px;
-  padding:9px;font-size:13px;font-family:inherit;resize:vertical;
-  min-height:75px;outline:none;line-height:1.5;}
-textarea.et-ans:focus{border-color:var(--teal);}
-
-/* ── NAV BUTTONS ── */
-.nav-row{display:flex;justify-content:space-between;align-items:center;
-  margin-top:18px;padding-top:14px;border-top:1px solid var(--border);}
-.nav-btn{padding:9px 22px;border:none;border-radius:6px;font-size:13px;
-  font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
-.nav-next{background:var(--teal);color:#fff;}
-.nav-next:hover{background:#0A6870;}
-.nav-prev{background:#fff;color:var(--navy);border:1.5px solid var(--border);}
-.nav-prev:hover{border-color:var(--navy);}
-.nav-prev:disabled{opacity:.4;cursor:default;}
-
-/* ── PROGRESS DOTS ── */
-#progress-bar{display:flex;justify-content:center;gap:7px;padding:10px 0;
-  position:fixed;bottom:52px;left:0;right:0;background:rgba(255,255,255,.95);
-  border-top:1px solid var(--border);z-index:100;}
-.pb-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:.2s;}
-.pb-dot.active{background:var(--teal);transform:scale(1.25);}
-.pb-dot.done{background:var(--navy);}
-
-/* ── PREVIEW CARD ── */
-.preview-card{background:linear-gradient(135deg,#1A0A14,#3D1520);
-  color:#fff;border-radius:8px;padding:15px 18px;margin-top:14px;}
-.pc-kicker{font-size:10px;font-weight:700;letter-spacing:1.5px;
-  text-transform:uppercase;color:#FCA5A5;margin-bottom:5px;}
-.pc-title{font-size:16px;font-weight:700;margin-bottom:5px;}
-.pc-desc{font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;}
-.pc-btn{display:inline-block;margin-top:10px;padding:8px 18px;background:var(--red);
-  color:#fff;border-radius:6px;text-decoration:none;font-size:13px;font-weight:700;}
-
-/* Suppress Google translate banner */
-.goog-te-banner-frame.skiptranslate{display:none!important;}
-body{top:0px!important;}
-#google_translate_element{display:none!important;}
-
-@media print{
-  .toolbar,#tts-bar,#translate-bar,#module-nav,#progress-bar{display:none!important;}
-  body{padding:0!important;background:#fff!important;}
+/* ════ RESPONSIVE ════ */
+@media (max-width: 600px) {
+  .topbar { padding: 0 16px; gap: 8px; }
+  .topbar .title { font-size: 12px; }
+  .pills-wrapper { flex-direction: column; }
+  .pill { width: 100%; text-align: center; }
+  .nav-buttons { flex-direction: column; }
+  .btn-next, .btn-finish { margin-left: 0; }
+  .sec-title { font-size: 22px; }
 }
 </style>
 </head>
 <body>
 
-<!-- MODULE NAV -->
-<nav id="module-nav">
-  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
-  <span class="mn-sep">›</span>
-  <div class="mn-lessons">
-    <a href="module.html#lesson-1" class="mn-lesson mn-active mn-l1">L1</a>
-    <a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a>
-    <a href="module.html#lesson-3" class="mn-lesson mn-l3">L3</a>
-    <a href="module.html#lesson-4" class="mn-lesson mn-l4">L4</a>
-  </div>
-  <span class="mn-crumb">Lesson 1 · Digital Lesson</span>
-</nav>
-
-<!-- TOOLBAR -->
-<div class="toolbar" style="top:38px;">
-  <div class="tb-left">🖥 When Controls Work — The Normal Cell Cycle · Lesson 1</div>
-  <div class="tb-right">
-    <button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
-  </div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="badge">LESSON 1</span>
+  <div class="title">The Normal Cell Cycle</div>
+  <button class="pdf-btn" onclick="downloadPDF()">⬇ Download My Answers</button>
 </div>
 
-<!-- ══ SLIDE 0: TITLE ══ -->
-<div class="slide-card active" id="slide-0">
-  <div class="slide-header">
-    <div class="slide-tag">Lesson 1 of 4 · Online Module</div>
-    <div class="slide-title">When Controls Work</div>
-    <div class="slide-sub">The Normal Cell Cycle · STEM Education &amp; Outreach</div>
-  </div>
-  <div class="slide-body">
-    <div class="name-row">
-      <div class="nf"><label>Full Name</label><input id="student-name" type="text" placeholder="First Last"/></div>
-      <div class="nf-sm"><label>Period</label><input id="student-period" type="text" placeholder="Period 3"/></div>
-      <div class="nf-sm"><label>Date</label><input id="student-date" type="text" placeholder="Today"/></div>
-    </div>
-    <div class="learn-box">
-      <div class="lb-label">What You Will Learn in This Module</div>
-      <div class="lb-item"><span class="lb-check">›</span>Name and describe the four phases of the cell cycle (G1, S, G2, M)</div>
-      <div class="lb-item"><span class="lb-check">›</span>Explain mitosis step-by-step: Prophase → Metaphase → Anaphase → Telophase</div>
-      <div class="lb-item"><span class="lb-check">›</span>Identify the three checkpoints and what each one verifies</div>
-      <div class="lb-item"><span class="lb-check">›</span>Name the key checkpoint proteins and explain what happens if they stop working</div>
-    </div>
-    <div class="info-card">
-      <div class="ic-label">Before You Start</div>
-      Complete this module before your next class. Your answers to the exit ticket go directly to your teacher. The card sort in class uses exactly this vocabulary — so take the comprehension checks seriously.
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn nav-prev" disabled>← Back</button>
-      <button class="nav-btn nav-next" onclick="goToSlide(1)">Section 1: The Cell Cycle →</button>
-    </div>
-  </div>
-</div>
+<!-- CONTAINER -->
+<div class="container">
 
-<!-- ══ SLIDE 1: THE FOUR PHASES ══ -->
-<div class="slide-card" id="slide-1">
-  <div class="slide-header">
-    <div class="slide-tag">Section 1 of 4 · The Normal Cell Cycle</div>
-    <div class="slide-title">The Four Phases</div>
-    <div class="slide-sub">What the cell does in the ~24 hours before it divides</div>
+  <!-- PROGRESS -->
+  <div class="progress-wrapper">
+    <div class="progress-label">PROGRESS</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progFill" style="width: 20%;"></div>
+    </div>
   </div>
-  <div class="slide-body">
-    <div class="two-panel">
-      <!-- SVG PANEL: Animated cell cycle -->
-      <div class="panel-left">
-        <div class="sec-lbl">Live Cell Cycle</div>
-        <svg id="s1-svg" viewBox="0 0 290 310" width="290" height="310" xmlns="http://www.w3.org/2000/svg">
-          <!-- Phase arcs (center 145,145 r=108) -->
-          <path id="s1-arc-g1" d="M145,37 A108,108 0 0,1 253,145" fill="none" stroke="#1A3A5C" stroke-width="36" stroke-linecap="butt" stroke-opacity="0.5"/>
-          <path id="s1-arc-s"  d="M253,145 A108,108 0 0,1 145,253" fill="none" stroke="#0E7C86" stroke-width="36" stroke-linecap="butt" stroke-opacity="0.5"/>
-          <path id="s1-arc-g2" d="M145,253 A108,108 0 0,1 37,145"  fill="none" stroke="#F0A500" stroke-width="36" stroke-linecap="butt" stroke-opacity="0.5"/>
-          <path id="s1-arc-m"  d="M37,145 A108,108 0 0,1 145,37"   fill="none" stroke="#C8102E" stroke-width="36" stroke-linecap="butt" stroke-opacity="0.5"/>
-          <!-- Divider lines -->
-          <line x1="145" y1="145" x2="145" y2="37"  stroke="white" stroke-width="2"/>
-          <line x1="145" y1="145" x2="253" y2="145" stroke="white" stroke-width="2"/>
-          <line x1="145" y1="145" x2="145" y2="253" stroke="white" stroke-width="2"/>
-          <line x1="145" y1="145" x2="37"  y2="145" stroke="white" stroke-width="2"/>
-          <!-- Phase text labels -->
-          <text x="205" y="102" fill="white" font-size="15" font-weight="800" font-family="Arial" text-anchor="middle">G1</text>
-          <text x="205" y="195" fill="white" font-size="15" font-weight="800" font-family="Arial" text-anchor="middle">S</text>
-          <text x="82"  y="195" fill="white" font-size="15" font-weight="800" font-family="Arial" text-anchor="middle">G2</text>
-          <text x="82"  y="102" fill="white" font-size="15" font-weight="800" font-family="Arial" text-anchor="middle">M</text>
-          <!-- Inner cell display area -->
-          <circle cx="145" cy="145" r="68" fill="#F8FBFF" stroke="#D1E4F0" stroke-width="2"/>
-          <!-- G1 interior: growing cell visual -->
-          <g id="s1-cell-g1" opacity="0">
-            <circle cx="145" cy="140" r="28" fill="#E8F4FC" stroke="#1A3A5C" stroke-width="2"/>
-            <circle cx="145" cy="140" r="13" fill="#1A3A5C" opacity="0.25"/>
-            <text x="145" y="172" text-anchor="middle" fill="#1A3A5C" font-size="9" font-weight="700" font-family="Arial">GROWING</text>
-          </g>
-          <!-- S interior: DNA strands doubling -->
-          <g id="s1-cell-s" opacity="0">
-            <circle cx="145" cy="140" r="28" fill="#E8F4FC" stroke="#0E7C86" stroke-width="2"/>
-            <line x1="134" y1="132" x2="134" y2="152" stroke="#1A3A5C" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="139" y1="128" x2="139" y2="155" stroke="#0E7C86" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="144" y1="130" x2="144" y2="153" stroke="#1A3A5C" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="149" y1="132" x2="149" y2="155" stroke="#0E7C86" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="154" y1="128" x2="154" y2="152" stroke="#1A3A5C" stroke-width="2.5" stroke-linecap="round"/>
-            <text x="145" y="172" text-anchor="middle" fill="#0E7C86" font-size="9" font-weight="700" font-family="Arial">DNA COPYING</text>
-          </g>
-          <!-- G2 interior: two nuclei forming -->
-          <g id="s1-cell-g2" opacity="0">
-            <circle cx="145" cy="140" r="30" fill="#E8F4FC" stroke="#F0A500" stroke-width="2"/>
-            <ellipse cx="137" cy="137" rx="9" ry="9" fill="#F0A500" opacity="0.35" stroke="#F0A500" stroke-width="1.5"/>
-            <ellipse cx="155" cy="145" rx="9" ry="9" fill="#F0A500" opacity="0.35" stroke="#F0A500" stroke-width="1.5"/>
-            <text x="145" y="174" text-anchor="middle" fill="#92400E" font-size="9" font-weight="700" font-family="Arial">CHECKING</text>
-          </g>
-          <!-- M interior: chromosomes dividing -->
-          <g id="s1-cell-m" opacity="0">
-            <circle cx="145" cy="140" r="30" fill="#FFF0F2" stroke="#C8102E" stroke-width="2"/>
-            <!-- Simple chromosome shapes -->
-            <line x1="136" y1="130" x2="142" y2="145" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
-            <line x1="130" y1="138" x2="145" y2="132" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
-            <line x1="154" y1="130" x2="148" y2="145" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
-            <line x1="148" y1="130" x2="162" y2="136" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
-            <text x="145" y="175" text-anchor="middle" fill="#C8102E" font-size="9" font-weight="700" font-family="Arial">DIVIDING</text>
-          </g>
-          <!-- Clock hand needle -->
-          <line id="s1-needle" x1="145" y1="145" x2="253" y2="145"
-                stroke="#1A3A5C" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-          <circle cx="145" cy="145" r="4" id="s1-pivot" fill="#1A3A5C"/>
-          <!-- Outer indicator dot (always on white bg outside arc) -->
-          <circle id="s1-dot" cx="253" cy="145" r="7" fill="white" stroke="#1A3A5C" stroke-width="3"/>
-          <!-- Phase label below -->
-          <text id="s1-phase-lbl" x="145" y="285" text-anchor="middle" fill="#1A3A5C" font-size="13" font-weight="800" font-family="Arial">G1 Phase</text>
-          <text id="s1-phase-sub" x="145" y="300" text-anchor="middle" fill="#64748B" font-size="10" font-family="Arial">Cell Growth · ~11 hrs</text>
-        </svg>
-      </div>
-      <!-- TEXT + VIDEO PANEL -->
-      <div class="panel-right">
-        <div class="sec-lbl">Overview</div>
-        <p>Every cell follows the same regulated sequence before dividing. This <strong>cell cycle</strong> ensures each daughter cell gets a complete, undamaged copy of the genome. Watch the cycle below — the animation on the left shows what's happening inside the cell at each phase.</p>
-        <table class="phase-table">
-          <tr><th>Phase</th><th>What Happens</th><th>Time</th></tr>
-          <tr><td><span class="ph-badge" style="background:#EEF5FB;color:var(--navy);">G1</span></td>
-              <td>Cell grows · checks nutrients · gets growth signals</td><td>~11 hrs</td></tr>
-          <tr><td><span class="ph-badge" style="background:#EEF9FA;color:var(--teal);">S</span></td>
-              <td>DNA replicated exactly once · sister chromatids form</td><td>~8 hrs</td></tr>
-          <tr><td><span class="ph-badge" style="background:#FFFBEB;color:#92400E;">G2</span></td>
-              <td>Verifies replication · preps division proteins</td><td>~4 hrs</td></tr>
-          <tr><td><span class="ph-badge" style="background:#FFF0F2;color:var(--red);">M</span></td>
-              <td>Nucleus divides (mitosis) · cytoplasm splits</td><td>~1 hr</td></tr>
-        </table>
-        <div class="yt-block">
-  <div class="yt-label">▶ Watch — Cell Cycle Overview</div>
-  <div class="yt-wrap">
-    <iframe src="https://www.youtube-nocookie.com/embed/skPOXcVvS5c?rel=0&modestbranding=1"
-      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
+
+  <!-- PILLS -->
+  <div class="pills-wrapper">
+    <div class="pill active" id="pill-0" onclick="goTo(0)">1. Why It Matters</div>
+    <div class="pill" id="pill-1" onclick="goTo(1)">2. The Phases</div>
+    <div class="pill" id="pill-2" onclick="goTo(2)">3. The Checkpoints</div>
+    <div class="pill" id="pill-3" onclick="goTo(3)">4. Regulatory Proteins</div>
+    <div class="pill" id="pill-4" onclick="goTo(4)">5. Cancer & Beyond</div>
   </div>
-  <p class="yt-cap">Crash Course Biology #29 · HHMI BioInteractive · NGSS-aligned (2024)</p>
-</div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SECTION 1: WHY CELL DIVISION MATTERS
+  ════════════════════════════════════════════════════════════ -->
+  <div class="section active" id="sec-0">
+    <span class="sec-tag">Section 1 of 5</span>
+    <h1 class="sec-title">Why Cell Division Matters</h1>
+    <p class="sec-intro">Before you can understand how the cell cycle works, it helps to know why cells need to divide and what could go wrong if they don't follow the rules.</p>
+
+    <div class="card">
+      <h3>The Big Picture</h3>
+      <p>Your body has about <strong>37 trillion cells</strong>. Every day, many of them die and need to be replaced. Others grow and split to help you get bigger or stronger. For this to work safely, cells must follow a very precise sequence:</p>
+      <ol style="margin-left: 20px; line-height: 1.8; font-size: 14px; color: var(--gray);">
+        <li>Make a complete copy of all their DNA</li>
+        <li>Check that the copy is accurate</li>
+        <li>Check that everything is ready</li>
+        <li>Divide into two daughter cells</li>
+      </ol>
+      <p style="margin-top: 12px;"><strong>Even one mistake at any step can be catastrophic.</strong> If a cell copies its DNA incorrectly and doesn't catch the error, that mistake gets passed to both daughter cells. Over time, mistakes can accumulate — and this is how cancer begins.</p>
+    </div>
+
+    <div class="card">
+      <h3>A Quality Control Story</h3>
+      <p>Imagine a factory that makes smartphones. At each step of the assembly line, inspectors check the work. If something's wrong, they pause production, fix it, or scrap the phone entirely — never letting a defective product move forward.</p>
+      <p><strong>Your cells work the same way.</strong> The cell cycle is like an assembly line, with quality control checkpoints at critical moments. If something looks wrong, the cell can pause, fix it, self-destruct, or notify your immune system to clean up the mess.</p>
+      <div class="analogy-box">
+        <strong>🏭 The Factory Analogy:</strong> Just as a factory needs quality control to avoid shipping broken phones, your cells need checkpoints to avoid creating damaged cells that could become cancerous.
       </div>
     </div>
-    <!-- QUIZ -->
+
+    <div class="card">
+      <h3>Why This Lesson Matters</h3>
+      <p>In this lesson, you'll learn:</p>
+      <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+        <li>What happens during each <strong>phase</strong> of the cell cycle</li>
+        <li>What <strong>checkpoints</strong> do and why we have three of them</li>
+        <li>What <strong>regulatory proteins</strong> are and why cells need them</li>
+        <li>Why <strong>multiple failures</strong> are needed for cancer to develop</li>
+      </ul>
+    </div>
+
+    <div class="quiz-block">
+      <div class="quiz-label">Think About It</div>
+      <p>Without checkpoints, what do you think could happen to cells with DNA damage?</p>
+      <textarea id="reflect-0" placeholder="Type your thoughts..." onchange="saveResponse('reflect-0')"></textarea>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" disabled>← Back</button>
+      <button class="btn btn-next" onclick="goTo(1)">Next → Section 2</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SECTION 2: THE FOUR PHASES
+  ════════════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-1">
+    <span class="sec-tag">Section 2 of 5</span>
+    <h1 class="sec-title">The Four Phases of the Cell Cycle</h1>
+    <p class="sec-intro">The cell cycle is divided into distinct phases, each with its own purpose. Think of them as steps in a recipe that the cell must follow in order.</p>
+
+    <div class="card">
+      <h3>A Cell's Journey Through the Cycle</h3>
+      <p>We'll follow a single cell as it moves through four phases:</p>
+      <table class="phase-table">
+        <tr>
+          <th>Phase</th>
+          <th>What's Happening</th>
+          <th>Why It Matters</th>
+        </tr>
+        <tr>
+          <td><strong>G1 Phase</strong><br><em>(Gap 1)</em></td>
+          <td>The cell <strong>grows</strong> and makes proteins. It increases in size and prepares for the next phase.</td>
+          <td>If the cell isn't big enough, it can't split evenly. Each daughter cell needs enough material to survive.</td>
+        </tr>
+        <tr>
+          <td><strong>S Phase</strong><br><em>(Synthesis)</em></td>
+          <td>The cell <strong>copies all its DNA</strong>. It duplicates every chromosome, creating an exact copy of its genetic material.</td>
+          <td>This is the most crucial phase! Each daughter cell MUST have a complete copy of DNA or it will die.</td>
+        </tr>
+        <tr>
+          <td><strong>G2 Phase</strong><br><em>(Gap 2)</em></td>
+          <td>The cell <strong>prepares for division</strong>. It continues to grow, organizes its DNA, and builds proteins needed for mitosis.</td>
+          <td>The cell double-checks that DNA was copied correctly and gathers everything needed to divide.</td>
+        </tr>
+        <tr>
+          <td><strong>M Phase</strong><br><em>(Mitosis)</em></td>
+          <td>The cell <strong>divides</strong>. Chromosomes line up, spindle fibers pull them apart, and the cell splits into two daughter cells.</td>
+          <td>This is the final, visible step. Two daughter cells are created from one parent cell.</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>A Common Misconception</h3>
+      <p>Many students think "S phase" is boring because it's called a "Gap" phase. But <strong>S phase is actually the busiest part of the cell cycle!</strong></p>
+      <p>During S phase, the cell is copying <strong>3 billion base pairs of DNA</strong> with nearly perfect accuracy. That's an incredible feat of biochemistry happening inside the nucleus right now in trillions of your cells.</p>
+      <div class="highlight">
+        <strong>✓ Correcting the Misconception:</strong> The name "Gap" refers to the period between S phase and the start of mitosis. But G1 and G2 are far from "resting" — they are active preparation phases.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Special Case: G0 Phase</h3>
+      <p>Not all cells divide regularly. Some cells, like neurons (nerve cells) and heart muscle cells, exit the cell cycle and enter a state called <strong>G0 (Gap 0)</strong> — a permanent or long-term pause.</p>
+      <p>In G0, cells don't divide. Instead, they focus entirely on their job: nerve cells send signals, heart cells pump blood, skin cells protect you. <strong>This is normal and healthy.</strong> Your body doesn't need these cells to divide constantly.</p>
+    </div>
+
     <div class="quiz-block">
       <div class="quiz-label">Check Your Understanding</div>
-      <div class="quiz-q">A cell spends the most time in which phase, and what is it doing?</div>
-      <div class="quiz-opts" id="q0-opts">
-        <div class="quiz-opt" onclick="answerQ('q0',0,false)"><span class="opt-letter">A</span>M phase — actively dividing</div>
-        <div class="quiz-opt" onclick="answerQ('q0',1,false)"><span class="opt-letter">B</span>S phase — DNA replication takes longest</div>
-        <div class="quiz-opt" onclick="answerQ('q0',2,true)"><span class="opt-letter">C</span>G1 phase — growing, checking nutrient levels, preparing for S phase</div>
-        <div class="quiz-opt" onclick="answerQ('q0',3,false)"><span class="opt-letter">D</span>G2 phase — double-checking replication</div>
-      </div>
-      <div class="quiz-fb fb-ok" id="q0-fb-correct">✓ Correct. G1 accounts for roughly half the cycle (~11 of 24 hours). The cell must satisfy multiple conditions before it earns the right to copy its DNA.</div>
-      <div class="quiz-fb fb-no" id="q0-fb-incorrect">Not quite. G1 is the longest phase at ~11 hours. M phase (mitosis) is the shortest — the cell spends far more time preparing to divide than actually dividing.</div>
+      <p>Why do you think the cell needs to grow during G1 and G2, not just copy DNA and divide immediately?</p>
+      <textarea id="reflect-1" placeholder="Type your thoughts..." onchange="saveResponse('reflect-1')"></textarea>
     </div>
-    <div class="nav-row">
-      <button class="nav-btn nav-prev" onclick="goToSlide(0)">← Back</button>
-      <button class="nav-btn nav-next" onclick="goToSlide(2)">Section 2: Mitosis →</button>
-    </div>
-  </div>
-</div>
 
-<!-- ══ SLIDE 2: MITOSIS PMAT ══ -->
-<div class="slide-card" id="slide-2">
-  <div class="slide-header">
-    <div class="slide-tag">Section 2 of 4 · The Normal Cell Cycle</div>
-    <div class="slide-title">Mitosis — The M Phase Up Close</div>
-    <div class="slide-sub">Four steps that turn one nucleus into two identical copies</div>
-  </div>
-  <div class="slide-body">
-    <div class="learn-box">
-      <div class="lb-label">What You Will Learn</div>
-      <div class="lb-item"><span class="lb-check">›</span>Name and describe Prophase, Metaphase, Anaphase, Telophase — and why the order matters</div>
-      <div class="lb-item"><span class="lb-check">›</span>Explain the role of spindle fibers and why chromosome alignment at metaphase is critical</div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goTo(0)">← Back</button>
+      <button class="btn btn-next" onclick="goTo(2)">Next → Section 3</button>
     </div>
-    <!-- PMAT STEP ANIMATOR -->
-    <div class="sec-lbl">Step-Through Animation — Click Next to Advance</div>
-    <div class="pmat-animator">
-      <div class="pmat-stage" id="pmat-stage">
-        <!-- Frame 0: Prophase -->
-        <div class="pmat-frame active" id="pf-0">
-          <svg viewBox="0 0 420 200" width="420" height="200" xmlns="http://www.w3.org/2000/svg">
-            <!-- Cell membrane -->
-            <ellipse cx="210" cy="100" rx="130" ry="88" fill="#FFF5F6" stroke="#C8102E" stroke-width="2.5"/>
-            <!-- Nuclear envelope dissolving -->
-            <ellipse cx="210" cy="100" rx="72" ry="58" fill="none" stroke="#1A3A5C" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
-            <!-- Condensing chromosomes (4 pairs) -->
-            <g stroke="#1A3A5C" stroke-width="5" stroke-linecap="round">
-              <line x1="190" y1="85" x2="200" y2="100"/><line x1="200" y1="85" x2="190" y2="100"/>
-              <line x1="215" y1="85" x2="225" y2="100"/><line x1="225" y1="85" x2="215" y2="100"/>
-              <line x1="190" y1="105" x2="200" y2="120"/><line x1="200" y1="105" x2="190" y2="120"/>
-              <line x1="215" y1="105" x2="225" y2="120"/><line x1="225" y1="105" x2="215" y2="120"/>
-            </g>
-            <!-- Centrosomes forming -->
-            <circle cx="120" cy="100" r="7" fill="#7C3AED" opacity="0.7"/>
-            <circle cx="300" cy="100" r="7" fill="#7C3AED" opacity="0.7"/>
-            <text x="210" y="185" text-anchor="middle" fill="#C8102E" font-size="13" font-weight="800" font-family="Arial">① PROPHASE</text>
-            <text x="210" y="197" text-anchor="middle" fill="#64748B" font-size="10" font-family="Arial">Chromosomes condense · nuclear envelope breaks down · spindle starts forming</text>
-          </svg>
-        </div>
-        <!-- Frame 1: Metaphase -->
-        <div class="pmat-frame" id="pf-1">
-          <svg viewBox="0 0 420 200" width="420" height="200" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="210" cy="100" rx="130" ry="88" fill="#EEF5FB" stroke="#1A3A5C" stroke-width="2.5"/>
-            <!-- Metaphase plate line -->
-            <line x1="210" y1="30" x2="210" y2="170" stroke="#0E7C86" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
-            <text x="228" y="44" fill="#0E7C86" font-size="9" font-family="Arial">Metaphase plate</text>
-            <!-- Centrosomes at poles -->
-            <circle cx="98" cy="100" r="8" fill="#7C3AED" opacity="0.8"/>
-            <circle cx="322" cy="100" r="8" fill="#7C3AED" opacity="0.8"/>
-            <!-- Spindle fibers -->
-            <g stroke="#64748B" stroke-width="1.2" opacity="0.7">
-              <line x1="106" y1="100" x2="207" y2="78"/><line x1="314" y1="100" x2="213" y2="78"/>
-              <line x1="106" y1="100" x2="207" y2="93"/><line x1="314" y1="100" x2="213" y2="93"/>
-              <line x1="106" y1="100" x2="207" y2="108"/><line x1="314" y1="100" x2="213" y2="108"/>
-              <line x1="106" y1="100" x2="207" y2="122"/><line x1="314" y1="100" x2="213" y2="122"/>
-            </g>
-            <!-- Chromosomes lined up at plate -->
-            <g stroke="#1A3A5C" stroke-width="5" stroke-linecap="round">
-              <line x1="203" y1="73" x2="213" y2="83"/><line x1="213" y1="73" x2="203" y2="83"/>
-              <line x1="203" y1="88" x2="213" y2="98"/><line x1="213" y1="88" x2="203" y2="98"/>
-              <line x1="203" y1="103" x2="213" y2="113"/><line x1="213" y1="103" x2="203" y2="113"/>
-              <line x1="203" y1="118" x2="213" y2="128"/><line x1="213" y1="118" x2="203" y2="128"/>
-            </g>
-            <!-- MAD2 checkpoint marker -->
-            <rect x="88" y="115" width="42" height="16" rx="4" fill="#16A34A" opacity="0.85"/>
-            <text x="109" y="127" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Arial">MAD2 ✓</text>
-            <text x="210" y="185" text-anchor="middle" fill="#1A3A5C" font-size="13" font-weight="800" font-family="Arial">② METAPHASE</text>
-            <text x="210" y="197" text-anchor="middle" fill="#64748B" font-size="10" font-family="Arial">Chromosomes align at center · spindle fibers attach · MAD2 checkpoint verifies</text>
-          </svg>
-        </div>
-        <!-- Frame 2: Anaphase -->
-        <div class="pmat-frame" id="pf-2">
-          <svg viewBox="0 0 420 210" width="420" height="210" xmlns="http://www.w3.org/2000/svg">
-            <!-- Elongating cell -->
-            <ellipse cx="210" cy="105" rx="155" ry="78" fill="#FFF8F0" stroke="#F0A500" stroke-width="2.5"/>
-            <!-- Centrosomes at far poles -->
-            <circle cx="72" cy="105" r="8" fill="#7C3AED" opacity="0.8"/>
-            <circle cx="348" cy="105" r="8" fill="#7C3AED" opacity="0.8"/>
-            <!-- Chromosomes moving to poles (V shapes = separated chromatids) -->
-            <g fill="#1A3A5C">
-              <!-- Left pole group -->
-              <path d="M110,90 L120,105 L130,90" stroke="#1A3A5C" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M110,105 L120,120 L130,105" stroke="#1A3A5C" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- Right pole group -->
-              <path d="M290,90 L300,105 L310,90" stroke="#1A3A5C" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M290,105 L300,120 L310,105" stroke="#1A3A5C" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            </g>
-            <!-- Movement arrows -->
-            <path d="M157,100 L180,100" stroke="#F0A500" stroke-width="2" marker-end="url(#arr-l)" fill="none" opacity="0.6"/>
-            <path d="M263,100 L240,100" stroke="#F0A500" stroke-width="2" marker-end="url(#arr-r)" fill="none" opacity="0.6"/>
-            <defs>
-              <marker id="arr-l" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
-                <path d="M0,0 L6,3 L0,6 Z" fill="#F0A500"/>
-              </marker>
-              <marker id="arr-r" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto">
-                <path d="M6,0 L0,3 L6,6 Z" fill="#F0A500"/>
-              </marker>
-            </defs>
-            <text x="210" y="190" text-anchor="middle" fill="#92400E" font-size="13" font-weight="800" font-family="Arial">③ ANAPHASE</text>
-            <text x="210" y="202" text-anchor="middle" fill="#64748B" font-size="10" font-family="Arial">Sister chromatids pulled apart · one copy moves to each pole · cell elongates</text>
-          </svg>
-        </div>
-        <!-- Frame 3: Telophase -->
-        <div class="pmat-frame" id="pf-3">
-          <svg viewBox="0 0 420 210" width="420" height="210" xmlns="http://www.w3.org/2000/svg">
-            <!-- Two forming daughter cells -->
-            <ellipse cx="142" cy="105" rx="100" ry="75" fill="#F0FFF4" stroke="#16A34A" stroke-width="2.5"/>
-            <ellipse cx="278" cy="105" rx="100" ry="75" fill="#F0FFF4" stroke="#16A34A" stroke-width="2.5"/>
-            <!-- Cleavage furrow -->
-            <path d="M210,40 Q185,105 210,170" stroke="#16A34A" stroke-width="2.5" fill="none" stroke-dasharray="4,3"/>
-            <!-- Nuclear envelopes reforming -->
-            <ellipse cx="142" cy="100" rx="45" ry="38" fill="none" stroke="#1A3A5C" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
-            <ellipse cx="278" cy="100" rx="45" ry="38" fill="none" stroke="#1A3A5C" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
-            <!-- Decondensing chromosomes (fuzzy blobs) -->
-            <ellipse cx="142" cy="100" rx="22" ry="20" fill="#1A3A5C" opacity="0.12"/>
-            <ellipse cx="278" cy="100" rx="22" ry="20" fill="#1A3A5C" opacity="0.12"/>
-            <!-- DNA = labels -->
-            <text x="142" y="104" text-anchor="middle" fill="#1A3A5C" font-size="10" font-weight="700" font-family="Arial">DNA</text>
-            <text x="278" y="104" text-anchor="middle" fill="#1A3A5C" font-size="10" font-weight="700" font-family="Arial">DNA</text>
-            <text x="210" y="190" text-anchor="middle" fill="#15803D" font-size="13" font-weight="800" font-family="Arial">④ TELOPHASE + CYTOKINESIS</text>
-            <text x="210" y="202" text-anchor="middle" fill="#64748B" font-size="10" font-family="Arial">Two nuclei reform · chromosomes decondense · cytoplasm splits into 2 identical cells</text>
-          </svg>
-        </div>
-      </div>
-      <div class="pmat-controls">
-        <div>
-          <div class="pmat-phase-name" id="pmat-name">① Prophase</div>
-          <div class="pmat-phase-sub" id="pmat-sub">Chromosomes condense · nuclear envelope breaks down</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div class="pmat-dots">
-            <div class="pmat-dot active" id="pdot-0"></div>
-            <div class="pmat-dot" id="pdot-1"></div>
-            <div class="pmat-dot" id="pdot-2"></div>
-            <div class="pmat-dot" id="pdot-3"></div>
-          </div>
-          <div class="pmat-btns">
-            <button class="pmat-btn pmat-prev" id="pmat-prev" onclick="pmatNav(-1)" disabled>← Back</button>
-            <button class="pmat-btn pmat-next" id="pmat-next" onclick="pmatNav(1)">Next →</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- VIDEO -->
-    <div class="yt-block">
-  <div class="yt-label">▶ Watch — Real Mitosis: Microscopy + Animation</div>
-  <div class="yt-wrap">
-    <iframe src="https://www.youtube-nocookie.com/embed/nlMVeW594F4?rel=0&modestbranding=1"
-      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
   </div>
-  <p class="yt-cap">Real microscopy + animation overlay by Jeremy Pickett-Heaps & Drew Berry · Wehi.tv</p>
-</div>
-    <!-- QUIZ -->
+
+  <!-- ════════════════════════════════════════════════════════════
+       SECTION 3: THE THREE CHECKPOINTS
+  ════════════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-2">
+    <span class="sec-tag">Section 3 of 5</span>
+    <h1 class="sec-title">The Three Quality Control Checkpoints</h1>
+    <p class="sec-intro">The cell doesn't just blindly progress through the phases. At three critical moments, it stops to ask: "Is everything OK to proceed?"</p>
+
+    <div class="card">
+      <h3>What Is a Checkpoint?</h3>
+      <p>A checkpoint is a <strong>quality control point</strong> in the cell cycle. Think of it like a border crossing where an inspector asks "Are you allowed to pass?"</p>
+      <p>If the answer is <strong>YES</strong>: The cell continues to the next phase.</p>
+      <p>If the answer is <strong>NO</strong>: The cell can either:</p>
+      <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+        <li><strong>Pause and fix the problem</strong> (if it's fixable)</li>
+        <li><strong>Self-destruct</strong> (if the damage is unfixable) — this is called <strong>apoptosis</strong></li>
+      </ul>
+    </div>
+
+    <div class="checkpoint-box">
+      <h4>🔵 Checkpoint 1: G1/S Checkpoint (The First Gate)</h4>
+      <p><strong>When does it happen?</strong> End of G1, before the cell enters S phase and copies its DNA.</p>
+      <p><strong>What does it ask?</strong></p>
+      <ul style="margin-left: 20px; margin-top: 8px; font-size: 14px; line-height: 1.6;">
+        <li>Is the cell large enough?</li>
+        <li>Is the DNA damage-free?</li>
+        <li>Are nutrients and growth factors available?</li>
+      </ul>
+      <p style="margin-top: 10px;"><strong>Why does it matter?</strong> If the cell copies damaged DNA, the damage gets passed to both daughter cells. This is a critical moment to catch problems.</p>
+    </div>
+
+    <div class="checkpoint-box">
+      <h4>🟢 Checkpoint 2: G2/M Checkpoint (The Second Gate)</h4>
+      <p><strong>When does it happen?</strong> End of G2, before the cell enters mitosis (M phase).</p>
+      <p><strong>What does it ask?</strong></p>
+      <ul style="margin-left: 20px; margin-top: 8px; font-size: 14px; line-height: 1.6;">
+        <li>Was all the DNA replicated accurately?</li>
+        <li>Is the cell large enough to divide?</li>
+        <li>Are mitotic proteins ready?</li>
+      </ul>
+      <p style="margin-top: 10px;"><strong>Why does it matter?</strong> This is the last chance to catch DNA damage before the cell actually divides.</p>
+    </div>
+
+    <div class="checkpoint-box">
+      <h4>🔴 Checkpoint 3: Spindle Assembly Checkpoint (The Final Gate)</h4>
+      <p><strong>When does it happen?</strong> During metaphase, while the cell is dividing.</p>
+      <p><strong>What does it ask?</strong></p>
+      <ul style="margin-left: 20px; margin-top: 8px; font-size: 14px; line-height: 1.6;">
+        <li>Is every single chromosome properly attached to spindle fibers?</li>
+        <li>Are the spindle fibers pulling from both poles?</li>
+      </ul>
+      <p style="margin-top: 10px;"><strong>Why does it matter?</strong> If a chromosome isn't attached properly and gets pulled apart incorrectly, the daughter cells will have the wrong number of chromosomes — a condition called <strong>aneuploidy</strong>. This is often lethal to the cell and a major cause of cancer.</p>
+      <p style="margin-top: 10px;"><strong>🎯 This is your last chance to prevent disaster.</strong> If this checkpoint fails, the damage is done and can't be easily fixed.</p>
+    </div>
+
+    <div class="card">
+      <h3>The Domino Effect of Checkpoint Failure</h3>
+      <p>One checkpoint failure usually doesn't cause cancer. Why? Because the cell often has other ways to fix problems:</p>
+      <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+        <li>The immune system detects something is wrong and destroys the cell</li>
+        <li>Another checkpoint catches the problem later</li>
+        <li>The cell self-destructs before it can divide</li>
+      </ul>
+      <p style="margin-top: 12px;"><strong>But when MULTIPLE checkpoints fail...</strong> then damaged cells start dividing. With each division, more damage accumulates. Over time and many cell divisions, this can lead to cancer.</p>
+    </div>
+
     <div class="quiz-block">
       <div class="quiz-label">Check Your Understanding</div>
-      <div class="quiz-q">During which mitosis step does the Spindle Assembly Checkpoint operate — and what happens if a chromosome is unattached?</div>
-      <div class="quiz-opts" id="q1-opts">
-        <div class="quiz-opt" onclick="answerQ('q1',0,false)"><span class="opt-letter">A</span>Prophase — detects whether chromosomes have condensed correctly</div>
-        <div class="quiz-opt" onclick="answerQ('q1',1,true)"><span class="opt-letter">B</span>Metaphase — if any chromosome is unattached, MAD2 blocks anaphase until all are secured</div>
-        <div class="quiz-opt" onclick="answerQ('q1',2,false)"><span class="opt-letter">C</span>Anaphase — the cell proceeds anyway and one daughter gets an extra chromosome</div>
-        <div class="quiz-opt" onclick="answerQ('q1',3,false)"><span class="opt-letter">D</span>Telophase — verifies each nucleus received the correct chromosome count</div>
-      </div>
-      <div class="quiz-fb fb-ok" id="q1-fb-correct">✓ Correct. The Spindle Assembly Checkpoint operates during metaphase, after chromosomes align but before anaphase. MAD2 generates a "wait" signal until every chromosome is attached at both kinetochores.</div>
-      <div class="quiz-fb fb-no" id="q1-fb-incorrect">The Spindle Assembly Checkpoint operates during <em>metaphase</em>. MAD2 monitors chromosome attachment and blocks anaphase until all chromosomes are secured — preventing daughter cells from receiving the wrong chromosome count.</div>
+      <p>Why do you think the Spindle Assembly Checkpoint is the "last chance" to prevent a disaster?</p>
+      <textarea id="reflect-2" placeholder="Type your thoughts..." onchange="saveResponse('reflect-2')"></textarea>
     </div>
-    <div class="nav-row">
-      <button class="nav-btn nav-prev" onclick="goToSlide(1)">← Back</button>
-      <button class="nav-btn nav-next" onclick="goToSlide(3)">Section 3: Checkpoints →</button>
-    </div>
-  </div>
-</div>
 
-<!-- ══ SLIDE 3: CHECKPOINTS ══ -->
-<div class="slide-card" id="slide-3">
-  <div class="slide-header">
-    <div class="slide-tag">Section 3 of 4 · The Normal Cell Cycle</div>
-    <div class="slide-title">Checkpoints — The Cell's Quality Control</div>
-    <div class="slide-sub">Three gates the cell must pass before it can divide</div>
-  </div>
-  <div class="slide-body">
-    <div class="two-panel">
-      <!-- SVG: Animated checkpoint gates -->
-      <div class="panel-left">
-        <div class="sec-lbl">Checkpoint Animation</div>
-        <svg id="cp-svg" viewBox="0 0 280 340" width="280" height="340" xmlns="http://www.w3.org/2000/svg">
-          <!-- Track (vertical) -->
-          <line x1="140" y1="20" x2="140" y2="320" stroke="#D1E4F0" stroke-width="8" stroke-linecap="round"/>
-          <!-- Checkpoint stations -->
-          <!-- G1/S Checkpoint -->
-          <g id="cp1-gate">
-            <rect x="80" y="88" width="120" height="40" rx="6" fill="#EEF5FB" stroke="#1A3A5C" stroke-width="2"/>
-            <text x="140" y="104" text-anchor="middle" fill="#1A3A5C" font-size="10" font-weight="700" font-family="Arial">G1/S CHECKPOINT</text>
-            <text x="140" y="118" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">DNA undamaged? · p53</text>
-            <!-- Gate bar -->
-            <line id="cp1-bar" x1="140" y1="128" x2="140" y2="160" stroke="#C8102E" stroke-width="5" stroke-linecap="round"/>
-          </g>
-          <!-- G2/M Checkpoint -->
-          <g id="cp2-gate">
-            <rect x="80" y="188" width="120" height="40" rx="6" fill="#EEF5FB" stroke="#0E7C86" stroke-width="2"/>
-            <text x="140" y="204" text-anchor="middle" fill="#0E7C86" font-size="10" font-weight="700" font-family="Arial">G2/M CHECKPOINT</text>
-            <text x="140" y="218" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">Replication complete? · ATM</text>
-            <line id="cp2-bar" x1="140" y1="228" x2="140" y2="260" stroke="#C8102E" stroke-width="5" stroke-linecap="round"/>
-          </g>
-          <!-- Spindle Checkpoint -->
-          <g id="cp3-gate">
-            <rect x="80" y="275" width="120" height="35" rx="6" fill="#F0FFF4" stroke="#16A34A" stroke-width="2"/>
-            <text x="140" y="290" text-anchor="middle" fill="#15803D" font-size="10" font-weight="700" font-family="Arial">SPINDLE CHECKPOINT</text>
-            <text x="140" y="302" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">Chromosomes attached? · MAD2</text>
-          </g>
-          <!-- Phase labels on track -->
-          <text x="62" y="60" text-anchor="end" fill="#1A3A5C" font-size="11" font-weight="700" font-family="Arial">G1</text>
-          <text x="62" y="160" text-anchor="end" fill="#0E7C86" font-size="11" font-weight="700" font-family="Arial">S</text>
-          <text x="62" y="230" text-anchor="end" fill="#92400E" font-size="11" font-weight="700" font-family="Arial">G2</text>
-          <text x="62" y="290" text-anchor="end" fill="#C8102E" font-size="11" font-weight="700" font-family="Arial">M</text>
-          <!-- Animated cell on track -->
-          <circle id="cp-cell" cx="140" cy="30" r="12" fill="#0E7C86" opacity="0.85"/>
-          <text id="cp-cell-txt" x="140" y="35" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Arial">CELL</text>
-          <!-- Status badge -->
-          <rect id="cp-badge" x="160" y="22" width="50" height="16" rx="4" fill="#16A34A" opacity="0"/>
-          <text id="cp-badge-txt" x="185" y="34" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Arial" opacity="0">PASS ✓</text>
-        </svg>
-      </div>
-      <!-- TEXT PANEL -->
-      <div class="panel-right">
-        <div class="sec-lbl">How Checkpoints Work</div>
-        <p>The cell cycle doesn't run automatically. At three points, the cell <strong>evaluates itself</strong> — checking whether it's ready and whether anything is damaged.</p>
-        <div class="info-card gold">
-          <div class="ic-label">The Factory Analogy</div>
-          Think of checkpoints as quality-control stations on an assembly line. Before a product moves to the next stage, an inspector checks: <em>Is this correct? Is anything broken?</em> Only if it passes does the process continue.
-        </div>
-        <table class="phase-table" style="font-size:11.5px;">
-          <tr><th>Checkpoint</th><th>Verifies</th><th>Protein</th></tr>
-          <tr><td>G1/S</td><td>DNA undamaged?</td><td>p53, Rb</td></tr>
-          <tr><td>G2/M</td><td>DNA fully replicated?</td><td>ATM/ATR</td></tr>
-          <tr><td>Spindle</td><td>Chromosomes attached?</td><td>MAD2</td></tr>
-        </table>
-        <div class="yt-block">
-  <div class="yt-label">▶ Watch — Checkpoint Control System</div>
-  <div class="yt-wrap">
-    <iframe src="https://www.youtube-nocookie.com/embed/skPOXcVvS5c?start=504&rel=0&modestbranding=1"
-      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
-  </div>
-  <p class="yt-cap">Crash Course Biology #29 · starts at the Cell Cycle Control System section (8:24)</p>
-</div>
-      </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goTo(1)">← Back</button>
+      <button class="btn btn-next" onclick="goTo(3)">Next → Section 4</button>
     </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SECTION 4: REGULATORY PROTEINS
+  ════════════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-3">
+    <span class="sec-tag">Section 4 of 5</span>
+    <h1 class="sec-title">Regulatory Proteins: The Cell's Gatekeepers</h1>
+    <p class="sec-intro">So who actually runs these checkpoints? Special proteins called "regulatory proteins" or "gatekeepers" control when the cell progresses through the cycle.</p>
+
+    <div class="card">
+      <h3>Introduction to the Gatekeepers</h3>
+      <p>The cell uses special proteins that turn "ON" and "OFF" at specific times to control progress through the cell cycle. These proteins act like switches, lights, and police officers all at once.</p>
+      <p>You don't need to memorize all the details yet — but it helps to know their names and general roles:</p>
+    </div>
+
+    <div class="card">
+      <h3>Meet the Key Players</h3>
+      
+      <h4 style="font-size: 15px; font-weight: 700; color: var(--navy); margin-top: 16px; margin-bottom: 8px;">🛡️ p53 — "The Guardian of the Genome"</h4>
+      <p>When DNA is damaged, p53 detects it. It can:</p>
+      <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+        <li>Pause the cell cycle to allow time for repair</li>
+        <li>Trigger apoptosis (cell self-destruction) if damage is unfixable</li>
+      </ul>
+      <div class="analogy-box">
+        <strong>🚔 Analogy:</strong> p53 is like a police officer who patrols the cell. If something looks wrong, it either calls for repairs or removes the cell from circulation entirely.
+      </div>
+
+      <h4 style="font-size: 15px; font-weight: 700; color: var(--navy); margin-top: 16px; margin-bottom: 8px;">🔄 Cyclins & CDKs — "The On/Off Switches"</h4>
+      <p><strong>CDKs</strong> (cyclin-dependent kinases) are enzymes that push the cell forward through the cycle. But here's the key: <strong>CDKs are inactive by themselves.</strong></p>
+      <p><strong>Cyclins</strong> are temporary proteins that <strong>activate</strong> CDKs when the time is right. When a cyclin binds to a CDK, it turns the enzyme ON. When the cyclin disappears, the CDK turns OFF.</p>
+      <div class="analogy-box">
+        <strong>🔑 The Key & Engine Analogy:</strong> Think of a car engine:
+        <ul style="margin-left: 20px; margin-top: 8px; font-size: 13px;">
+          <li>The <strong>CDK is the engine</strong> — powerful, but useless without fuel</li>
+          <li>The <strong>cyclin is the key</strong> — without it, the engine won't start</li>
+          <li>When you turn the key (add cyclin), the engine fires up (CDK activates)</li>
+          <li>When you remove the key (cyclin disappears), the engine shuts down</li>
+        </ul>
+        <p style="margin-top: 8px;">The cell uses different cyclin-CDK combinations at different times to control when progress happens.</p>
+      </div>
+
+      <h4 style="font-size: 15px; font-weight: 700; color: var(--navy); margin-top: 16px; margin-bottom: 8px;">⛔ Mad2 — "The Stop Signal"</h4>
+      <p>At the Spindle Assembly Checkpoint, if a chromosome isn't attached correctly, a protein called <strong>Mad2</strong> is activated. Mad2 sends a "STOP" signal that prevents the cell from progressing into anaphase (the pulling-apart stage).</p>
+      <p>Mad2 is like a brake pedal — it keeps the cell stopped until everything is correct.</p>
+    </div>
+
+    <div class="card">
+      <h3>Why These Proteins Matter</h3>
+      <p>These regulatory proteins are like a carefully choreographed dance. Each one turns on and off at just the right moment, creating a precise sequence. If the choreography is wrong — if a protein is absent, overactive, or mutated — the dance breaks down. Damaged cells can slip through and divide.</p>
+      <p><strong>In later lessons, you'll learn that cancer often involves mutations in these regulatory proteins.</strong> For now, just know that they exist and that they control the cell cycle like a conductor controls an orchestra.</p>
+    </div>
+
     <div class="quiz-block">
       <div class="quiz-label">Check Your Understanding</div>
-      <div class="quiz-q">A mutation inactivates ATM kinase. What is the most likely consequence for the cell?</div>
-      <div class="quiz-opts" id="q2-opts">
-        <div class="quiz-opt" onclick="answerQ('q2',0,false)"><span class="opt-letter">A</span>Cells divide faster because ATM normally slows down DNA replication</div>
-        <div class="quiz-opt" onclick="answerQ('q2',1,true)"><span class="opt-letter">B</span>The G2/M checkpoint fails — cells with unrepaired DNA breaks enter mitosis and pass errors to daughter cells</div>
-        <div class="quiz-opt" onclick="answerQ('q2',2,false)"><span class="opt-letter">C</span>The G1/S checkpoint fails — p53 depends on ATM to function at G1</div>
-        <div class="quiz-opt" onclick="answerQ('q2',3,false)"><span class="opt-letter">D</span>The cell immediately undergoes apoptosis</div>
-      </div>
-      <div class="quiz-fb fb-ok" id="q2-fb-correct">✓ Correct. ATM kinase is the G2/M checkpoint sensor. Without it, cells with double-strand DNA breaks can enter mitosis and divide — passing broken DNA to every daughter cell.</div>
-      <div class="quiz-fb fb-no" id="q2-fb-incorrect">ATM kinase operates at the G2/M checkpoint, detecting double-strand breaks after replication. Without ATM, the G2/M gate stays open for damaged cells. The G1/S checkpoint uses a separate pathway through p53.</div>
+      <p>Why is it important that CDKs are inactive by themselves and need cyclins to turn them on?</p>
+      <textarea id="reflect-3" placeholder="Type your thoughts..." onchange="saveResponse('reflect-3')"></textarea>
     </div>
-    <div class="nav-row">
-      <button class="nav-btn nav-prev" onclick="goToSlide(2)">← Back</button>
-      <button class="nav-btn nav-next" onclick="goToSlide(4)">Section 4: The Proteins →</button>
-    </div>
-  </div>
-</div>
 
-<!-- ══ SLIDE 4: PROTEIN CAST ══ -->
-<div class="slide-card" id="slide-4">
-  <div class="slide-header">
-    <div class="slide-tag">Section 4 of 4 · The Normal Cell Cycle</div>
-    <div class="slide-title">The Protein Cast</div>
-    <div class="slide-sub">Four proteins that run the checkpoints — and what breaks when they mutate</div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goTo(2)">← Back</button>
+      <button class="btn btn-next" onclick="goTo(4)">Next → Section 5</button>
+    </div>
   </div>
-  <div class="slide-body">
-    <div class="sec-lbl">Key Checkpoint Proteins</div>
-    <p style="font-size:13px;margin-bottom:12px;">Each checkpoint is run by a protein. Proteins are encoded by genes. If the gene mutates, the protein stops working. If the protein stops working, the checkpoint fails. This chain is the molecular basis of cancer.</p>
-    <div class="protein-grid">
-      <!-- p53 card -->
-      <div class="pcard">
-        <div class="pcard-top">
-          <div class="pcard-vis">
-            <svg viewBox="0 0 200 90" width="200" height="90" xmlns="http://www.w3.org/2000/svg">
-              <!-- DNA strand with damage mark -->
-              <path d="M20,30 Q30,20 40,30 Q50,40 60,30 Q70,20 80,30" stroke="#1A3A5C" stroke-width="2.5" fill="none"/>
-              <path d="M20,45 Q30,35 40,45 Q50,55 60,45 Q70,35 80,45" stroke="#64748B" stroke-width="2" fill="none"/>
-              <!-- Damage X mark -->
-              <line x1="55" y1="24" x2="65" y2="34" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
-              <line x1="65" y1="24" x2="55" y2="34" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
-              <!-- Arrow to p53 protein -->
-              <path d="M88,37 L108,37" stroke="#64748B" stroke-width="1.5" marker-end="url(#arw1)" fill="none"/>
-              <defs><marker id="arw1" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
-                <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/></marker></defs>
-              <!-- p53 protein hexagon -->
-              <polygon points="130,25 145,17 160,25 160,42 145,50 130,42" fill="#1A3A5C" opacity="0.85"/>
-              <text x="145" y="37" text-anchor="middle" fill="white" font-size="10" font-weight="800" font-family="Arial">p53</text>
-              <!-- STOP signal -->
-              <polygon points="175,27 180,23 185,23 190,27 190,37 185,41 180,41 175,37" fill="#C8102E" opacity="0.9"/>
-              <text x="182" y="35" text-anchor="middle" fill="white" font-size="9" font-weight="800" font-family="Arial">STOP</text>
-              <text x="100" y="72" text-anchor="middle" fill="#1A3A5C" font-size="11" font-weight="700" font-family="Arial">DNA damage detected → cycle halts</text>
-              <text x="100" y="84" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">Triggers repair or apoptosis</text>
-            </svg>
-          </div>
-          <div class="pcard-name">p53</div>
-          <div class="pcard-gene">Gene: TP53</div>
-          <div class="pcard-body">Detects DNA damage at G1/S. Halts the cycle and activates repair. If repair fails, triggers apoptosis. Mutated in &gt;50% of all cancers.</div>
-          <span class="pcard-badge b-ts">G1/S Checkpoint</span>
-        </div>
-      </div>
-      <!-- Rb card -->
-      <div class="pcard">
-        <div class="pcard-top">
-          <div class="pcard-vis">
-            <svg viewBox="0 0 200 90" width="200" height="90" xmlns="http://www.w3.org/2000/svg">
-              <!-- S phase entry arrow being blocked -->
-              <rect x="15" y="25" width="55" height="26" rx="5" fill="#EEF5FB" stroke="#1A3A5C" stroke-width="1.5"/>
-              <text x="42" y="36" text-anchor="middle" fill="#1A3A5C" font-size="10" font-weight="700" font-family="Arial">G1</text>
-              <text x="42" y="47" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">Phase</text>
-              <path d="M74,38 L100,38" stroke="#64748B" stroke-width="2" marker-end="url(#arw2)" fill="none"/>
-              <defs><marker id="arw2" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
-                <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/></marker></defs>
-              <!-- Rb braking bar -->
-              <rect x="96" y="18" width="12" height="42" rx="4" fill="#C8102E" opacity="0.85"/>
-              <text x="102" y="44" text-anchor="middle" fill="white" font-size="9" font-weight="800" font-family="Arial" transform="rotate(-90,102,44)">Rb</text>
-              <!-- S phase box (blocked) -->
-              <rect x="118" y="25" width="55" height="26" rx="5" fill="#FFF0F2" stroke="#C8102E" stroke-width="1.5" opacity="0.6"/>
-              <text x="145" y="36" text-anchor="middle" fill="#C8102E" font-size="10" font-weight="700" font-family="Arial">S</text>
-              <text x="145" y="47" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">Blocked</text>
-              <text x="100" y="72" text-anchor="middle" fill="#1A3A5C" font-size="11" font-weight="700" font-family="Arial">Blocks S phase entry</text>
-              <text x="100" y="84" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">Two-hit hypothesis · both copies must fail</text>
-            </svg>
-          </div>
-          <div class="pcard-name">Rb Protein</div>
-          <div class="pcard-gene">Gene: RB1</div>
-          <div class="pcard-body">A second G1/S brake. Blocks transcription factors needed to enter S phase. Both copies of RB1 must mutate to fail — the classic two-hit example.</div>
-          <span class="pcard-badge b-ts">G1/S Checkpoint</span>
-        </div>
-      </div>
-      <!-- ATM/ATR card -->
-      <div class="pcard">
-        <div class="pcard-top">
-          <div class="pcard-vis">
-            <svg viewBox="0 0 200 90" width="200" height="90" xmlns="http://www.w3.org/2000/svg">
-              <!-- DNA double strand with break -->
-              <path d="M20,28 Q35,18 50,28 Q65,38 80,28" stroke="#1A3A5C" stroke-width="2.5" fill="none"/>
-              <path d="M20,42 Q35,32 50,42 Q65,52 80,42" stroke="#64748B" stroke-width="2" fill="none"/>
-              <!-- Break in strand -->
-              <line x1="80" y1="22" x2="100" y2="32" stroke="#D1E4F0" stroke-width="1" stroke-dasharray="3,3"/>
-              <circle cx="80" cy="28" r="5" fill="#C8102E" opacity="0.8"/>
-              <circle cx="80" cy="42" r="5" fill="#C8102E" opacity="0.8"/>
-              <text x="90" y="24" fill="#C8102E" font-size="9" font-weight="700" font-family="Arial">BREAK</text>
-              <!-- ATM sensor -->
-              <rect x="115" y="22" width="55" height="32" rx="6" fill="#EEF5FB" stroke="#0E7C86" stroke-width="2"/>
-              <text x="142" y="35" text-anchor="middle" fill="#0E7C86" font-size="10" font-weight="800" font-family="Arial">ATM</text>
-              <text x="142" y="47" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">SENSING</text>
-              <path d="M96,35 L112,35" stroke="#0E7C86" stroke-width="1.5" marker-end="url(#arw3)" fill="none"/>
-              <defs><marker id="arw3" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
-                <path d="M0,0 L6,3 L0,6 Z" fill="#0E7C86"/></marker></defs>
-              <text x="100" y="72" text-anchor="middle" fill="#0E7C86" font-size="11" font-weight="700" font-family="Arial">Detects DNA breaks after replication</text>
-              <text x="100" y="84" text-anchor="middle" fill="#64748B" font-size="9" font-family="Arial">Guards the G2/M checkpoint</text>
-            </svg>
-          </div>
-          <div class="pcard-name">ATM/ATR Kinase</div>
-          <div class="pcard-gene">Gene: ATM, ATR</div>
-          <div class="pcard-body">Sensors at G2/M. Detect double-strand DNA breaks after replication. Activate repair pathways; trigger apoptosis if damage is irreparable.</div>
-          <span class="pcard-badge b-g2">G2/M Checkpoint</span>
-        </div>
-      </div>
-      <!-- MAD2 card -->
-      <div class="pcard">
-        <div class="pcard-top">
-          <div class="pcard-vis">
-            <svg viewBox="0 0 200 90" width="200" height="90" xmlns="http://www.w3.org/2000/svg">
-              <!-- Chromosome at metaphase plate -->
-              <line x1="100" y1="10" x2="100" y2="80" stroke="#D1E4F0" stroke-width="1.5" stroke-dasharray="4,3"/>
-              <!-- Chromosome (X shape) at plate -->
-              <line x1="92" y1="33" x2="108" y2="50" stroke="#1A3A5C" stroke-width="5" stroke-linecap="round"/>
-              <line x1="92" y1="50" x2="108" y2="33" stroke="#1A3A5C" stroke-width="5" stroke-linecap="round"/>
-              <!-- Left spindle fiber (attached) -->
-              <line x1="30" y1="42" x2="91" y2="42" stroke="#64748B" stroke-width="1.5" opacity="0.8"/>
-              <circle cx="30" cy="42" r="6" fill="#7C3AED" opacity="0.7"/>
-              <!-- Right spindle fiber (unattached! dashed) -->
-              <line x1="110" y1="42" x2="155" y2="42" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
-              <circle cx="170" cy="42" r="6" fill="#7C3AED" opacity="0.4"/>
-              <text x="162" y="28" fill="#C8102E" font-size="9" font-weight="700" font-family="Arial">UNATTACHED</text>
-              <!-- MAD2 alert -->
-              <rect x="115" y="56" width="60" height="18" rx="4" fill="#C8102E" opacity="0.85"/>
-              <text x="145" y="69" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Arial">MAD2: WAIT ⛔</text>
-              <text x="100" y="84" text-anchor="middle" fill="#C8102E" font-size="10" font-weight="700" font-family="Arial">Blocks anaphase until all attached</text>
-            </svg>
-          </div>
-          <div class="pcard-name">MAD2</div>
-          <div class="pcard-gene">Gene: MAD2L1</div>
-          <div class="pcard-body">Spindle Assembly Checkpoint sensor. When any chromosome is unattached, MAD2 generates a "wait" signal that blocks anaphase from beginning.</div>
-          <span class="pcard-badge b-mc">Spindle Checkpoint</span>
-        </div>
-      </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SECTION 5: CANCER CONNECTION
+  ════════════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-4">
+    <span class="sec-tag">Section 5 of 5</span>
+    <h1 class="sec-title">When Checkpoints Fail: The Cancer Connection</h1>
+    <p class="sec-intro">Now that you understand how checkpoints work, you can see how they prevent cancer — and what happens when they don't.</p>
+
+    <div class="card">
+      <h3>A Single Failure Usually Isn't Enough</h3>
+      <p>Here's an important fact: <strong>Cancer is not caused by a single checkpoint failure.</strong></p>
+      <p>If one checkpoint fails, the cell often has backup systems:</p>
+      <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+        <li>Another checkpoint might catch the problem later</li>
+        <li>The immune system might detect and destroy the cell</li>
+        <li>The cell might self-destruct before it causes harm</li>
+      </ul>
+      <p style="margin-top: 12px;">So cells are actually quite resilient. They have built-in redundancy to prevent disasters.</p>
     </div>
-    <div class="info-card red">
-      <div class="ic-label">The Chain That Leads to Cancer</div>
-      <strong>Gene mutation → Protein fails → Checkpoint bypassed → Damaged DNA copied → Uncontrolled division.</strong> This is the molecular basis of cancer. In Lesson 2, you will see exactly what happens when p53 fails — and meet Maya, whose case you will diagnose.
+
+    <div class="card">
+      <h3>Multiple Failures = Cancer Risk</h3>
+      <p>But when <strong>MULTIPLE checkpoints fail over time</strong>, that's when the real danger emerges:</p>
+      <ol style="margin-left: 20px; font-size: 14px; line-height: 2; color: var(--gray);">
+        <li><strong>First failure:</strong> A checkpoint lets a slightly damaged cell through</li>
+        <li><strong>First division:</strong> The damaged cell divides, creating two copies of the damage</li>
+        <li><strong>Second failure:</strong> Another checkpoint also fails in one of these daughter cells</li>
+        <li><strong>Second division:</strong> Now two cells become four, each carrying even more damage</li>
+        <li><strong>Accumulation:</strong> Over many divisions and failures, damage compounds</li>
+        <li><strong>Cancer:</strong> Eventually, a cell accumulates enough damage to become cancerous</li>
+      </ol>
     </div>
+
+    <div class="highlight">
+      <strong>🔬 Key Insight:</strong> Cancer develops over years or decades because it requires MULTIPLE mutations and checkpoint failures. This is why most cancers occur in older people — they've had more time for damage to accumulate.
+    </div>
+
+    <div class="card">
+      <h3>Why This Matters for Research</h3>
+      <p>Scientists like those at St. Jude study exactly which checkpoints fail in different cancers. They ask questions like:</p>
+      <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+        <li><strong>"Which protein is mutated in leukemia?"</strong></li>
+        <li><strong>"Can we block that protein's function in cancer cells?"</strong></li>
+        <li><strong>"Can we force cancer cells to self-destruct?"</strong></li>
+      </ul>
+      <p style="margin-top: 12px;">By understanding the cell cycle and checkpoints, researchers design treatments that specifically target the broken checkpoints in cancer cells — while leaving healthy cells alone.</p>
+    </div>
+
+    <div class="card">
+      <h3>What Comes Next</h3>
+      <p>In Lesson 2, you'll dive deeper into:</p>
+      <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+        <li>Exactly HOW cyclins and CDKs work at the molecular level</li>
+        <li>Specific mutations that cause cancer</li>
+        <li>How drugs target broken checkpoints</li>
+        <li>Real examples from cancer biology and treatment</li>
+      </ul>
+      <p style="margin-top: 12px;">You've now built the foundation. You understand the big picture of why cells divide, how they control that process, and why the control systems matter.</p>
+    </div>
+
     <div class="quiz-block">
-      <div class="quiz-label">Check Your Understanding</div>
-      <div class="quiz-q">Why is p53 sometimes called the "guardian of the genome"?</div>
-      <div class="quiz-opts" id="q3-opts">
-        <div class="quiz-opt" onclick="answerQ('q3',0,false)"><span class="opt-letter">A</span>p53 speeds up DNA replication in S phase, producing more accurate copies</div>
-        <div class="quiz-opt" onclick="answerQ('q3',1,false)"><span class="opt-letter">B</span>p53 is the only checkpoint protein — without it, no checkpoints function at all</div>
-        <div class="quiz-opt" onclick="answerQ('q3',2,true)"><span class="opt-letter">C</span>p53 guards the G1/S gate — if it fails, damaged DNA gets copied in S phase and every daughter cell inherits the error</div>
-        <div class="quiz-opt" onclick="answerQ('q3',3,false)"><span class="opt-letter">D</span>p53 repairs DNA directly, so without it replication errors accumulate</div>
-      </div>
-      <div class="quiz-fb fb-ok" id="q3-fb-correct">✓ Correct. p53 stands at the G1/S checkpoint — the last gate before DNA replication. If p53 fails, a cell with damaged DNA enters S phase and copies that damage into every future daughter cell. That's why TP53 mutations appear in over 50% of cancers.</div>
-      <div class="quiz-fb fb-no" id="q3-fb-incorrect">p53's importance comes from its position at G1/S — just before DNA replication. If it fails, damaged DNA gets copied. ATM/ATR (G2/M) and MAD2 (Spindle) are separate proteins protecting against different errors at different stages.</div>
+      <div class="quiz-label">Reflection Question</div>
+      <p>In your own words, explain why cancer requires multiple checkpoint failures rather than just one.</p>
+      <textarea id="reflect-4" placeholder="Type your thoughts..." onchange="saveResponse('reflect-4')"></textarea>
     </div>
-    <div class="nav-row">
-      <button class="nav-btn nav-prev" onclick="goToSlide(3)">← Back</button>
-      <button class="nav-btn nav-next" onclick="goToSlide(5)">Exit Ticket →</button>
-    </div>
-  </div>
-</div>
 
-<!-- ══ SLIDE 5: EXIT TICKET ══ -->
-<div class="slide-card" id="slide-5">
-  <div class="slide-header" style="background:linear-gradient(135deg,#064E3B,#065F46);">
-    <div class="slide-tag">Exit Ticket · Lesson 1</div>
-    <div class="slide-title">Complete Before Class</div>
-    <div class="slide-sub">Your answers help your teacher prepare tomorrow's card sort</div>
-  </div>
-  <div class="slide-body">
-    <p style="font-size:13px;color:var(--gray);margin-bottom:14px;">Answer honestly — blank is better than a guess. Your teacher will see exactly where the class needs more time.</p>
-    <div class="et-q">
-      <div class="et-qlbl">Question 1 of 3 · Multiple Choice</div>
-      <div class="et-qtext">A cell ends G2 with unrepaired double-strand DNA breaks. What happens under normal conditions?</div>
-      <div class="quiz-opts" id="qet1-opts">
-        <div class="quiz-opt" onclick="answerQ('qet1',0,false)"><span class="opt-letter">A</span>The cell enters mitosis — breaks can be repaired during M phase</div>
-        <div class="quiz-opt" onclick="answerQ('qet1',1,true)"><span class="opt-letter">B</span>ATM/ATR detects the breaks and the G2/M checkpoint halts the cell cycle</div>
-        <div class="quiz-opt" onclick="answerQ('qet1',2,false)"><span class="opt-letter">C</span>The G1/S checkpoint reactivates and sends the cell back to G1</div>
-        <div class="quiz-opt" onclick="answerQ('qet1',3,false)"><span class="opt-letter">D</span>p53 detects the breaks and forces the cell to skip to cytokinesis</div>
-      </div>
-      <div class="quiz-fb fb-ok" id="qet1-fb-correct">✓ ATM/ATR kinase is the G2/M checkpoint sensor — it detects double-strand breaks after replication.</div>
-      <div class="quiz-fb fb-no" id="qet1-fb-incorrect">The G2/M checkpoint (ATM/ATR) monitors DNA integrity after replication. p53 operates at G1/S — an earlier, different checkpoint.</div>
-    </div>
-    <div class="et-q">
-      <div class="et-qlbl">Question 2 of 3 · Multiple Choice</div>
-      <div class="et-qtext">What is MAD2's function, and during which phase of mitosis does it operate?</div>
-      <div class="quiz-opts" id="qet2-opts">
-        <div class="quiz-opt" onclick="answerQ('qet2',0,false)"><span class="opt-letter">A</span>MAD2 repairs double-strand DNA breaks during prophase</div>
-        <div class="quiz-opt" onclick="answerQ('qet2',1,true)"><span class="opt-letter">B</span>MAD2 generates a "wait" signal during metaphase when any chromosome is unattached to spindle fibers</div>
-        <div class="quiz-opt" onclick="answerQ('qet2',2,false)"><span class="opt-letter">C</span>MAD2 activates apoptosis in G1 when DNA damage is detected</div>
-        <div class="quiz-opt" onclick="answerQ('qet2',3,false)"><span class="opt-letter">D</span>MAD2 triggers cytokinesis during telophase</div>
-      </div>
-      <div class="quiz-fb fb-ok" id="qet2-fb-correct">✓ MAD2 is the Spindle Assembly Checkpoint sensor — it operates during metaphase and blocks anaphase until every chromosome is properly attached.</div>
-      <div class="quiz-fb fb-no" id="qet2-fb-incorrect">MAD2 is the Spindle Checkpoint sensor at metaphase. It blocks anaphase until every chromosome is attached to spindle fibers at both kinetochores.</div>
-    </div>
-    <div class="et-q">
-      <div class="et-qlbl">Question 3 of 3 · Short Answer</div>
-      <div class="et-qtext">Choose ONE checkpoint. Name it, identify its key protein, and explain in your own words what would happen to a cell if that protein stopped working.</div>
-      <textarea class="et-ans" id="et-sa" placeholder="Example: The G1/S checkpoint uses p53. If p53 stopped working, the cell could..."></textarea>
-    </div>
-    <button onclick="submitET()" style="width:100%;padding:11px;background:var(--teal);color:#fff;
-      border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;
-      font-family:inherit;margin-top:4px;">Submit Exit Ticket →</button>
-    <div class="preview-card" style="margin-top:14px;">
-      <div class="pc-kicker">Up Next — Lesson 2</div>
-      <div class="pc-title">When Controls Break Down</div>
-      <div class="pc-desc">You know how the cell cycle works when everything goes right. In Lesson 2, you'll meet Maya — a 12-year-old with leukemia. Her genetic panel shows a checkpoint mutation. Your team diagnoses which checkpoint failed, and why.</div>
-      <a class="pc-btn" href="Student_Lesson_WhenControlsBreakDown.html">Start Lesson 2 →</a>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn nav-prev" onclick="goToSlide(4)">← Back</button>
-      <span style="font-size:13px;color:var(--gray);">Module complete ✓</span>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goTo(3)">← Back</button>
+      <button class="btn btn-finish" onclick="finishLesson()">✓ Finish & Submit</button>
     </div>
   </div>
-</div>
 
-<!-- PROGRESS BAR -->
-<div id="progress-bar">
-  <div class="pb-dot active" id="dot-0"></div>
-  <div class="pb-dot" id="dot-1"></div>
-  <div class="pb-dot" id="dot-2"></div>
-  <div class="pb-dot" id="dot-3"></div>
-  <div class="pb-dot" id="dot-4"></div>
-  <div class="pb-dot" id="dot-5"></div>
+  <!-- COMPLETION -->
+  <div id="completion" style="display: none;">
+    <div class="completion-banner">
+      <h2>🎉 Lesson Complete!</h2>
+      <p>Great work! You've learned the foundation of how cells divide safely and what happens when the control systems fail. Download your answers above to share with your teacher, then move on to Lesson 2 to dive deeper into the molecular mechanisms.</p>
+      <button class="btn btn-next" onclick="window.location.href='lesson1-card-sort.html'" style="margin-top: 16px; margin-left: 0;">Next Activity: Card Sort →</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
-/* ══ SLIDE NAVIGATION ══════════════════════════════════════════════════════ */
-var currentSlide = 0, TOTAL = 6;
-function goToSlide(n) {
-  document.getElementById('slide-'+currentSlide).classList.remove('active');
-  for(var i=0;i<TOTAL;i++) {
-    var d=document.getElementById('dot-'+i);
-    d.className = i<n ? 'pb-dot done' : i===n ? 'pb-dot active' : 'pb-dot';
+let currentSection = 0;
+const completedSections = new Set();
+const responses = {};
+
+function goTo(idx) {
+  document.getElementById('sec-' + currentSection).classList.remove('active');
+  document.getElementById('sec-' + idx).classList.add('active');
+  completedSections.add(currentSection);
+  currentSection = idx;
+  
+  for (let i = 0; i < 5; i++) {
+    const pill = document.getElementById('pill-' + i);
+    pill.classList.remove('active', 'done');
+    if (i === idx) pill.classList.add('active');
+    else if (completedSections.has(i)) pill.classList.add('done');
   }
-  currentSlide=n;
-  document.getElementById('slide-'+n).classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+  
+  const pct = Math.round(((idx + 1) / 5) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ══ QUIZ ══════════════════════════════════════════════════════════════════ */
-function answerQ(qid, idx, correct) {
-  var opts = document.querySelectorAll('#'+qid+'-opts .quiz-opt');
-  opts.forEach(function(o){o.classList.add('disabled');});
-  opts[idx].classList.add(correct ? 'correct' : 'incorrect');
-  var fbOk = document.getElementById(qid+'-fb-correct');
-  var fbNo = document.getElementById(qid+'-fb-incorrect');
-  if(fbOk) fbOk.classList.toggle('show', correct);
-  if(fbNo) fbNo.classList.toggle('show', !correct);
+function saveResponse(id) {
+  responses[id] = document.getElementById(id).value;
 }
 
-/* ══ PMAT ANIMATOR ══════════════════════════════════════════════════════════ */
-var pmatStep = 0;
-var PMAT_INFO = [
-  {name:'① Prophase',    sub:'Chromosomes condense · nuclear envelope breaks down · spindle starts forming'},
-  {name:'② Metaphase',   sub:'Chromosomes align at center · spindle fibers attach · MAD2 checkpoint verifies'},
-  {name:'③ Anaphase',    sub:'Sister chromatids pulled apart · one copy moves to each pole · cell elongates'},
-  {name:'④ Telophase',   sub:'Two nuclei reform · chromosomes decondense · cytokinesis splits cytoplasm'},
-];
-function pmatNav(dir) {
-  document.getElementById('pf-'+pmatStep).classList.remove('active');
-  document.getElementById('pdot-'+pmatStep).classList.remove('active');
-  pmatStep = Math.max(0, Math.min(3, pmatStep + dir));
-  document.getElementById('pf-'+pmatStep).classList.add('active');
-  document.getElementById('pdot-'+pmatStep).classList.add('active');
-  document.getElementById('pmat-name').textContent = PMAT_INFO[pmatStep].name;
-  document.getElementById('pmat-sub').textContent  = PMAT_INFO[pmatStep].sub;
-  document.getElementById('pmat-prev').disabled = pmatStep === 0;
-  document.getElementById('pmat-next').disabled = pmatStep === 3;
-  if(pmatStep===3) {
-    document.getElementById('pmat-next').textContent = 'Done ✓';
-    document.getElementById('pmat-next').style.background='var(--green)';
-  } else {
-    document.getElementById('pmat-next').textContent = 'Next →';
-    document.getElementById('pmat-next').style.background='';
-  }
+function finishLesson() {
+  completedSections.add(4);
+  document.getElementById('sec-4').style.display = 'none';
+  document.getElementById('completion').style.display = 'block';
+  document.getElementById('progFill').style.width = '100%';
 }
 
-/* ══ SECTION 1 CELL CYCLE ANIMATION ════════════════════════════════════════ */
-(function() {
-  var cx=145, cy=145, rOuter=130;
-  var phases = [
-    {name:'G1 Phase',  sub:'Cell Growth · ~11 hrs',      color:'#1A3A5C', cell:'s1-cell-g1', arc:'s1-arc-g1'},
-    {name:'S Phase',   sub:'DNA Synthesis · ~8 hrs',     color:'#0E7C86', cell:'s1-cell-s',  arc:'s1-arc-s' },
-    {name:'G2 Phase',  sub:'Pre-division Check · ~4 hrs', color:'#F0A500', cell:'s1-cell-g2', arc:'s1-arc-g2'},
-    {name:'M Phase',   sub:'Mitosis · ~1 hr',            color:'#C8102E', cell:'s1-cell-m',  arc:'s1-arc-m' },
-  ];
-  var dur=9000, startTime=null, lastPh=null;
-  var dot=document.getElementById('s1-dot');
-  var needle=document.getElementById('s1-needle');
-  var pivot=document.getElementById('s1-pivot');
-  var lbl=document.getElementById('s1-phase-lbl');
-  var sub=document.getElementById('s1-phase-sub');
-  function rad(d){return d*Math.PI/180;}
-  function xy(deg,r){var a=rad(deg-90);return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)};}
-  function getPhase(deg){
-    var d=((deg%360)+360)%360;
-    if(d>=270||d<90) return phases[0];
-    if(d>=90&&d<180) return phases[1];
-    if(d>=180&&d<270) return phases[2];
-    return phases[3];
-  }
-  function anim(ts){
-    if(!startTime) startTime=ts;
-    var deg=((ts-startTime)/dur)*360;
-    var p=xy(deg,rOuter);
-    dot.setAttribute('cx',p.x); dot.setAttribute('cy',p.y);
-    needle.setAttribute('x2',p.x); needle.setAttribute('y2',p.y);
-    var ph=getPhase(deg);
-    lbl.textContent=ph.name; sub.textContent=ph.sub;
-    dot.setAttribute('stroke',ph.color);
-    needle.setAttribute('stroke',ph.color);
-    pivot.setAttribute('fill',ph.color);
-    if(ph!==lastPh){
-      phases.forEach(function(p2){
-        var a=document.getElementById(p2.arc);
-        var c=document.getElementById(p2.cell);
-        if(a){a.setAttribute('stroke-opacity','0.4');a.setAttribute('stroke-width','30');}
-        if(c){c.setAttribute('opacity','0');}
-      });
-      var ac=document.getElementById(ph.arc);
-      var cc=document.getElementById(ph.cell);
-      if(ac){ac.setAttribute('stroke-opacity','1');ac.setAttribute('stroke-width','36');}
-      if(cc){cc.setAttribute('opacity','1');}
-      lastPh=ph;
-    }
-    requestAnimationFrame(anim);
-  }
-  requestAnimationFrame(anim);
-})();
-
-/* ══ CHECKPOINT GATE ANIMATION ══════════════════════════════════════════════ */
-(function() {
-  var cell=document.getElementById('cp-cell');
-  var cellTxt=document.getElementById('cp-cell-txt');
-  var badge=document.getElementById('cp-badge');
-  var badgeTxt=document.getElementById('cp-badge-txt');
-  var cp1bar=document.getElementById('cp1-bar');
-  var cp2bar=document.getElementById('cp2-bar');
-  // Keyframes: [y position, gate1open, gate2open, showBadge, badgeColor, phase]
-  var steps=[
-    {y:30,  g1:'block',g2:'block',badge:0},  // Start
-    {y:85,  g1:'block',g2:'block',badge:0},  // Approaching G1/S
-    {y:85,  g1:'block',g2:'block',badge:1,bclr:'#16A34A',btxt:'PASS ✓'}, // G1 check
-    {y:188, g1:'none', g2:'block',badge:0},  // After G1, approaching G2/M
-    {y:188, g1:'none', g2:'block',badge:1,bclr:'#16A34A',btxt:'PASS ✓'}, // G2 check
-    {y:280, g1:'none', g2:'none', badge:0},  // M phase
-    {y:310, g1:'none', g2:'none', badge:1,bclr:'#0E7C86',btxt:'DIVIDING'}, // Complete
-  ];
-  var step=0, interval=1400;
-  function advance(){
-    step=(step+1)%steps.length;
-    var s=steps[step];
-    // Animate cell
-    cell.style.transition='cy 0.6s ease';
-    cell.setAttribute('cy',s.y);
-    cellTxt.setAttribute('y',s.y+5);
-    // Gate bars
-    cp1bar.style.display=s.g1;
-    cp2bar.style.display=s.g2;
-    // Badge
-    if(s.badge){
-      badge.setAttribute('opacity','1');
-      badgeTxt.setAttribute('opacity','1');
-      badge.setAttribute('fill',s.bclr);
-      badgeTxt.textContent=s.btxt;
-      badge.setAttribute('x', parseFloat(cell.getAttribute('cx'))+15);
-      badgeTxt.setAttribute('x', parseFloat(cell.getAttribute('cx'))+40);
-      badge.setAttribute('y', s.y-14);
-      badgeTxt.setAttribute('y', s.y-3);
-    } else {
-      badge.setAttribute('opacity','0');
-      badgeTxt.setAttribute('opacity','0');
+function downloadPDF() {
+  let html = '<div style="font-family: Arial, sans-serif; color: #333;">';
+  html += '<h1 style="color: #1A3A5C; border-bottom: 2px solid #0E7C86; padding-bottom: 10px;">Lesson 1: The Normal Cell Cycle — Your Answers</h1>';
+  html += '<p style="color: #666; margin: 20px 0;"><strong>Name:</strong> ' + (document.getElementById('sName')?.value || '[Your name]') + '</p>';
+  html += '<p style="color: #666;"><strong>Date:</strong> ' + new Date().toLocaleDateString() + '</p>';
+  html += '<hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">';
+  
+  for (let i = 0; i < 5; i++) {
+    const id = 'reflect-' + i;
+    const elem = document.getElementById(id);
+    if (elem) {
+      html += '<h3 style="color: #1A3A5C; margin-top: 20px;">Section ' + (i+1) + ' Reflection</h3>';
+      html += '<p style="background: #EEF5FB; padding: 12px; border-radius: 4px; line-height: 1.6;">' + 
+              (elem.value || '<em>No response</em>') + '</p>';
     }
   }
-  setInterval(advance, interval);
-})();
-
-/* ══ EXIT TICKET ══════════════════════════════════════════════════════════ */
-function submitET() {
-  alert('Exit ticket submitted! See you in class for the card sort.');
+  
+  html += '<p style="margin-top: 30px; font-size: 12px; color: #999; border-top: 1px solid #ddd; padding-top: 10px;">St. Jude Children\'s Research Hospital · STEMM Education & Outreach</p></div>';
+  
+  const win = window.open('', '', 'width=800,height=600');
+  win.document.write(html);
+  setTimeout(() => win.print(), 100);
 }
 </script>
 
-<script>
-/* ═══ Read-Aloud Engine v2 ═══════════════════════════════════════════════ */
-(function() {
-  var synth    = window.speechSynthesis;
-  var _rate    = 1.0;
-  var _playing = false;
-  var _paused  = false;
-  var _sections = [];
-  var _idx     = 0;
-  var _utt     = null;
-  var _timer   = null;
-
-  /* DOM walker: builds text with proper punctuation after every block element */
-  window._ttsExtract = function(rootEl) {
-    if (!rootEl) return '';
-    var clone = rootEl.cloneNode(true);
-
-    var skipSels = [
-      'button','select','svg','script','style',
-      'input[type=submit]','input[type=button]','input[type=reset]',
-      '#tts-bar','.tts-bar','#translate-bar','.toolbar','.top-bar',
-      '.tb-right','[aria-hidden="true"]'
-    ];
-    skipSels.forEach(function(sel) {
-      try {
-        clone.querySelectorAll(sel).forEach(function(n) {
-          if (n.parentNode) n.parentNode.removeChild(n);
-        });
-      } catch(e) {}
-    });
-
-    var BLOCK = {
-      DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,
-      LI:1,DT:1,DD:1,TD:1,TH:1,TR:1,CAPTION:1,
-      SECTION:1,ARTICLE:1,BLOCKQUOTE:1,FIGURE:1,FIGCAPTION:1,
-      LABEL:1,LEGEND:1,SUMMARY:1
-    };
-
-    var parts = [];
-    function walk(node) {
-      if (node.nodeType === 3) {
-        var t = node.nodeValue.replace(/\s+/g,' ');
-        if (t.trim()) parts.push(t);
-        return;
-      }
-      if (node.nodeType !== 1) return;
-      var tag = node.tagName;
-      if (tag === 'BR') { parts.push(' '); return; }
-      var before = parts.length;
-      var c = node.childNodes;
-      for (var i = 0; i < c.length; i++) walk(c[i]);
-      if (BLOCK[tag] && parts.length > before) {
-        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
-        if (seg) {
-          if (!/[.!?:;\u2014\u2013,]$/.test(seg)) seg += '.';
-          parts.push(seg + ' ');
-        }
-      }
-    }
-    walk(clone);
-    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
-  };
-
-  window._ttsGetSections = function() {
-    var page = document.querySelector('.page, main, [role=main]') || document.body;
-    return Array.from(page.children).filter(function(el) {
-      return (el.textContent || '').trim().length > 15;
-    });
-  };
-
-  function clearHL() {
-    document.querySelectorAll('.tts-reading').forEach(function(el) {
-      el.classList.remove('tts-reading');
-    });
-  }
-
-  function readAt(idx) {
-    clearTimeout(_timer);
-    if (idx >= _sections.length) { onDone(); return; }
-    _idx = idx;
-    clearHL();
-    var sec = _sections[idx];
-    if (sec.parentNode) {
-      sec.classList.add('tts-reading');
-      try { sec.scrollIntoView({behavior:'smooth',block:'nearest'}); } catch(e) {}
-    }
-    var txt = window._ttsExtract(sec);
-    if (!txt.trim()) { readAt(idx + 1); return; }
-
-    _utt = new SpeechSynthesisUtterance(txt);
-    _utt.rate = _rate;
-    _utt.lang = document.documentElement.lang || 'en-US';
-    _utt.onend = function() {
-      if (!_playing) return;
-      _timer = setTimeout(function() {
-        if (_playing && !_paused) readAt(idx + 1);
-      }, 500);
-    };
-    _utt.onerror = function(e) {
-      if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
-    };
-    synth.speak(_utt);
-    _playing = true; _paused = false;
-    updateUI(_idx + 1, _sections.length);
-  }
-
-  function onDone() {
-    _playing = false; _paused = false;
-    clearHL(); clearTimeout(_timer); updateUI(0,0);
-  }
-
-  function updateUI(cur, total) {
-    var play = document.getElementById('tts-play');
-    var pause = document.getElementById('tts-pause');
-    var stop  = document.getElementById('tts-stop');
-    var status = document.getElementById('tts-status');
-    var stxt   = document.getElementById('tts-status-text');
-    if (!play) return;
-    if (_playing) {
-      play.innerHTML  = '&#8635; Restart';
-      pause.disabled  = false;
-      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
-      pause.title     = _paused ? 'Resume' : 'Pause';
-      stop.disabled   = false;
-      if (status) status.style.display = 'flex';
-      if (stxt) stxt.textContent = _paused ? 'Paused'
-        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading\u2026');
-    } else {
-      play.innerHTML  = '&#9654; Play';
-      pause.disabled  = true;
-      pause.innerHTML = '&#9646;&#9646;';
-      stop.disabled   = true;
-      if (status) status.style.display = 'none';
-    }
-  }
-
-  window.ttsPlay = function() {
-    synth.cancel(); clearTimeout(_timer);
-    _sections = window._ttsGetSections();
-    if (!_sections.length) return;
-    _playing = true; _paused = false;
-    readAt(0);
-  };
-  window.ttsPauseResume = function() {
-    if (!_playing) return;
-    if (_paused) { synth.resume(); _paused = false; }
-    else         { synth.pause();  _paused = true;  }
-    updateUI(_idx + 1, _sections.length);
-  };
-  window.ttsStop = function() {
-    synth.cancel(); clearTimeout(_timer);
-    _playing = false; _paused = false;
-    clearHL(); updateUI(0,0);
-  };
-  window.ttsSetRate = function(r) {
-    _rate = r;
-    document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
-      b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
-    });
-    if (_playing && !_paused) {
-      var ri = _idx; synth.cancel(); clearTimeout(_timer);
-      _sections = window._ttsGetSections();
-      _timer = setTimeout(function() { readAt(ri); }, 100);
-    }
-  };
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) window.ttsStop();
-  });
-})();
-</script>
-
-<script>
-window._ttsGetSections = function() {
-  var a = document.querySelector('.slide-card.active');
-  return a ? [a] : [];
-};
-</script>
-
-<div id="google_translate_element" style="display:none"></div>
-
-<div id="translate-bar">
-  <span class="tb-label">🌐</span>
-  <select id="lang-select" aria-label="Select language">
-    <option value="">Language</option>
-    <option value="es">Español</option>
-    <option value="zh-CN">中文 (简体)</option>
-    <option value="zh-TW">中文 (繁體)</option>
-    <option value="ar">العربية</option>
-    <option value="fr">Français</option>
-    <option value="vi">Tiếng Việt</option>
-    <option value="ko">한국어</option>
-    <option value="pt">Português</option>
-    <option value="ru">Русский</option>
-    <option value="hi">हिंदी</option>
-    <option value="ht">Kreyòl Ayisyen</option>
-    <option value="tl">Filipino</option>
-    <option value="ja">日本語</option>
-    <option value="de">Deutsch</option>
-    <option value="so">Somali</option>
-    <option value="am">አማርኛ</option>
-    <option value="ur">اردو</option>
-    <option value="bn">বাংলা</option>
-    <option value="fa">ف
-
-<script>
-// Initialise Google Translate silently
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'en',
-    autoDisplay: false
-  }, 'google_translate_element');
-}
-
-// Drive translation via the internal goog-te-combo select
-function triggerTranslate(lang) {
-  var combo = document.querySelector('.goog-te-combo');
-  if (!combo) {
-    // Widget not ready yet — retry once after 600 ms
-    setTimeout(function() { triggerTranslate(lang); }, 600);
-    return;
-  }
-  if (lang === '') {
-    // Reset to English
-    combo.value = '';
-    var resetEvt = document.createEvent('HTMLEvents');
-    resetEvt.initEvent('change', false, true);
-    combo.dispatchEvent(resetEvt);
-    document.getElementById('lang-select').value = '';
-    return;
-  }
-  combo.value = lang;
-  var evt = document.createEvent('HTMLEvents');
-  evt.initEvent('change', false, true);
-  combo.dispatchEvent(evt);
-}
-
-document.getElementById('lang-select').addEventListener('change', function() {
-  triggerTranslate(this.value);
-});
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
-  <span class="tts-icon" title="Read Aloud">&#128266;</span>
-  <span class="tts-label">Read Aloud</span>
-  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
-  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
-  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
-  <div class="tts-divider"></div>
-</body></html>
+</body>
+</html>

@@ -1,596 +1,299 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Guided Notes — The Normal Cell Cycle · Lesson 1</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 Guided Notes | St. Jude STEMM</title>
 <style>
-:root{--navy:#1A3A5C;--teal:#0E7C86;--gold:#F0A500;--green:#16A34A;
-  --light:#EEF5FB;--gray:#64748B;--dark:#1E293B;--border:#D1E4F0;--bg:#F4F7FB;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);padding:38px 0 60px;
-  padding-bottom: 52px;}
-.toolbar{background:var(--navy);padding:8px 16px;display:flex;align-items:center;
-  justify-content:flex-end;gap:10px;}
-.toolbar button{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:5px;
-  padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
-.toolbar button:hover{background:rgba(255,255,255,.25);}
-.page{max-width:760px;margin:0 auto;padding:20px 20px 40px;}
-.doc-header{background:linear-gradient(135deg,var(--navy),#0E4D5A);color:#fff;
-  border-radius:8px;padding:20px 22px;margin-bottom:18px;}
-.dh-kicker{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:#7FD4D8;margin-bottom:6px;}
-.dh-title{font-size:20px;font-weight:800;margin-bottom:4px;}
-.dh-sub{font-size:12.5px;color:rgba(255,255,255,.7);}
-.name-row{display:flex;gap:10px;margin-bottom:16px;border:1px solid var(--border);
-  border-radius:6px;background:#fff;padding:8px 14px;align-items:flex-end;}
-.nf{flex:2;}.nf-sm{flex:1;}
-.nf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.5px;color:var(--gray);margin-bottom:2px;}
-.nf input{width:100%;border:none;border-bottom:1.5px solid var(--navy);padding:2px 0;
-  font-size:13px;font-family:inherit;outline:none;background:transparent;}
-.obj-box{background:var(--light);border-left:3px solid var(--teal);
-  border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:16px;}
-.obj-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:var(--teal);margin-bottom:4px;}
-.obj-text{font-size:13px;line-height:1.5;}
-.wb{background:#fff;border:1px solid var(--border);border-radius:6px;
-  padding:10px 14px;margin-bottom:16px;}
-.wb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:var(--gray);margin-bottom:6px;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;}
-.chip{background:var(--bg);border:1px solid var(--border);border-radius:12px;
-  padding:3px 10px;font-size:12px;font-weight:500;}
-.sec-bar{font-weight:700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
-  border-bottom:1.5px solid var(--border);padding-bottom:4px;margin:18px 0 10px;}
-.sec-bar.navy{color:var(--navy);}
-.sec-bar.teal{color:var(--teal);}
-.sec-bar.gold{color:#92400E;}
-.sec-bar.green{color:#15803D;}
-.write-field{width:100%;border:none;border-bottom:1.5px solid var(--border);
-  padding:4px 0;font-size:13px;font-family:inherit;outline:none;background:transparent;
-  margin:4px 0 8px;color:var(--dark);}
-.write-field:focus{border-bottom-color:var(--teal);}
-.fill-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
-.fill-table th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-size:12px;}
-.fill-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
-.fill-table td input{width:100%;border:none;border-bottom:1px solid var(--border);
-  outline:none;font-family:inherit;font-size:13px;background:transparent;padding:2px 0;}
-.fill-table tr:nth-child(even) td{background:var(--bg);}
-.diag-container{background:#fff;border:1.5px solid var(--border);border-radius:8px;
-  padding:16px;margin:10px 0;}
-.diag-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:var(--teal);margin-bottom:8px;}
-.phase-label-row{display:flex;gap:8px;margin-bottom:6px;}
-.pl-item{flex:1;}
-.pl-name{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--gray);
-  margin-bottom:2px;}
-.pl-input{width:100%;border:none;border-bottom:1.5px solid var(--border);padding:3px 0;
-  font-size:12px;font-family:inherit;outline:none;background:transparent;}
-.pl-input:focus{border-bottom-color:var(--teal);}
-.cp-grid{display:flex;flex-direction:column;gap:8px;margin:10px 0;}
-.cp-row{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;}
-.cp-row.header span{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.8px;color:var(--gray);padding-bottom:4px;
-  border-bottom:1.5px solid var(--border);}
-.cp-row input{width:100%;border:none;border-bottom:1.5px solid var(--border);
-  padding:4px 0;font-size:12px;font-family:inherit;outline:none;background:transparent;}
-.syn-q{background:#fff;border:1px solid var(--border);border-radius:6px;
-  padding:12px 14px;margin:8px 0;}
-.syn-q-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:var(--teal);margin-bottom:4px;}
-.syn-q-text{font-size:13px;margin-bottom:8px;line-height:1.45;}
-textarea.syn-ans{width:100%;border:1.5px solid var(--border);border-radius:5px;
-  padding:8px 10px;font-size:13px;font-family:inherit;resize:vertical;
-  min-height:65px;outline:none;line-height:1.5;}
-textarea.syn-ans:focus{border-color:var(--teal);}
-.self-check{background:var(--navy);border-radius:8px;padding:16px 18px;margin-top:18px;}
-.sc-title{color:#7FD4D8;font-size:10px;font-weight:700;letter-spacing:1.5px;
-  text-transform:uppercase;margin-bottom:10px;}
-.sc-row{display:flex;align-items:flex-start;gap:10px;color:rgba(255,255,255,.85);
-  font-size:13px;margin-bottom:8px;line-height:1.45;}
-.sc-box{width:16px;height:16px;border:1.5px solid rgba(255,255,255,.4);
-  border-radius:3px;flex-shrink:0;margin-top:2px;}
-.sc-q{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.15);}
-.sc-q-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-  color:#7FD4D8;margin-bottom:4px;}
-textarea.sc-ans{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
-  border-radius:5px;padding:8px;font-size:12.5px;font-family:inherit;color:#fff;
-  resize:vertical;min-height:55px;outline:none;line-height:1.5;}
-textarea.sc-ans::placeholder{color:rgba(255,255,255,.3);}
+:root {
+  --navy:#1A3A5C; --teal:#0E7C86; --gold:#F0A500; --light:#EEF5FB; 
+  --border:#D1E4F0; --dark:#1E293B; --gray:#64748B; --muted:#94A3B8;
+  --green:#16A34A; --lightgreen:#DCFCE7; --lightteal:#EBF7F8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: var(--dark); }
 
-  #tts-bar{position:fixed;bottom:0;left:0;right:0;background:#1A3A5C;color:#fff;
-    padding:7px 16px;display:flex;align-items:center;gap:8px;z-index:9997;
-    box-shadow:0 -2px 10px rgba(0,0,0,.3);flex-wrap:wrap;min-height:46px;}
-  .tts-icon{font-size:17px;flex-shrink:0;}
-  .tts-label{font-size:10.5px;font-weight:700;letter-spacing:.8px;
-    text-transform:uppercase;color:#7FD4D8;flex-shrink:0;}
-  .tts-btn{border:none;border-radius:5px;padding:5px 12px;font-size:12px;
-    font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
-  .tts-primary{background:#0E7C86;color:#fff;}
-  .tts-primary:hover{background:#0A6870;}
-  .tts-secondary{background:rgba(255,255,255,.12);color:#fff;padding:5px 10px;font-size:13px;}
-  .tts-secondary:hover:not(:disabled){background:rgba(255,255,255,.22);}
-  .tts-secondary:disabled{opacity:.35;cursor:default;}
-  .tts-divider{width:1px;height:20px;background:rgba(255,255,255,.2);flex-shrink:0;}
-  .tts-speed-row{display:flex;align-items:center;gap:4px;flex-shrink:0;}
-  .tts-speed-lbl{font-size:10px;color:#A8C8E8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-  .tts-speed-btn{background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:4px;
-    padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;}
-  .tts-speed-btn:hover{background:rgba(255,255,255,.2);}
-  .tts-speed-btn.tts-speed-active{background:#0E7C86;font-weight:700;}
-  .tts-status{font-size:11px;color:#A8C8E8;margin-left:auto;display:flex;align-items:center;gap:5px;}
-  .tts-pulse{width:7px;height:7px;border-radius:50%;background:#16A34A;
-    animation:ttsPulse 1.2s ease-in-out infinite;}
-  @keyframes ttsPulse{0%,100%{opacity:1}50%{opacity:.3}}
-  .tts-reading{outline:2.5px solid #0E7C86!important;outline-offset:4px;border-radius:6px;}
+.topbar {
+  background: var(--navy); color: #fff; padding: 0 28px; display: flex; align-items: center; gap: 14px;
+  height: 54px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.topbar .badge { background: var(--teal); color: #fff; font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
+.topbar .title { font-size: 14px; font-weight: 700; flex: 1; }
+.topbar .pdf-btn {
+  background: var(--gold); color: var(--navy); border: none; padding: 7px 16px; border-radius: 4px;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;
+}
 
+.container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
+.sec-tag { display: inline-block; background: var(--lightteal); color: var(--teal); 
+  padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; 
+  text-transform: uppercase; margin-bottom: 12px; }
+
+.sec-title { font-size: 28px; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+.sec-intro { font-size: 15px; line-height: 1.6; color: var(--gray); margin-bottom: 24px; }
+
+.card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+.card h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+.card p { font-size: 14px; line-height: 1.6; color: var(--gray); margin-bottom: 12px; }
+
+.fill-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.fill-table th, .fill-table td { padding: 12px; text-align: left; border: 1px solid var(--border); }
+.fill-table th { background: var(--lightteal); color: var(--teal); font-weight: 700; font-size: 13px; }
+.fill-table td { font-size: 13px; color: var(--dark); }
+.fill-table input, .fill-table textarea { 
+  width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; 
+  font-family: inherit; font-size: 13px; }
+.fill-table textarea { min-height: 80px; resize: vertical; }
+
+.reflection-block { background: var(--lightteal); border-left: 4px solid var(--teal); 
+  padding: 16px; margin: 16px 0; border-radius: 4px; }
+.reflection-block h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.reflection-block p { font-size: 13px; color: var(--dark); margin-bottom: 12px; }
+.reflection-block textarea { width: 100%; min-height: 100px; padding: 12px; 
+  border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-size: 13px; }
+
+.page-break { page-break-after: always; padding: 40px 0; border-top: 2px solid var(--border); margin-top: 40px; }
+
+@media print {
+  body { background: #fff; }
+  .topbar { position: static; }
+  .card { page-break-inside: avoid; }
+}
+
+@media (max-width: 600px) {
+  .topbar { padding: 0 16px; gap: 8px; }
+  .topbar .title { font-size: 12px; }
+  .fill-table { font-size: 12px; }
+  .fill-table th, .fill-table td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="badge">LESSON 1</span>
+  <div class="title">Guided Notes: The Normal Cell Cycle</div>
+  <button class="pdf-btn" onclick="window.print()">⬇ Print / Save as PDF</button>
+</div>
+
+<div class="container">
+
+<div class="card">
+  <h3>📝 How to Use These Notes</h3>
+  <p>These notes are designed to go alongside the Lesson 1 digital lesson. As you read each section in the lesson, fill in the blanks and answer the reflection questions here. You can:</p>
+  <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
+    <li><strong>Type directly into this page</strong> (works on computer or tablet)</li>
+    <li><strong>Print it out</strong> and fill in by hand</li>
+    <li><strong>Save as PDF</strong> to keep a digital copy</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 1: THE PHASES
+════════════════════════════════════════════════════════════ -->
+
+<div class="card">
+  <span class="sec-tag">Section 1: The Phases</span>
+  <h2 class="sec-title">Fill In: The Four Phases of the Cell Cycle</h2>
   
-.toolbar{position:sticky;top:38px;z-index:150;background:#0D2240;padding:8px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 2px 10px rgba(0,0,0,.4);}
-.tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
-.tb-right{display:flex;gap:8px;align-items:center;}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
-  border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;
-  transition:all .15s;white-space:nowrap;font-family:inherit;}
-.btn-print{background:#C8102E;color:#fff;}
-.btn-print:hover{background:#A00024;}
-.btn-save{background:#0E7C86;color:#fff;}
-.btn-save:hover{background:#0A6870;}
-.btn-clear{background:rgba(255,255,255,.08);color:#A8C8E8;
-  border:1px solid rgba(255,255,255,.15);}
-.btn-clear:hover{background:rgba(255,255,255,.18);}
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    Complete this table by filling in what happens during each phase and why it matters.
+  </p>
 
-  #translate-bar {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 99999;
-    background: rgba(26,58,92,.97);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 9px;
-    padding: 6px 10px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.32);
-    backdrop-filter: blur(8px);
-  }
-  #translate-bar .tb-label {
-    font-size: 14px;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  /* Native <select> — scrolls automatically on every OS/browser */
-  #lang-select {
-    appearance: none;
-    -webkit-appearance: none;
-    background: rgba(255,255,255,.08);
-    color: #D0E8F8;
-    border: 1px solid rgba(255,255,255,.22);
-    border-radius: 6px;
-    padding: 4px 22px 4px 8px;
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    outline: none;
-    min-width: 130px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 7px center;
-  }
-  #lang-select:focus { border-color: rgba(14,124,134,.8); }
-  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
-  /* Suppress the Google Translate top banner (it shifts page content down) */
-  .goog-te-banner-frame.skiptranslate { display: none !important; }
-  body { top: 0px !important; }
-  #google_translate_element { display: none !important; }
-  .goog-te-banner-frame.skiptranslate{display:none!important;}
-body{top:0px!important;}
-#google_translate_element{display:none!important;}
-  @media print{
-  .toolbar,#tts-bar,#translate-bar,#module-nav,#progress-bar{display:none!important;}
-  body{padding:0!important;background:#fff!important;}
-}
-</style></head><body>
-<nav id="module-nav" style="background:#0D2438;padding:0 16px;display:flex;align-items:center;height:38px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.3);">
-  <a href="module.html" style="font-size:11px;font-weight:700;color:#7FD4D8;text-decoration:none;margin-right:8px;">🔬 Cell Division</a>
-  <span style="color:rgba(255,255,255,.25);margin:0 8px;">›</span>
-  <a href="module.html#lesson-1" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:#7FD4D8;border:1px solid #0E7C86;background:rgba(255,255,255,.1);">L1</a>
-  <a href="module.html#lesson-2" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:rgba(255,255,255,.5);margin-left:3px;">L2</a>
-  <a href="module.html#lesson-3" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:rgba(255,255,255,.5);margin-left:3px;">L3</a>
-  <a href="module.html#lesson-4" style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:4px;text-decoration:none;color:rgba(255,255,255,.5);margin-left:3px;">L4</a>
-  <span style="font-size:11px;color:rgba(255,255,255,.4);margin-left:auto;">Lesson 1 · Guided Notes</span>
-</nav>
-<div class="toolbar">
-  <div class="tb-left">📝 Guided Notes — The Normal Cell Cycle · Lesson 1</div>
-  <div class="tb-right">
-    <button class="btn btn-clear" onclick="clearAllInputs()">↺ Clear</button>
-    <button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
-  </div>
-</div>
-<div class="toolbar">
-  <button onclick="window.print()">🖨 Print / Save PDF</button>
-</div>
-<div class="page">
+  <table class="fill-table">
+    <tr>
+      <th>Phase Name</th>
+      <th>What Happens?</th>
+      <th>Why Does It Matter?</th>
+    </tr>
+    <tr>
+      <td><strong>G1 Phase</strong></td>
+      <td><textarea placeholder="The cell..."></textarea></td>
+      <td><textarea placeholder="This is important because..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>S Phase</strong></td>
+      <td><textarea placeholder="The cell..."></textarea></td>
+      <td><textarea placeholder="This is the most important phase because..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>G2 Phase</strong></td>
+      <td><textarea placeholder="The cell..."></textarea></td>
+      <td><textarea placeholder="This is important because..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>M Phase</strong></td>
+      <td><textarea placeholder="The cell..."></textarea></td>
+      <td><textarea placeholder="This is important because..."></textarea></td>
+    </tr>
+  </table>
 
-<div class="doc-header">
-  <div class="dh-kicker">Lesson 1 · Guided Notes</div>
-  <div class="dh-title">The Normal Cell Cycle</div>
-  <div class="dh-sub">Note-catcher for the online module and card sort activity</div>
-</div>
-
-<div class="name-row">
-  <div class="nf"><label>Full Name</label><input type="text" placeholder="First Last"/></div>
-  <div class="nf-sm"><label>Period / Class</label><input type="text" placeholder="Period 3"/></div>
-  <div class="nf-sm"><label>Date</label><input type="text" placeholder="Today"/></div>
-</div>
-
-<div class="obj-box">
-  <div class="obj-lbl">Learning Objective</div>
-  <div class="obj-text">I can identify the four phases of the cell cycle, describe what occurs in each phase, and explain why cell cycle checkpoints are essential quality-control mechanisms.</div>
-</div>
-
-<div class="wb">
-  <div class="wb-lbl">Word Bank</div>
-  <div class="chips">
-    <span class="chip">cell cycle</span><span class="chip">G1 phase</span>
-    <span class="chip">S phase</span><span class="chip">G2 phase</span>
-    <span class="chip">M phase</span><span class="chip">interphase</span>
-    <span class="chip">mitosis</span><span class="chip">cytokinesis</span>
-    <span class="chip">checkpoint</span><span class="chip">p53</span>
-    <span class="chip">ATM/ATR</span><span class="chip">MAD2</span>
-    <span class="chip">apoptosis</span><span class="chip">sister chromatids</span>
-    <span class="chip">kinetochore</span>
+  <div class="reflection-block">
+    <h4>Reflection: Why Does the Order Matter?</h4>
+    <p>The cell cycle always happens in order: G1 → S → G2 → M. Why do you think the cell can't copy DNA first and grow later? Or divide before copying DNA?</p>
+    <textarea placeholder="Your answer..."></textarea>
   </div>
 </div>
 
-<!-- SECTION 1: Four Phases -->
-<div class="sec-bar navy">Section 1 — The Four Phases of the Cell Cycle</div>
-<p style="font-size:13px;margin-bottom:10px;">Complete the table using what you learned in the online module. Write phase descriptions in your own words.</p>
-<table class="fill-table">
-  <tr><th>Phase</th><th>Full Name</th><th>What happens? (your own words)</th><th>Approx. Time</th></tr>
-  <tr><td><strong>G1</strong></td><td>Gap 1</td><td><input type="text" placeholder="Describe what the cell does in G1..."/></td><td>~___ hrs</td></tr>
-  <tr><td><strong>S</strong></td><td>Synthesis</td><td><input type="text" placeholder="What is synthesized here?"/></td><td>~___ hrs</td></tr>
-  <tr><td><strong>G2</strong></td><td>Gap 2</td><td><input type="text" placeholder="What does the cell verify in G2?"/></td><td>~___ hrs</td></tr>
-  <tr><td><strong>M</strong></td><td>Mitosis &amp; Cytokinesis</td><td><input type="text" placeholder="What is the end result of M phase?"/></td><td>~___ hr</td></tr>
-</table>
-<p style="font-size:12.5px;color:var(--gray);margin-top:4px;">G1 + S + G2 together are called: <input type="text" style="border:none;border-bottom:1.5px solid var(--border);outline:none;font-size:13px;padding:1px 4px;" placeholder="_______________"/></p>
+<div class="page-break"></div>
 
-<!-- SECTION 2: Mitosis -->
-<div class="sec-bar teal">Section 2 — The Four Phases of Mitosis (PMAT)</div>
-<p style="font-size:13px;margin-bottom:10px;">Label each mitosis phase and write one key event that happens during it.</p>
-<div class="diag-container">
-  <div class="diag-lbl">Phase → Key Event</div>
-  <div class="phase-label-row">
-    <div class="pl-item"><div class="pl-name">P — Prophase</div><input class="pl-input" type="text" placeholder="Key event..."/></div>
-    <div class="pl-item"><div class="pl-name">M — Metaphase</div><input class="pl-input" type="text" placeholder="Key event..."/></div>
-  </div>
-  <div class="phase-label-row" style="margin-top:8px;">
-    <div class="pl-item"><div class="pl-name">A — Anaphase</div><input class="pl-input" type="text" placeholder="Key event..."/></div>
-    <div class="pl-item"><div class="pl-name">T — Telophase / Cytokinesis</div><input class="pl-input" type="text" placeholder="Key event..."/></div>
-  </div>
-</div>
-<p style="font-size:13px;margin-top:8px;">Why does chromosome alignment at the metaphase plate matter before anaphase begins?</p>
-<input type="text" class="write-field" placeholder="Because if chromosomes aren't aligned..."/>
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 2: THE CHECKPOINTS
+════════════════════════════════════════════════════════════ -->
 
-<!-- SECTION 3: Checkpoints -->
-<div class="sec-bar gold">Section 3 — Cell Cycle Checkpoints</div>
-<p style="font-size:13px;margin-bottom:8px;">Fill in the checkpoint table. Each row = one checkpoint station.</p>
-<div class="cp-grid">
-  <div class="cp-row header">
-    <span>Checkpoint Name</span><span>What Does It Verify?</span><span>Key Protein(s)</span>
-  </div>
-  <div class="cp-row">
-    <input type="text" placeholder="G1/S Checkpoint"/>
-    <input type="text" placeholder="Is DNA undamaged? Is the cell..."/>
-    <input type="text" placeholder="p53, Rb"/>
-  </div>
-  <div class="cp-row">
-    <input type="text" placeholder="G2/M Checkpoint"/>
-    <input type="text" placeholder="Was DNA fully replicated?..."/>
-    <input type="text" placeholder="ATM/ATR"/>
-  </div>
-  <div class="cp-row">
-    <input type="text" placeholder="Spindle Checkpoint"/>
-    <input type="text" placeholder="Are all chromosomes attached to..."/>
-    <input type="text" placeholder="MAD2"/>
+<div class="card">
+  <span class="sec-tag">Section 2: The Checkpoints</span>
+  <h2 class="sec-title">Fill In: What Do the Three Checkpoints Check For?</h2>
+  
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    For each checkpoint, write down what it checks for and what happens if something is wrong.
+  </p>
+
+  <table class="fill-table">
+    <tr>
+      <th>Checkpoint</th>
+      <th>When Does It Happen?</th>
+      <th>What Does It Check?</th>
+      <th>What Happens If Something Is Wrong?</th>
+    </tr>
+    <tr>
+      <td><strong>G1/S<br>Checkpoint</strong></td>
+      <td>End of G1, before entering S</td>
+      <td><textarea placeholder="The checkpoint checks..."></textarea></td>
+      <td><textarea placeholder="The cell can..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>G2/M<br>Checkpoint</strong></td>
+      <td>End of G2, before entering M</td>
+      <td><textarea placeholder="The checkpoint checks..."></textarea></td>
+      <td><textarea placeholder="The cell can..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>Spindle Assembly<br>Checkpoint</strong></td>
+      <td>During metaphase (during M)</td>
+      <td><textarea placeholder="The checkpoint checks..."></textarea></td>
+      <td><textarea placeholder="The cell can..."></textarea></td>
+    </tr>
+  </table>
+
+  <div class="reflection-block">
+    <h4>Reflection: Why Three Checkpoints?</h4>
+    <p>Why do you think the cell needs THREE checkpoints instead of just one? What would happen if the cell only had one checkpoint?</p>
+    <textarea placeholder="Your answer..."></textarea>
   </div>
 </div>
 
-<!-- SECTION 4: Protein Cast -->
-<div class="sec-bar green">Section 4 — The Protein Cast</div>
-<p style="font-size:13px;margin-bottom:8px;">Match each protein to its checkpoint and write its function in your own words.</p>
-<table class="fill-table">
-  <tr><th>Protein</th><th>Gene</th><th>Checkpoint</th><th>Function (your words)</th></tr>
-  <tr><td>p53</td><td>TP53</td><td><input type="text" placeholder="G1/S..."/></td><td><input type="text" placeholder="Detects damage and..."/></td></tr>
-  <tr><td>Rb</td><td>RB1</td><td><input type="text" placeholder="G1/S..."/></td><td><input type="text" placeholder="Blocks entry into S phase by..."/></td></tr>
-  <tr><td>ATM/ATR</td><td>ATM, ATR</td><td><input type="text" placeholder="G2/M..."/></td><td><input type="text" placeholder="Senses double-strand..."/></td></tr>
-  <tr><td>MAD2</td><td>MAD2L1</td><td><input type="text" placeholder="Spindle..."/></td><td><input type="text" placeholder="Generates 'wait' signal when..."/></td></tr>
-</table>
+<div class="page-break"></div>
 
-<!-- SECTION 5: Synthesis -->
-<div class="sec-bar navy">Section 5 — Synthesis Questions</div>
-<div class="syn-q">
-  <div class="syn-q-lbl">Q1 · Understand</div>
-  <div class="syn-q-text">Why are there three separate checkpoints rather than one comprehensive check at the end of interphase?</div>
-  <textarea class="syn-ans" placeholder="Each checkpoint catches a different type of error at a different moment because..."></textarea>
-</div>
-<div class="syn-q">
-  <div class="syn-q-lbl">Q2 · Apply — Bridge to Lesson 2</div>
-  <div class="syn-q-text">A student says: "If p53 isn't working, the cell will still be caught by the G2/M checkpoint." Do you agree? What does this tell you about checkpoint redundancy?</div>
-  <textarea class="syn-ans" placeholder="I agree / disagree because..."></textarea>
-</div>
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 3: REGULATORY PROTEINS
+════════════════════════════════════════════════════════════ -->
 
-<div class="self-check">
-  <div class="sc-title">Self-Check — Leave blank if unsure (your teacher will see this)</div>
-  <div class="sc-row"><div class="sc-box"></div>I can name the four cell cycle phases and describe what happens in each</div>
-  <div class="sc-row"><div class="sc-box"></div>I can explain the four phases of mitosis in order (PMAT) and why the order matters</div>
-  <div class="sc-row"><div class="sc-box"></div>I can identify all three checkpoints, what each verifies, and its key protein</div>
-  <div class="sc-row"><div class="sc-box"></div>I can explain what would happen if p53 or MAD2 stopped working</div>
-  <div class="sc-q">
-    <div class="sc-q-label">One question I still have after this lesson:</div>
-    <textarea class="sc-ans" placeholder="My question is..."></textarea>
+<div class="card">
+  <span class="sec-tag">Section 3: Regulatory Proteins</span>
+  <h2 class="sec-title">Match: The Protein Gatekeepers</h2>
+  
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    Draw a line connecting each protein to its role in the cell cycle.
+  </p>
+
+  <table class="fill-table">
+    <tr>
+      <th style="width: 40%;">Protein Name</th>
+      <th>Role / What It Does</th>
+    </tr>
+    <tr>
+      <td><strong>p53</strong></td>
+      <td><textarea placeholder="p53 is..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>Cyclins</strong></td>
+      <td><textarea placeholder="Cyclins are..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>CDKs</strong></td>
+      <td><textarea placeholder="CDKs are..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>Mad2</strong></td>
+      <td><textarea placeholder="Mad2 is..."></textarea></td>
+    </tr>
+  </table>
+
+  <div class="reflection-block">
+    <h4>Reflection: The Key & Engine Analogy</h4>
+    <p>In the lesson, you learned that cyclins are like keys and CDKs are like engines. Using this analogy, explain why CDKs need cyclins to work.</p>
+    <textarea placeholder="Your answer..."></textarea>
   </div>
 </div>
 
-</div><!-- /page -->
+<div class="page-break"></div>
 
-<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
-  <span class="tts-icon">&#128266;</span>
-  <span class="tts-label">Read Aloud</span>
-  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()">&#9654; Play</button>
-  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled>&#9646;&#9646;</button>
-  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled>&#9632;</button>
-  <div class="tts-divider"></div>
-  <div class="tts-speed-row">
-    <span class="tts-speed-lbl">Speed</span>
-    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&times;</button>
-    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&times;</button>
-    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&times;</button>
-    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&times;</button>
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 4: CHECKPOINT FAILURE & CANCER
+════════════════════════════════════════════════════════════ -->
+
+<div class="card">
+  <span class="sec-tag">Section 4: Cancer Connection</span>
+  <h2 class="sec-title">Understand: Why Cancer Needs Multiple Failures</h2>
+  
+  <div class="reflection-block">
+    <h4>Reflection #1: Single vs. Multiple Failures</h4>
+    <p>Why is ONE checkpoint failure usually not enough to cause cancer, but MULTIPLE failures over time can?</p>
+    <textarea placeholder="Explain..."></textarea>
   </div>
-  <div class="tts-status" id="tts-status" style="display:none">
-    <div class="tts-pulse"></div>
-    <span id="tts-status-text">Reading&hellip;</span>
+
+  <div class="reflection-block">
+    <h4>Reflection #2: The Domino Effect</h4>
+    <p>Imagine a cell with damaged DNA:</p>
+    <p>• If only the G1/S checkpoint fails, what could happen next?</p>
+    <textarea placeholder="Step 1..."></textarea>
+    <p style="margin-top: 12px;">• If that same cell then has a G2/M checkpoint failure, what happens?</p>
+    <textarea placeholder="Step 2..."></textarea>
+    <p style="margin-top: 12px;">• Why does this accumulation of failures over many cell divisions matter for cancer?</p>
+    <textarea placeholder="Why..."></textarea>
+  </div>
+
+  <div class="reflection-block">
+    <h4>Reflection #3: Connecting to St. Jude Research</h4>
+    <p>St. Jude researchers study which proteins are broken in cancer cells. Based on what you learned, why would identifying which checkpoint failed be important for treating cancer?</p>
+    <textarea placeholder="Your answer..."></textarea>
   </div>
 </div>
 
-<script>
-/* ═══ Read-Aloud Engine v2 ═══════════════════════════════════════════════ */
-(function() {
-  var synth    = window.speechSynthesis;
-  var _rate    = 1.0;
-  var _playing = false;
-  var _paused  = false;
-  var _sections = [];
-  var _idx     = 0;
-  var _utt     = null;
-  var _timer   = null;
+<div class="page-break"></div>
 
-  /* DOM walker: builds text with proper punctuation after every block element */
-  window._ttsExtract = function(rootEl) {
-    if (!rootEl) return '';
-    var clone = rootEl.cloneNode(true);
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 5: SUMMARY
+════════════════════════════════════════════════════════════ -->
 
-    var skipSels = [
-      'button','select','svg','script','style',
-      'input[type=submit]','input[type=button]','input[type=reset]',
-      '#tts-bar','.tts-bar','#translate-bar','.toolbar','.top-bar',
-      '.tb-right','[aria-hidden="true"]'
-    ];
-    skipSels.forEach(function(sel) {
-      try {
-        clone.querySelectorAll(sel).forEach(function(n) {
-          if (n.parentNode) n.parentNode.removeChild(n);
-        });
-      } catch(e) {}
-    });
+<div class="card">
+  <span class="sec-tag">Section 5: Summary</span>
+  <h2 class="sec-title">What You've Learned</h2>
+  
+  <div class="reflection-block">
+    <h4>Write Your Own Summary</h4>
+    <p>In your own words, explain what the cell cycle is and why checkpoints are important. (Use 3-5 sentences.)</p>
+    <textarea placeholder="The cell cycle is... Checkpoints are important because..."></textarea>
+  </div>
 
-    var BLOCK = {
-      DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,
-      LI:1,DT:1,DD:1,TD:1,TH:1,TR:1,CAPTION:1,
-      SECTION:1,ARTICLE:1,BLOCKQUOTE:1,FIGURE:1,FIGCAPTION:1,
-      LABEL:1,LEGEND:1,SUMMARY:1
-    };
-
-    var parts = [];
-    function walk(node) {
-      if (node.nodeType === 3) {
-        var t = node.nodeValue.replace(/\s+/g,' ');
-        if (t.trim()) parts.push(t);
-        return;
-      }
-      if (node.nodeType !== 1) return;
-      var tag = node.tagName;
-      if (tag === 'BR') { parts.push(' '); return; }
-      var before = parts.length;
-      var c = node.childNodes;
-      for (var i = 0; i < c.length; i++) walk(c[i]);
-      if (BLOCK[tag] && parts.length > before) {
-        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
-        if (seg) {
-          if (!/[.!?:;\u2014\u2013,]$/.test(seg)) seg += '.';
-          parts.push(seg + ' ');
-        }
-      }
-    }
-    walk(clone);
-    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
-  };
-
-  window._ttsGetSections = function() {
-    var page = document.querySelector('.page, main, [role=main]') || document.body;
-    return Array.from(page.children).filter(function(el) {
-      return (el.textContent || '').trim().length > 15;
-    });
-  };
-
-  function clearHL() {
-    document.querySelectorAll('.tts-reading').forEach(function(el) {
-      el.classList.remove('tts-reading');
-    });
-  }
-
-  function readAt(idx) {
-    clearTimeout(_timer);
-    if (idx >= _sections.length) { onDone(); return; }
-    _idx = idx;
-    clearHL();
-    var sec = _sections[idx];
-    if (sec.parentNode) {
-      sec.classList.add('tts-reading');
-      try { sec.scrollIntoView({behavior:'smooth',block:'nearest'}); } catch(e) {}
-    }
-    var txt = window._ttsExtract(sec);
-    if (!txt.trim()) { readAt(idx + 1); return; }
-
-    _utt = new SpeechSynthesisUtterance(txt);
-    _utt.rate = _rate;
-    _utt.lang = document.documentElement.lang || 'en-US';
-    _utt.onend = function() {
-      if (!_playing) return;
-      _timer = setTimeout(function() {
-        if (_playing && !_paused) readAt(idx + 1);
-      }, 500);
-    };
-    _utt.onerror = function(e) {
-      if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
-    };
-    synth.speak(_utt);
-    _playing = true; _paused = false;
-    updateUI(_idx + 1, _sections.length);
-  }
-
-  function onDone() {
-    _playing = false; _paused = false;
-    clearHL(); clearTimeout(_timer); updateUI(0,0);
-  }
-
-  function updateUI(cur, total) {
-    var play = document.getElementById('tts-play');
-    var pause = document.getElementById('tts-pause');
-    var stop  = document.getElementById('tts-stop');
-    var status = document.getElementById('tts-status');
-    var stxt   = document.getElementById('tts-status-text');
-    if (!play) return;
-    if (_playing) {
-      play.innerHTML  = '&#8635; Restart';
-      pause.disabled  = false;
-      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
-      pause.title     = _paused ? 'Resume' : 'Pause';
-      stop.disabled   = false;
-      if (status) status.style.display = 'flex';
-      if (stxt) stxt.textContent = _paused ? 'Paused'
-        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading\u2026');
-    } else {
-      play.innerHTML  = '&#9654; Play';
-      pause.disabled  = true;
-      pause.innerHTML = '&#9646;&#9646;';
-      stop.disabled   = true;
-      if (status) status.style.display = 'none';
-    }
-  }
-
-  window.ttsPlay = function() {
-    synth.cancel(); clearTimeout(_timer);
-    _sections = window._ttsGetSections();
-    if (!_sections.length) return;
-    _playing = true; _paused = false;
-    readAt(0);
-  };
-  window.ttsPauseResume = function() {
-    if (!_playing) return;
-    if (_paused) { synth.resume(); _paused = false; }
-    else         { synth.pause();  _paused = true;  }
-    updateUI(_idx + 1, _sections.length);
-  };
-  window.ttsStop = function() {
-    synth.cancel(); clearTimeout(_timer);
-    _playing = false; _paused = false;
-    clearHL(); updateUI(0,0);
-  };
-  window.ttsSetRate = function(r) {
-    _rate = r;
-    document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
-      b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
-    });
-    if (_playing && !_paused) {
-      var ri = _idx; synth.cancel(); clearTimeout(_timer);
-      _sections = window._ttsGetSections();
-      _timer = setTimeout(function() { readAt(ri); }, 100);
-    }
-  };
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) window.ttsStop();
-  });
-})();
-</script>
-<script>
-window._ttsGetSections = function() {
-  var page = document.querySelector('.page');
-  if (!page) return [];
-  var groups = [], current = [];
-  Array.from(page.children).forEach(function(c) {
-    if (c.classList.contains('sec-bar') || c.classList.contains('doc-header')) {
-      if (current.length) groups.push(current.slice());
-      current = [c];
-    } else { current.push(c); }
-  });
-  if (current.length) groups.push(current);
-  return groups.map(function(kids) {
-    var w = document.createElement('div');
-    kids.forEach(function(c) { w.appendChild(c.cloneNode(true)); });
-    return w;
-  }).filter(function(w) { return (w.textContent||'').trim().length > 20; });
-};
-</script>
-
-<div id="google_translate_element" style="display:none"></div>
-<div id="translate-bar">
-  <span class="tb-label">🌐</span>
-  <select id="lang-select" aria-label="Select language">
-    <option value="">Language</option>
-    <option value="es">Español</option>
-    <option value="zh-CN">中文 (简体)</option>
-    <option value="zh-TW">中文 (繁體)</option>
-    <option value="ar">العربية</option>
-    <option value="fr">Français</option>
-    <option value="vi">Tiếng Việt</option>
-    <option value="ko">한국어</option>
-    <option value="pt">Português</option>
-    <option value="ru">Русский</option>
-    <option value="hi">हिंदी</option>
-    <option value="ht">Kreyòl Ayisyen</option>
-    <option value="tl">Filipino</option>
-    <option value="ja">日本語</option>
-    <option value="de">Deutsch</option>
-    <option value="so">Somali</option>
-    <option value="am">አማርኛ</option>
-    <option value="ur">اردو</option>
-    <option value="bn">বাংলা</option>
-    <option value="fa">فارسی</option>
-  </select>
+  <div class="reflection-block">
+    <h4>Questions for Class Discussion</h4>
+    <p>Write down 1-2 questions you still have about the cell cycle or checkpoints that you'd like to discuss with your classmates or teacher.</p>
+    <textarea placeholder="My question is..."></textarea>
+  </div>
 </div>
-<script>
-function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'en',autoDisplay:false},'google_translate_element');
-}
-function triggerTranslate(lang){
-  var combo=document.querySelector('.goog-te-combo');
-  if(!combo){setTimeout(function(){triggerTranslate(lang);},600);return;}
-  if(lang===''){
-    combo.value='';var e=document.createEvent('HTMLEvents');
-    e.initEvent('change',false,true);combo.dispatchEvent(e);
-    document.getElementById('lang-select').value='';return;
-  }
-  combo.value=lang;var e=document.createEvent('HTMLEvents');
-  e.initEvent('change',false,true);combo.dispatchEvent(e);
-}
-document.addEventListener('DOMContentLoaded',function(){
-  var s=document.getElementById('lang-select');
-  if(s)s.addEventListener('change',function(){triggerTranslate(this.value);});
-});
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-</body></html>
+
+<div class="card" style="background: var(--lightteal); border-color: var(--teal); text-align: center; margin-top: 40px;">
+  <p style="font-size: 13px; color: var(--teal); font-weight: 600; margin: 0;">
+    ✓ Great work completing these guided notes! <br>
+    Next, try the Card Sort Activity to practice what you've learned.
+  </p>
+</div>
+
+</div>
+
+</body>
+</html>
