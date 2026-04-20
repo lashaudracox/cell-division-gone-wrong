@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head><title>Figure 5.1 Preview v2</title>
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; padding: 20px; margin: 0; }
+.figure { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+.figure-content { background: #fafbfc; border-radius: 4px; padding: 20px; overflow-x: auto; }
+.figure-caption { margin-top: 15px; padding: 12px; background: #f8f9fa; border-left: 3px solid #0E7C86; font-size: 13px; color: #333; border-radius: 4px; line-height: 1.6; }
+.fig-number { font-weight: 700; color: #0E7C86; }
+</style>
+</head>
+<body>
+    <!-- FIGURE 5.1: The Cumulative Path to Cancer (v2) -->
+    <div class="figure">
+      <div class="figure-content">
+        <svg viewBox="0 0 1010 600" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto; display: block;">
+          <text x="505" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1A3A5C">The Cumulative Path to Cancer</text>
+          <text x="505" y="47" text-anchor="middle" font-size="11" fill="#666" font-style="italic">Cancer develops from multiple checkpoint failures over time — not one event</text>
+          <defs>
+            <marker id="fig51-arrow" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto">
+              <polygon points="0 0, 10 4, 0 8" fill="#555"/>
+            </marker>
+          </defs>
+          <rect x="20" y="65" width="220" height="440" fill="white" stroke="#16A34A" stroke-width="2.5" rx="8"/>
+          <rect x="20" y="65" width="220" height="36" fill="#16A34A" rx="8"/>
+          <rect x="20" y="90" width="220" height="11" fill="#16A34A"/>
+          <text x="130" y="87" text-anchor="middle" font-size="14" font-weight="700" fill="white">STAGE 1: Normal</text>
+          <text x="130" y="120" text-anchor="middle" font-size="11" font-style="italic" fill="#555">Healthy cell</text>
+          <circle cx="130" cy="180" r="38" fill="#DBEEF5" stroke="#16A34A" stroke-width="2.5"/>
+          <circle cx="130" cy="180" r="36" fill="none" stroke="#16A34A" stroke-width="0.8" opacity="0.5"/>
+          <circle cx="125.4" cy="177.0" r="17.1" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1.5"/>
+          <circle cx="121.2" cy="173.5" r="3.4" fill="#2A4A6A" opacity="0.55"/>
+          <path d="M 115.2 178.7 Q 120.3 182.1 125.4 179.5 T 135.7 180.4" fill="none" stroke="#D9534F" stroke-width="1.2" opacity="0.65"/>
+          <path d="M 116.9 171.8 Q 123.7 175.2 130.6 170.1 T 137.4 174.4" fill="none" stroke="#4A7FB0" stroke-width="1.2" opacity="0.65"/>
+          <line x1="35" y1="245" x2="225" y2="245" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="35" y="265" text-anchor="start" font-size="10" font-weight="700" fill="#1A3A5C">Checkpoint status:</text>
+          <circle cx="45" cy="282" r="7" fill="#16A34A"/>
+          <text x="45" y="285" text-anchor="middle" font-size="10" font-weight="700" fill="white">✓</text>
+          <text x="58" y="285" text-anchor="start" font-size="10" fill="#333">G1/S checkpoint</text>
+          <circle cx="45" cy="300" r="7" fill="#16A34A"/>
+          <text x="45" y="303" text-anchor="middle" font-size="10" font-weight="700" fill="white">✓</text>
+          <text x="58" y="303" text-anchor="start" font-size="10" fill="#333">G2/M checkpoint</text>
+          <circle cx="45" cy="318" r="7" fill="#16A34A"/>
+          <text x="45" y="321" text-anchor="middle" font-size="10" font-weight="700" fill="white">✓</text>
+          <text x="58" y="321" text-anchor="start" font-size="10" fill="#333">Spindle checkpoint</text>
+          <line x1="35" y1="350" x2="225" y2="350" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="130" y="370" text-anchor="middle" font-size="10" fill="#333">All checkpoints working.</text>
+          <text x="130" y="383" text-anchor="middle" font-size="10" fill="#333">Cell divides only when</text>
+          <text x="130" y="396" text-anchor="middle" font-size="10" fill="#333">needed for growth or repair.</text>
+          <rect x="270" y="65" width="220" height="440" fill="white" stroke="#F0A500" stroke-width="2.5" rx="8"/>
+          <rect x="270" y="65" width="220" height="36" fill="#F0A500" rx="8"/>
+          <rect x="270" y="90" width="220" height="11" fill="#F0A500"/>
+          <text x="380" y="87" text-anchor="middle" font-size="14" font-weight="700" fill="white">STAGE 2: One Mutation</text>
+          <text x="380" y="120" text-anchor="middle" font-size="11" font-style="italic" fill="#555">One checkpoint damaged</text>
+          <circle cx="380" cy="180" r="38" fill="#DBEEF5" stroke="#F0A500" stroke-width="2.5"/>
+          <circle cx="380" cy="180" r="36" fill="none" stroke="#F0A500" stroke-width="0.8" opacity="0.5"/>
+          <circle cx="375.4" cy="177.0" r="17.1" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1.5"/>
+          <circle cx="371.2" cy="173.5" r="3.4" fill="#2A4A6A" opacity="0.55"/>
+          <path d="M 365.2 178.7 Q 370.3 182.1 375.4 179.5 T 385.7 180.4" fill="none" stroke="#D9534F" stroke-width="1.2" opacity="0.65"/>
+          <path d="M 366.9 171.8 Q 373.7 175.2 380.6 170.1 T 387.4 174.4" fill="none" stroke="#4A7FB0" stroke-width="1.2" opacity="0.65"/>
+          <text x="395" y="172" font-size="14" font-weight="700" fill="#DC143C">✗</text>
+          <text x="403" y="176" font-size="8" fill="#DC143C" font-style="italic">mutation</text>
+          <line x1="285" y1="245" x2="475" y2="245" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="285" y="265" text-anchor="start" font-size="10" font-weight="700" fill="#1A3A5C">Checkpoint status:</text>
+          <circle cx="295" cy="282" r="7" fill="#DC143C"/>
+          <text x="295" y="285" text-anchor="middle" font-size="10" font-weight="700" fill="white">✗</text>
+          <text x="308" y="285" text-anchor="start" font-size="10" fill="#333">G1/S checkpoint</text>
+          <circle cx="295" cy="300" r="7" fill="#16A34A"/>
+          <text x="295" y="303" text-anchor="middle" font-size="10" font-weight="700" fill="white">✓</text>
+          <text x="308" y="303" text-anchor="start" font-size="10" fill="#333">G2/M checkpoint</text>
+          <circle cx="295" cy="318" r="7" fill="#16A34A"/>
+          <text x="295" y="321" text-anchor="middle" font-size="10" font-weight="700" fill="white">✓</text>
+          <text x="308" y="321" text-anchor="start" font-size="10" fill="#333">Spindle checkpoint</text>
+          <line x1="285" y1="350" x2="475" y2="350" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="380" y="370" text-anchor="middle" font-size="10" fill="#333">One mutation alone isn't</text>
+          <text x="380" y="383" text-anchor="middle" font-size="10" fill="#333">enough — the other checkpoints</text>
+          <text x="380" y="396" text-anchor="middle" font-size="10" fill="#333">often catch the problem.</text>
+          <rect x="520" y="65" width="220" height="440" fill="white" stroke="#E8751C" stroke-width="2.5" rx="8"/>
+          <rect x="520" y="65" width="220" height="36" fill="#E8751C" rx="8"/>
+          <rect x="520" y="90" width="220" height="11" fill="#E8751C"/>
+          <text x="630" y="87" text-anchor="middle" font-size="14" font-weight="700" fill="white">STAGE 3: Multiple Mutations</text>
+          <text x="630" y="120" text-anchor="middle" font-size="11" font-style="italic" fill="#555">Cells over-dividing</text>
+          <circle cx="605" cy="162" r="20" fill="#DBEEF5" stroke="#E8751C" stroke-width="1.5"/>
+          <circle cx="603.0" cy="161.0" r="10.0" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 598.0 161.0 Q 603.0 164.0 608.0 161.0" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="650" cy="165" r="20" fill="#DBEEF5" stroke="#E8751C" stroke-width="1.5"/>
+          <circle cx="648.0" cy="164.0" r="10.0" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 643.0 164.0 Q 648.0 167.0 653.0 164.0" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="612" cy="200" r="20" fill="#DBEEF5" stroke="#E8751C" stroke-width="1.5"/>
+          <circle cx="610.0" cy="199.0" r="10.0" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 605.0 199.0 Q 610.0 202.0 615.0 199.0" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="652" cy="198" r="20" fill="#DBEEF5" stroke="#E8751C" stroke-width="1.5"/>
+          <circle cx="650.0" cy="197.0" r="10.0" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 645.0 197.0 Q 650.0 200.0 655.0 197.0" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <line x1="535" y1="245" x2="725" y2="245" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="535" y="265" text-anchor="start" font-size="10" font-weight="700" fill="#1A3A5C">Checkpoint status:</text>
+          <circle cx="545" cy="282" r="7" fill="#DC143C"/>
+          <text x="545" y="285" text-anchor="middle" font-size="10" font-weight="700" fill="white">✗</text>
+          <text x="558" y="285" text-anchor="start" font-size="10" fill="#333">G1/S checkpoint</text>
+          <circle cx="545" cy="300" r="7" fill="#DC143C"/>
+          <text x="545" y="303" text-anchor="middle" font-size="10" font-weight="700" fill="white">✗</text>
+          <text x="558" y="303" text-anchor="start" font-size="10" fill="#333">G2/M checkpoint</text>
+          <circle cx="545" cy="318" r="7" fill="#16A34A"/>
+          <text x="545" y="321" text-anchor="middle" font-size="10" font-weight="700" fill="white">✓</text>
+          <text x="558" y="321" text-anchor="start" font-size="10" fill="#333">Spindle checkpoint</text>
+          <line x1="535" y1="350" x2="725" y2="350" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="630" y="370" text-anchor="middle" font-size="10" fill="#333">Multiple checkpoints broken.</text>
+          <text x="630" y="383" text-anchor="middle" font-size="10" fill="#333">Cells divide too often,</text>
+          <text x="630" y="396" text-anchor="middle" font-size="10" fill="#333">forming a small abnormal cluster.</text>
+          <rect x="770" y="65" width="220" height="440" fill="white" stroke="#DC143C" stroke-width="2.5" rx="8"/>
+          <rect x="770" y="65" width="220" height="36" fill="#DC143C" rx="8"/>
+          <rect x="770" y="90" width="220" height="11" fill="#DC143C"/>
+          <text x="880" y="87" text-anchor="middle" font-size="14" font-weight="700" fill="white">STAGE 4: Cancer</text>
+          <text x="880" y="120" text-anchor="middle" font-size="11" font-style="italic" fill="#555">Uncontrolled growth (tumor)</text>
+          <ellipse cx="879.2794709181358" cy="179.13538908014974" rx="12.6" ry="12.9" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="878.1" cy="178.6" r="5.8" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 875.2 178.6 Q 878.1 180.3 881.0 178.6" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="885.5520863036897" cy="212.67282942282645" rx="13.9" ry="16.0" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="884.1" cy="212.0" r="7.0" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 880.6 212.0 Q 884.1 214.1 887.7 212.0" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="911.3095700834142" cy="201.77522423989947" rx="13.5" ry="13.2" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="909.9" cy="201.1" r="8.2" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 905.9 201.1 Q 909.9 203.5 914.0 201.1" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="891.5356047985581" cy="149.25492730587598" rx="14.8" ry="11.5" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="890.2" cy="148.6" r="6.6" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 886.9 148.6 Q 890.2 150.6 893.5 148.6" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="851.9657926395049" cy="165.1899797686504" rx="10.6" ry="8.9" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="850.9" cy="164.7" r="5.1" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 848.4 164.7 Q 850.9 166.2 853.5 164.7" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="908.7376142656249" cy="178.10555974966695" rx="13.9" ry="13.5" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="907.4" cy="177.4" r="6.7" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 904.1 177.4 Q 907.4 179.4 910.7 177.4" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="864.8525180491018" cy="145.22770509059396" rx="16.8" ry="14.8" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="863.4" cy="144.5" r="7.3" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 859.7 144.5 Q 863.4 146.7 867.1 144.5" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="847.3815622484311" cy="205.09466155968252" rx="13.2" ry="11.2" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="846.1" cy="204.5" r="8.1" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 842.1 204.5 Q 846.1 206.9 850.2 204.5" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="910.6961131407348" cy="150.44339374606213" rx="11.0" ry="11.4" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="909.6" cy="149.9" r="6.0" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 906.6 149.9 Q 909.6 151.7 912.6 149.9" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="860.582319944513" cy="184.34187859207358" rx="11.1" ry="10.4" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="859.5" cy="183.8" r="5.6" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 856.6 183.8 Q 859.5 185.5 862.3 183.8" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <ellipse cx="842.2274688094644" cy="185.9494151421785" rx="10.3" ry="10.2" fill="#DBEEF5" stroke="#DC143C" stroke-width="1.5"/>
+          <circle cx="841.2" cy="185.4" r="5.2" fill="#F4F9FC" stroke="#4A6F8F" stroke-width="1"/>
+          <path d="M 838.6 185.4 Q 841.2 187.0 843.8 185.4" fill="none" stroke="#D9534F" stroke-width="0.8" opacity="0.6"/>
+          <line x1="785" y1="245" x2="975" y2="245" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="785" y="265" text-anchor="start" font-size="10" font-weight="700" fill="#1A3A5C">Checkpoint status:</text>
+          <circle cx="795" cy="282" r="7" fill="#DC143C"/>
+          <text x="795" y="285" text-anchor="middle" font-size="10" font-weight="700" fill="white">✗</text>
+          <text x="808" y="285" text-anchor="start" font-size="10" fill="#333">G1/S checkpoint</text>
+          <circle cx="795" cy="300" r="7" fill="#DC143C"/>
+          <text x="795" y="303" text-anchor="middle" font-size="10" font-weight="700" fill="white">✗</text>
+          <text x="808" y="303" text-anchor="start" font-size="10" fill="#333">G2/M checkpoint</text>
+          <circle cx="795" cy="318" r="7" fill="#DC143C"/>
+          <text x="795" y="321" text-anchor="middle" font-size="10" font-weight="700" fill="white">✗</text>
+          <text x="808" y="321" text-anchor="start" font-size="10" fill="#333">Spindle checkpoint</text>
+          <line x1="785" y1="350" x2="975" y2="350" stroke="#D1E4F0" stroke-width="1"/>
+          <text x="880" y="370" text-anchor="middle" font-size="10" fill="#333">All checkpoints failed.</text>
+          <text x="880" y="383" text-anchor="middle" font-size="10" fill="#333">Cells divide continuously,</text>
+          <text x="880" y="396" text-anchor="middle" font-size="10" fill="#333">forming a disorganized tumor.</text>
+          <line x1="242" y1="220" x2="268" y2="220" stroke="#555" stroke-width="2" marker-end="url(#fig51-arrow)"/>
+          <text x="255.0" y="212" text-anchor="middle" font-size="10" font-weight="700" fill="#F0A500">1st mutation</text>
+          <text x="255.0" y="234" text-anchor="middle" font-size="8" fill="#888" font-style="italic">+ years</text>
+          <line x1="492" y1="220" x2="518" y2="220" stroke="#555" stroke-width="2" marker-end="url(#fig51-arrow)"/>
+          <text x="505.0" y="212" text-anchor="middle" font-size="10" font-weight="700" fill="#F0A500">2nd mutation</text>
+          <text x="505.0" y="234" text-anchor="middle" font-size="8" fill="#888" font-style="italic">+ years</text>
+          <line x1="742" y1="220" x2="768" y2="220" stroke="#555" stroke-width="2" marker-end="url(#fig51-arrow)"/>
+          <text x="755.0" y="212" text-anchor="middle" font-size="10" font-weight="700" fill="#F0A500">more mutations</text>
+          <text x="755.0" y="234" text-anchor="middle" font-size="8" fill="#888" font-style="italic">+ years</text>
+          <line x1="130" y1="535" x2="880" y2="535" stroke="#999" stroke-width="2"/>
+          <line x1="130" y1="530" x2="130" y2="540" stroke="#555" stroke-width="2"/>
+          <text x="130" y="555" text-anchor="middle" font-size="11" font-weight="700" fill="#444">Year 0</text>
+          <line x1="380" y1="530" x2="380" y2="540" stroke="#555" stroke-width="2"/>
+          <text x="380" y="555" text-anchor="middle" font-size="11" font-weight="700" fill="#444">~5 years</text>
+          <line x1="630" y1="530" x2="630" y2="540" stroke="#555" stroke-width="2"/>
+          <text x="630" y="555" text-anchor="middle" font-size="11" font-weight="700" fill="#444">~10–15 years</text>
+          <line x1="880" y1="530" x2="880" y2="540" stroke="#555" stroke-width="2"/>
+          <text x="880" y="555" text-anchor="middle" font-size="11" font-weight="700" fill="#444">20+ years</text>
+          <text x="505" y="577" text-anchor="middle" font-size="11" fill="#555" font-style="italic">Cancer typically takes 10–20+ years to develop — this is why cancer risk increases with age</text>
+        </svg>
+      </div>
+      <div class="figure-caption">
+        <span class="fig-number">Figure 5.1:</span> Cancer develops through the <strong>multi-hit hypothesis</strong> — the gradual accumulation of multiple checkpoint failures over time. A single mutation rarely causes cancer because the other checkpoints can usually catch the problem (Stage 2). But as more mutations accumulate and more checkpoints fail (Stages 3 and 4), cells lose the ability to stop dividing. The <strong style="color:#16A34A;">green ✓</strong> marks represent checkpoints still working; <strong style="color:#DC143C;">red ✗</strong> marks represent checkpoints that have been damaged by mutations. This process typically takes <strong>10–20 years</strong>, which is why cancer risk increases with age.
+      </div>
+    </div></body></html>

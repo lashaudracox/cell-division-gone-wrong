@@ -11,19 +11,27 @@
   --green:#16A34A; --lightgreen:#DCFCE7; --lightteal:#EBF7F8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: var(--dark); }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: var(--dark); padding-top: 54px; }
 
-.topbar {
-  background: var(--navy); color: #fff; padding: 0 28px; display: flex; align-items: center; gap: 14px;
-  height: 54px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,.25);
+/* ════ TOP BAR ════ */
+.top-bar {
+  background: var(--navy); color: #fff; padding: 0 28px; display: flex; align-items: center; gap: 16px;
+  height: 54px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,.25);
 }
-.topbar .badge { background: var(--teal); color: #fff; font-size: 10px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
-.topbar .title { font-size: 14px; font-weight: 700; flex: 1; }
-.topbar .pdf-btn {
-  background: var(--gold); color: var(--navy); border: none; padding: 7px 16px; border-radius: 4px;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;
+.top-bar-brand { font-size: 13px; font-weight: 600; color: #D0E8F8; flex: 1; }
+.top-bar-controls { display: flex; align-items: center; gap: 12px; }
+.lang-select {
+  background: transparent; border: 1px solid #466FA0; color: #D0E8F8; padding: 6px 10px; 
+  border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: 500;
 }
+.lang-select:focus { outline: none; border-color: var(--teal); }
+.lang-select option { background: var(--navy); color: #D0E8F8; }
+.print-btn {
+  background: var(--gold); color: var(--navy); border: none; padding: 6px 12px; border-radius: 4px;
+  font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s;
+}
+.print-btn:hover { filter: brightness(0.95); }
+.print-btn svg { width: 14px; height: 14px; }
 
 .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
@@ -57,14 +65,14 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: v
 .page-break { page-break-after: always; padding: 40px 0; border-top: 2px solid var(--border); margin-top: 40px; }
 
 @media print {
-  body { background: #fff; }
-  .topbar { position: static; }
+  .top-bar { display: none !important; }
+  body { padding-top: 0; background: #fff; }
   .card { page-break-inside: avoid; }
 }
 
 @media (max-width: 600px) {
-  .topbar { padding: 0 16px; gap: 8px; }
-  .topbar .title { font-size: 12px; }
+  .top-bar { padding: 0 16px; gap: 8px; }
+  .top-bar-brand { font-size: 11px; }
   .fill-table { font-size: 12px; }
   .fill-table th, .fill-table td { padding: 8px; }
 }
@@ -72,34 +80,86 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: v
 </head>
 <body>
 
-<div class="topbar">
-  <span class="badge">LESSON 1</span>
-  <div class="title">Guided Notes: The Normal Cell Cycle</div>
-  <button class="pdf-btn" onclick="window.print()">⬇ Print / Save as PDF</button>
+<div class="top-bar">
+  <span class="top-bar-brand">Cell Division Gone Wrong · Lesson 1 · Guided Notes</span>
+  <div class="top-bar-controls">
+    <select class="lang-select" aria-label="Select language">
+      <option value="">🌐 Language</option>
+      <option value="es">Español</option>
+      <option value="zh-CN">中文 (简体)</option>
+      <option value="zh-TW">中文 (繁體)</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="vi">Tiếng Việt</option>
+      <option value="ko">한국어</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="hi">हिंदी</option>
+      <option value="ht">Kreyòl Ayisyen</option>
+      <option value="tl">Filipino</option>
+      <option value="ja">日本語</option>
+      <option value="de">Deutsch</option>
+      <option value="so">Somali</option>
+      <option value="am">አማርኛ</option>
+      <option value="ur">اردو</option>
+      <option value="bn">বাংলা</option>
+      <option value="fa">فارسی</option>
+    </select>
+    <button class="print-btn" onclick="window.print()" title="Print or save as PDF">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+      Print / Save PDF
+    </button>
+  </div>
 </div>
 
 <div class="container">
 
 <div class="card">
   <h3>📝 How to Use These Notes</h3>
-  <p>These notes are designed to go alongside the Lesson 1 digital lesson. As you read each section in the lesson, fill in the blanks and answer the reflection questions here. You can:</p>
-  <ul style="margin-left: 20px; font-size: 14px; line-height: 1.8; color: var(--gray);">
-    <li><strong>Type directly into this page</strong> (works on computer or tablet)</li>
-    <li><strong>Print it out</strong> and fill in by hand</li>
-    <li><strong>Save as PDF</strong> to keep a digital copy</li>
-  </ul>
+  <p>These notes are designed to go alongside the Lesson 1 digital lesson. As you read each section in the lesson and watch the embedded videos, fill in the blanks and answer the reflection questions here. You can type directly into this page, print it out, or save as PDF.</p>
+  <p style="font-size: 13px; color: var(--gray); margin-top: 8px;"><em>Tip: The lesson uses figures (numbered like Figure 2.1) and videos (numbered like Video 1.3). When you see those references in these notes, go back to the lesson to look at them.</em></p>
 </div>
 
-<!-- ════════════════════════════════════════════════════════════
-     SECTION 1: THE PHASES
-════════════════════════════════════════════════════════════ -->
-
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 1: Why Cell Division Matters -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="card">
-  <span class="sec-tag">Section 1: The Phases</span>
+  <span class="sec-tag">Section 1: The Big Picture</span>
+  <h2 class="sec-title">Why Cell Division Matters</h2>
+  
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    Look at <strong>Figure 1.1</strong> in the lesson. It shows how one parent cell becomes two identical daughter cells. Use that figure to answer the questions below.
+  </p>
+
+  <div class="reflection-block">
+    <h4>Reflection 1: Why does your body need to make new cells?</h4>
+    <p>List at least three reasons your body needs cell division:</p>
+    <textarea placeholder="1. ...&#10;2. ...&#10;3. ..." rows="4"></textarea>
+  </div>
+
+  <div class="reflection-block">
+    <h4>Reflection 2: Identical daughter cells</h4>
+    <p>The two daughter cells produced by mitosis are <strong>genetically identical</strong> to the parent cell. Why is this important? What would go wrong if they weren't identical?</p>
+    <textarea placeholder="Your answer..." rows="3"></textarea>
+  </div>
+
+  <div style="background: var(--lightteal); padding: 12px; border-radius: 4px; margin-top: 16px;">
+    <strong style="color: var(--teal);">💡 Key Vocabulary Check:</strong>
+    <p style="font-size: 13px; margin-top: 4px;">All the cells in this lesson are <strong>diploid (2n)</strong> — meaning they have a full set of chromosomes. The process that makes haploid cells (like sperm and eggs) is called <em>meiosis</em>, which is a different process you'll learn about later.</p>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 2: The Four Phases -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="card">
+  <span class="sec-tag">Section 2: The Cell Cycle</span>
   <h2 class="sec-title">Fill In: The Four Phases of the Cell Cycle</h2>
   
   <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
-    Complete this table by filling in what happens during each phase and why it matters.
+    Use <strong>Figure 2.1</strong> (the cell cycle wheel) to complete this table. Notice how much time the cell spends in each phase!
   </p>
 
   <table class="fill-table">
@@ -109,191 +169,460 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: v
       <th>Why Does It Matter?</th>
     </tr>
     <tr>
-      <td><strong>G1 Phase</strong></td>
+      <td><strong>G1 Phase</strong><br><em style="font-size:11px;">(Gap 1 / Growth)</em></td>
       <td><textarea placeholder="The cell..."></textarea></td>
       <td><textarea placeholder="This is important because..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>S Phase</strong></td>
+      <td><strong>S Phase</strong><br><em style="font-size:11px;">(Synthesis)</em></td>
       <td><textarea placeholder="The cell..."></textarea></td>
       <td><textarea placeholder="This is the most important phase because..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>G2 Phase</strong></td>
+      <td><strong>G2 Phase</strong><br><em style="font-size:11px;">(Gap 2)</em></td>
       <td><textarea placeholder="The cell..."></textarea></td>
       <td><textarea placeholder="This is important because..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>M Phase</strong></td>
+      <td><strong>M Phase</strong><br><em style="font-size:11px;">(Mitotic phase)</em></td>
       <td><textarea placeholder="The cell..."></textarea></td>
       <td><textarea placeholder="This is important because..."></textarea></td>
     </tr>
   </table>
 
+  <div style="background: #FEF3C7; padding: 12px; border-radius: 4px; margin: 16px 0; border-left: 3px solid var(--gold);">
+    <strong style="color: var(--navy);">🔁 Don't forget G0!</strong>
+    <p style="font-size: 13px; margin-top: 4px;">Some cells exit the cycle into <strong>G0 (resting state)</strong> instead of continuing to divide. Many of your nerve and muscle cells are in G0 right now.</p>
+  </div>
+
   <div class="reflection-block">
     <h4>Reflection: Why Does the Order Matter?</h4>
-    <p>The cell cycle always happens in order: G1 → S → G2 → M. Why do you think the cell can't copy DNA first and grow later? Or divide before copying DNA?</p>
+    <p>The cell cycle always happens in order: G1 → S → G2 → M. Why do you think the cell can't copy DNA first and grow later?</p>
     <textarea placeholder="Your answer..."></textarea>
   </div>
 </div>
 
 <div class="page-break"></div>
 
-<!-- ════════════════════════════════════════════════════════════
-     SECTION 2: THE CHECKPOINTS
-════════════════════════════════════════════════════════════ -->
-
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 3: Key Vocabulary -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="card">
-  <span class="sec-tag">Section 2: The Checkpoints</span>
-  <h2 class="sec-title">Fill In: What Do the Three Checkpoints Check For?</h2>
+  <span class="sec-tag">Section 3: Vocabulary</span>
+  <h2 class="sec-title">Key Structures in Cell Division</h2>
   
   <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
-    For each checkpoint, write down what it checks for and what happens if something is wrong.
+    These structures show up over and over in the lesson figures and videos. Knowing them now will make everything else click. Use the <strong>Key Structures in Cell Division</strong> card from the lesson to fill in this table.
+  </p>
+
+  <table class="fill-table">
+    <tr>
+      <th style="width: 30%;">Structure</th>
+      <th>What It Is / Does</th>
+    </tr>
+    <tr>
+      <td><strong style="color:#D9534F;">Chromosome</strong></td>
+      <td><textarea placeholder="A chromosome is..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#D9534F;">Sister chromatids</strong></td>
+      <td><textarea placeholder="Sister chromatids are..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#1A3A5C;">Centromere</strong></td>
+      <td><textarea placeholder="The centromere is..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#F0A500;">Kinetochore</strong></td>
+      <td><textarea placeholder="A kinetochore is..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#0E7C86;">Spindle fibers</strong></td>
+      <td><textarea placeholder="Spindle fibers are..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#0E7C86;">Centrosome / Centrioles</strong></td>
+      <td><textarea placeholder="Centrosomes contain... and they..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#4A6F8F;">Nuclear envelope</strong></td>
+      <td><textarea placeholder="The nuclear envelope is..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#F0A500;">Cleavage furrow</strong></td>
+      <td><textarea placeholder="A cleavage furrow is..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong style="color:#F0A500;">Contractile ring</strong><br><em style="font-size:11px;">(actin + myosin)</em></td>
+      <td><textarea placeholder="The contractile ring is..."></textarea></td>
+    </tr>
+  </table>
+
+  <div class="reflection-block">
+    <h4>Quick Self-Check</h4>
+    <p>Without looking back, can you draw a simple chromosome and label its <strong>two sister chromatids</strong> and <strong>centromere</strong>? Sketch it in the box below or on a separate paper.</p>
+    <textarea placeholder="Describe your sketch in words, or sketch on paper..." rows="4"></textarea>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 4: Six Stages of Mitosis -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="card">
+  <span class="sec-tag">Section 4: The Mitotic Phase</span>
+  <h2 class="sec-title">Study Notes: The Six Stages of Mitosis</h2>
+  
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    After watching <strong>Video 1.3</strong> (Amoeba Sisters — Mitosis) in the main lesson, use these detailed notes to review and deepen your understanding of each stage. Fill in the blanks as you study. The mnemonic <strong>PMAT</strong> helps you remember the order: <strong>P</strong>rophase → <strong>M</strong>etaphase → <strong>A</strong>naphase → <strong>T</strong>elophase.
+  </p>
+
+  <div style="background: var(--light); border-left: 4px solid var(--teal); padding: 16px; border-radius: 4px; margin-bottom: 16px;">
+    <h3 style="color: var(--teal); margin-bottom: 8px;">Before Mitosis: Interphase (review)</h3>
+    <p style="font-size: 14px; line-height: 1.6; color: var(--dark);">
+      The cell spends most of its time in interphase (G1, S, G2). During <strong>S phase</strong>, DNA is copied, so each chromosome now has <strong>two identical sister chromatids</strong> joined at the centromere. The cell enters mitosis with everything ready to be divided.
+    </p>
+  </div>
+
+  <div style="border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 12px;">
+    <h3 style="color: var(--navy); margin-bottom: 10px;">📍 Stage 1: Prophase</h3>
+    <p style="font-size: 14px; line-height: 1.6; color: var(--dark); margin-bottom: 10px;"><strong>What's happening:</strong></p>
+    <ul style="margin-left: 24px; font-size: 14px; line-height: 1.7; color: var(--gray);">
+      <li>Chromosomes <strong>condense</strong> and become visible under a microscope</li>
+      <li>Each chromosome consists of two identical sister chromatids joined at the <strong>centromere</strong></li>
+      <li>Centrioles move to <strong>opposite poles</strong> of the cell (in animal cells)</li>
+      <li>Spindle fibers begin to form from the centrosomes</li>
+      <li>Nuclear envelope begins to break down</li>
+    </ul>
+    <p style="font-size: 14px; color: var(--dark); margin-top: 10px;"><strong>Key visible change:</strong> Red X-shaped chromosomes become visible in the cell nucleus.</p>
+    <div style="background: #FFF8E6; padding: 10px; border-radius: 4px; margin-top: 10px;">
+      <strong style="font-size: 13px; color: var(--navy);">Check your understanding:</strong>
+      <p style="font-size: 13px; margin-top: 4px;">What shape do chromosomes appear in during prophase, and why?</p>
+      <textarea placeholder="Your answer..."></textarea>
+    </div>
+  </div>
+
+  <div style="border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 12px;">
+    <h3 style="color: var(--navy); margin-bottom: 10px;">📍 Stage 2: Prometaphase</h3>
+    <p style="font-size: 14px; line-height: 1.6; color: var(--dark); margin-bottom: 10px;"><strong>What's happening:</strong></p>
+    <ul style="margin-left: 24px; font-size: 14px; line-height: 1.7; color: var(--gray);">
+      <li>Nuclear envelope <strong>completely disintegrates</strong></li>
+      <li>Spindle fibers now have direct access to chromosomes</li>
+      <li>Each chromosome has a <strong>kinetochore</strong> (protein structure) on the centromere</li>
+      <li>Spindle fibers <strong>attach to kinetochores</strong> on both sides of each chromosome</li>
+      <li>Some spindle fibers don't attach to chromosomes; they form the pole-to-pole framework</li>
+    </ul>
+    <p style="font-size: 14px; color: var(--dark); margin-top: 10px;"><strong>Key visible change:</strong> Chromosomes start being pulled from both directions; they begin to move.</p>
+    <p style="font-size: 13px; color: var(--gray); margin-top: 8px; font-style: italic;">Note: Some textbooks fold prometaphase into late prophase — they often say there are 4 stages (PMAT) rather than 5.</p>
+  </div>
+
+  <div style="border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 12px;">
+    <h3 style="color: var(--navy); margin-bottom: 10px;">📍 Stage 3: Metaphase</h3>
+    <p style="font-size: 14px; line-height: 1.6; color: var(--dark); margin-bottom: 10px;"><strong>What's happening:</strong></p>
+    <ul style="margin-left: 24px; font-size: 14px; line-height: 1.7; color: var(--gray);">
+      <li>All chromosomes <strong>align at the cell's center</strong> (the equatorial plate or metaphase plate)</li>
+      <li>This alignment is crucial for accurate distribution to daughter cells</li>
+      <li>Spindle fibers from both poles are still pulling on the chromosomes</li>
+      <li>This is the most recognizable stage — the cell looks like it has a "belt" of chromosomes around its middle</li>
+    </ul>
+    <p style="font-size: 14px; color: var(--dark); margin-top: 10px;"><strong>Key visible change:</strong> Chromosomes form a perfect line across the cell's center.</p>
+    <div style="background: #FEF3C7; padding: 10px; border-radius: 4px; margin-top: 10px; border-left: 3px solid var(--gold);">
+      <strong style="font-size: 13px; color: var(--navy);">🔍 Quality Control Point:</strong>
+      <p style="font-size: 13px; margin-top: 4px; color: var(--dark);">The cell has a checkpoint at metaphase (the <strong>spindle assembly checkpoint</strong>) to ensure all chromosomes are properly attached to spindle fibers before proceeding. Unattached chromosomes trigger a "wait" signal. You'll learn more about this in Section 6.</p>
+    </div>
+  </div>
+
+  <div style="border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 12px;">
+    <h3 style="color: var(--navy); margin-bottom: 10px;">📍 Stage 4: Anaphase</h3>
+    <p style="font-size: 14px; line-height: 1.6; color: var(--dark); margin-bottom: 10px;"><strong>What's happening:</strong></p>
+    <ul style="margin-left: 24px; font-size: 14px; line-height: 1.7; color: var(--gray);">
+      <li><strong>Sister chromatids separate</strong> at the centromere</li>
+      <li>Once separated, each chromatid is now called an individual <strong>chromosome</strong></li>
+      <li>Spindle fibers <strong>shorten</strong>, pulling the separated chromosomes toward opposite poles</li>
+      <li>The cell elongates, getting longer as chromosomes move apart</li>
+      <li>By the end of anaphase, the cell has two complete and identical sets of chromosomes</li>
+    </ul>
+    <p style="font-size: 14px; color: var(--dark); margin-top: 10px;"><strong>Key visible change:</strong> Chromosomes move to opposite ends of the cell, appearing as V-shapes.</p>
+    <div style="background: #FFF8E6; padding: 10px; border-radius: 4px; margin-top: 10px;">
+      <strong style="font-size: 13px; color: var(--navy);">Check your understanding:</strong>
+      <p style="font-size: 13px; margin-top: 4px;">Why is it important that sister chromatids are pulled to <em>opposite</em> poles (and not both to the same pole)?</p>
+      <textarea placeholder="Your answer..."></textarea>
+    </div>
+  </div>
+
+  <div style="border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 12px;">
+    <h3 style="color: var(--navy); margin-bottom: 10px;">📍 Stage 5: Telophase</h3>
+    <p style="font-size: 14px; line-height: 1.6; color: var(--dark); margin-bottom: 10px;"><strong>What's happening:</strong></p>
+    <ul style="margin-left: 24px; font-size: 14px; line-height: 1.7; color: var(--gray);">
+      <li>Chromosomes <strong>decondense</strong> (relax) and become less visible</li>
+      <li>They form a diffuse mass of chromatin again (like interphase)</li>
+      <li><strong>Nuclear envelopes reform</strong> around each set of chromosomes</li>
+      <li>Each new nucleus now has its own complete set of genetic instructions</li>
+      <li>Spindle fibers disappear</li>
+      <li>The cell is now ready for cytokinesis</li>
+    </ul>
+    <p style="font-size: 14px; color: var(--dark); margin-top: 10px;"><strong>Key visible change:</strong> Two separate nuclei form, one at each pole.</p>
+    <div style="background: #FEE2E2; padding: 10px; border-radius: 4px; margin-top: 10px; border-left: 3px solid #DC143C;">
+      <strong style="font-size: 13px; color: #991B1B;">⚠️ Important:</strong>
+      <p style="font-size: 13px; margin-top: 4px; color: var(--dark);"><strong>Telophase ≠ End of cell division.</strong> Telophase completes mitosis (nuclear division), but the cell is still one cell. Cytokinesis (next section) physically separates it into two daughter cells.</p>
+    </div>
+  </div>
+
+  <div style="background: var(--light); padding: 14px; border-radius: 6px; margin-top: 16px; border: 2px solid var(--teal);">
+    <h4 style="color: var(--navy); margin-bottom: 8px;">🎯 Summary: The Complete Sequence</h4>
+    <p style="font-size: 14px; line-height: 1.8; margin: 0;">
+      <strong>Prophase:</strong> Chromosomes condense, spindle forms<br>
+      <strong>→ Prometaphase:</strong> Nuclear envelope dissolves, spindle attaches<br>
+      <strong>→ Metaphase:</strong> Chromosomes align at center<br>
+      <strong>→ Anaphase:</strong> Sister chromatids separate, move to poles<br>
+      <strong>→ Telophase:</strong> Chromosomes decondense, nuclei reform<br>
+      <strong>→ Cytokinesis:</strong> Cell physically divides into two (see next section)
+    </p>
+  </div>
+
+  <div class="reflection-block" style="margin-top: 20px;">
+    <h4>Reflection: Putting It Together</h4>
+    <p>In your own words, describe the journey of one chromosome through mitosis. Start with how it looks in interphase and end with how it looks in the two daughter cells after cytokinesis.</p>
+    <textarea placeholder="Your answer..." rows="6"></textarea>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 5: Cytokinesis -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="card">
+  <span class="sec-tag">Section 5: Cytokinesis</span>
+  <h2 class="sec-title">Cytokinesis: The Final Split</h2>
+
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    Mitosis divides the <em>nucleus</em>; cytokinesis divides the <em>cell</em>. Watch <strong>Video 1.4</strong> (the sea urchin embryo dividing) in the lesson — you can actually see the cleavage furrow form in real time!
+  </p>
+
+  <table class="fill-table">
+    <tr>
+      <th style="width: 30%;">Question</th>
+      <th>Your Answer</th>
+    </tr>
+    <tr>
+      <td><strong>What is the contractile ring made of?</strong></td>
+      <td><textarea placeholder="The contractile ring is made of..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>What is the cleavage furrow?</strong></td>
+      <td><textarea placeholder="The cleavage furrow is..."></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>How is plant cytokinesis different?</strong></td>
+      <td><textarea placeholder="Plant cells form a... instead of pinching because..."></textarea></td>
+    </tr>
+  </table>
+
+  <div class="reflection-block">
+    <h4>Reflection: Why Two Steps?</h4>
+    <p>Why do you think cells separate into two steps (mitosis first, then cytokinesis)? Why not just split everything at once?</p>
+    <textarea placeholder="Your answer..." rows="3"></textarea>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 6: Decision-Gate Checkpoints -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="card">
+  <span class="sec-tag">Section 6: Quality Control</span>
+  <h2 class="sec-title">Checkpoints as Decision Gates</h2>
+  
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    Use <strong>Figure 3.1</strong> (The Three Major Cell Cycle Checkpoints) and <strong>Video 3.1</strong> (Amoeba Sisters Cell Cycle) to complete this section. Think of each checkpoint as a <em>gate</em> with two paths: <span style="color:#16A34A;font-weight:700;">PASS ✓</span> (continue) or <span style="color:#DC143C;font-weight:700;">FAIL ✗</span> (pause).
   </p>
 
   <table class="fill-table">
     <tr>
       <th>Checkpoint</th>
-      <th>When Does It Happen?</th>
-      <th>What Does It Check?</th>
-      <th>What Happens If Something Is Wrong?</th>
+      <th>When?</th>
+      <th>What does the gate check?</th>
+      <th>If FAIL ✗ — what happens?</th>
     </tr>
     <tr>
-      <td><strong>G1/S<br>Checkpoint</strong></td>
-      <td>End of G1, before entering S</td>
-      <td><textarea placeholder="The checkpoint checks..."></textarea></td>
-      <td><textarea placeholder="The cell can..."></textarea></td>
+      <td><strong>G1/S</strong></td>
+      <td>End of G1</td>
+      <td><textarea placeholder="The gate checks..."></textarea></td>
+      <td><textarea placeholder="The cell can pause to..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>G2/M<br>Checkpoint</strong></td>
-      <td>End of G2, before entering M</td>
-      <td><textarea placeholder="The checkpoint checks..."></textarea></td>
-      <td><textarea placeholder="The cell can..."></textarea></td>
+      <td><strong>G2/M</strong></td>
+      <td>End of G2</td>
+      <td><textarea placeholder="The gate checks..."></textarea></td>
+      <td><textarea placeholder="The cell can pause to..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>Spindle Assembly<br>Checkpoint</strong></td>
-      <td>During metaphase (during M)</td>
-      <td><textarea placeholder="The checkpoint checks..."></textarea></td>
-      <td><textarea placeholder="The cell can..."></textarea></td>
+      <td><strong>Spindle (M)</strong></td>
+      <td>During metaphase</td>
+      <td><textarea placeholder="The gate checks..."></textarea></td>
+      <td><textarea placeholder="The cell can pause to..."></textarea></td>
     </tr>
   </table>
 
+  <div style="background: #FEE2E2; padding: 12px; border-radius: 4px; margin-top: 16px; border-left: 3px solid #DC143C;">
+    <strong style="color: #991B1B;">📍 Important term: <em>Apoptosis</em></strong>
+    <p style="font-size: 13px; margin-top: 4px; color: var(--dark);">When damage is too severe to repair, the cell can undergo <strong>apoptosis</strong> — programmed cell death. This is the body's way of safely eliminating broken cells before they cause harm.</p>
+  </div>
+
   <div class="reflection-block">
-    <h4>Reflection: Why Three Checkpoints?</h4>
-    <p>Why do you think the cell needs THREE checkpoints instead of just one? What would happen if the cell only had one checkpoint?</p>
-    <textarea placeholder="Your answer..."></textarea>
+    <h4>Reflection 1: Why Three Gates?</h4>
+    <p>Why do you think the cell needs THREE checkpoints instead of just one big one at the end?</p>
+    <textarea placeholder="Your answer..." rows="3"></textarea>
+  </div>
+
+  <div class="reflection-block">
+    <h4>Reflection 2: The Gate Analogy</h4>
+    <p>Imagine you're designing a security gate at the entrance to a high-stakes laboratory. List 2–3 specific things your gate would check before letting someone in. How is this similar to what cell cycle checkpoints do?</p>
+    <textarea placeholder="Your gate would check... This is similar to checkpoints because..." rows="4"></textarea>
   </div>
 </div>
 
 <div class="page-break"></div>
 
-<!-- ════════════════════════════════════════════════════════════
-     SECTION 3: REGULATORY PROTEINS
-════════════════════════════════════════════════════════════ -->
-
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 7: Regulatory Proteins -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="card">
-  <span class="sec-tag">Section 3: Regulatory Proteins</span>
+  <span class="sec-tag">Section 7: The Molecular Players</span>
   <h2 class="sec-title">Match: The Protein Gatekeepers</h2>
   
   <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
-    Draw a line connecting each protein to its role in the cell cycle.
+    Use <strong>Figure 4.1</strong> in the lesson. These proteins control the gates from Section 6 — they're the actual molecular "gatekeepers."
   </p>
 
   <table class="fill-table">
     <tr>
-      <th style="width: 40%;">Protein Name</th>
+      <th style="width: 30%;">Protein</th>
       <th>Role / What It Does</th>
     </tr>
     <tr>
-      <td><strong>p53</strong></td>
+      <td><strong>p53</strong><br><em style="font-size:11px;">"the guardian"</em></td>
       <td><textarea placeholder="p53 is..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>Cyclins</strong></td>
+      <td><strong>Cyclins</strong><br><em style="font-size:11px;">"the keys"</em></td>
       <td><textarea placeholder="Cyclins are..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>CDKs</strong></td>
+      <td><strong>CDKs</strong><br><em style="font-size:11px;">(Cyclin-Dependent Kinases — "the engines")</em></td>
       <td><textarea placeholder="CDKs are..."></textarea></td>
     </tr>
     <tr>
-      <td><strong>Mad2</strong></td>
+      <td><strong>Mad2</strong><br><em style="font-size:11px;">"the spindle watchdog"</em></td>
       <td><textarea placeholder="Mad2 is..."></textarea></td>
     </tr>
   </table>
 
   <div class="reflection-block">
     <h4>Reflection: The Key & Engine Analogy</h4>
-    <p>In the lesson, you learned that cyclins are like keys and CDKs are like engines. Using this analogy, explain why CDKs need cyclins to work.</p>
-    <textarea placeholder="Your answer..."></textarea>
+    <p>In the lesson, you learned that cyclins are like keys and CDKs are like engines. Why do CDKs need cyclins to work? What advantage does this design give the cell?</p>
+    <textarea placeholder="Your answer..." rows="4"></textarea>
   </div>
 </div>
 
 <div class="page-break"></div>
 
-<!-- ════════════════════════════════════════════════════════════
-     SECTION 4: CHECKPOINT FAILURE & CANCER
-════════════════════════════════════════════════════════════ -->
-
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 8: Cancer - Multi-Hit Hypothesis -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="card">
-  <span class="sec-tag">Section 4: Cancer Connection</span>
-  <h2 class="sec-title">Understand: Why Cancer Needs Multiple Failures</h2>
+  <span class="sec-tag">Section 8: Cancer Connection</span>
+  <h2 class="sec-title">The Multi-Hit Hypothesis</h2>
   
-  <div class="reflection-block">
-    <h4>Reflection #1: Single vs. Multiple Failures</h4>
-    <p>Why is ONE checkpoint failure usually not enough to cause cancer, but MULTIPLE failures over time can?</p>
-    <textarea placeholder="Explain..."></textarea>
-  </div>
-
-  <div class="reflection-block">
-    <h4>Reflection #2: The Domino Effect</h4>
-    <p>Imagine a cell with damaged DNA:</p>
-    <p>• If only the G1/S checkpoint fails, what could happen next?</p>
-    <textarea placeholder="Step 1..."></textarea>
-    <p style="margin-top: 12px;">• If that same cell then has a G2/M checkpoint failure, what happens?</p>
-    <textarea placeholder="Step 2..."></textarea>
-    <p style="margin-top: 12px;">• Why does this accumulation of failures over many cell divisions matter for cancer?</p>
-    <textarea placeholder="Why..."></textarea>
-  </div>
-
-  <div class="reflection-block">
-    <h4>Reflection #3: Connecting to St. Jude Research</h4>
-    <p>St. Jude researchers study which proteins are broken in cancer cells. Based on what you learned, why would identifying which checkpoint failed be important for treating cancer?</p>
-    <textarea placeholder="Your answer..."></textarea>
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<!-- ════════════════════════════════════════════════════════════
-     SECTION 5: SUMMARY
-════════════════════════════════════════════════════════════ -->
-
-<div class="card">
-  <span class="sec-tag">Section 5: Summary</span>
-  <h2 class="sec-title">What You've Learned</h2>
-  
-  <div class="reflection-block">
-    <h4>Write Your Own Summary</h4>
-    <p>In your own words, explain what the cell cycle is and why checkpoints are important. (Use 3-5 sentences.)</p>
-    <textarea placeholder="The cell cycle is... Checkpoints are important because..."></textarea>
-  </div>
-
-  <div class="reflection-block">
-    <h4>Questions for Class Discussion</h4>
-    <p>Write down 1-2 questions you still have about the cell cycle or checkpoints that you'd like to discuss with your classmates or teacher.</p>
-    <textarea placeholder="My question is..."></textarea>
-  </div>
-</div>
-
-<div class="card" style="background: var(--lightteal); border-color: var(--teal); text-align: center; margin-top: 40px;">
-  <p style="font-size: 13px; color: var(--teal); font-weight: 600; margin: 0;">
-    ✓ Great work completing these guided notes! <br>
-    Next, try the Card Sort Activity to practice what you've learned.
+  <p style="font-size: 14px; color: var(--gray); margin-bottom: 16px;">
+    Use <strong>Figure 5.1</strong> (The Cumulative Path to Cancer) to answer these questions. The big idea: cancer doesn't come from <em>one</em> mistake — it takes multiple checkpoint failures over many years.
   </p>
+
+  <table class="fill-table">
+    <tr>
+      <th>Stage</th>
+      <th>Cells (one or many?)</th>
+      <th>Which checkpoints are working?</th>
+    </tr>
+    <tr>
+      <td><strong>Stage 1: Normal</strong></td>
+      <td><textarea rows="2"></textarea></td>
+      <td><textarea rows="2"></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>Stage 2: One Mutation</strong></td>
+      <td><textarea rows="2"></textarea></td>
+      <td><textarea rows="2"></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>Stage 3: Multiple Mutations</strong></td>
+      <td><textarea rows="2"></textarea></td>
+      <td><textarea rows="2"></textarea></td>
+    </tr>
+    <tr>
+      <td><strong>Stage 4: Cancer</strong></td>
+      <td><textarea rows="2"></textarea></td>
+      <td><textarea rows="2"></textarea></td>
+    </tr>
+  </table>
+
+  <div class="reflection-block">
+    <h4>Reflection 1: Single vs. Multiple Failures</h4>
+    <p>Why is ONE checkpoint failure usually NOT enough to cause cancer? What does the cell rely on as a backup?</p>
+    <textarea placeholder="Your answer..." rows="3"></textarea>
+  </div>
+
+  <div class="reflection-block">
+    <h4>Reflection 2: Why Cancer Takes Decades</h4>
+    <p>Looking at the timeline in Figure 5.1, cancer typically takes <strong>10–20+ years</strong> to develop. Why does this slow timeline help explain why cancer risk increases as people get older?</p>
+    <textarea placeholder="Your answer..." rows="3"></textarea>
+  </div>
+
+  <div class="reflection-block">
+    <h4>Reflection 3: Connection to St. Jude</h4>
+    <p>St. Jude Children's Research Hospital studies childhood cancers. Cancer is much rarer in children than in adults — but it does happen. Based on what you've learned, what might cause cancer to develop more quickly in some children, even though normally cancer takes decades?</p>
+    <textarea placeholder="Your answer..." rows="4"></textarea>
+  </div>
 </div>
 
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 9: Summary -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="card">
+  <span class="sec-tag">Section 9: Pulling It All Together</span>
+  <h2 class="sec-title">What You've Learned</h2>
+
+  <div class="reflection-block">
+    <h4>📝 The Big Picture (in your own words)</h4>
+    <p>In 4–6 sentences, explain to a younger student: What is the cell cycle? Why are checkpoints important? And what does this have to do with cancer?</p>
+    <textarea placeholder="The cell cycle is... Checkpoints are important because... Cancer happens when..." rows="8"></textarea>
+  </div>
+
+  <div style="background: var(--lightteal); padding: 16px; border-radius: 6px; margin-top: 16px;">
+    <h4 style="color: var(--teal); margin-bottom: 12px;">✅ Self-Check: Can You...</h4>
+    <ul style="margin-left: 24px; font-size: 14px; line-height: 1.9; color: var(--dark);">
+      <li>Name and describe the four phases of the cell cycle (G1, S, G2, M)?</li>
+      <li>List the six stages of mitosis in order using the PMAT mnemonic?</li>
+      <li>Describe what cytokinesis is and how it differs in animal vs. plant cells?</li>
+      <li>Identify the three major checkpoints and what each one checks for?</li>
+      <li>Explain what happens when a cell PASSES vs. FAILS a checkpoint?</li>
+      <li>Define the "multi-hit hypothesis" and explain why cancer typically takes decades?</li>
+      <li>Use the key vocabulary terms from Section 3 to describe what's happening in a figure?</li>
+    </ul>
+  </div>
+
+  <div style="background: #FFF8E6; padding: 16px; border-radius: 6px; margin-top: 16px; border-left: 3px solid var(--gold);">
+    <h4 style="color: var(--navy); margin-bottom: 8px;">🚀 Looking Ahead to Lesson 2</h4>
+    <p style="font-size: 14px; color: var(--dark);">In Lesson 2, you'll learn the <em>molecular details</em> — how p53 actually decides whether a cell lives or dies, how cyclins and CDKs function as a clock, and how specific mutations in those proteins lead to specific cancers. The foundation you built here makes all of that possible.</p>
+  </div>
 </div>
+
+</div>  <!-- /container -->
 
 </body>
 </html>
