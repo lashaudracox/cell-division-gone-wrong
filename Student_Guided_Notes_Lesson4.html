@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fighting Back: Lab to Patient | Lesson 4 | LaShaudra Cox Learning Design</title>
+<style>
+  :root {
+    --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
+    --green:#16A34A; --light:#EEF5FB; --border:#D1E4F0;
+    --dark:#1E293B; --gray:#64748B; --muted:#94A3B8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:var(--dark);padding:0 0 60px;
+  padding-bottom: 52px;
+  padding-top: 38px;}
+
+  /* ── TOOLBAR ── */
+  .toolbar{position:sticky;top:0;z-index:200;background:#0D2240;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.4);}
+  .tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
+  .tb-right{display:flex;gap:8px;align-items:center;}
+  .save-msg{font-size:11px;color:#7FD4D8;font-style:italic;opacity:0;transition:opacity .4s;margin-right:8px;}
+  .save-msg.show{opacity:1;}
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .btn-save{background:var(--teal);color:#fff;} .btn-save:hover{background:#0A6870;}
+  .btn-print{background:var(--red);color:#fff;} .btn-print:hover{background:#A00024;}
+  .btn-clear{background:rgba(255,255,255,.08);color:#A8C8E8;border:1px solid rgba(255,255,255,.15);} .btn-clear:hover{background:rgba(255,255,255,.18);}
+
+  /* ── PAGE ── */
+  .page{max-width:800px;margin:20px auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);}
+
+  /* ── HEADER ── */
+  .doc-header{background:var(--navy);padding:22px 28px 18px;}
+  .badge{background:var(--teal);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;text-transform:uppercase;display:inline-block;margin-bottom:8px;}
+  .doc-header h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:3px;}
+  .doc-header .sub{font-size:13px;color:#A8C8E8;}
+  .meta-row{display:flex;gap:14px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);}
+  .meta-field{flex:1;}
+  .meta-label{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;margin-bottom:3px;}
+  .meta-in{width:100%;background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.2);color:#fff;font-size:13px;padding:3px 0;outline:none;font-family:inherit;}
+  .meta-in::placeholder{color:rgba(255,255,255,.25);}
+  .meta-in:focus{border-bottom-color:var(--teal);}
+
+  /* ── SEC HEADER ── */
+  .sec-bar{padding:8px 20px;color:#fff;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+  .sec-bar.navy{background:var(--navy);}
+  .sec-bar.teal{background:var(--teal);}
+  .sec-bar.red{background:var(--red);}
+  .sec-bar.gold{background:#B07500;}
+  .sec-bar.dark{background:#0D2D47;}
+  .sec-bar.purple{background:#5B21B6;}
+
+  /* ── SECTION BODY ── */
+  .sb{padding:16px 20px;}
+  .instr{font-size:11.5px;color:var(--gray);font-style:italic;margin-bottom:12px;}
+
+  /* ── DR. TAWFIK: WHAT YOU WILL LEARN ── */
+  .wyll{background:#EBF7F8;border-left:4px solid var(--teal);border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:14px;}
+  .wyll-label{font-size:9px;font-weight:700;letter-spacing:1.8px;color:var(--teal);text-transform:uppercase;margin-bottom:8px;}
+  .wyll ul{list-style:none;padding:0;margin:0;}
+  .wyll ul li{font-size:12.5px;color:var(--dark);padding:3px 0;line-height:1.5;display:flex;gap:7px;align-items:flex-start;}
+  .wyll ul li::before{content:"›";font-weight:700;color:var(--teal);flex-shrink:0;}
+
+  /* ── DR. TAWFIK: WHY THIS MATTERS ── */
+  .wtm{background:#FFF9EC;border-left:4px solid var(--gold);border-radius:0 6px 6px 0;padding:10px 14px;margin-top:14px;margin-bottom:4px;}
+  .wtm-label{font-size:9px;font-weight:700;letter-spacing:1.8px;color:#8A6000;text-transform:uppercase;margin-bottom:7px;}
+  .wtm p{font-size:12.5px;color:var(--dark);line-height:1.65;}
+
+  /* ── INPUTS ── */
+  .blank{display:inline-block;border:none;border-bottom:2px solid var(--teal);background:transparent;font-size:13px;font-family:inherit;color:var(--dark);padding:1px 3px;outline:none;vertical-align:bottom;min-width:100px;transition:border-color .15s,background .15s;}
+  .blank:focus{border-bottom-color:var(--navy);background:#EEF5FB;}
+  .blank.sm{min-width:70px;} .blank.lg{min-width:200px;} .blank.xl{min-width:280px;} .blank.full{width:100%;display:block;margin-top:4px;}
+  .blank.light{color:#fff;border-bottom-color:rgba(255,255,255,.35);}
+  .blank.light:focus{background:rgba(255,255,255,.08);}
+
+  textarea.ta{width:100%;border:1.5px solid var(--border);border-radius:5px;padding:8px 10px;font-size:12.5px;font-family:inherit;color:var(--dark);resize:vertical;min-height:68px;outline:none;line-height:1.6;transition:border-color .15s;}
+  textarea.ta:focus{border-color:var(--teal);}
+  textarea.ta.short{min-height:46px;}
+  textarea.ta.tall{min-height:92px;}
+
+  textarea.phase-ta{width:100%;border:none;border-bottom:1px solid var(--border);background:transparent;font-size:12px;font-family:inherit;color:var(--dark);padding:4px 6px;outline:none;resize:none;min-height:42px;line-height:1.5;display:block;}
+  textarea.phase-ta:focus{background:#F8FBFF;}
+
+  /* ── OBJ BOX ── */
+  .obj-box{background:var(--light);border-left:3px solid var(--teal);padding:10px 14px;border-radius:0 5px 5px 0;margin-bottom:12px;font-size:13px;line-height:1.6;}
+  .obj-box strong{color:var(--teal);}
+
+  /* ── WORD BANK ── */
+  .wb{background:#132C47;border-radius:6px;padding:10px 14px;margin-bottom:14px;}
+  .wb-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;margin-bottom:8px;}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{background:#1E3D5A;color:#A8C8E8;padding:3px 10px;border-radius:14px;font-size:11.5px;font-weight:600;border:1px solid rgba(255,255,255,.1);}
+
+  /* ── DIAGRAM ── */
+  .diag-row{display:flex;gap:14px;align-items:flex-start;}
+  .diag-svg{flex-shrink:0;}
+  .diag-right{flex:1;min-width:0;}
+
+  /* ── TABLES ── */
+  .nt{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:10px;}
+  .nt th{background:var(--navy);color:#fff;padding:6px 10px;font-weight:600;font-size:11px;text-align:left;}
+  .nt th.t{background:var(--teal);}
+  .nt td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .nt tr:last-child td{border-bottom:none;}
+  .nt tr:nth-child(even) td{background:#F8FBFF;}
+  .ph-lbl{font-weight:700;font-size:12.5px;}
+
+  /* ── CALLOUTS ── */
+  .callout{padding:10px 14px;border-radius:5px;margin:10px 0;font-size:12.5px;line-height:1.7;}
+  .callout.navy{background:var(--navy);color:#D0E8F8;}
+  .callout.teal{background:#EBF7F8;border-left:3px solid var(--teal);}
+  .callout.gold{background:#FFF9EC;border-left:3px solid var(--gold);}
+  .callout.red{background:#FFF0F2;border-left:3px solid var(--red);}
+  .callout strong{color:var(--teal);}
+  .callout.navy strong{color:#7FD4D8;}
+  .callout.gold strong{color:#8A6000;}
+  .callout.red strong{color:var(--red);}
+
+  /* ── TWO COL ── */
+  .two-col{display:flex;gap:10px;margin:10px 0;}
+  .two-col>div{flex:1;min-width:0;}
+
+  /* ── DEF GRID ── */
+  .def-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+  .def-card{flex:0 0 calc(50% - 5px);border:1.5px solid var(--border);border-radius:5px;overflow:hidden;min-width:0;}
+  .def-head{padding:7px 12px;color:#fff;font-weight:700;font-size:12.5px;}
+  .def-body{padding:10px 12px;}
+  .def-note{font-size:11px;color:var(--muted);margin-bottom:5px;}
+
+  /* ── TWO-HIT ── */
+  .hit-flow{display:flex;align-items:stretch;gap:0;margin:10px 0;}
+  .hit-box{flex:1;background:var(--light);border:1.5px solid var(--border);border-radius:5px;padding:10px;text-align:center;}
+  .hit-box.res{background:#FFF0F2;border-color:var(--red);}
+  .hit-arr{width:28px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--muted);flex-shrink:0;}
+  .hit-ttl{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:5px;}
+  .hit-ttl.r{color:var(--red);}
+  .hit-cp{font-size:12px;color:var(--dark);line-height:1.5;}
+  .res-in{width:100%;border:none;border-bottom:1.5px solid var(--border);background:transparent;font-size:12px;font-family:inherit;padding:2px 2px;outline:none;text-align:center;margin-top:6px;}
+  .res-in:focus{border-bottom-color:var(--teal);background:#EEF5FB;}
+  .res-lbl{font-size:10px;color:var(--gray);font-weight:700;margin-top:6px;}
+
+  /* ── SCENARIOS ── */
+  .sc-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+  .sc-box{flex:0 0 calc(50% - 5px);border:1.5px solid var(--border);border-radius:5px;overflow:hidden;min-width:0;}
+  .sc-head{padding:6px 10px;color:#fff;font-size:11.5px;font-weight:700;}
+  .sc-body{padding:10px;}
+  .sc-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+  .sc-lbl{font-weight:700;color:var(--gray);font-size:11px;flex-shrink:0;min-width:88px;}
+  .sc-in{flex:1;border:none;border-bottom:1.5px solid var(--border);background:transparent;font-size:12px;font-family:inherit;padding:2px 3px;outline:none;}
+  .sc-in:focus{border-bottom-color:var(--teal);}
+  .sc-obs{font-size:10.5px;color:var(--muted);margin:6px 0 3px;}
+
+  /* ── CASE FILE ── */
+  .case-box{background:#FFF0F2;border:1.5px solid #FFBCC8;border-radius:6px;padding:12px 14px;margin-bottom:12px;}
+  .case-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--red);text-transform:uppercase;margin-bottom:5px;}
+  .case-intro{font-size:13px;font-style:italic;font-weight:600;margin-bottom:10px;line-height:1.4;}
+  .clue{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #FFD0D8;font-size:12px;line-height:1.4;}
+  .clue:last-child{border-bottom:none;}
+
+  /* ── SYNTHESIS ── */
+  .syn-q{background:var(--light);border-radius:6px;padding:12px 14px;margin-bottom:10px;}
+  .syn-q .qt{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:7px;line-height:1.4;}
+
+  /* ── SELF-CHECK ── */
+  .ck-list{list-style:none;padding:0;}
+  .ck-list li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;cursor:pointer;}
+  .ck-list li:last-child{border-bottom:none;}
+  .ck-list input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--teal);flex-shrink:0;cursor:pointer;}
+
+  /* ── FOOTER ── */
+  .doc-footer{text-align:center;font-size:10px;color:var(--muted);font-style:italic;padding:14px 20px;border-top:1px solid var(--border);}
+
+  /* ═══ PRINT ════════════════════════════════════════════════ */
+  @media print {
+    body{background:#fff;padding:0;}
+    .toolbar{display:none !important;}
+    .page{box-shadow:none;border-radius:0;margin:0;max-width:100%;}
+    .blank{border-bottom:1px solid #aaa !important;background:transparent !important;}
+    .ta,.phase-ta,.sc-in,.res-in,.meta-in,.blank.full{
+      border:none !important;border-bottom:1px solid #ccc !important;
+      background:transparent !important;resize:none !important;overflow:visible !important;
+    }
+    .ta{min-height:0 !important;}
+    .wyll,.wtm,.sec-bar,.doc-header,.wb,.case-box,.callout.navy{
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    }
+    @page{margin:0.75in;}
+  }
+
+  /* ── ELL SENTENCE STARTERS ─────────────────────────────────── */
+  details.ell-starter {
+    margin-top: 6px;
+    border-radius: 7px;
+    border: 1.5px solid #C4B5FD;
+    overflow: hidden;
+    background: #F5F3FF;
+  }
+  details.ell-starter summary {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5B21B6;
+    letter-spacing: .5px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  details.ell-starter summary::-webkit-details-marker { display: none; }
+  details.ell-starter summary::before {
+    content: '▶';
+    font-size: 9px;
+    transition: transform .15s;
+  }
+  details.ell-starter[open] summary::before { transform: rotate(90deg); }
+  .ell-body {
+    padding: 10px 14px 12px;
+    font-size: 12.5px;
+    color: #3730A3;
+    line-height: 1.65;
+    border-top: 1px solid #C4B5FD;
+    background: #FAF5FF;
+  }
+  .ell-body em {
+    background: rgba(167,139,250,.2);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-style: normal;
+    font-weight: 600;
+    color: #4C1D95;
+  }
+  .ell-fill {
+    display: inline-block;
+    min-width: 120px;
+    border-bottom: 1.5px solid #7C3AED;
+    color: #7C3AED;
+    font-style: italic;
+  }
+
+  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
+  /* Fixed bottom-right: clears every file's top bar & print buttons */
+  #translate-bar {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 99999;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+  }
+  #translate-bar .tb-label {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+  }
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
+
+  /* ── TTS Read-Aloud Bar ─────────────────────────────── */
+  #tts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1A3A5C;
+    color: #fff;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9997;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
+  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
+  .tts-btn {
+    border: none; border-radius: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: background .15s;
+  }
+  .tts-primary { background: #0E7C86; color: #fff; }
+  .tts-primary:hover { background: #0A6870; }
+  .tts-secondary {
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 5px 10px; font-size: 13px;
+  }
+  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .tts-secondary:disabled { opacity: .35; cursor: default; }
+  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
+                   text-transform: uppercase; letter-spacing: .5px; }
+  .tts-speed-btn {
+    background: rgba(255,255,255,.1); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 4px 8px; font-size: 11px; cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: background .12s;
+  }
+  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
+  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
+  .tts-status {
+    font-size: 11px; color: #A8C8E8; margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tts-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* Reading highlight */
+  .tts-reading {
+    outline: 2.5px solid #0E7C86 !important;
+    outline-offset: 4px;
+    border-radius: 6px;
+    transition: outline .2s;
+  }
+
+
+  /* ── Module Nav Bar ─────────────────────────────── */
+  #module-nav {
+    background: #0D2438;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .mn-home {
+    font-size: 11px; font-weight: 700; color: #7FD4D8;
+    text-decoration: none; white-space: nowrap; margin-right: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mn-home:hover { color: #fff; }
+  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
+  .mn-lessons {
+    display: flex; gap: 2px; align-items: center;
+  }
+  .mn-lesson {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
+    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
+    transition: all .12s; border: 1px solid transparent;
+  }
+  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
+  .mn-lesson.mn-active {
+    color: #fff; border-color: rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+  }
+  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
+  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
+  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
+  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
+  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Module-wide additions (L3/L4 build) ── */
+  :root { --acc: #7C3AED; --acc-dark: #5B21B6; --acc-soft: #F5F3FF; }
+  body { padding-bottom: 64px; }
+  #translate-bar { bottom: 58px; }
+  .sec-bar.amber { background: #92400E; }
+  .sec-bar.violet { background: #5B21B6; }
+  .badge.acc { background: var(--acc-dark); }
+  .doc-header.acc { background: linear-gradient(135deg, var(--navy) 0%, var(--acc-dark) 140%); }
+  .sr-only { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  :focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+  @media print { #tts-bar, #translate-bar, #module-nav { display:none !important; } }
+
+  .gs-table td select { width:100%; padding:5px 6px; border:1.5px solid var(--border); border-radius:5px; font-family:inherit; font-size:12px; }
+  .ped-note { font-size:11.5px; color:var(--gray); }
+  .mini-report { width:100%; border-collapse:collapse; font-size:12px; margin:8px 0 12px; }
+  .mini-report th, .mini-report td { border:1px solid var(--border); padding:6px 8px; text-align:left; }
+  .mini-report th { background:#F1F5F9; font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--gray); }
+  .det { color:var(--red); font-weight:700; } .nodet { color:var(--green); font-weight:700; }
+  .cer-lbl { font-size:10px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin:10px 0 4px; }
+  .sim-log { width:100%; border-collapse:collapse; font-size:12px; }
+  .sim-log th { background:#92400E; color:#fff; padding:6px 8px; font-size:10.5px; text-align:left; }
+  .sim-log td { border-bottom:1px solid var(--border); padding:3px 6px; }
+  .sim-log input { width:100%; border:none; border-bottom:1px solid var(--border); font-family:inherit; font-size:12px; padding:3px; outline:none; background:transparent; }
+  .sim-log input:focus { border-bottom-color:var(--teal); background:#F8FBFF; }
+
+</style>
+</head>
+<body>
+<nav id="module-nav" aria-label="Module navigation">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons"><a href="module.html#lesson-1" class="mn-lesson mn-l1">L1</a><a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a><a href="module.html#lesson-3" class="mn-lesson mn-l3">L3</a><a href="module.html#lesson-4" class="mn-lesson mn-l4 mn-active" aria-current="page">L4</a></div>
+  <span class="mn-crumb">Lesson 4 · Guided Notes</span>
+</nav>
+<div class="toolbar"><div class="tb-left">📝 Guided Notes · Fighting Back: Lab to Patient · Lesson 4</div><div class="tb-right"><span class="save-msg" id="saveMsg" role="status"></span><button class="btn btn-clear" onclick="clearAll()">↺ Clear All</button><button class="btn btn-save" onclick="saveWork()">💾 Save Progress</button><button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button></div></div>
+
+<div class="page">
+<div class="doc-header acc">
+  <span class="badge acc">LaShaudra Cox Learning Design · Lesson 4</span>
+  <h1>Fighting Back: Lab to Patient</h1>
+  <p class="sub">Guided Notes · Chemotherapy, Targeted Therapy, CAR-T, Genomic Data &amp; Clinical Trials</p>
+  <div class="meta-row">
+    <div class="meta-field"><label class="meta-label" for="f-name">Name</label><input class="meta-in" id="f-name" placeholder="Your name"></div>
+    <div class="meta-field"><label class="meta-label" for="f-date">Date</label><input class="meta-in" id="f-date" type="date"></div>
+    <div class="meta-field"><label class="meta-label" for="f-period">Period / Class</label><input class="meta-in" id="f-period" placeholder="e.g. Period 3"></div>
+  </div>
+</div>
+<div class="sb" style="padding-bottom:4px;">
+  <div class="obj-box"><div style="font-size:9.5px;font-weight:700;letter-spacing:1.5px;color:var(--teal);text-transform:uppercase;margin-bottom:5px;">Learning Objective</div>
+    I can <strong>evaluate</strong> treatment strategies based on a patient's molecular evidence and <strong>design</strong> a treatment brief for a new patient using genomic data. <span style="color:var(--gray);font-size:12px;">(NGSS HS-LS1-4 · HS-LS3-2)</span></div>
+  <div class="case-box" style="background:#F5F3FF;border-color:#C4B5FD;"><div class="case-lbl" style="color:#5B21B6;">Driving Question</div>
+    <div class="case-intro" style="margin-bottom:0;">Maya's leukemia came back after chemotherapy. Why did that happen, and what could work next?</div></div>
+  <div class="wb"><div class="wb-lbl">📚 Word Bank</div><div class="chips">
+    <span class="chip">relapse</span><span class="chip">chemotherapy</span><span class="chip">S phase</span><span class="chip">M phase</span><span class="chip">spindle</span><span class="chip">apoptosis</span>
+    <span class="chip">targeted therapy</span><span class="chip">tyrosine kinase inhibitor</span><span class="chip">BCR-ABL1</span><span class="chip">CAR-T</span><span class="chip">CD19</span>
+    <span class="chip">cytokine release syndrome</span><span class="chip">genomic data portal</span><span class="chip">de-identified</span><span class="chip">clinical trial</span></div></div>
+</div>
+
+
+<div class="sec-bar violet">💊 Section 1 · Chemotherapy and the Cell Cycle</div>
+<div class="sb">
+  <div class="wyll"><div class="wyll-label">What You Will Learn in This Section</div><ul><li>Match chemo drugs to the cell cycle phase they target</li><li>Explain chemo side effects</li><li>Explain why TP53 loss can make chemo fail</li></ul></div>
+  <table class="nt"><thead><tr><th style="width:24%">Drug</th><th style="width:18%">Phase / process</th><th>How it stops the cell</th></tr></thead><tbody>
+   <tr><td class="ph-lbl">Methotrexate</td><td><input class="blank full" id="d1-ph"></td><td><textarea class="phase-ta" id="d1-how"></textarea></td></tr>
+   <tr><td class="ph-lbl">Vincristine</td><td><input class="blank full" id="d2-ph"></td><td><textarea class="phase-ta" id="d2-how"></textarea></td></tr>
+   <tr><td class="ph-lbl">Steroids</td><td><input class="blank full" id="d3-ph"></td><td><textarea class="phase-ta" id="d3-how"></textarea></td></tr></tbody></table>
+  <div class="two-col"><div class="syn-q" style="margin:0;"><div class="qt">Why does chemo cause hair loss and infections?</div><textarea class="ta short" id="s1-side"></textarea></div>
+  <div class="syn-q" style="margin:0;"><div class="qt">Why did Maya's leukemia relapse? Use p53.</div><textarea class="ta short" id="s1-relapse"></textarea></div></div><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">Many chemo drugs damage the cell, and then <span class="ell-fill">&nbsp;</span> triggers apoptosis. Maya's cells have no <span class="ell-fill">&nbsp;</span>, so some <span class="ell-fill">&nbsp;</span>.</div></details>
+  <div class="wtm"><div class="wtm-label">Why This Matters</div><p>Combination chemo cures most children with ALL. Knowing where each drug strikes connects Lesson 1's cell cycle directly to treatment.</p></div>
+</div>
+
+
+<div class="sec-bar navy">🎯 Section 2 · Targeted Therapy</div>
+<div class="sb">
+  <div class="wyll"><div class="wyll-label">What You Will Learn in This Section</div><ul><li>Explain how a targeted drug blocks one abnormal protein</li><li>Evaluate why gain-of-function mutations are easier targets</li></ul></div>
+  <div class="callout teal" style="line-height:2.2;">A tyrosine kinase inhibitor blocks the <input class="blank" id="t-enz" placeholder="______"> enzyme, which is always <input class="blank sm" id="t-on" placeholder="on / off">.
+  This is an example of targeting a <input class="blank lg" id="t-gof" placeholder="gain / loss of function"> mutation.</div>
+  <div class="def-grid"><div class="def-card"><div class="def-head" style="background:var(--green)">✓ Easier target</div><div class="def-body"><div class="def-note">Type of mutation, example, and why:</div><textarea class="ta short" id="t-easy"></textarea></div></div>
+  <div class="def-card"><div class="def-head" style="background:var(--red)">✗ Harder target</div><div class="def-body"><div class="def-note">Type of mutation, example, and why:</div><textarea class="ta short" id="t-hard"></textarea></div></div></div>
+  <div class="wtm"><div class="wtm-label">Why This Matters</div><p>A genetic report is also a treatment map. A "stuck gas pedal" protein can sometimes be switched off with a drug made to fit it.</p></div>
+</div>
+
+
+<div class="sec-bar teal">🛡 Section 3 · CAR-T Immunotherapy</div>
+<div class="sb">
+  <div class="wyll"><div class="wyll-label">What You Will Learn in This Section</div><ul><li>Sequence the five steps of CAR-T therapy</li><li>Explain why CAR-T can work without p53</li><li>Weigh CAR-T's benefits against its risks</li></ul></div>
+  <table class="nt"><thead><tr><th style="width:12%">Step</th><th>What happens</th></tr></thead><tbody><tr><td class="ph-lbl">1</td><td><input class="blank full" id="c-s1"></td></tr><tr><td class="ph-lbl">2</td><td><input class="blank full" id="c-s2"></td></tr><tr><td class="ph-lbl">3</td><td><input class="blank full" id="c-s3"></td></tr><tr><td class="ph-lbl">4</td><td><input class="blank full" id="c-s4"></td></tr><tr><td class="ph-lbl">5</td><td><input class="blank full" id="c-s5"></td></tr></tbody></table>
+  <div class="syn-q"><div class="qt">CAR-T recognizes the marker <input class="blank sm" id="c-mk" placeholder="____">. Why can it kill Maya's leukemia cells even without p53?</div><textarea class="ta short" id="c-why"></textarea></div>
+  <div class="two-col"><div class="callout gold" style="margin:0;"><strong>Evidence:</strong> <input class="blank sm" id="c-n" placeholder="__"> of 75 patients went into remission = <input class="blank sm" id="c-pct" placeholder="__%"></div>
+  <div class="callout red" style="margin:0;"><strong>Trade-offs:</strong> <input class="blank full" id="c-risk" placeholder="two risks…"></div></div>
+  <div class="wtm"><div class="wtm-label">Why This Matters</div><p>CAR-T works because researchers knew which cell type Maya's cancer came from (B cells) and which surface marker those cells carry (CD19).</p></div>
+</div>
+
+
+<div class="sec-bar red">🖥 Section 4 · Genomic Data Portals (Explorer Answers)</div>
+<div class="sb">
+  <div class="wyll"><div class="wyll-label">What You Will Learn in This Section</div><ul><li>Explain what genomic portals are and how privacy is protected</li><li>Record your investigation results</li></ul></div>
+  <div class="syn-q"><div class="qt">What does "de-identified" mean, and why does it matter?</div><textarea class="ta short" id="p-deid"></textarea></div>
+  <table class="nt"><thead><tr><th style="width:8%">#</th><th>My portal finding</th></tr></thead><tbody><tr><td class="ph-lbl">1</td><td><textarea class="phase-ta" id="p-q1"></textarea></td></tr><tr><td class="ph-lbl">2</td><td><textarea class="phase-ta" id="p-q2"></textarea></td></tr><tr><td class="ph-lbl">3</td><td><textarea class="phase-ta" id="p-q3"></textarea></td></tr><tr><td class="ph-lbl">4</td><td><textarea class="phase-ta" id="p-q4"></textarea></td></tr><tr><td class="ph-lbl">5</td><td><textarea class="phase-ta" id="p-q5"></textarea></td></tr></tbody></table>
+  <div class="wtm"><div class="wtm-label">Why This Matters</div><p>Childhood cancers are rare. Shared data lets researchers see patterns no single hospital could find alone.</p></div>
+</div>
+
+
+<div class="sec-bar amber">🧪 Section 5 · From Lab to Patient</div>
+<div class="sb">
+  <div class="wyll"><div class="wyll-label">What You Will Learn in This Section</div><ul><li>Describe the phases of clinical trials</li><li>Interpret long-term survival trends</li></ul></div>
+  <table class="nt"><thead><tr><th style="width:22%">Stage</th><th>Main question it answers</th></tr></thead><tbody>
+   <tr><td class="ph-lbl">Lab research</td><td><input class="blank full" id="l-lab"></td></tr><tr><td class="ph-lbl">Phase 1</td><td><input class="blank full" id="l-p1"></td></tr>
+   <tr><td class="ph-lbl">Phase 2</td><td><input class="blank full" id="l-p2"></td></tr><tr><td class="ph-lbl">Phase 3</td><td><input class="blank full" id="l-p3"></td></tr></tbody></table>
+  <div class="callout gold" style="line-height:2.2;">5-year survival for childhood ALL rose from <input class="blank sm" id="l-s1" placeholder="__%"> (1990–94) to <input class="blank sm" id="l-s2" placeholder="__%"> (2000–05), up from about <input class="blank sm" id="l-s0" placeholder="__%"> in the late 1960s.</div>
+  <div class="syn-q"><div class="qt">Researcher video: one thing that surprised me</div><textarea class="ta short" id="l-vid"></textarea></div>
+  <div class="wtm"><div class="wtm-label">Why This Matters</div><p>Every survival statistic in this module exists because families chose to join clinical trials.</p></div>
+</div>
+
+
+<div class="sec-bar dark">🧩 Section 6 · In Class: Treatment Strategy Designer</div>
+<div class="sb">
+  <div class="wyll"><div class="wyll-label">What You Will Learn in This Section</div><ul><li>Build and justify a plan for three patients</li><li>Compare why the same disease needs different plans</li></ul></div>
+  <table class="nt"><thead><tr><th style="width:14%">Patient</th><th>Our plan (options)</th><th>Key biological reason</th><th style="width:22%">Rejected option + why</th></tr></thead><tbody><tr><td class="ph-lbl">Maya</td><td><textarea class="phase-ta" id="ds-maya-plan"></textarea></td><td><textarea class="phase-ta" id="ds-maya-why"></textarea></td><td><textarea class="phase-ta" id="ds-maya-no"></textarea></td></tr><tr><td class="ph-lbl">Jordan</td><td><textarea class="phase-ta" id="ds-jordan-plan"></textarea></td><td><textarea class="phase-ta" id="ds-jordan-why"></textarea></td><td><textarea class="phase-ta" id="ds-jordan-no"></textarea></td></tr><tr><td class="ph-lbl">Sam</td><td><textarea class="phase-ta" id="ds-sam-plan"></textarea></td><td><textarea class="phase-ta" id="ds-sam-why"></textarea></td><td><textarea class="phase-ta" id="ds-sam-no"></textarea></td></tr></tbody></table>
+  <div class="wtm"><div class="wtm-label">Why This Matters</div><p>A care team doesn't ask "what's the best cancer drug?" It asks "what fits this child's biology?"</p></div>
+</div>
+
+<div class="sec-bar navy">🔗 Module Synthesis: From Cell Cycle to Cure</div>
+<div class="sb">
+  <div class="syn-q"><div class="qt">Trace Maya's story across all four lessons in 4–5 sentences: the normal cell cycle (L1) → which controls broke (L2) → where the mutations came from (L3) → how doctors fight back (L4).</div><textarea class="ta tall" id="syn-all"></textarea></div>
+</div>
+
+<div class="sec-bar teal">✅ Self-Check</div>
+<div class="sb"><ul class="ck-list">
+  <li><input type="checkbox" id="ck1"><label for="ck1">I can match chemo drugs to cell cycle phases and explain why TP53 loss can cause relapse.</label></li>
+  <li><input type="checkbox" id="ck2"><label for="ck2">I can explain how targeted therapy works and which mutations make good targets.</label></li>
+  <li><input type="checkbox" id="ck3"><label for="ck3">I can explain CAR-T step by step and when it fits a patient.</label></li>
+  <li><input type="checkbox" id="ck4"><label for="ck4">I can use genomic data to support a treatment decision.</label></li>
+  <li><input type="checkbox" id="ck5"><label for="ck5">I can design and defend a treatment strategy for a new patient.</label></li>
+</ul></div>
+<div class="doc-footer">Cell Division Gone Wrong · LaShaudra Cox Learning Design · Lesson 4 of 4 · Grades 9–10 · Guided Notes</div>
+</div>
+<!-- ── LANGUAGE TRANSLATION WIDGET ── -->
+<div id="translate-bar">
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
+</div>
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+}
+function triggerTranslate(lang) {
+  var combo = document.querySelector('.goog-te-combo');
+  if (!combo) { setTimeout(function() { triggerTranslate(lang); }, 600); return; }
+  combo.value = lang;
+  var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', false, true); combo.dispatchEvent(evt);
+  if (lang === '') document.getElementById('lang-select').value = '';
+}
+document.getElementById('lang-select').addEventListener('change', function() { triggerTranslate(this.value); });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>window.TTS_SECTIONS = function() { var p=document.querySelector('.page'); if(!p) return [];
+return Array.from(p.querySelectorAll('.doc-header, .obj-box, .case-box, .sec-bar, .wyll, .callout, .syn-q, .wtm, .def-grid, .ck-list')).filter(function(el){return el.offsetParent!==null && (el.textContent||'').trim().length>10;}); };</script>
+<!-- Read Aloud Bar -->
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon" title="Read Aloud">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&#215;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&#215;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none"><div class="tts-pulse"></div><span id="tts-status-text">Reading&hellip;</span></div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 (single instance) ═══
+   Reads the active section block by block with 500 ms pauses and
+   a teal outline on the block being read. */
+(function() {
+  var synth = window.speechSynthesis;
+  var _rate = 1.0, _playing = false, _paused = false, _sections = [], _idx = 0, _timer = null;
+
+  function extract(rootEl) {
+    var clone = rootEl.cloneNode(true);
+    ['button','select','svg','script','style','input','textarea','[aria-hidden="true"]','.slide-nav','.accum-btns']
+      .forEach(function(sel) { clone.querySelectorAll(sel).forEach(function(n) { n.remove(); }); });
+    var BLOCK = {DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,LI:1,TD:1,TH:1,TR:1,CAPTION:1,BLOCKQUOTE:1,FIGCAPTION:1,LABEL:1};
+    var parts = [];
+    (function walk(node) {
+      if (node.nodeType === 3) { var t = node.nodeValue.replace(/\s+/g,' '); if (t.trim()) parts.push(t); return; }
+      if (node.nodeType !== 1) return;
+      var before = parts.length;
+      node.childNodes.forEach(walk);
+      if (BLOCK[node.tagName] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) { if (!/[.!?:;—,]$/.test(seg)) seg += '.'; parts.push(seg + ' '); }
+      }
+    })(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  }
+  function getSections() {
+    if (window.TTS_SECTIONS) return window.TTS_SECTIONS();
+    var a = document.querySelector('.slide-card.active');
+    if (!a) return [];
+    var hdr = a.querySelector('.slide-header');
+    var body = a.querySelector('.slide-body');
+    var list = hdr ? [hdr] : [];
+    if (body) Array.from(body.children).forEach(function(el) {
+      if (el.offsetParent !== null && (el.textContent || '').trim().length > 15) list.push(el);
+    });
+    return list;
+  }
+  function clearHL() { document.querySelectorAll('.tts-reading').forEach(function(el) { el.classList.remove('tts-reading'); }); }
+  function readAt(i) {
+    clearTimeout(_timer);
+    if (i >= _sections.length) { done(); return; }
+    _idx = i; clearHL();
+    var sec = _sections[i];
+    sec.classList.add('tts-reading');
+    try { sec.scrollIntoView({ behavior:'smooth', block:'nearest' }); } catch(e) {}
+    var txt = extract(sec);
+    if (!txt) { readAt(i + 1); return; }
+    var u = new SpeechSynthesisUtterance(txt);
+    u.rate = _rate;
+    u.lang = (document.documentElement.lang || 'en');
+    u.onend = function() { if (_playing) _timer = setTimeout(function() { if (_playing && !_paused) readAt(i + 1); }, 500); };
+    u.onerror = function(e) { if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(i + 1); };
+    synth.speak(u);
+    _playing = true; _paused = false; ui();
+  }
+  function done() { _playing = false; _paused = false; clearHL(); clearTimeout(_timer); ui(); }
+  function ui() {
+    var play = document.getElementById('tts-play'), pause = document.getElementById('tts-pause'),
+        stop = document.getElementById('tts-stop'), st = document.getElementById('tts-status'),
+        stx = document.getElementById('tts-status-text');
+    if (_playing) {
+      play.innerHTML = '&#8635; Restart'; pause.disabled = false; stop.disabled = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      st.style.display = 'flex';
+      stx.textContent = _paused ? 'Paused' : 'Block ' + (_idx + 1) + ' of ' + _sections.length;
+    } else {
+      play.innerHTML = '&#9654; Play'; pause.disabled = true; stop.disabled = true; st.style.display = 'none';
+    }
+  }
+  window.ttsPlay = function() { synth.cancel(); clearTimeout(_timer); _sections = getSections(); if (_sections.length) readAt(0); };
+  window.ttsPauseResume = function() { if (!_playing) return; if (_paused) { synth.resume(); _paused = false; } else { synth.pause(); _paused = true; } ui(); };
+  window.ttsStop = function() { synth.cancel(); clearTimeout(_timer); _playing = false; _paused = false; clearHL(); ui(); };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) { b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r); });
+    if (_playing && !_paused) { var ri = _idx; synth.cancel(); clearTimeout(_timer); _timer = setTimeout(function() { readAt(ri); }, 100); }
+  };
+  document.addEventListener('visibilitychange', function() { if (document.hidden) window.ttsStop(); });
+})();
+</script>
+
+<script>
+/* ── Autosave: every input/textarea/select with an id inside .page ──
+   Stored per-browser only (localStorage). Wrapped in try/catch because
+   storage can be blocked; Print / Save PDF is always the reliable backup. */
+(function() {
+  var KEY = 'cdgw_l4_notes';
+  function fields() { return Array.from(document.querySelectorAll('.page input[id], .page textarea[id], .page select[id]')); }
+  window.saveWork = function(quiet) {
+    var data = {};
+    fields().forEach(function(el) { data[el.id] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value; });
+    try {
+      localStorage.setItem(KEY, JSON.stringify(data));
+      if (!quiet) { var m = document.getElementById('saveMsg'); if (m) { m.textContent = '✓ Saved at ' + new Date().toLocaleTimeString(); m.classList.add('show'); setTimeout(function() { m.classList.remove('show'); }, 3000); } }
+    } catch (e) { if (!quiet) alert('Could not save in this browser. Use Print / Save PDF to keep your work.'); }
+  };
+  window.clearAll = function() {
+    if (!confirm('Clear all of your answers on this page?')) return;
+    fields().forEach(function(el) { if (el.type === 'checkbox' || el.type === 'radio') el.checked = false; else el.value = ''; });
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    if (window.onClearAll) window.onClearAll();
+  };
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) { var d = JSON.parse(raw); fields().forEach(function(el) { if (!(el.id in d)) return; if (el.type === 'checkbox' || el.type === 'radio') el.checked = d[el.id]; else el.value = d[el.id]; }); }
+  } catch (e) {}
+  var t; document.addEventListener('input', function() { clearTimeout(t); t = setTimeout(function() { window.saveWork(true); }, 800); });
+  document.addEventListener('change', function() { window.saveWork(true); });
+})();
+</script>
+
+</body>
+</html>

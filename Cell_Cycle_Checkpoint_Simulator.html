@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cell Cycle Checkpoint Simulator | STEMM Education &amp; Outreach</title>
+<title>Cell Cycle Checkpoint Simulator | LaShaudra Cox Learning Design</title>
 <style>
   :root {
     --navy: #1A3A5C; --teal: #0E7C86; --red: #C8102E; --gold: #F0A500;
@@ -466,6 +466,7 @@
   }
 
 </style>
+<script src="cdgw-config.js"></script>
 </head>
 <body>
 
@@ -1072,7 +1073,7 @@ const REQUIRED_SCENARIOS = ['normal', 'tp53', 'ras', 'both'];
 // Setup: Google Sheet → Extensions → Apps Script → paste doPost()
 // function → Deploy as Web App (Execute as: Me, Anyone) → copy URL.
 // Leave empty to use clipboard-copy fallback only.
-const SUBMIT_URL = '';
+const SUBMIT_URL = (window.CDGW_CONFIG && window.CDGW_CONFIG.SUBMIT_URL) || '';
 // ──────────────────────────────────────────────────────────────
 
 const scenarios = {
@@ -1409,7 +1410,7 @@ async function submitResponses() {
       await fetch(SUBMIT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(Object.assign({ classCode: (window.CDGW_CONFIG || {}).CLASS_CODE || '' }, payload)),
         mode: SUBMIT_URL.includes('formspree') ? 'cors' : 'no-cors',
       });
       btn.textContent = '✓ Submitted';
@@ -1762,162 +1763,6 @@ window._ttsGetSections = function() {
 };
 </script>
 
-
-<!-- Read Aloud Bar -->
-<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
-  <span class="tts-icon" title="Read Aloud">&#128266;</span>
-  <span class="tts-label">Read Aloud</span>
-  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
-  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
-  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
-  <div class="tts-divider"></div>
-  <div class="tts-speed-row">
-    <span class="tts-speed-lbl">Speed</span>
-    <button class="tts-speed-btn" data-rate="0.8"  onclick="ttsSetRate(0.8)">0.8&#215;</button>
-    <button class="tts-speed-btn tts-speed-active" data-rate="1"    onclick="ttsSetRate(1)">1&#215;</button>
-    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
-    <button class="tts-speed-btn" data-rate="1.5"  onclick="ttsSetRate(1.5)">1.5&#215;</button>
-  </div>
-  <div class="tts-status" id="tts-status" style="display:none">
-    <div class="tts-pulse"></div>
-    <span id="tts-status-text">Reading&hellip;</span>
-  </div>
-</div>
-
-<script>
-/* ═══ Read-Aloud Engine ═══════════════════════════════════════════════════ */
-(function() {
-  var synth  = window.speechSynthesis;
-  var _rate  = 1.0;
-  var _playing = false;
-  var _paused  = false;
-  var _sections = [];
-  var _idx = 0;
-  var _utt = null;
-
-  /* Default section finder — override per file below */
-  window._ttsGetSections = function() {
-    return Array.from(document.querySelectorAll('.page > *')).filter(function(el) {
-      return el.offsetParent !== null && (el.innerText || el.textContent || '').trim().length > 20;
-    });
-  };
-
-  function extractText(el) {
-    var clone = el.cloneNode(true);
-    ['button','select','input','svg','script','style','#tts-bar',
-     '.tts-bar','.top-bar','.toolbar','.tb-right'].forEach(function(sel) {
-      try {
-        clone.querySelectorAll(sel).forEach(function(n) {
-          if (n.parentNode) n.parentNode.removeChild(n);
-        });
-      } catch(e) {}
-    });
-    return ((clone.innerText || clone.textContent) || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function readAt(idx) {
-    if (idx >= _sections.length) { onDone(); return; }
-    _idx = idx;
-
-    // scroll into view
-    try { _sections[idx].scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e) {}
-
-    // highlight
-    clearHL();
-    _sections[idx].classList.add('tts-reading');
-
-    var txt = extractText(_sections[idx]);
-    if (!txt) { readAt(idx + 1); return; }
-
-    _utt = new SpeechSynthesisUtterance(txt);
-    _utt.rate = _rate;
-    _utt.lang = document.documentElement.lang || 'en-US';
-    _utt.onend = function() { readAt(idx + 1); };
-    _utt.onerror = function(e) {
-      if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
-    };
-    synth.speak(_utt);
-    _playing = true; _paused = false;
-    updateUI(_idx + 1, _sections.length);
-  }
-
-  function clearHL() {
-    document.querySelectorAll('.tts-reading').forEach(function(el) {
-      el.classList.remove('tts-reading');
-    });
-  }
-
-  function onDone() {
-    _playing = false; _paused = false;
-    clearHL(); updateUI(0, 0);
-  }
-
-  function updateUI(cur, total) {
-    var play  = document.getElementById('tts-play');
-    var pause = document.getElementById('tts-pause');
-    var stop  = document.getElementById('tts-stop');
-    var status  = document.getElementById('tts-status');
-    var statusTxt = document.getElementById('tts-status-text');
-    if (!play) return;
-    if (_playing) {
-      play.innerHTML  = '&#8635; Restart';
-      pause.disabled  = false;
-      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
-      pause.title     = _paused ? 'Resume' : 'Pause';
-      stop.disabled   = false;
-      status.style.display = 'flex';
-      if (statusTxt) statusTxt.textContent = _paused
-        ? 'Paused'
-        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading…');
-    } else {
-      play.innerHTML  = '&#9654; Play';
-      pause.disabled  = true;
-      pause.innerHTML = '&#9646;&#9646;';
-      stop.disabled   = true;
-      status.style.display = 'none';
-    }
-  }
-
-  window.ttsPlay = function() {
-    synth.cancel();
-    _sections = window._ttsGetSections();
-    if (!_sections.length) return;
-    readAt(0);
-  };
-
-  window.ttsPauseResume = function() {
-    if (!_playing) return;
-    if (_paused) { synth.resume(); _paused = false; }
-    else         { synth.pause();  _paused = true;  }
-    updateUI(_idx + 1, _sections.length);
-  };
-
-  window.ttsStop = function() {
-    synth.cancel();
-    _playing = false; _paused = false;
-    clearHL(); updateUI(0, 0);
-  };
-
-  window.ttsSetRate = function(r) {
-    _rate = r;
-    document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
-      b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
-    });
-    if (_playing && !_paused) {
-      var resumeIdx = _idx;
-      synth.cancel();
-      _sections = window._ttsGetSections();
-      setTimeout(function() { readAt(resumeIdx); }, 80);
-    }
-  };
-
-  /* Stop reading when page visibility changes (tab switch) */
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) window.ttsStop();
-  });
-})();
-/* ════════════════════════════════════════════════════════════════════════ */
-</script>
 
 <script>
 window._ttsGetSections = function() {

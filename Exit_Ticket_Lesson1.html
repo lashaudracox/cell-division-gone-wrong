@@ -149,7 +149,8 @@ body{top:0px!important;}
   .toolbar,#tts-bar,#translate-bar,#module-nav,#progress-bar{display:none!important;}
   body{padding:0!important;background:#fff!important;}
 }
-</style></head><body>
+</style><script src="cdgw-config.js"></script>
+</head><body>
 <nav id="module-nav" style="background:#0D2438;padding:0 16px;display:flex;align-items:center;height:38px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.3);">
   <a href="module.html" style="font-size:11px;font-weight:700;color:#7FD4D8;text-decoration:none;margin-right:8px;">🔬 Cell Division</a>
   <span style="color:rgba(255,255,255,.25);margin:0 8px;">›</span>
@@ -222,8 +223,26 @@ function answerET(qid, idx, correct) {
   document.getElementById(qid + '-fb-ok').classList.toggle('show', correct);
   document.getElementById(qid + '-fb-no').classList.toggle('show', !correct);
 }
+function etChoice(qid) {
+  var opts = document.querySelectorAll('#' + qid + '-opts .opt'), L = 'ABCD';
+  for (var i = 0; i < opts.length; i++) if (opts[i].classList.contains('correct') || opts[i].classList.contains('incorrect'))
+    return { choice: L[i], correct: opts[i].classList.contains('correct') ? 'Yes ✓' : 'No ✗' };
+  return null;
+}
 function submitET() {
-  alert('Exit ticket submitted! See you in class for the card sort.');
+  var name = (document.getElementById('et-name').value || '').trim();
+  var q1 = etChoice('qet1'), q2 = etChoice('qet2');
+  var sa = (document.getElementById('et-sa').value || '').trim();
+  if (!name) { alert('Please enter your name so your teacher can match this to you.'); document.getElementById('et-name').focus(); return; }
+  if (!q1 || !q2) { alert('Please answer both multiple choice questions.'); return; }
+  if (sa.length < 20) { alert('Please write at least a sentence for the short answer.'); return; }
+  var payload = { module: 'Lesson 1 — Exit Ticket', name: name, period: (document.getElementById('et-period').value || '').trim(),
+    q1: q1.choice, q1Correct: q1.correct, q2: q2.choice, q2Correct: q2.correct, shortAnswer: sa };
+  var btn = document.querySelector('.submit-btn'); btn.disabled = true; btn.textContent = 'Submitting…';
+  window.cdgwSubmit(payload).then(function (r) {
+    btn.textContent = r === 'error' ? 'Could not send. Print this page for your teacher.' : '✓ Submitted. See you in class for the card sort!';
+    if (r === 'error') btn.disabled = false;
+  });
 }
 </script>
 <div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">

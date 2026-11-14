@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson 1 Guided Notes | St. Jude STEMM</title>
+<title>Lesson 1 Guided Notes | LaShaudra Cox Learning Design</title>
 <style>
 :root {
   --navy:#1A3A5C; --teal:#0E7C86; --gold:#F0A500; --light:#EEF5FB; 
@@ -77,8 +77,174 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: v
   .fill-table th, .fill-table td { padding: 8px; }
 }
 </style>
+
+<style id="cdgw-chrome">
+/* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
+  /* Fixed bottom-right: clears every file's top bar & print buttons */
+  #translate-bar {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 99999;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+  }
+  #translate-bar .tb-label {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+  }
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
+
+  /* ── TTS Read-Aloud Bar ─────────────────────────────── */
+  #tts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1A3A5C;
+    color: #fff;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9997;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
+  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
+  .tts-btn {
+    border: none; border-radius: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: background .15s;
+  }
+  .tts-primary { background: #0E7C86; color: #fff; }
+  .tts-primary:hover { background: #0A6870; }
+  .tts-secondary {
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 5px 10px; font-size: 13px;
+  }
+  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .tts-secondary:disabled { opacity: .35; cursor: default; }
+  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
+                   text-transform: uppercase; letter-spacing: .5px; }
+  .tts-speed-btn {
+    background: rgba(255,255,255,.1); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 4px 8px; font-size: 11px; cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: background .12s;
+  }
+  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
+  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
+  .tts-status {
+    font-size: 11px; color: #A8C8E8; margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tts-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* Reading highlight */
+  .tts-reading {
+    outline: 2.5px solid #0E7C86 !important;
+    outline-offset: 4px;
+    border-radius: 6px;
+    transition: outline .2s;
+  }
+
+
+  /* ── Module Nav Bar ─────────────────────────────── */
+  #module-nav {
+    background: #0D2438;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .mn-home {
+    font-size: 11px; font-weight: 700; color: #7FD4D8;
+    text-decoration: none; white-space: nowrap; margin-right: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mn-home:hover { color: #fff; }
+  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
+  .mn-lessons {
+    display: flex; gap: 2px; align-items: center;
+  }
+  .mn-lesson {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
+    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
+    transition: all .12s; border: 1px solid transparent;
+  }
+  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
+  .mn-lesson.mn-active {
+    color: #fff; border-color: rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+  }
+  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
+  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
+  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
+  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
+  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* injected: fixed module nav above the page's own header */
+  #module-nav { position: fixed !important; top: 0; left: 0; right: 0; }
+  html { padding-top: 38px; }
+  body { padding-bottom: 64px; }
+  #translate-bar { bottom: 58px; }
+  .top-bar { top: 38px !important; }
+  @media print { #module-nav, #tts-bar, #translate-bar { display: none !important; } html { padding-top: 0; } }
+</style>
 </head>
 <body>
+<nav id="module-nav" aria-label="Module navigation">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons"><a href="module.html#lesson-1" class="mn-lesson mn-l1 mn-active" aria-current="page">L1</a><a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a><a href="module.html#lesson-3" class="mn-lesson mn-l3">L3</a><a href="module.html#lesson-4" class="mn-lesson mn-l4">L4</a></div>
+  <span class="mn-crumb">Lesson 1 · Guided Notes</span>
+</nav>
+
 
 <div class="top-bar">
   <span class="top-bar-brand">Cell Division Gone Wrong · Lesson 1 · Guided Notes</span>
@@ -582,8 +748,8 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: v
   </div>
 
   <div class="reflection-block">
-    <h4>Reflection 3: Connection to St. Jude</h4>
-    <p>St. Jude Children's Research Hospital studies childhood cancers. Cancer is much rarer in children than in adults — but it does happen. Based on what you've learned, what might cause cancer to develop more quickly in some children, even though normally cancer takes decades?</p>
+    <h4>Reflection 3: Connection to Pediatric Cancer Research</h4>
+    <p>Children's cancer research hospitals study childhood cancers. Cancer is much rarer in children than in adults — but it does happen. Based on what you've learned, what might cause cancer to develop more quickly in some children, even though normally cancer takes decades?</p>
     <textarea placeholder="Your answer..." rows="4"></textarea>
   </div>
 </div>
@@ -624,5 +790,150 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #E8EFF7; color: v
 
 </div>  <!-- /container -->
 
+<!-- ── LANGUAGE TRANSLATION WIDGET ── -->
+<div id="translate-bar">
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
+</div>
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+}
+function triggerTranslate(lang) {
+  var combo = document.querySelector('.goog-te-combo');
+  if (!combo) { setTimeout(function() { triggerTranslate(lang); }, 600); return; }
+  combo.value = lang;
+  var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', false, true); combo.dispatchEvent(evt);
+  if (lang === '') document.getElementById('lang-select').value = '';
+}
+document.getElementById('lang-select').addEventListener('change', function() { triggerTranslate(this.value); });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>/* Wire the page's own header language menu to the translate engine; hide the duplicate floating widget. */
+(function(){ var h=document.querySelector('.lang-select'); var fb=document.getElementById('translate-bar');
+  if(h && typeof triggerTranslate==='function'){ h.addEventListener('change',function(){ triggerTranslate(this.value); }); if(fb) fb.style.display='none'; } })();</script>
+<script>window.TTS_SECTIONS = function() { var els = Array.from(document.querySelectorAll('.container > .card, .container > .reflection-block')); return els.filter(function(e){ return e.offsetParent !== null && (e.textContent||"").trim().length > 15; }); };</script>
+<!-- Read Aloud Bar -->
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon" title="Read Aloud">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&#215;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&#215;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none"><div class="tts-pulse"></div><span id="tts-status-text">Reading&hellip;</span></div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 (single instance) ═══
+   Reads the active section block by block with 500 ms pauses and
+   a teal outline on the block being read. */
+(function() {
+  var synth = window.speechSynthesis;
+  var _rate = 1.0, _playing = false, _paused = false, _sections = [], _idx = 0, _timer = null;
+
+  function extract(rootEl) {
+    var clone = rootEl.cloneNode(true);
+    ['button','select','svg','script','style','input','textarea','[aria-hidden="true"]','.slide-nav','.accum-btns']
+      .forEach(function(sel) { clone.querySelectorAll(sel).forEach(function(n) { n.remove(); }); });
+    var BLOCK = {DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,LI:1,TD:1,TH:1,TR:1,CAPTION:1,BLOCKQUOTE:1,FIGCAPTION:1,LABEL:1};
+    var parts = [];
+    (function walk(node) {
+      if (node.nodeType === 3) { var t = node.nodeValue.replace(/\s+/g,' '); if (t.trim()) parts.push(t); return; }
+      if (node.nodeType !== 1) return;
+      var before = parts.length;
+      node.childNodes.forEach(walk);
+      if (BLOCK[node.tagName] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) { if (!/[.!?:;—,]$/.test(seg)) seg += '.'; parts.push(seg + ' '); }
+      }
+    })(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  }
+  function getSections() {
+    if (window.TTS_SECTIONS) return window.TTS_SECTIONS();
+    var a = document.querySelector('.slide-card.active');
+    if (!a) return [];
+    var hdr = a.querySelector('.slide-header');
+    var body = a.querySelector('.slide-body');
+    var list = hdr ? [hdr] : [];
+    if (body) Array.from(body.children).forEach(function(el) {
+      if (el.offsetParent !== null && (el.textContent || '').trim().length > 15) list.push(el);
+    });
+    return list;
+  }
+  function clearHL() { document.querySelectorAll('.tts-reading').forEach(function(el) { el.classList.remove('tts-reading'); }); }
+  function readAt(i) {
+    clearTimeout(_timer);
+    if (i >= _sections.length) { done(); return; }
+    _idx = i; clearHL();
+    var sec = _sections[i];
+    sec.classList.add('tts-reading');
+    try { sec.scrollIntoView({ behavior:'smooth', block:'nearest' }); } catch(e) {}
+    var txt = extract(sec);
+    if (!txt) { readAt(i + 1); return; }
+    var u = new SpeechSynthesisUtterance(txt);
+    u.rate = _rate;
+    u.lang = (document.documentElement.lang || 'en');
+    u.onend = function() { if (_playing) _timer = setTimeout(function() { if (_playing && !_paused) readAt(i + 1); }, 500); };
+    u.onerror = function(e) { if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(i + 1); };
+    synth.speak(u);
+    _playing = true; _paused = false; ui();
+  }
+  function done() { _playing = false; _paused = false; clearHL(); clearTimeout(_timer); ui(); }
+  function ui() {
+    var play = document.getElementById('tts-play'), pause = document.getElementById('tts-pause'),
+        stop = document.getElementById('tts-stop'), st = document.getElementById('tts-status'),
+        stx = document.getElementById('tts-status-text');
+    if (_playing) {
+      play.innerHTML = '&#8635; Restart'; pause.disabled = false; stop.disabled = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      st.style.display = 'flex';
+      stx.textContent = _paused ? 'Paused' : 'Block ' + (_idx + 1) + ' of ' + _sections.length;
+    } else {
+      play.innerHTML = '&#9654; Play'; pause.disabled = true; stop.disabled = true; st.style.display = 'none';
+    }
+  }
+  window.ttsPlay = function() { synth.cancel(); clearTimeout(_timer); _sections = getSections(); if (_sections.length) readAt(0); };
+  window.ttsPauseResume = function() { if (!_playing) return; if (_paused) { synth.resume(); _paused = false; } else { synth.pause(); _paused = true; } ui(); };
+  window.ttsStop = function() { synth.cancel(); clearTimeout(_timer); _playing = false; _paused = false; clearHL(); ui(); };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) { b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r); });
+    if (_playing && !_paused) { var ri = _idx; synth.cancel(); clearTimeout(_timer); _timer = setTimeout(function() { readAt(ri); }, 100); }
+  };
+  document.addEventListener('visibilitychange', function() { if (document.hidden) window.ttsStop(); });
+})();
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>When Controls Break Down | STEMM Education &amp; Outreach</title>
+<title>When Controls Break Down | LaShaudra Cox Learning Design</title>
 <style>
   :root {
     --navy: #1A3A5C;
@@ -827,7 +827,11 @@
     transition: outline .2s;
   }
 
+
+  /* Publisher identity: LaShaudra Cox Learning Design (deep purple + gold) */
+  .org-badge, .org-badge.l3 { background:#4C1D95 !important; color:#F5C542 !important; letter-spacing:1.5px; }
 </style>
+<script src="cdgw-config.js"></script>
 </head>
 <body>
 
@@ -848,7 +852,7 @@
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-left">
-    <span class="org-badge">STEM</span>
+    <span class="org-badge">LC</span>
     <span class="topbar-title">When Controls Break Down</span>
   </div>
   <div class="progress-wrap">
@@ -1216,7 +1220,7 @@
           <div class="wm-icon">💡</div>
           <div class="wm-body">
             <div class="wm-label">Why this matters</div>
-            <p>The p53 protein is nicknamed the <strong>"guardian of the genome"</strong> — and for good reason. TP53 mutations are found in <strong>more than 50% of all human cancers</strong>, including many of the pediatric cancers studied at St. Jude. When a student understands what p53 does at a checkpoint, they're already partway to understanding why a single gene can be so decisive in whether cancer develops.</p>
+            <p>The p53 protein is nicknamed the <strong>"guardian of the genome"</strong> — and for good reason. TP53 mutations are found in <strong>more than 50% of all human cancers</strong>, including many of the pediatric cancers studied at children's cancer research hospitals. When a student understands what p53 does at a checkpoint, they're already partway to understanding why a single gene can be so decisive in whether cancer develops.</p>
           </div>
         </div>
       </div>
@@ -1343,7 +1347,7 @@
           <div class="wm-icon">💡</div>
           <div class="wm-body">
             <div class="wm-label">Why this matters</div>
-            <p>The two-hit hypothesis explains why some children develop cancer far earlier than expected. In <strong>Li-Fraumeni syndrome</strong>, a child is born with one mutated copy of TP53 — they've inherited the first hit. They only need one more mutation for the brake to fail entirely. St. Jude's genetic screening programs exist because of this biology: when we know a family carries a first-hit mutation, we can monitor children earlier, catch disease earlier, and treat it earlier.</p>
+            <p>The two-hit hypothesis explains why some children develop cancer far earlier than expected. In <strong>Li-Fraumeni syndrome</strong>, a child is born with one mutated copy of TP53 — they've inherited the first hit. They only need one more mutation for the brake to fail entirely. Genetic screening programs at children's cancer research hospitals exist because of this biology: when we know a family carries a first-hit mutation, we can monitor children earlier, catch disease earlier, and treat it earlier.</p>
           </div>
         </div>
       </div>
@@ -1458,7 +1462,7 @@
           <div class="wm-icon">💡</div>
           <div class="wm-body">
             <div class="wm-label">Why this matters</div>
-            <p>If cancer is not one disease but many, then treatment can't be one-size-fits-all — and this is exactly why <strong>precision medicine</strong> exists. Researchers at St. Jude sequence the mutations in each patient's tumor to match treatment to the specific genes that are broken. A drug that works for a child with a RAS-mutated leukemia may not help a child whose cancer is driven by a TP53 mutation. Understanding cancer at the cellular level is what makes personalized treatment possible.</p>
+            <p>If cancer is not one disease but many, then treatment can't be one-size-fits-all — and this is exactly why <strong>precision medicine</strong> exists. Researchers at children's cancer research hospitals sequence the mutations in each patient's tumor to match treatment to the specific genes that are broken. A drug that works for a child with a RAS-mutated leukemia may not help a child whose cancer is driven by a TP53 mutation. Understanding cancer at the cellular level is what makes personalized treatment possible.</p>
           </div>
         </div>
       </div>
@@ -1677,6 +1681,7 @@ const totalSlides = 5;
 const answered = {};
 
 function goSlide(n) {
+  if (window.ttsStop) window.ttsStop();
   document.getElementById('slide-' + currentSlide).classList.remove('active');
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   currentSlide = n;
@@ -1761,7 +1766,7 @@ function updateCharCount() {
 //
 //  Leave SUBMIT_URL as '' to use offline/clipboard-copy fallback only.
 // ══════════════════════════════════════════════════════════════
-const SUBMIT_URL = '';   // ← PASTE YOUR URL HERE
+const SUBMIT_URL = (window.CDGW_CONFIG && window.CDGW_CONFIG.SUBMIT_URL) || '';   // ← PASTE YOUR URL HERE
 
 async function submitExitTicket() {
   const nameEl   = document.getElementById('student-name');
@@ -1815,7 +1820,7 @@ async function submitExitTicket() {
       await fetch(SUBMIT_URL, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
+        body: JSON.stringify(Object.assign({ classCode: (window.CDGW_CONFIG || {}).CLASS_CODE || '' }, payload)),
         // 'no-cors' required for Google Apps Script — the POST goes through
         // even though the response is opaque (we can't read it back)
         mode:    SUBMIT_URL.includes('formspree') ? 'cors' : 'no-cors'
@@ -2011,7 +2016,7 @@ function printFullModule() {
     '</table>',
     '<div class="pm-salabel">Short Answer</div>',
     '<div class="pm-sa">' + esc(sa) + '</div>',
-    '<div class="pm-footer">Cell Division Gone Wrong · Lesson 2 · STEM Education &amp; Outreach · Grades 9–10</div>',
+    '<div class="pm-footer">Cell Division Gone Wrong · Lesson 2 · LaShaudra Cox Learning Design · Grades 9–10</div>',
   ].join('');
 
   // Inject or update the print modal
@@ -2247,162 +2252,6 @@ window._ttsGetSections = function() {
 })();
 </script>
 
-
-<!-- Read Aloud Bar -->
-<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
-  <span class="tts-icon" title="Read Aloud">&#128266;</span>
-  <span class="tts-label">Read Aloud</span>
-  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
-  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
-  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
-  <div class="tts-divider"></div>
-  <div class="tts-speed-row">
-    <span class="tts-speed-lbl">Speed</span>
-    <button class="tts-speed-btn" data-rate="0.8"  onclick="ttsSetRate(0.8)">0.8&#215;</button>
-    <button class="tts-speed-btn tts-speed-active" data-rate="1"    onclick="ttsSetRate(1)">1&#215;</button>
-    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
-    <button class="tts-speed-btn" data-rate="1.5"  onclick="ttsSetRate(1.5)">1.5&#215;</button>
-  </div>
-  <div class="tts-status" id="tts-status" style="display:none">
-    <div class="tts-pulse"></div>
-    <span id="tts-status-text">Reading&hellip;</span>
-  </div>
-</div>
-
-<script>
-/* ═══ Read-Aloud Engine ═══════════════════════════════════════════════════ */
-(function() {
-  var synth  = window.speechSynthesis;
-  var _rate  = 1.0;
-  var _playing = false;
-  var _paused  = false;
-  var _sections = [];
-  var _idx = 0;
-  var _utt = null;
-
-  /* Default section finder — override per file below */
-  window._ttsGetSections = function() {
-    return Array.from(document.querySelectorAll('.page > *')).filter(function(el) {
-      return el.offsetParent !== null && (el.innerText || el.textContent || '').trim().length > 20;
-    });
-  };
-
-  function extractText(el) {
-    var clone = el.cloneNode(true);
-    ['button','select','input','svg','script','style','#tts-bar',
-     '.tts-bar','.top-bar','.toolbar','.tb-right'].forEach(function(sel) {
-      try {
-        clone.querySelectorAll(sel).forEach(function(n) {
-          if (n.parentNode) n.parentNode.removeChild(n);
-        });
-      } catch(e) {}
-    });
-    return ((clone.innerText || clone.textContent) || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function readAt(idx) {
-    if (idx >= _sections.length) { onDone(); return; }
-    _idx = idx;
-
-    // scroll into view
-    try { _sections[idx].scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e) {}
-
-    // highlight
-    clearHL();
-    _sections[idx].classList.add('tts-reading');
-
-    var txt = extractText(_sections[idx]);
-    if (!txt) { readAt(idx + 1); return; }
-
-    _utt = new SpeechSynthesisUtterance(txt);
-    _utt.rate = _rate;
-    _utt.lang = document.documentElement.lang || 'en-US';
-    _utt.onend = function() { readAt(idx + 1); };
-    _utt.onerror = function(e) {
-      if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(idx + 1);
-    };
-    synth.speak(_utt);
-    _playing = true; _paused = false;
-    updateUI(_idx + 1, _sections.length);
-  }
-
-  function clearHL() {
-    document.querySelectorAll('.tts-reading').forEach(function(el) {
-      el.classList.remove('tts-reading');
-    });
-  }
-
-  function onDone() {
-    _playing = false; _paused = false;
-    clearHL(); updateUI(0, 0);
-  }
-
-  function updateUI(cur, total) {
-    var play  = document.getElementById('tts-play');
-    var pause = document.getElementById('tts-pause');
-    var stop  = document.getElementById('tts-stop');
-    var status  = document.getElementById('tts-status');
-    var statusTxt = document.getElementById('tts-status-text');
-    if (!play) return;
-    if (_playing) {
-      play.innerHTML  = '&#8635; Restart';
-      pause.disabled  = false;
-      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
-      pause.title     = _paused ? 'Resume' : 'Pause';
-      stop.disabled   = false;
-      status.style.display = 'flex';
-      if (statusTxt) statusTxt.textContent = _paused
-        ? 'Paused'
-        : (total > 1 ? 'Section ' + cur + ' of ' + total : 'Reading…');
-    } else {
-      play.innerHTML  = '&#9654; Play';
-      pause.disabled  = true;
-      pause.innerHTML = '&#9646;&#9646;';
-      stop.disabled   = true;
-      status.style.display = 'none';
-    }
-  }
-
-  window.ttsPlay = function() {
-    synth.cancel();
-    _sections = window._ttsGetSections();
-    if (!_sections.length) return;
-    readAt(0);
-  };
-
-  window.ttsPauseResume = function() {
-    if (!_playing) return;
-    if (_paused) { synth.resume(); _paused = false; }
-    else         { synth.pause();  _paused = true;  }
-    updateUI(_idx + 1, _sections.length);
-  };
-
-  window.ttsStop = function() {
-    synth.cancel();
-    _playing = false; _paused = false;
-    clearHL(); updateUI(0, 0);
-  };
-
-  window.ttsSetRate = function(r) {
-    _rate = r;
-    document.querySelectorAll('.tts-speed-btn').forEach(function(b) {
-      b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r);
-    });
-    if (_playing && !_paused) {
-      var resumeIdx = _idx;
-      synth.cancel();
-      _sections = window._ttsGetSections();
-      setTimeout(function() { readAt(resumeIdx); }, 80);
-    }
-  };
-
-  /* Stop reading when page visibility changes (tab switch) */
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) window.ttsStop();
-  });
-})();
-/* ════════════════════════════════════════════════════════════════════════ */
-</script>
 
 <script>
 window._ttsGetSections = function() {

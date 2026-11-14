@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cell Division Gone Wrong | STEM Education &amp; Outreach</title>
+<title>Cell Division Gone Wrong | LaShaudra Cox Learning Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
@@ -74,6 +74,7 @@
     border-radius: 4px;
     margin-bottom: 24px;
   }
+  .hero-badge { background:#4C1D95 !important; color:#F5C542 !important; }
   .hero h1 {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(38px, 6vw, 62px);
@@ -447,8 +448,8 @@
   .mat-btn.gold { background: var(--gold); color: #fff; }
   .mat-btn.gold:hover { background: #C88800; }
 
-  /* ── ST. JUDE BANNER ───────────────────────────────────────── */
-  .stjude-banner {
+  /* ── RESEARCH BANNER ───────────────────────────────────────── */
+  .research-banner {
     background: var(--navy);
     border-radius: 14px;
     padding: 40px;
@@ -459,7 +460,7 @@
     position: relative;
     overflow: hidden;
   }
-  .stjude-banner::before {
+  .research-banner::before {
     content: '';
     position: absolute;
     right: -40px;
@@ -469,18 +470,18 @@
     border-radius: 50%;
     background: rgba(14,124,134,.2);
   }
-  .stjude-connection {
+  .research-connection {
     position: relative;
   }
-  .stjude-connection .conn-label {
+  .research-connection .conn-label {
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 6px;
   }
-  .stjude-connection h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-  .stjude-connection p  { font-size: 12.5px; color: #A8C8E8; line-height: 1.6; }
+  .research-connection h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .research-connection p  { font-size: 12.5px; color: #A8C8E8; line-height: 1.6; }
 
   /* ── ID RATIONALE ──────────────────────────────────────────── */
   .rationale-grid {
@@ -930,7 +931,7 @@
     .overview-grid { grid-template-columns: 1fr; }
     .materials-grid.cols-2 { grid-template-columns: 1fr; max-width: 100%; }
     .standard-tooltip { width: min(280px, calc(100vw - 80px)); }
-    .stjude-banner { grid-template-columns: 1fr; }
+    .research-banner { grid-template-columns: 1fr; }
     .rationale-grid { grid-template-columns: 1fr; }
     .about-card { flex-direction: column; padding: 24px; }
     .nav-links { display: none; }
@@ -944,13 +945,15 @@
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <span class="nav-brand">Cell Division Gone Wrong · STEM Education &amp; Outreach</span>
+    <span class="nav-brand">Cell Division Gone Wrong · LaShaudra Cox Learning Design</span>
     <div class="nav-links">
       <a href="#overview">Overview</a>
       <a href="#student">Student Materials</a>
       <a href="#teacher">Teacher Materials</a>
       <a href="#rationale">ID Rationale</a>
+      <a href="#pilot">Pilot</a>
       <a href="#about">About</a>
+      <a href="module.html" style="font-weight:700;">Full Module →</a>
     </div>
   </div>
 </nav>
@@ -958,7 +961,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-badge">STEM Education &amp; Outreach · Grades 9–10</div>
+    <div class="hero-badge">LaShaudra Cox Learning Design · Grades 9–10</div>
     <h1>Cell Division<br><span>Gone Wrong</span></h1>
     <p class="hero-sub">Understanding Cancer at the Cellular Level</p>
     <div class="hero-meta">
@@ -972,6 +975,8 @@
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       Explore the Module
     </a>
+    <a href="module.html" class="hero-cta" style="margin-left:10px;background:transparent;border:1.5px solid rgba(255,255,255,.5);">Open the Full 4-Lesson Module →</a>
+    <p style="margin-top:18px;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#F0C75E;font-weight:700;">Design. Teach. Transform.</p>
   </div>
   <div class="hero-scroll"></div>
 </section>
@@ -1006,15 +1011,15 @@
                 <span class="ct-line"><span class="ct-label">Online</span><span class="ct-value">Digital lesson + checkpoint simulator + exit ticket</span></span>
                 <span class="ct-line"><span class="ct-label">In-Class</span><span class="ct-value">"Meet Maya" ALL case study + small group debrief</span></span>
                 <span class="ct-line"><span class="ct-label">Bloom's</span><span class="ct-value">Understand → Analyze</span></span>
-                <span class="ct-line"><span class="ct-label">Note</span><span class="ct-value">Materials in this repository</span></span>
+                <span class="ct-line"><span class="ct-label">Note</span><span class="ct-value">Featured in the design case study below</span></span>
               </span>
             </th>
             <th scope="col" class="lesson-col" tabindex="0" aria-describedby="lesson-3-info">
               <div class="lesson-num">LESSON 3</div>
               <div class="lesson-title">The Genetics of Cancer</div>
               <span class="mtx-tooltip" id="lesson-3-info" role="tooltip">
-                <span class="ct-line"><span class="ct-label">Online</span><span class="ct-value">Oncogenes vs. tumor suppressors + guided notes</span></span>
-                <span class="ct-line"><span class="ct-label">In-Class</span><span class="ct-value">Modeling activity — broken DNA repair</span></span>
+                <span class="ct-line"><span class="ct-label">Online</span><span class="ct-value">Digital lesson: oncogenes, two-hit evidence, germline vs. somatic, DNA repair + CER on Maya's report</span></span>
+                <span class="ct-line"><span class="ct-label">In-Class</span><span class="ct-value">DNA Repair Simulator + Family Genetics Consult</span></span>
                 <span class="ct-line"><span class="ct-label">Bloom's</span><span class="ct-value">Analyze → Evaluate</span></span>
               </span>
             </th>
@@ -1022,8 +1027,8 @@
               <div class="lesson-num">LESSON 4</div>
               <div class="lesson-title">Fighting Back: Lab to Patient</div>
               <span class="mtx-tooltip" id="lesson-4-info" role="tooltip">
-                <span class="ct-line"><span class="ct-label">Online</span><span class="ct-value">Cancer researcher video + genomic data portal exploration</span></span>
-                <span class="ct-line"><span class="ct-label">In-Class</span><span class="ct-value">Design challenge — treatment strategy for patient profile</span></span>
+                <span class="ct-line"><span class="ct-label">Online</span><span class="ct-value">Digital lesson (chemo, targeted therapy, CAR-T, trials) + researcher video + Genomic Data Portal Explorer</span></span>
+                <span class="ct-line"><span class="ct-label">In-Class</span><span class="ct-value">Treatment Strategy Designer + summative Research Brief (new patient)</span></span>
                 <span class="ct-line"><span class="ct-label">Bloom's</span><span class="ct-value">Evaluate → Create</span></span>
               </span>
             </th>
@@ -1142,7 +1147,7 @@
     <div class="matrix-legend">
       <div class="legend-item"><span class="dot addressed"></span> <span>Addressed in this lesson</span></div>
       <div class="legend-item"><span class="dot not-addressed"></span> <span>Not addressed</span></div>
-      <div class="legend-item"><span style="color:var(--gold);font-size:13px;">★</span> <span>Featured lesson — materials in this repository</span></div>
+      <div class="legend-item"><span style="color:var(--gold);font-size:13px;">★</span> <span>Featured in this case study · all four lessons are in the <a href="module.html" style="color:var(--teal);font-weight:700;">full module</a></span></div>
     </div>
   </div>
 </section>
@@ -1318,18 +1323,23 @@
           </div>
         </div>
         <div class="mat-card-body" style="padding:0 18px 12px;">
-          6-page document explaining the research foundation behind every design decision — from Bloom's level choices to simulator structure to why Maya anchors every document.
+          8-page document explaining the research behind every design decision across all four lessons and the pilot, from the staged Bloom's arc to the probabilistic DNA repair simulator to why Leo's Research Brief uses a bounded options card.
         </div>
         <div class="mat-card-features" style="padding:10px 18px;">
           <span class="feature-tag">Merrill (2002)</span>
           <span class="feature-tag">Sweller (2019)</span>
           <span class="feature-tag">Keller ARCS (1987)</span>
           <span class="feature-tag">Belland et al. (2013)</span>
+          <span class="feature-tag">McNeill &amp; Krajcik (2012)</span>
         </div>
         <div class="mat-card-footer" style="padding:10px 18px;">
           <a href="Design_Rationale_Document.docx" class="mat-btn" style="background:var(--purple);color:#fff;flex:1;min-width:0;">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Rationale
+          </a>
+          <a href="The_Big-Picture_Design_Logic.docx" class="mat-btn" style="background:#F5C542;color:#4C1D95;flex:1;min-width:0;">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Design Logic
           </a>
         </div>
       </div>
@@ -1414,30 +1424,30 @@
 
 <div class="divider"></div>
 
-<!-- ST. JUDE CONNECTION -->
+<!-- RESEARCH CONNECTION -->
 <section>
   <div class="container">
     <span class="section-label">Research Connection</span>
     <h2 class="section-title">Every connection is grounded in real science</h2>
     <p class="section-desc">Every biomedical reference in this module is tied to actual research, real patient biology, and documented clinical outcomes, not generic examples chosen for convenience.</p>
 
-    <div class="stjude-banner">
-      <div class="stjude-connection">
+    <div class="research-banner">
+      <div class="research-connection">
         <div class="conn-label" style="color:var(--teal)">Research Anchor</div>
         <h4>TP53 Mutations</h4>
         <p>Students analyze TP53 mutations — a tumor suppressor gene that is an active focus of pediatric cancer research at leading children's cancer research hospitals. This is documented science, not a textbook approximation.</p>
       </div>
-      <div class="stjude-connection">
+      <div class="research-connection">
         <div class="conn-label" style="color:#F0A500">Real Data</div>
         <h4>Genomic Data Portal</h4>
-        <p>Lesson 4 introduces students to publicly accessible genomic data portals — repositories built from real pediatric cancer patients. Students engage with actual research infrastructure, not simulated data.</p>
+        <p>Lesson 4 teaches students how genomic data portals work using a transparently labeled teaching portal modeled on published pediatric leukemia data, then points them to real public portals (NCI's Childhood Cancer Data Initiative and cBioPortal).</p>
       </div>
-      <div class="stjude-connection">
+      <div class="research-connection">
         <div class="conn-label" style="color:#FF8090">Patient Narrative</div>
         <h4>Meet Maya</h4>
         <p>The case study is built on the real biology of Acute lymphoblastic leukemia (ALL) — lymphoblasts, bone marrow, tumor suppressor mutations in lymphocyte development. Fictional patient, fully accurate science grounded in published clinical profiles.</p>
       </div>
-      <div class="stjude-connection">
+      <div class="research-connection">
         <div class="conn-label" style="color:#C4B5FD">Treatment Bridge</div>
         <h4>CAR-T Immunotherapy</h4>
         <p>Lesson 4 introduces CAR-T cell therapy — a direct application of the cellular biology students spent three lessons building. The treatment mechanism connects directly to the mutation biology students analyzed.</p>
@@ -1506,6 +1516,24 @@
 
 <div class="divider"></div>
 
+<!-- PILOT -->
+<section id="pilot">
+  <div class="container">
+    <span class="section-label">Classroom Pilot · 2026–27</span>
+    <h2 class="section-title">Now piloting with partner teachers</h2>
+    <p style="max-width:760px;font-size:15px;line-height:1.7;color:var(--gray);margin-bottom:22px;">All four lessons are complete and ready for classroom use. I'm partnering with a small group of high school biology teachers to run the module, gather student and teacher feedback, and measure learning gains before a wider release.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:22px;">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;"><div style="font-size:22px;">📚</div><h4 style="margin:6px 0 4px;color:var(--navy);">4 complete lessons</h4><p style="font-size:13px;color:var(--gray);line-height:1.6;">40+ student and teacher resources: digital lessons, simulators, case activities, decks, and facilitation guides.</p></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;"><div style="font-size:22px;">🧭</div><h4 style="margin:6px 0 4px;color:var(--navy);">Pilot implementation kit</h4><p style="font-size:13px;color:var(--gray);line-height:1.6;">Onboarding, a pacing calendar, tech setup, and a plain-language student-data note.</p></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;"><div style="font-size:22px;">📈</div><h4 style="margin:6px 0 4px;color:var(--navy);">Built-in evaluation</h4><p style="font-size:13px;color:var(--gray);line-height:1.6;">Standards-aligned pre/post assessment, exit-ticket data capture, and teacher and student feedback surveys.</p></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;"><div style="font-size:22px;">♿</div><h4 style="margin:6px 0 4px;color:var(--navy);">Access built in</h4><p style="font-size:13px;color:var(--gray);line-height:1.6;">Read Aloud and 20-language translation on every student page. No logins, no installs, any browser.</p></div>
+    </div>
+    <p style="font-size:14px;"><strong>Interested in piloting?</strong> Email <a href="mailto:coxl2@outlook.com" style="color:var(--teal);font-weight:700;">coxl2@outlook.com</a> · <a href="module.html" style="color:var(--teal);font-weight:700;">Preview the full module →</a> · <a href="module.html#pilot-teachers" style="color:var(--teal);font-weight:700;">Pilot teacher kit →</a></p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- ABOUT -->
 <section id="about">
   <div class="container">
@@ -1529,7 +1557,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-left">
-      <p><strong>Cell Division Gone Wrong</strong> · STEM Education &amp; Outreach</p>
+      <p><strong>Cell Division Gone Wrong</strong> · LaShaudra Cox Learning Design</p>
       <p style="margin-top:4px">Grades 9–10 · Biology / Life Science · Flipped Classroom Module</p>
     </div>
     <div class="footer-right">

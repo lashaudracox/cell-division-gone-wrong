@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Genetics Consult | Lesson 3 | LaShaudra Cox Learning Design</title>
+<style>
+  :root {
+    --navy:#1A3A5C; --teal:#0E7C86; --red:#C8102E; --gold:#F0A500;
+    --green:#16A34A; --light:#EEF5FB; --border:#D1E4F0;
+    --dark:#1E293B; --gray:#64748B; --muted:#94A3B8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:var(--dark);padding:0 0 60px;
+  padding-bottom: 52px;
+  padding-top: 38px;}
+
+  /* ── TOOLBAR ── */
+  .toolbar{position:sticky;top:0;z-index:200;background:#0D2240;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.4);}
+  .tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
+  .tb-right{display:flex;gap:8px;align-items:center;}
+  .save-msg{font-size:11px;color:#7FD4D8;font-style:italic;opacity:0;transition:opacity .4s;margin-right:8px;}
+  .save-msg.show{opacity:1;}
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .btn-save{background:var(--teal);color:#fff;} .btn-save:hover{background:#0A6870;}
+  .btn-print{background:var(--red);color:#fff;} .btn-print:hover{background:#A00024;}
+  .btn-clear{background:rgba(255,255,255,.08);color:#A8C8E8;border:1px solid rgba(255,255,255,.15);} .btn-clear:hover{background:rgba(255,255,255,.18);}
+
+  /* ── PAGE ── */
+  .page{max-width:800px;margin:20px auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);}
+
+  /* ── HEADER ── */
+  .doc-header{background:var(--navy);padding:22px 28px 18px;}
+  .badge{background:var(--teal);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;text-transform:uppercase;display:inline-block;margin-bottom:8px;}
+  .doc-header h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:3px;}
+  .doc-header .sub{font-size:13px;color:#A8C8E8;}
+  .meta-row{display:flex;gap:14px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);}
+  .meta-field{flex:1;}
+  .meta-label{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;margin-bottom:3px;}
+  .meta-in{width:100%;background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.2);color:#fff;font-size:13px;padding:3px 0;outline:none;font-family:inherit;}
+  .meta-in::placeholder{color:rgba(255,255,255,.25);}
+  .meta-in:focus{border-bottom-color:var(--teal);}
+
+  /* ── SEC HEADER ── */
+  .sec-bar{padding:8px 20px;color:#fff;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+  .sec-bar.navy{background:var(--navy);}
+  .sec-bar.teal{background:var(--teal);}
+  .sec-bar.red{background:var(--red);}
+  .sec-bar.gold{background:#B07500;}
+  .sec-bar.dark{background:#0D2D47;}
+  .sec-bar.purple{background:#5B21B6;}
+
+  /* ── SECTION BODY ── */
+  .sb{padding:16px 20px;}
+  .instr{font-size:11.5px;color:var(--gray);font-style:italic;margin-bottom:12px;}
+
+  /* ── DR. TAWFIK: WHAT YOU WILL LEARN ── */
+  .wyll{background:#EBF7F8;border-left:4px solid var(--teal);border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:14px;}
+  .wyll-label{font-size:9px;font-weight:700;letter-spacing:1.8px;color:var(--teal);text-transform:uppercase;margin-bottom:8px;}
+  .wyll ul{list-style:none;padding:0;margin:0;}
+  .wyll ul li{font-size:12.5px;color:var(--dark);padding:3px 0;line-height:1.5;display:flex;gap:7px;align-items:flex-start;}
+  .wyll ul li::before{content:"›";font-weight:700;color:var(--teal);flex-shrink:0;}
+
+  /* ── DR. TAWFIK: WHY THIS MATTERS ── */
+  .wtm{background:#FFF9EC;border-left:4px solid var(--gold);border-radius:0 6px 6px 0;padding:10px 14px;margin-top:14px;margin-bottom:4px;}
+  .wtm-label{font-size:9px;font-weight:700;letter-spacing:1.8px;color:#8A6000;text-transform:uppercase;margin-bottom:7px;}
+  .wtm p{font-size:12.5px;color:var(--dark);line-height:1.65;}
+
+  /* ── INPUTS ── */
+  .blank{display:inline-block;border:none;border-bottom:2px solid var(--teal);background:transparent;font-size:13px;font-family:inherit;color:var(--dark);padding:1px 3px;outline:none;vertical-align:bottom;min-width:100px;transition:border-color .15s,background .15s;}
+  .blank:focus{border-bottom-color:var(--navy);background:#EEF5FB;}
+  .blank.sm{min-width:70px;} .blank.lg{min-width:200px;} .blank.xl{min-width:280px;} .blank.full{width:100%;display:block;margin-top:4px;}
+  .blank.light{color:#fff;border-bottom-color:rgba(255,255,255,.35);}
+  .blank.light:focus{background:rgba(255,255,255,.08);}
+
+  textarea.ta{width:100%;border:1.5px solid var(--border);border-radius:5px;padding:8px 10px;font-size:12.5px;font-family:inherit;color:var(--dark);resize:vertical;min-height:68px;outline:none;line-height:1.6;transition:border-color .15s;}
+  textarea.ta:focus{border-color:var(--teal);}
+  textarea.ta.short{min-height:46px;}
+  textarea.ta.tall{min-height:92px;}
+
+  textarea.phase-ta{width:100%;border:none;border-bottom:1px solid var(--border);background:transparent;font-size:12px;font-family:inherit;color:var(--dark);padding:4px 6px;outline:none;resize:none;min-height:42px;line-height:1.5;display:block;}
+  textarea.phase-ta:focus{background:#F8FBFF;}
+
+  /* ── OBJ BOX ── */
+  .obj-box{background:var(--light);border-left:3px solid var(--teal);padding:10px 14px;border-radius:0 5px 5px 0;margin-bottom:12px;font-size:13px;line-height:1.6;}
+  .obj-box strong{color:var(--teal);}
+
+  /* ── WORD BANK ── */
+  .wb{background:#132C47;border-radius:6px;padding:10px 14px;margin-bottom:14px;}
+  .wb-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#4A7A9B;text-transform:uppercase;margin-bottom:8px;}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{background:#1E3D5A;color:#A8C8E8;padding:3px 10px;border-radius:14px;font-size:11.5px;font-weight:600;border:1px solid rgba(255,255,255,.1);}
+
+  /* ── DIAGRAM ── */
+  .diag-row{display:flex;gap:14px;align-items:flex-start;}
+  .diag-svg{flex-shrink:0;}
+  .diag-right{flex:1;min-width:0;}
+
+  /* ── TABLES ── */
+  .nt{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:10px;}
+  .nt th{background:var(--navy);color:#fff;padding:6px 10px;font-weight:600;font-size:11px;text-align:left;}
+  .nt th.t{background:var(--teal);}
+  .nt td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .nt tr:last-child td{border-bottom:none;}
+  .nt tr:nth-child(even) td{background:#F8FBFF;}
+  .ph-lbl{font-weight:700;font-size:12.5px;}
+
+  /* ── CALLOUTS ── */
+  .callout{padding:10px 14px;border-radius:5px;margin:10px 0;font-size:12.5px;line-height:1.7;}
+  .callout.navy{background:var(--navy);color:#D0E8F8;}
+  .callout.teal{background:#EBF7F8;border-left:3px solid var(--teal);}
+  .callout.gold{background:#FFF9EC;border-left:3px solid var(--gold);}
+  .callout.red{background:#FFF0F2;border-left:3px solid var(--red);}
+  .callout strong{color:var(--teal);}
+  .callout.navy strong{color:#7FD4D8;}
+  .callout.gold strong{color:#8A6000;}
+  .callout.red strong{color:var(--red);}
+
+  /* ── TWO COL ── */
+  .two-col{display:flex;gap:10px;margin:10px 0;}
+  .two-col>div{flex:1;min-width:0;}
+
+  /* ── DEF GRID ── */
+  .def-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+  .def-card{flex:0 0 calc(50% - 5px);border:1.5px solid var(--border);border-radius:5px;overflow:hidden;min-width:0;}
+  .def-head{padding:7px 12px;color:#fff;font-weight:700;font-size:12.5px;}
+  .def-body{padding:10px 12px;}
+  .def-note{font-size:11px;color:var(--muted);margin-bottom:5px;}
+
+  /* ── TWO-HIT ── */
+  .hit-flow{display:flex;align-items:stretch;gap:0;margin:10px 0;}
+  .hit-box{flex:1;background:var(--light);border:1.5px solid var(--border);border-radius:5px;padding:10px;text-align:center;}
+  .hit-box.res{background:#FFF0F2;border-color:var(--red);}
+  .hit-arr{width:28px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--muted);flex-shrink:0;}
+  .hit-ttl{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:5px;}
+  .hit-ttl.r{color:var(--red);}
+  .hit-cp{font-size:12px;color:var(--dark);line-height:1.5;}
+  .res-in{width:100%;border:none;border-bottom:1.5px solid var(--border);background:transparent;font-size:12px;font-family:inherit;padding:2px 2px;outline:none;text-align:center;margin-top:6px;}
+  .res-in:focus{border-bottom-color:var(--teal);background:#EEF5FB;}
+  .res-lbl{font-size:10px;color:var(--gray);font-weight:700;margin-top:6px;}
+
+  /* ── SCENARIOS ── */
+  .sc-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+  .sc-box{flex:0 0 calc(50% - 5px);border:1.5px solid var(--border);border-radius:5px;overflow:hidden;min-width:0;}
+  .sc-head{padding:6px 10px;color:#fff;font-size:11.5px;font-weight:700;}
+  .sc-body{padding:10px;}
+  .sc-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+  .sc-lbl{font-weight:700;color:var(--gray);font-size:11px;flex-shrink:0;min-width:88px;}
+  .sc-in{flex:1;border:none;border-bottom:1.5px solid var(--border);background:transparent;font-size:12px;font-family:inherit;padding:2px 3px;outline:none;}
+  .sc-in:focus{border-bottom-color:var(--teal);}
+  .sc-obs{font-size:10.5px;color:var(--muted);margin:6px 0 3px;}
+
+  /* ── CASE FILE ── */
+  .case-box{background:#FFF0F2;border:1.5px solid #FFBCC8;border-radius:6px;padding:12px 14px;margin-bottom:12px;}
+  .case-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--red);text-transform:uppercase;margin-bottom:5px;}
+  .case-intro{font-size:13px;font-style:italic;font-weight:600;margin-bottom:10px;line-height:1.4;}
+  .clue{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #FFD0D8;font-size:12px;line-height:1.4;}
+  .clue:last-child{border-bottom:none;}
+
+  /* ── SYNTHESIS ── */
+  .syn-q{background:var(--light);border-radius:6px;padding:12px 14px;margin-bottom:10px;}
+  .syn-q .qt{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:7px;line-height:1.4;}
+
+  /* ── SELF-CHECK ── */
+  .ck-list{list-style:none;padding:0;}
+  .ck-list li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;cursor:pointer;}
+  .ck-list li:last-child{border-bottom:none;}
+  .ck-list input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--teal);flex-shrink:0;cursor:pointer;}
+
+  /* ── FOOTER ── */
+  .doc-footer{text-align:center;font-size:10px;color:var(--muted);font-style:italic;padding:14px 20px;border-top:1px solid var(--border);}
+
+  /* ═══ PRINT ════════════════════════════════════════════════ */
+  @media print {
+    body{background:#fff;padding:0;}
+    .toolbar{display:none !important;}
+    .page{box-shadow:none;border-radius:0;margin:0;max-width:100%;}
+    .blank{border-bottom:1px solid #aaa !important;background:transparent !important;}
+    .ta,.phase-ta,.sc-in,.res-in,.meta-in,.blank.full{
+      border:none !important;border-bottom:1px solid #ccc !important;
+      background:transparent !important;resize:none !important;overflow:visible !important;
+    }
+    .ta{min-height:0 !important;}
+    .wyll,.wtm,.sec-bar,.doc-header,.wb,.case-box,.callout.navy{
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    }
+    @page{margin:0.75in;}
+  }
+
+  /* ── ELL SENTENCE STARTERS ─────────────────────────────────── */
+  details.ell-starter {
+    margin-top: 6px;
+    border-radius: 7px;
+    border: 1.5px solid #C4B5FD;
+    overflow: hidden;
+    background: #F5F3FF;
+  }
+  details.ell-starter summary {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5B21B6;
+    letter-spacing: .5px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  details.ell-starter summary::-webkit-details-marker { display: none; }
+  details.ell-starter summary::before {
+    content: '▶';
+    font-size: 9px;
+    transition: transform .15s;
+  }
+  details.ell-starter[open] summary::before { transform: rotate(90deg); }
+  .ell-body {
+    padding: 10px 14px 12px;
+    font-size: 12.5px;
+    color: #3730A3;
+    line-height: 1.65;
+    border-top: 1px solid #C4B5FD;
+    background: #FAF5FF;
+  }
+  .ell-body em {
+    background: rgba(167,139,250,.2);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-style: normal;
+    font-weight: 600;
+    color: #4C1D95;
+  }
+  .ell-fill {
+    display: inline-block;
+    min-width: 120px;
+    border-bottom: 1.5px solid #7C3AED;
+    color: #7C3AED;
+    font-style: italic;
+  }
+
+  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
+  /* Fixed bottom-right: clears every file's top bar & print buttons */
+  #translate-bar {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 99999;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+  }
+  #translate-bar .tb-label {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+  }
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
+
+  /* ── TTS Read-Aloud Bar ─────────────────────────────── */
+  #tts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1A3A5C;
+    color: #fff;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9997;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
+  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
+  .tts-btn {
+    border: none; border-radius: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: background .15s;
+  }
+  .tts-primary { background: #0E7C86; color: #fff; }
+  .tts-primary:hover { background: #0A6870; }
+  .tts-secondary {
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 5px 10px; font-size: 13px;
+  }
+  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .tts-secondary:disabled { opacity: .35; cursor: default; }
+  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
+                   text-transform: uppercase; letter-spacing: .5px; }
+  .tts-speed-btn {
+    background: rgba(255,255,255,.1); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 4px 8px; font-size: 11px; cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: background .12s;
+  }
+  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
+  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
+  .tts-status {
+    font-size: 11px; color: #A8C8E8; margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tts-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* Reading highlight */
+  .tts-reading {
+    outline: 2.5px solid #0E7C86 !important;
+    outline-offset: 4px;
+    border-radius: 6px;
+    transition: outline .2s;
+  }
+
+
+  /* ── Module Nav Bar ─────────────────────────────── */
+  #module-nav {
+    background: #0D2438;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .mn-home {
+    font-size: 11px; font-weight: 700; color: #7FD4D8;
+    text-decoration: none; white-space: nowrap; margin-right: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mn-home:hover { color: #fff; }
+  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
+  .mn-lessons {
+    display: flex; gap: 2px; align-items: center;
+  }
+  .mn-lesson {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
+    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
+    transition: all .12s; border: 1px solid transparent;
+  }
+  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
+  .mn-lesson.mn-active {
+    color: #fff; border-color: rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+  }
+  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
+  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
+  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
+  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
+  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Module-wide additions (L3/L4 build) ── */
+  :root { --acc: #F0A500; --acc-dark: #92400E; --acc-soft: #FFF7E6; }
+  body { padding-bottom: 64px; }
+  #translate-bar { bottom: 58px; }
+  .sec-bar.amber { background: #92400E; }
+  .sec-bar.violet { background: #5B21B6; }
+  .badge.acc { background: var(--acc-dark); }
+  .doc-header.acc { background: linear-gradient(135deg, var(--navy) 0%, var(--acc-dark) 140%); }
+  .sr-only { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  :focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+  @media print { #tts-bar, #translate-bar, #module-nav { display:none !important; } }
+
+  .role-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .role { border:1.5px solid var(--border); border-radius:8px; overflow:hidden; }
+  .role-h { padding:9px 12px; color:#fff; font-weight:700; font-size:13px; }
+  .role-h small { display:block; font-weight:500; opacity:.85; font-size:11px; }
+  .role-b { padding:10px 12px; font-size:12.5px; line-height:1.55; }
+  .role-b ol { margin:6px 0 8px 18px; } .role-b li { margin-bottom:4px; }
+  .clue-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .clue-card { border:1.5px solid var(--border); border-radius:8px; padding:10px 12px; font-size:12.5px; line-height:1.55; background:#FAFCFF; }
+  .clue-card .cl { font-size:9.5px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:#92400E; margin-bottom:4px; }
+  .mini-report { width:100%; border-collapse:collapse; font-size:11.5px; margin-top:4px; }
+  .mini-report th, .mini-report td { border:1px solid var(--border); padding:4px 6px; text-align:left; }
+  .mini-report th { background:#F1F5F9; font-size:10px; text-transform:uppercase; color:var(--gray); }
+  .det { color:var(--red); font-weight:700; } .nodet { color:var(--green); font-weight:700; }
+  .locked5 { border:2px dashed #92400E; border-radius:8px; padding:14px; text-align:center; background:#FFF7E6; }
+  .locked5 button { background:#92400E; color:#fff; border:none; border-radius:6px; padding:8px 14px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:6px; }
+  #clue5 { display:none; }
+  .cons-q { padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .cons-q:last-child { border-bottom:none; }
+  .cons-q .qt { font-weight:700; color:var(--navy); margin-bottom:6px; }
+  .opts { display:flex; flex-wrap:wrap; gap:8px 16px; font-size:12.5px; }
+  .opts label { display:flex; gap:6px; align-items:center; cursor:pointer; }
+  .ped-legend { display:flex; flex-wrap:wrap; gap:14px; font-size:11px; color:var(--gray); margin-top:6px; }
+  @media (max-width:720px) { .role-grid, .clue-grid { grid-template-columns:1fr; } }
+  @media print { .locked5 { display:none; } #clue5 { display:block !important; } .role, .clue-card { break-inside:avoid; } }
+
+</style>
+</head>
+<body>
+<nav id="module-nav" aria-label="Module navigation">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons"><a href="module.html#lesson-1" class="mn-lesson mn-l1">L1</a><a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a><a href="module.html#lesson-3" class="mn-lesson mn-l3 mn-active" aria-current="page">L3</a><a href="module.html#lesson-4" class="mn-lesson mn-l4">L4</a></div>
+  <span class="mn-crumb">Lesson 3 · Family Genetics Consult</span>
+</nav>
+<div class="toolbar"><div class="tb-left">👨‍👩‍👧 Family Genetics Consult · Lesson 3 Group Activity</div><div class="tb-right"><span class="save-msg" id="saveMsg" role="status"></span><button class="btn btn-clear" onclick="clearAll()">↺ Clear All</button><button class="btn btn-save" onclick="saveWork()">💾 Save Progress</button><button class="btn btn-print" onclick="window.print()">🖨 Print / Save PDF</button></div></div>
+
+<div class="page">
+<div class="doc-header acc">
+  <span class="badge acc">Group Activity · Lesson 3</span>
+  <h1>Family Genetics Consult: The Maya Case</h1>
+  <p class="sub">Four specialists, one family, one big question: should Eli be tested?</p>
+  <div class="meta-row">
+    <div class="meta-field"><label class="meta-label" for="f-name">Your Name</label><input class="meta-in" id="f-name" placeholder="Your name"></div>
+    <div class="meta-field"><label class="meta-label" for="f-role">Your Role</label><input class="meta-in" id="f-role" placeholder="e.g. Genetic Counselor"></div>
+    <div class="meta-field"><label class="meta-label" for="f-period">Date / Period</label><input class="meta-in" id="f-period" placeholder="e.g. Period 3"></div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="callout teal"><strong>🏥 Real-world connection:</strong> When a child's cancer might be inherited, children's cancer research hospitals bring in a <strong>genetic counselor</strong> alongside the oncology team. Together they review the lab results and family history, then help the family decide about testing for relatives. Today your group is that team.</div>
+</div>
+
+<div class="sec-bar amber">📁 The Evidence: Review Together Before You Split Into Roles</div>
+<div class="sb">
+  <div class="clue-grid">
+    <div class="clue-card"><div class="cl">Clue 1 · Diagnosis</div>Maya, age 12: B-cell acute lymphoblastic leukemia (ALL), <strong>low-hypodiploid</strong> subtype. Her leukemia cells have fewer chromosomes than normal. TP53 mutations are common in this subtype, and in roughly 4 in 10 of these children the TP53 mutation is inherited.</div>
+    <div class="clue-card"><div class="cl">Clue 2 · Tumor–normal sequencing</div>
+      <table class="mini-report"><tr><th>Finding</th><th>Leukemia</th><th>Skin</th></tr>
+      <tr><td>TP53 copy 1, point mutation</td><td class="det">Detected</td><td class="det">Detected</td></tr>
+      <tr><td>TP53 copy 2, deleted</td><td class="det">Detected</td><td class="nodet">Not detected</td></tr>
+      <tr><td>NRAS activating mutation</td><td class="det">Detected</td><td class="nodet">Not detected</td></tr></table></div>
+  </div>
+  <div class="clue-card" style="margin-top:10px;"><div class="cl">Clue 3 · Family pedigree</div>
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pedt pedd" style="width:100%;height:auto;">
+  <title id="pedt">Maya's three-generation family pedigree</title>
+  <desc id="pedd">Generation 1: maternal grandfather, unaffected; maternal grandmother, filled circle, breast cancer at 34, deceased at 41; paternal grandfather and grandmother, unaffected. Generation 2: maternal uncle, filled square, osteosarcoma at 15, now 40 and a survivor; Maya's mother, age 38, no cancer; Maya's father, age 40, no cancer; father's sister, age 36, no cancer. Generation 3: Maya, filled circle with arrow, ALL at 12; brother Eli, age 8, status unknown.</desc>
+  <g font-family="Segoe UI, Arial" font-size="11" fill="#1E293B">
+    <text x="8" y="58" font-weight="700" fill="#64748B">I</text>
+    <text x="8" y="168" font-weight="700" fill="#64748B">II</text>
+    <text x="8" y="278" font-weight="700" fill="#64748B">III</text>
+    <!-- Gen I maternal -->
+    <rect x="70" y="38" width="32" height="32" fill="#fff" stroke="#1E293B" stroke-width="2"/>
+    <circle cx="186" cy="54" r="17" fill="#C8102E" stroke="#1E293B" stroke-width="2"/>
+    <line x1="166" y1="76" x2="206" y2="32" stroke="#1E293B" stroke-width="2"/>
+    <line x1="102" y1="54" x2="169" y2="54" stroke="#1E293B" stroke-width="2"/>
+    <text x="86" y="86" text-anchor="middle">Grandfather</text><text x="86" y="99" text-anchor="middle" fill="#64748B">72</text>
+    <text x="186" y="88" text-anchor="middle">Grandmother</text><text x="186" y="101" text-anchor="middle" fill="#C8102E" font-weight="700">breast cancer, 34</text><text x="186" y="114" text-anchor="middle" fill="#64748B">died at 41</text>
+    <!-- Gen I paternal -->
+    <rect x="470" y="38" width="32" height="32" fill="#fff" stroke="#1E293B" stroke-width="2"/>
+    <circle cx="586" cy="54" r="17" fill="#fff" stroke="#1E293B" stroke-width="2"/>
+    <line x1="502" y1="54" x2="569" y2="54" stroke="#1E293B" stroke-width="2"/>
+    <text x="486" y="86" text-anchor="middle">Grandfather</text><text x="486" y="99" text-anchor="middle" fill="#64748B">70</text>
+    <text x="586" y="86" text-anchor="middle">Grandmother</text><text x="586" y="99" text-anchor="middle" fill="#64748B">68</text>
+    <!-- Gen II drop lines -->
+    <line x1="136" y1="54" x2="136" y2="125" stroke="#1E293B" stroke-width="2"/>
+    <line x1="86" y1="125" x2="226" y2="125" stroke="#1E293B" stroke-width="2"/>
+    <line x1="86" y1="125" x2="86" y2="148" stroke="#1E293B" stroke-width="2"/>
+    <line x1="226" y1="125" x2="226" y2="148" stroke="#1E293B" stroke-width="2"/>
+    <line x1="536" y1="54" x2="536" y2="125" stroke="#1E293B" stroke-width="2"/>
+    <line x1="426" y1="125" x2="616" y2="125" stroke="#1E293B" stroke-width="2"/>
+    <line x1="426" y1="125" x2="426" y2="148" stroke="#1E293B" stroke-width="2"/>
+    <line x1="616" y1="125" x2="616" y2="148" stroke="#1E293B" stroke-width="2"/>
+    <!-- Gen II -->
+    <rect x="70" y="148" width="32" height="32" fill="#C8102E" stroke="#1E293B" stroke-width="2"/>
+    <text x="86" y="196" text-anchor="middle">Uncle</text><text x="86" y="209" text-anchor="middle" fill="#C8102E" font-weight="700">osteosarcoma, 15</text><text x="86" y="222" text-anchor="middle" fill="#64748B">survivor, now 40</text>
+    <circle cx="226" cy="164" r="17" fill="#fff" stroke="#1E293B" stroke-width="2"/>
+    <text x="226" y="198" text-anchor="middle" font-weight="700">Mother</text><text x="226" y="211" text-anchor="middle" fill="#64748B">38, no cancer</text>
+    <rect x="410" y="148" width="32" height="32" fill="#fff" stroke="#1E293B" stroke-width="2"/>
+    <text x="426" y="198" text-anchor="middle" font-weight="700">Father</text><text x="426" y="211" text-anchor="middle" fill="#64748B">40, no cancer</text>
+    <circle cx="616" cy="164" r="17" fill="#fff" stroke="#1E293B" stroke-width="2"/>
+    <text x="616" y="198" text-anchor="middle">Aunt</text><text x="616" y="211" text-anchor="middle" fill="#64748B">36, no cancer</text>
+    <!-- marriage -->
+    <line x1="243" y1="164" x2="410" y2="164" stroke="#1E293B" stroke-width="2"/>
+    <line x1="326" y1="164" x2="326" y2="235" stroke="#1E293B" stroke-width="2"/>
+    <line x1="276" y1="235" x2="376" y2="235" stroke="#1E293B" stroke-width="2"/>
+    <line x1="276" y1="235" x2="276" y2="258" stroke="#1E293B" stroke-width="2"/>
+    <line x1="376" y1="235" x2="376" y2="258" stroke="#1E293B" stroke-width="2"/>
+    <!-- Gen III -->
+    <circle cx="276" cy="275" r="17" fill="#C8102E" stroke="#1E293B" stroke-width="2"/>
+    <path d="M232,300 L254,288" stroke="#0E7C86" stroke-width="3"/><polygon points="258,285 248,286 252,294" fill="#0E7C86"/>
+    <text x="276" y="308" text-anchor="middle" font-weight="700">Maya</text><text x="276" y="321" text-anchor="middle" fill="#C8102E" font-weight="700">ALL, 12</text>
+    <rect x="360" y="259" width="32" height="32" fill="#fff" stroke="#1E293B" stroke-width="2"/>
+    <text x="376" y="280" text-anchor="middle" font-size="16" font-weight="700" fill="#92400E">?</text>
+    <text x="376" y="308" text-anchor="middle" font-weight="700">Eli</text><text x="376" y="321" text-anchor="middle" fill="#64748B">8, no cancer</text>
+  </g>
+</svg>
+<div class="ped-legend"><span>□ male · ○ female</span><span><b style="color:#C8102E">■●</b> had cancer</span><span>slash = deceased</span><span><b style="color:#0E7C86">➚</b> patient (Maya)</span><span><b style="color:#92400E">?</b> unknown status</span></div>
+</div>
+  <div class="clue-card" style="margin-top:10px;"><div class="cl">Clue 4 · The family's question</div><em>"Did Maya get this from us? Should Eli be tested? And what does this mean for the rest of our family?"</em></div>
+</div>
+
+<div class="sec-bar navy">👥 Round 1 · Your Role: Answer Individually, Then Share</div>
+<div class="sb">
+  <p class="instr">Read your role card and answer its questions on your own (about 8 minutes). Then take turns sharing with your team.</p>
+  <div class="role-grid"><div class="role"><div class="role-h" style="background:#0E7C86">🧬 Genetic Counselor<small>Family history &amp; inheritance</small></div>
+<div class="role-b"><p>You read the family tree and explain inheritance to the family.</p><ol><li>Circle every relative with cancer on the pedigree. Which side of the family are they on? What is unusual about their ages?<textarea class="ta short" id="r0q0" aria-label="🧬 Genetic Counselor question 1"></textarea></li><li>If Maya's first TP53 hit is germline, it came from one parent. Using the pedigree, which parent is more likely, and why?<textarea class="ta short" id="r0q1" aria-label="🧬 Genetic Counselor question 2"></textarea></li><li>If that parent carries it, what is the chance that Eli inherited it? Show your reasoning.<textarea class="ta short" id="r0q2" aria-label="🧬 Genetic Counselor question 3"></textarea></li></ol><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">The cancers on the <span class="ell-fill">&nbsp;</span> side happened at unusually young ages, which suggests <span class="ell-fill">&nbsp;</span>. Each child of a carrier has a <span class="ell-fill">&nbsp;</span> chance because <span class="ell-fill">&nbsp;</span>.</div></details></div></div><div class="role"><div class="role-h" style="background:#C8102E">🔬 Molecular Pathologist<small>Lab evidence</small></div>
+<div class="role-b"><p>You interpret the tumor–normal sequencing report.</p><ol><li>Sort each finding in Maya's report as germline or somatic. What is your evidence for each?<textarea class="ta short" id="r1q0" aria-label="🔬 Molecular Pathologist question 1"></textarea></li><li>Why was the "normal" sample taken from skin and not from blood?<textarea class="ta short" id="r1q1" aria-label="🔬 Molecular Pathologist question 2"></textarea></li><li>Maya has two TP53 hits. Explain how each one got there using the two-hit hypothesis.<textarea class="ta short" id="r1q2" aria-label="🔬 Molecular Pathologist question 3"></textarea></li></ol><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">The TP53 copy-1 mutation is <span class="ell-fill">&nbsp;</span> because it was found in <span class="ell-fill">&nbsp;</span>. The NRAS mutation is <span class="ell-fill">&nbsp;</span> because <span class="ell-fill">&nbsp;</span>.</div></details></div></div><div class="role"><div class="role-h" style="background:#1A3A5C">🩺 Pediatric Oncologist<small>Patient care</small></div>
+<div class="role-b"><p>You decide how this genetic finding affects care for Maya and her family.</p><ol><li>An inherited TP53 mutation means Maya's other cells are each one hit away from losing TP53. Why might doctors try to <em>limit radiation</em> (like CT scans and radiation therapy) when treating her?<textarea class="ta short" id="r2q0" aria-label="🩺 Pediatric Oncologist question 1"></textarea></li><li>Children who carry a germline TP53 mutation are offered regular screening, often including whole-body MRI. Why start screening in childhood instead of waiting until adulthood?<textarea class="ta short" id="r2q1" aria-label="🩺 Pediatric Oncologist question 2"></textarea></li><li>Does knowing her first hit was inherited change which mutations are in her leukemia cells? Explain.<textarea class="ta short" id="r2q2" aria-label="🩺 Pediatric Oncologist question 3"></textarea></li></ol><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">Because Maya's healthy cells already have one TP53 hit, radiation could <span class="ell-fill">&nbsp;</span>. Screening early helps because <span class="ell-fill">&nbsp;</span>.</div></details></div></div><div class="role"><div class="role-h" style="background:#92400E">🤝 Family Advocate<small>The family's perspective</small></div>
+<div class="role-b"><p>You speak for Maya's parents and for Eli.</p><ol><li>What are the three most important questions Maya's parents will ask? Write them in their words.<textarea class="ta short" id="r3q0" aria-label="🤝 Family Advocate question 1"></textarea></li><li>Eli is 8. How should the team explain testing to him in a way he can understand? Who makes the final decision?<textarea class="ta short" id="r3q1" aria-label="🤝 Family Advocate question 2"></textarea></li><li>How might Maya's mom feel if she learns she passed the mutation on? What could the team say to support her?<textarea class="ta short" id="r3q2" aria-label="🤝 Family Advocate question 3"></textarea></li></ol><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">Maya's parents would want to know <span class="ell-fill">&nbsp;</span>, <span class="ell-fill">&nbsp;</span>, and <span class="ell-fill">&nbsp;</span>. To explain testing to Eli, we could say <span class="ell-fill">&nbsp;</span>.</div></details></div></div></div>
+</div>
+
+<div class="sec-bar red">🔓 Round 2 · New Evidence</div>
+<div class="sb">
+  <div class="locked5" id="lock5"><strong>Clue 5 is locked.</strong><br><span style="font-size:12.5px;color:var(--gray);">Your teacher will release it after Round 1. Before you open it, make a team prediction: which parent carries the TP53 mutation?</span><br>
+    <input class="blank xl" id="pred5" placeholder="Our prediction and why…" style="margin-top:8px;"><br>
+    <button onclick="openClue5()">Teacher: Release Clue 5</button></div>
+  <div class="clue-card" id="clue5"><div class="cl">Clue 5 · Parents' genetic test results</div>
+    <table class="mini-report"><tr><th>Person</th><th>TP53 variant (same one as Maya's copy 1)</th></tr>
+    <tr><td>Maya's mother (38, no cancer)</td><td class="det">Detected</td></tr>
+    <tr><td>Maya's father (40, no cancer)</td><td class="nodet">Not detected</td></tr></table>
+    <p style="margin-top:8px;font-size:12.5px;">Discuss: Was your prediction supported? Maya's mother carries the variant but has never had cancer. How is that possible?</p>
+    <textarea class="ta short" id="c5-disc" aria-label="Clue 5 discussion"></textarea></div>
+</div>
+
+<div class="sec-bar dark">🗳 Team Consensus</div>
+<div class="sb">
+  <div class="cons-q"><div class="qt">1. Maya's first TP53 hit was…</div><div class="opts"><label><input type="radio" name="cq1" id="cq1-0"> Germline (inherited)</label><label><input type="radio" name="cq1" id="cq1-1"> Somatic (acquired)</label><label><input type="radio" name="cq1" id="cq1-2"> Can't tell from the evidence</label></div></div>
+  <div class="cons-q"><div class="qt">2. The chance that Eli inherited the TP53 variant is…</div><div class="opts"><label><input type="radio" name="cq2" id="cq2-0"> 0%</label><label><input type="radio" name="cq2" id="cq2-1"> 25%</label><label><input type="radio" name="cq2" id="cq2-2"> 50%</label><label><input type="radio" name="cq2" id="cq2-3"> 100%</label></div></div>
+  <div class="cons-q"><div class="qt">3. Our recommendation for Eli:</div><div class="opts"><label><input type="radio" name="cq3" id="cq3-0"> Offer testing now, with genetic counseling</label><label><input type="radio" name="cq3" id="cq3-1"> Wait until he is 18</label><label><input type="radio" name="cq3" id="cq3-2"> No testing needed</label></div><textarea class="ta short" id="cq3-why" placeholder="Our reasoning…" style="margin-top:8px;"></textarea></div>
+  <div class="cons-q"><div class="qt">4. One other relative who should be offered testing, and why:</div><input class="blank full" id="cq4"></div>
+  <div class="cons-q"><div class="qt">5. One thing our team disagreed about, or found hard to agree on:</div><textarea class="ta short" id="cq5"></textarea></div>
+</div>
+
+<div class="sec-bar teal">💬 Whole-Class Debrief</div>
+<div class="sb">
+  <div class="syn-q"><div class="qt">1. <span class="badge" style="background:#0E7C86;margin:0 4px 0 0;">Analyze</span> How did Clue 5 change your team's confidence? What could you claim <em>before</em> Clue 5, and what could you claim only <em>after</em> it?</div><textarea class="ta short" id="d1"></textarea></div>
+  <div class="syn-q"><div class="qt">2. <span class="badge" style="background:#92400E;margin:0 4px 0 0;">Evaluate</span> If Eli tests <strong>negative</strong>, does that mean he can never get cancer? Explain.</div><textarea class="ta short" id="d2"></textarea></div>
+  <div class="syn-q"><div class="qt">3. <span class="badge" style="background:#92400E;margin:0 4px 0 0;">Evaluate</span> Suppose neither parent carried the variant. How would that change the answer for Eli? For Maya's own future children?</div><textarea class="ta short" id="d3"></textarea></div>
+</div>
+
+<div class="sec-bar navy">✅ Consult Self-Check</div>
+<div class="sb">
+  <ul class="ck-list">
+    <li><input type="checkbox" id="k1"><label for="k1">I can use a tumor–normal report to sort germline and somatic mutations.</label></li>
+    <li><input type="checkbox" id="k2"><label for="k2">I can read a pedigree and spot patterns that suggest inherited cancer risk.</label></li>
+    <li><input type="checkbox" id="k3"><label for="k3">I can calculate a sibling's chance of inheriting a germline variant and explain why.</label></li>
+    <li><input type="checkbox" id="k4"><label for="k4">I can explain why carrying a TP53 variant raises risk without guaranteeing cancer.</label></li>
+  </ul>
+</div>
+<div class="doc-footer">Cell Division Gone Wrong · LaShaudra Cox Learning Design · Lesson 3 of 4 · Grades 9–10 · Family Genetics Consult · The Maya family and their records are fictional.</div>
+</div>
+<!-- ── LANGUAGE TRANSLATION WIDGET ── -->
+<div id="translate-bar">
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
+</div>
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+}
+function triggerTranslate(lang) {
+  var combo = document.querySelector('.goog-te-combo');
+  if (!combo) { setTimeout(function() { triggerTranslate(lang); }, 600); return; }
+  combo.value = lang;
+  var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', false, true); combo.dispatchEvent(evt);
+  if (lang === '') document.getElementById('lang-select').value = '';
+}
+document.getElementById('lang-select').addEventListener('change', function() { triggerTranslate(this.value); });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>window.TTS_SECTIONS = function() { var p=document.querySelector('.page'); return Array.from(p.querySelectorAll('.doc-header, .callout, .sec-bar, .clue-card, .role, .locked5, .cons-q .qt, .syn-q .qt')).filter(function(e){return e.offsetParent!==null;}); };</script>
+<!-- Read Aloud Bar -->
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon" title="Read Aloud">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&#215;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&#215;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none"><div class="tts-pulse"></div><span id="tts-status-text">Reading&hellip;</span></div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 (single instance) ═══
+   Reads the active section block by block with 500 ms pauses and
+   a teal outline on the block being read. */
+(function() {
+  var synth = window.speechSynthesis;
+  var _rate = 1.0, _playing = false, _paused = false, _sections = [], _idx = 0, _timer = null;
+
+  function extract(rootEl) {
+    var clone = rootEl.cloneNode(true);
+    ['button','select','svg','script','style','input','textarea','[aria-hidden="true"]','.slide-nav','.accum-btns']
+      .forEach(function(sel) { clone.querySelectorAll(sel).forEach(function(n) { n.remove(); }); });
+    var BLOCK = {DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,LI:1,TD:1,TH:1,TR:1,CAPTION:1,BLOCKQUOTE:1,FIGCAPTION:1,LABEL:1};
+    var parts = [];
+    (function walk(node) {
+      if (node.nodeType === 3) { var t = node.nodeValue.replace(/\s+/g,' '); if (t.trim()) parts.push(t); return; }
+      if (node.nodeType !== 1) return;
+      var before = parts.length;
+      node.childNodes.forEach(walk);
+      if (BLOCK[node.tagName] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) { if (!/[.!?:;—,]$/.test(seg)) seg += '.'; parts.push(seg + ' '); }
+      }
+    })(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  }
+  function getSections() {
+    if (window.TTS_SECTIONS) return window.TTS_SECTIONS();
+    var a = document.querySelector('.slide-card.active');
+    if (!a) return [];
+    var hdr = a.querySelector('.slide-header');
+    var body = a.querySelector('.slide-body');
+    var list = hdr ? [hdr] : [];
+    if (body) Array.from(body.children).forEach(function(el) {
+      if (el.offsetParent !== null && (el.textContent || '').trim().length > 15) list.push(el);
+    });
+    return list;
+  }
+  function clearHL() { document.querySelectorAll('.tts-reading').forEach(function(el) { el.classList.remove('tts-reading'); }); }
+  function readAt(i) {
+    clearTimeout(_timer);
+    if (i >= _sections.length) { done(); return; }
+    _idx = i; clearHL();
+    var sec = _sections[i];
+    sec.classList.add('tts-reading');
+    try { sec.scrollIntoView({ behavior:'smooth', block:'nearest' }); } catch(e) {}
+    var txt = extract(sec);
+    if (!txt) { readAt(i + 1); return; }
+    var u = new SpeechSynthesisUtterance(txt);
+    u.rate = _rate;
+    u.lang = (document.documentElement.lang || 'en');
+    u.onend = function() { if (_playing) _timer = setTimeout(function() { if (_playing && !_paused) readAt(i + 1); }, 500); };
+    u.onerror = function(e) { if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(i + 1); };
+    synth.speak(u);
+    _playing = true; _paused = false; ui();
+  }
+  function done() { _playing = false; _paused = false; clearHL(); clearTimeout(_timer); ui(); }
+  function ui() {
+    var play = document.getElementById('tts-play'), pause = document.getElementById('tts-pause'),
+        stop = document.getElementById('tts-stop'), st = document.getElementById('tts-status'),
+        stx = document.getElementById('tts-status-text');
+    if (_playing) {
+      play.innerHTML = '&#8635; Restart'; pause.disabled = false; stop.disabled = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      st.style.display = 'flex';
+      stx.textContent = _paused ? 'Paused' : 'Block ' + (_idx + 1) + ' of ' + _sections.length;
+    } else {
+      play.innerHTML = '&#9654; Play'; pause.disabled = true; stop.disabled = true; st.style.display = 'none';
+    }
+  }
+  window.ttsPlay = function() { synth.cancel(); clearTimeout(_timer); _sections = getSections(); if (_sections.length) readAt(0); };
+  window.ttsPauseResume = function() { if (!_playing) return; if (_paused) { synth.resume(); _paused = false; } else { synth.pause(); _paused = true; } ui(); };
+  window.ttsStop = function() { synth.cancel(); clearTimeout(_timer); _playing = false; _paused = false; clearHL(); ui(); };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) { b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r); });
+    if (_playing && !_paused) { var ri = _idx; synth.cancel(); clearTimeout(_timer); _timer = setTimeout(function() { readAt(ri); }, 100); }
+  };
+  document.addEventListener('visibilitychange', function() { if (document.hidden) window.ttsStop(); });
+})();
+</script>
+
+<script>
+/* ── Autosave: every input/textarea/select with an id inside .page ──
+   Stored per-browser only (localStorage). Wrapped in try/catch because
+   storage can be blocked; Print / Save PDF is always the reliable backup. */
+(function() {
+  var KEY = 'cdgw_l3_consult';
+  function fields() { return Array.from(document.querySelectorAll('.page input[id], .page textarea[id], .page select[id]')); }
+  window.saveWork = function(quiet) {
+    var data = {};
+    fields().forEach(function(el) { data[el.id] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value; });
+    try {
+      localStorage.setItem(KEY, JSON.stringify(data));
+      if (!quiet) { var m = document.getElementById('saveMsg'); if (m) { m.textContent = '✓ Saved at ' + new Date().toLocaleTimeString(); m.classList.add('show'); setTimeout(function() { m.classList.remove('show'); }, 3000); } }
+    } catch (e) { if (!quiet) alert('Could not save in this browser. Use Print / Save PDF to keep your work.'); }
+  };
+  window.clearAll = function() {
+    if (!confirm('Clear all of your answers on this page?')) return;
+    fields().forEach(function(el) { if (el.type === 'checkbox' || el.type === 'radio') el.checked = false; else el.value = ''; });
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    if (window.onClearAll) window.onClearAll();
+  };
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) { var d = JSON.parse(raw); fields().forEach(function(el) { if (!(el.id in d)) return; if (el.type === 'checkbox' || el.type === 'radio') el.checked = d[el.id]; else el.value = d[el.id]; }); }
+  } catch (e) {}
+  var t; document.addEventListener('input', function() { clearTimeout(t); t = setTimeout(function() { window.saveWork(true); }, 800); });
+  document.addEventListener('change', function() { window.saveWork(true); });
+})();
+</script>
+<script>
+function openClue5(){ document.getElementById('clue5').style.display='block'; document.getElementById('lock5').style.display='none';
+  try{ localStorage.setItem('cdgw_l3_clue5','1'); }catch(e){} }
+try{ if(localStorage.getItem('cdgw_l3_clue5')==='1') openClue5(); }catch(e){}
+window.onClearAll=function(){ try{ localStorage.removeItem('cdgw_l3_clue5'); }catch(e){} document.getElementById('clue5').style.display='none'; document.getElementById('lock5').style.display='block'; };
+</script>
+</body>
+</html>

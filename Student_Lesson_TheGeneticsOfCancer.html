@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Genetics of Cancer | Lesson 3 | LaShaudra Cox Learning Design</title>
+<style>
+  :root {
+    --navy: #1A3A5C;
+    --teal: #0E7C86;
+    --red: #C8102E;
+    --gold: #F0A500;
+    --light: #EEF5FB;
+    --white: #FFFFFF;
+    --gray: #64748B;
+    --dark: #1E293B;
+    --green: #16A34A;
+    --purple: #7C3AED;
+    --muted: #94A3B8;
+    --border: #D1E4F0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #F0F4F8; color: var(--dark); min-height: 100vh; 
+  padding-top: 38px;}
+
+  /* TOP NAV */
+  .topbar {
+    background: var(--navy);
+    color: white;
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .org-badge { background: #C8102E; color: white; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 2px 7px; border-radius: 3px; margin-right: 6px; }
+  .topbar-title { font-size: 15px; font-weight: 600; color: #A8C8E8; }
+  .progress-wrap { display: flex; align-items: center; gap: 10px; }
+  .progress-label { font-size: 12px; color: #7FA8C8; }
+  .progress-bar-outer { width: 160px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
+  .progress-bar-inner { height: 100%; background: var(--teal); border-radius: 3px; transition: width 0.4s ease; }
+
+  /* LAYOUT */
+  .layout { display: flex; min-height: calc(100vh - 56px); }
+  .sidebar {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .sidebar-heading {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--muted);
+    padding: 0 20px 12px;
+    text-transform: uppercase;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+    font-size: 13.5px;
+    color: var(--gray);
+  }
+  .nav-item:hover { background: var(--light); }
+  .nav-item.active { background: #EEF5FF; border-left-color: var(--teal); color: var(--navy); font-weight: 600; }
+  .nav-item.completed { color: var(--green); }
+  .nav-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .nav-dot.active { background: var(--teal); color: white; }
+  .nav-dot.completed { background: var(--green); color: white; }
+  .nav-dot.locked { background: #E2E8F0; color: var(--muted); }
+  .nav-dot.default { background: var(--light); color: var(--gray); border: 1px solid var(--border); }
+
+  /* MAIN CONTENT */
+  .main { flex: 1; max-width: 860px; padding: 36px 40px; }
+
+  /* SLIDE CARD */
+  .slide-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow: hidden;
+    margin-bottom: 28px;
+    display: none;
+  }
+  .slide-card.active { display: block; }
+  .slide-header {
+    background: var(--navy);
+    padding: 24px 32px 20px;
+    color: white;
+    position: relative;
+  }
+  .slide-header.teal { background: var(--teal); }
+  .slide-header.red { background: var(--red); }
+  .slide-header.gold { background: var(--gold); }
+  .slide-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .slide-header h1 { font-size: 24px; font-weight: 700; line-height: 1.2; }
+  .slide-header p { margin-top: 6px; font-size: 14px; color: rgba(255,255,255,0.75); }
+  .slide-body { padding: 32px; }
+
+  /* CONTENT ELEMENTS */
+  .concept-intro {
+    background: var(--light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .concept-intro strong { color: var(--teal); }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .info-card {
+    background: var(--light);
+    border-radius: 8px;
+    padding: 18px;
+    border-top: 3px solid var(--teal);
+  }
+  .info-card.red-top { border-top-color: var(--red); }
+  .info-card.gold-top { border-top-color: var(--gold); }
+  .info-card.green-top { border-top-color: var(--green); }
+  .info-card h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--teal); margin-bottom: 8px; }
+  .info-card.red-top h3 { color: var(--red); }
+  .info-card.gold-top h3 { color: var(--gold); }
+  .info-card.green-top h3 { color: var(--green); }
+  .info-card p, .info-card ul { font-size: 13.5px; line-height: 1.6; color: var(--dark); }
+  .info-card ul { padding-left: 16px; }
+  .info-card ul li { margin-bottom: 4px; }
+
+  /* CELL CYCLE DIAGRAM */
+  .cell-cycle-container { text-align: center; padding: 20px 0; }
+  .cell-cycle-svg { max-width: 420px; margin: 0 auto; display: block; }
+
+  /* CHECKPOINT TABLE */
+  .checkpoint-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+  .checkpoint-table th {
+    background: var(--navy);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .checkpoint-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .checkpoint-table tr:nth-child(even) td { background: #F8FBFF; }
+  .checkpoint-table tr:last-child td { border-bottom: none; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .badge-teal { background: #D0F0F2; color: #0E7C86; }
+  .badge-red { background: #FFE4E8; color: var(--red); }
+  .badge-gold { background: #FFF3CD; color: #B07500; }
+
+  /* DEFINITION BOX */
+  .definition {
+    background: #FFF9E6;
+    border: 1px solid #F0D878;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .definition strong { color: #8A6000; }
+
+  /* CALLOUT */
+  .callout {
+    background: #FFF0F2;
+    border-left: 4px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .callout.teal { background: #EDF9FA; border-left-color: var(--teal); }
+  .callout.gold { background: #FFF8EC; border-left-color: var(--gold); }
+  .callout strong { color: var(--red); }
+  .callout.teal strong { color: var(--teal); }
+  .callout.gold strong { color: #8A6000; }
+
+  /* ANALOGY BOX */
+  .analogy {
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin: 22px 0;
+  }
+  .analogy-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7FA8C8; font-weight: 700; margin-bottom: 8px; }
+  .analogy p { font-size: 15px; line-height: 1.7; color: #D0E8F8; }
+  .analogy em { color: #7FD4D8; font-style: normal; font-weight: 600; }
+
+  /* ── CAR ANALOGY ILLUSTRATION ──────────────────────────────────
+     Visual reinforcement of the oncogene/tumor-suppressor analogy.
+     Added in response to Tawfik feedback: "Consider having an image
+     to reinforce your analogy." An SVG gas pedal and brake pedal
+     provide a concrete dual-coding anchor for the abstract concept
+     (Mayer's multimedia principle). */
+  .analogy-illustration {
+    display: flex;
+    gap: 18px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.12);
+    flex-wrap: wrap;
+  }
+  .pedal-panel {
+    flex: 1;
+    min-width: 220px;
+    background: rgba(255,255,255,.04);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .pedal-panel.accelerator { border: 1px solid rgba(240,165,0,.4); }
+  .pedal-panel.brake { border: 1px solid rgba(200,16,46,.4); }
+  .pedal-svg { flex-shrink: 0; }
+  .pedal-info { flex: 1; }
+  .pedal-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .pedal-panel.accelerator .pedal-label { color: var(--gold); }
+  .pedal-panel.brake .pedal-label { color: #FF8090; }
+  .pedal-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .pedal-caption {
+    font-size: 12px;
+    color: #B8CFE3;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  /* ── PRE-TRAINING BLOCK ────────────────────────────────────────
+     "What you will learn" block at the top of the lesson. Directly
+     applies Mayer's pre-training principle — introducing names and
+     characteristics of key concepts before they appear in context
+     reduces intrinsic cognitive load during the main instruction. */
+  .pre-training {
+    background: linear-gradient(135deg, #F8FAFD 0%, #EEF5FB 100%);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .pre-training::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--gold) 100%);
+    border-radius: 4px 0 0 4px;
+  }
+  .pre-training .pt-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .pre-training .pt-label .pt-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .pre-training h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .pre-training .pt-intro {
+    font-size: 13.5px;
+    color: var(--gray);
+    margin-bottom: 14px;
+    line-height: 1.55;
+  }
+  .pre-training .pt-goals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .pre-training .pt-goal {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid var(--border);
+  }
+  .pre-training .pt-goal-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .pre-training .pt-goal-text {
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .pre-training .pt-goal-text strong { color: var(--navy); }
+
+  /* ── WHY THIS MATTERS (REFLECTION) ─────────────────────────────
+     Placed after each Check Your Understanding. Keller's ARCS
+     Satisfaction — closes the loop between effort and meaning by
+     connecting the just-learned concept to a real-world purpose. */
+  .why-matters {
+    background: #FFFAF0;
+    border: 1.5px solid #F5D9A8;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0 6px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .why-matters .wm-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .why-matters .wm-body { flex: 1; }
+  .why-matters .wm-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #B87800;
+    margin-bottom: 4px;
+  }
+  .why-matters p {
+    font-size: 13.5px;
+    color: var(--dark);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .why-matters p strong { color: #8A6000; }
+
+  /* QUIZ */
+  .quiz-section {
+    background: #F0F9FF;
+    border: 2px solid var(--teal);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 28px;
+  }
+  .quiz-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--teal); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+  }
+  .quiz-q { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 14px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+    cursor: pointer; transition: all 0.15s; font-size: 14px; line-height: 1.4;
+  }
+  .quiz-opt:hover { border-color: var(--teal); background: #EDF9FA; }
+  .quiz-opt.correct { border-color: var(--green); background: #F0FFF4; }
+  .quiz-opt.incorrect { border-color: var(--red); background: #FFF0F2; }
+  .quiz-opt.disabled { pointer-events: none; opacity: 0.7; }
+  .opt-letter {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--light); font-size: 11px; font-weight: 700;
+    color: var(--gray); flex-shrink: 0;
+  }
+  .quiz-feedback {
+    margin-top: 14px; padding: 12px 16px; border-radius: 8px;
+    font-size: 14px; line-height: 1.55; display: none;
+  }
+  .quiz-feedback.correct { background: #F0FFF4; border: 1px solid var(--green); color: #15803D; }
+  .quiz-feedback.incorrect { background: #FFF0F2; border: 1px solid var(--red); color: var(--red); }
+
+  /* SHORT ANSWER */
+  .short-answer-wrap { margin-top: 20px; }
+  .short-answer-label { font-size: 13px; font-weight: 600; color: var(--gray); margin-bottom: 8px; display: block; }
+  .short-answer-q { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  textarea.short-ans {
+    width: 100%; min-height: 90px; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px; font-size: 14px; resize: vertical;
+    font-family: inherit; color: var(--dark);
+    transition: border 0.15s;
+  }
+  textarea.short-ans:focus { outline: none; border-color: var(--teal); }
+  .char-count { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; }
+
+  /* NAVIGATION */
+  .slide-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 32px;
+    border-top: 1px solid var(--border);
+    background: #FAFCFF;
+  }
+  .nav-btn {
+    padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn.primary { background: var(--teal); color: white; }
+  .nav-btn.primary:hover { background: #0A6870; }
+  .nav-btn.secondary { background: var(--light); color: var(--navy); border: 1px solid var(--border); }
+  .nav-btn.secondary:hover { background: #DDE9F5; }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .slide-counter { font-size: 13px; color: var(--muted); }
+
+  /* EXIT TICKET */
+  .exit-ticket-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #0E3A6B 100%);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 20px; color: white;
+  }
+  .exit-ticket-header h3 { font-size: 18px; font-weight: 700; }
+  .exit-ticket-header p { font-size: 13px; color: #A8C8E8; margin-top: 4px; }
+  .exit-q { background: white; border-radius: 8px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
+  .exit-q-num { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .exit-q p { font-size: 14.5px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  /* STUDENT IDENTITY FIELDS */
+  .student-id-row {
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px;
+    background: white; border-radius: 8px; border: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+  .sid-field { display: flex; flex-direction: column; gap: 5px; }
+  .sid-field.wide { flex: 2; min-width: 180px; }
+  .sid-field.narrow { flex: 1; min-width: 100px; }
+  .sid-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .sid-input {
+    padding: 9px 12px; border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 14px; font-family: inherit;
+    color: var(--dark); outline: none; transition: border-color .15s;
+  }
+  .sid-input:focus { border-color: var(--teal); }
+  .sid-input.error { border-color: var(--red); }
+
+  /* SUBMIT / LOADING */
+  .submit-btn {
+    width: 100%; padding: 14px; background: var(--red); color: white;
+    border: none; border-radius: 8px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s, opacity .15s; margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .submit-btn:hover:not(:disabled) { background: #A00024; }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .spinner {
+    width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.35);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin .7s linear infinite; display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  .submit-btn.loading .spinner { display: inline-block; }
+  .submit-btn.loading .btn-label { display: none; }
+
+  /* ERROR BANNER */
+  .submit-error {
+    display: none; background: #FDE8EC; border: 1.5px solid var(--red);
+    border-radius: 8px; padding: 12px 16px; margin-top: 10px;
+    font-size: 13px; color: #8B0014; line-height: 1.5;
+  }
+
+  /* COMPLETION — updated to show what was sent */
+  .submitted-summary {
+    background: var(--light); border-radius: 8px; padding: 14px 18px;
+    margin: 16px auto 0; max-width: 500px; text-align: left;
+    border: 1px solid var(--border); font-size: 13px;
+  }
+  .submitted-summary .ss-row { display: flex; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .submitted-summary .ss-row:last-child { border-bottom: none; }
+  .submitted-summary .ss-label { font-weight: 700; color: var(--navy); min-width: 80px; }
+  .submitted-summary .ss-val { color: var(--gray); flex: 1; }
+  .ss-correct { color: #16A34A; font-weight: 700; }
+  .ss-incorrect { color: var(--red); font-weight: 700; }
+
+  /* COMPLETE STATE */
+  .completion-screen {
+    text-align: center; padding: 48px 32px;
+  }
+  .completion-icon { font-size: 64px; margin-bottom: 16px; }
+  .completion-screen h2 { font-size: 26px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .completion-screen p { font-size: 15px; color: var(--gray); max-width: 440px; margin: 0 auto 24px; line-height: 1.6; }
+  .remind-box {
+    background: var(--light); border-radius: 10px; padding: 20px 24px;
+    max-width: 500px; margin: 0 auto; text-align: left;
+  }
+  .remind-box h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .remind-box ul { list-style: none; padding: 0; }
+  .remind-box ul li { font-size: 14px; color: var(--dark); padding: 5px 0; display: flex; gap: 8px; }
+
+  /* KEY VOCAB GLOSSARY */
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .vocab-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .vocab-term { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 4px; }
+  .vocab-def { font-size: 12.5px; color: var(--gray); line-height: 1.5; }
+
+  @media (max-width: 700px) {
+    .sidebar { display: none; }
+    .main { padding: 20px 16px; }
+    .info-grid, .vocab-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
+  /* Fixed bottom-right: clears every file's top bar & print buttons */
+  #translate-bar {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 99999;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+  }
+  #translate-bar .tb-label {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+  }
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
+
+  /* ── FULL-MODULE PRINT ──────────────────────────────────────
+     When body has class 'printing', hide everything except
+     #print-modal which contains the formatted response doc.
+     window.print() is called directly — no popup, no iframe.  */
+  @media print {
+    body.printing > * { display: none !important; }
+    body.printing #print-modal { display: block !important; }
+  }
+  #print-modal {
+    display: none;
+    font-family: Arial, sans-serif;
+    padding: 24px;
+    color: #1E293B;
+  }
+  #print-modal h1  { font-size: 18px; color: #1A3A5C; margin: 0 0 4px; }
+  #print-modal .pm-meta { font-size: 12px; color: #64748B; margin-bottom: 20px; }
+  #print-modal h2  {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #0E7C86;
+    margin: 20px 0 6px; padding-bottom: 4px;
+    border-bottom: 2px solid #0E7C86;
+  }
+  #print-modal table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+  #print-modal td {
+    padding: 10px 12px; border-bottom: 1px solid #E2EAF0;
+    font-size: 12px; vertical-align: top;
+  }
+  #print-modal .pm-qlabel {
+    font-size: 10px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px;
+    white-space: nowrap; width: 90px;
+  }
+  #print-modal .pm-answer { font-weight: 600; color: #1A3A5C; }
+  #print-modal .pm-sa {
+    background: #F8FBFF; border: 1px solid #D1E4F0; border-radius: 6px;
+    padding: 10px 14px; font-size: 12.5px; line-height: 1.6;
+    white-space: pre-wrap; margin-bottom: 8px;
+  }
+  #print-modal .pm-salabel {
+    font-size: 11px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px; margin: 10px 0 5px;
+  }
+  #print-modal .pm-footer {
+    margin-top: 28px; font-size: 10px; color: #94A3B8;
+    border-top: 1px solid #E2EAF0; padding-top: 10px;
+  }
+
+  /* ── TTS Read-Aloud Bar ─────────────────────────────── */
+  #tts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1A3A5C;
+    color: #fff;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9997;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
+  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
+  .tts-btn {
+    border: none; border-radius: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: background .15s;
+  }
+  .tts-primary { background: #0E7C86; color: #fff; }
+  .tts-primary:hover { background: #0A6870; }
+  .tts-secondary {
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 5px 10px; font-size: 13px;
+  }
+  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .tts-secondary:disabled { opacity: .35; cursor: default; }
+  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
+                   text-transform: uppercase; letter-spacing: .5px; }
+  .tts-speed-btn {
+    background: rgba(255,255,255,.1); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 4px 8px; font-size: 11px; cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: background .12s;
+  }
+  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
+  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
+  .tts-status {
+    font-size: 11px; color: #A8C8E8; margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tts-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* Reading highlight */
+  .tts-reading {
+    outline: 2.5px solid #0E7C86 !important;
+    outline-offset: 4px;
+    border-radius: 6px;
+    transition: outline .2s;
+  }
+
+
+  /* ── Module Nav Bar ─────────────────────────────── */
+  #module-nav {
+    background: #0D2438;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .mn-home {
+    font-size: 11px; font-weight: 700; color: #7FD4D8;
+    text-decoration: none; white-space: nowrap; margin-right: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mn-home:hover { color: #fff; }
+  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
+  .mn-lessons {
+    display: flex; gap: 2px; align-items: center;
+  }
+  .mn-lesson {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
+    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
+    transition: all .12s; border: 1px solid transparent;
+  }
+  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
+  .mn-lesson.mn-active {
+    color: #fff; border-color: rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+  }
+  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
+  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
+  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
+  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
+  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ══ LESSON 3 ADDITIONS ══════════════════════════════════════
+     Lesson 3 accent = amber/gold (matches module nav L3 color).
+     Dark amber (#92400E) is used for header fills so white text
+     meets WCAG AA contrast; bright gold stays an accent color.  */
+  :root { --l3: #F0A500; --l3-dark: #92400E; --l3-soft: #FFF7E6; }
+  .slide-header.amber { background: var(--l3-dark); }
+  .org-badge.l3 { background: var(--l3-dark); }
+  .progress-bar-inner.l3 { background: var(--l3); }
+
+  /* Bridge from previous lesson */
+  .bridge {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 22px; font-size: 13.5px; line-height: 1.6;
+  }
+  .bridge .br-tag {
+    flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #fff; background: var(--red);
+    padding: 3px 8px; border-radius: 4px; margin-top: 2px;
+  }
+
+  /* Maya hook card */
+  .maya-hook {
+    background: linear-gradient(135deg, #1A3A5C 0%, #24507A 100%);
+    color: #fff; border-radius: 12px; padding: 22px 24px; margin: 0 0 24px;
+    display: flex; gap: 18px; align-items: flex-start;
+  }
+  .maya-hook .mh-avatar {
+    width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+    background: var(--l3); color: var(--navy); font-size: 22px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .maya-hook .mh-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #FDE68A; font-weight: 700; margin-bottom: 6px; }
+  .maya-hook blockquote { font-size: 16px; line-height: 1.6; font-style: italic; color: #E6F0FA; margin-bottom: 8px; }
+  .maya-hook p { font-size: 13.5px; line-height: 1.6; color: #B8CFE3; }
+  .maya-hook strong { color: #FDE68A; }
+
+  /* Mechanism table */
+  .mech-table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 13.5px; }
+  .mech-table caption { text-align: left; font-size: 12px; color: var(--gray); padding-bottom: 8px; }
+  .mech-table th { background: var(--l3-dark); color: #fff; padding: 10px 12px; text-align: left; font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase; }
+  .mech-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  .mech-table tr:nth-child(even) td { background: #FFFBF2; }
+  .mech-table .mech-name { font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .mech-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+
+  /* Figures */
+  figure.lesson-fig { margin: 22px 0; background: #FAFCFF; border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  figure.lesson-fig svg { width: 100%; height: auto; display: block; }
+  figure.lesson-fig figcaption { font-size: 12.5px; color: var(--gray); margin-top: 10px; line-height: 1.5; }
+  figure.lesson-fig figcaption strong { color: var(--navy); }
+
+  /* Evidence data table */
+  .evidence-table { width: 100%; border-collapse: collapse; margin: 16px 0 6px; font-size: 13.5px; }
+  .evidence-table th, .evidence-table td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+  .evidence-table thead th { background: var(--navy); color: #fff; font-size: 11.5px; text-transform: uppercase; letter-spacing: .5px; }
+  .evidence-table tbody th { background: #F1F5F9; font-weight: 700; color: var(--navy); width: 32%; }
+  .evidence-note { font-size: 11.5px; color: var(--muted); margin-bottom: 18px; }
+
+  /* Paradox / think-about-it box */
+  .paradox {
+    border: 2px solid var(--l3); background: var(--l3-soft); border-radius: 10px;
+    padding: 18px 20px; margin: 22px 0;
+  }
+  .paradox .px-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--l3-dark); margin-bottom: 6px; }
+  .paradox .px-q { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.45; }
+  .reveal-btn {
+    background: var(--l3-dark); color: #fff; border: none; border-radius: 6px;
+    padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .reveal-btn:hover { background: #7A3509; }
+  .reveal-body { display: none; margin-top: 12px; font-size: 14px; line-height: 1.65; }
+  .reveal-body.open { display: block; }
+
+  /* Gatekeeper vs caretaker */
+  .role-pill { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; }
+  .role-pill.gate { background: #FFE4E8; color: var(--red); }
+  .role-pill.care { background: #D0F0F2; color: var(--teal); }
+
+  /* Mutation accumulation mini-model */
+  .accum {
+    background: #0F2740; color: #fff; border-radius: 12px; padding: 20px 22px; margin: 22px 0;
+  }
+  .accum-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .accum-title { font-size: 15px; font-weight: 700; }
+  .accum-sub { font-size: 12px; color: #A8C8E8; margin-bottom: 14px; line-height: 1.5; }
+  .accum-btns { display: flex; gap: 8px; }
+  .accum-btn { border: none; border-radius: 6px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .accum-btn.go { background: var(--l3); color: #3B2300; }
+  .accum-btn.reset { background: rgba(255,255,255,.12); color: #fff; }
+  .lane { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+  .lane-top { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 8px; }
+  .lane-name { font-weight: 700; }
+  .lane-name.ok { color: #7FD4D8; }
+  .lane-name.bad { color: #FCA5A5; }
+  .lane-count { color: #D0E8F8; }
+  .lane-cells { display: flex; flex-wrap: wrap; gap: 4px; min-height: 18px; }
+  .lc { width: 14px; height: 14px; border-radius: 50%; background: #3B6A94; }
+  .lc.mut { background: var(--red); box-shadow: 0 0 0 2px rgba(200,16,46,.35); }
+  .lane-warn { font-size: 12px; color: #FDE68A; margin-top: 8px; display: none; }
+  .accum-foot { font-size: 11px; color: #7FA8C8; margin-top: 8px; font-style: italic; }
+
+  /* Genetic report */
+  .report {
+    border: 1.5px solid #CBD5E1; border-radius: 10px; overflow: hidden; margin: 20px 0;
+    font-size: 13.5px; background: #fff;
+  }
+  .report-head { background: #F1F5F9; padding: 14px 18px; border-bottom: 1px solid #CBD5E1; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .report-head .rh-title { font-weight: 800; color: var(--navy); font-size: 14px; letter-spacing: .3px; }
+  .report-head .rh-meta { font-size: 12px; color: var(--gray); }
+  .report table { width: 100%; border-collapse: collapse; }
+  .report th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: var(--gray); padding: 10px 14px; border-bottom: 1px solid var(--border); background: #FAFCFF; }
+  .report td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .report tr:last-child td { border-bottom: none; }
+  .det { font-weight: 700; color: var(--red); }
+  .nodet { font-weight: 600; color: var(--green); }
+  .report-foot { padding: 12px 18px; background: #FFFBF2; border-top: 1px solid #F5D9A8; font-size: 12.5px; line-height: 1.55; }
+
+  /* CER builder */
+  .cer { display: grid; gap: 12px; margin-top: 16px; }
+  .cer-row { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .cer-row label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .cer-row .cer-hint { font-size: 12.5px; color: var(--gray); margin-bottom: 8px; line-height: 1.5; }
+  .cer-row.c label { color: var(--navy); }
+  .cer-row.e label { color: var(--teal); }
+  .cer-row.r label { color: var(--l3-dark); }
+  .cer-row textarea { width: 100%; min-height: 64px; border: 1.5px solid var(--border); border-radius: 7px; padding: 10px; font-size: 14px; font-family: inherit; resize: vertical; }
+  .cer-row textarea:focus { outline: none; border-color: var(--teal); }
+  .cer-check { margin-top: 10px; }
+  .model-answer { display: none; margin-top: 14px; background: #F0FFF4; border: 1px solid var(--green); border-radius: 8px; padding: 14px 16px; font-size: 13.5px; line-height: 1.65; }
+  .model-answer.open { display: block; }
+  .model-answer h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #15803D; margin-bottom: 6px; }
+
+  /* Starter chips (ELL support) */
+  .starters { font-size: 12.5px; color: var(--gray); margin-top: 6px; }
+  .starters code { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 1px 6px; font-family: inherit; color: var(--dark); }
+
+  @media (max-width: 700px) {
+    .maya-hook { flex-direction: column; }
+    .mech-table .mech-name { white-space: normal; }
+  }
+  /* Keep fixed bars from covering content */
+  body { padding-bottom: 64px; }
+  #translate-bar { bottom: 58px; }
+
+
+  /* Publisher identity: LaShaudra Cox Learning Design (deep purple + gold) */
+  .org-badge, .org-badge.l3 { background:#4C1D95 !important; color:#F5C542 !important; letter-spacing:1.5px; }
+</style>
+<script src="cdgw-config.js"></script>
+</head>
+<body>
+
+<!-- Module Nav Bar -->
+<nav id="module-nav" aria-label="Module navigation">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons">
+    <a href="module.html#lesson-1" class="mn-lesson mn-l1">L1</a>
+    <a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a>
+    <a href="module.html#lesson-3" class="mn-lesson mn-l3 mn-active" aria-current="page">L3</a>
+    <a href="module.html#lesson-4" class="mn-lesson mn-l4">L4</a>
+  </div>
+  <span class="mn-crumb">Lesson 3 · Digital Lesson</span>
+</nav>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="org-badge l3">LC</span>
+    <span class="topbar-title">The Genetics of Cancer</span>
+  </div>
+  <div class="progress-wrap">
+    <span class="progress-label" id="prog-label">1 of 6</span>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner l3" id="prog-bar" style="width:17%"></div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" aria-label="Lesson sections">
+    <div class="sidebar-heading">Lesson 3 Contents</div>
+    <div class="nav-item active" data-slide="0" onclick="goSlide(0)">
+      <div class="nav-dot active">1</div>
+      Two Kinds of Cancer Genes
+    </div>
+    <div class="nav-item" data-slide="1" onclick="goSlide(1)">
+      <div class="nav-dot default">2</div>
+      The Two-Hit Evidence
+    </div>
+    <div class="nav-item" data-slide="2" onclick="goSlide(2)">
+      <div class="nav-dot default">3</div>
+      Inherited or Acquired?
+    </div>
+    <div class="nav-item" data-slide="3" onclick="goSlide(3)">
+      <div class="nav-dot default">4</div>
+      When DNA Repair Breaks
+    </div>
+    <div class="nav-item" data-slide="4" onclick="goSlide(4)">
+      <div class="nav-dot default">5</div>
+      Make Your Claim: Maya's Report
+    </div>
+    <div class="nav-item" data-slide="5" onclick="goSlide(5)">
+      <div class="nav-dot locked">✓</div>
+      Exit Ticket
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ══ SLIDE 0: TWO KINDS OF CANCER GENES ══ -->
+    <div class="slide-card active" id="slide-0">
+      <div class="slide-header amber">
+        <div class="slide-tag">Section 1 of 6 · Lesson 3</div>
+        <h1>Two Kinds of Cancer Genes, Up Close</h1>
+        <p>You know the gas pedal and the brake. Now let's look at how each one actually breaks.</p>
+      </div>
+      <div class="slide-body">
+
+        <!-- Student identity -->
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 20px;align-items:flex-end;">
+          <div style="flex:2;min-width:160px;">
+            <label for="student-name" class="sid-label" style="display:block;margin-bottom:5px;">Full Name <span style="color:var(--red)">*</span></label>
+            <input id="student-name" class="sid-input" style="width:100%;" type="text" placeholder="First Last" autocomplete="name" required>
+          </div>
+          <div style="flex:1;min-width:100px;">
+            <label for="student-period" class="sid-label" style="display:block;margin-bottom:5px;">Class Period</label>
+            <input id="student-period" class="sid-input" style="width:100%;" type="text" placeholder="e.g. 3rd" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="bridge">
+          <span class="br-tag">From L2</span>
+          <span>In Lesson 2 you learned that <strong>oncogenes</strong> act like a stuck gas pedal, <strong>tumor suppressors</strong> act like brakes, and Maya's leukemia cells had lost <em>both</em> copies of the TP53 brake gene and carried an activated RAS gas-pedal gene. Lesson 3 asks a deeper question: <strong>where did those mutations come from, and what does that mean for Maya's family?</strong></span>
+        </div>
+
+        <div class="maya-hook">
+          <div class="mh-avatar" aria-hidden="true">M</div>
+          <div>
+            <div class="mh-label">Maya's mom has a question</div>
+            <blockquote>"Did Maya get this from us? Her little brother Eli is eight. Should we be worried about him too?"</blockquote>
+            <p>The care team can't answer that with a guess. They need <strong>genetic evidence</strong>. By the end of this lesson, you'll read Maya's genetic report and make an evidence-based claim that answers her mom's question.</p>
+          </div>
+        </div>
+
+        <div class="pre-training">
+          <div class="pt-label"><span class="pt-icon">📍</span>Start Here</div>
+          <h3>What you'll learn in this lesson</h3>
+          <p class="pt-intro">Watch for these five ideas. Each section builds one of them, and you'll need all five for Maya's report in Section 5.</p>
+          <div class="pt-goals">
+            <div class="pt-goal"><span class="pt-goal-num">1</span><span class="pt-goal-text">Three ways a <strong>proto-oncogene</strong> becomes an oncogene</span></div>
+            <div class="pt-goal"><span class="pt-goal-num">2</span><span class="pt-goal-text">How scientists used <strong>evidence</strong> to test the two-hit hypothesis</span></div>
+            <div class="pt-goal"><span class="pt-goal-num">3</span><span class="pt-goal-text">The difference between <strong>germline</strong> (inherited) and <strong>somatic</strong> (acquired) mutations</span></div>
+            <div class="pt-goal"><span class="pt-goal-num">4</span><span class="pt-goal-text">Why broken <strong>DNA repair genes</strong> speed up cancer</span></div>
+            <div class="pt-goal"><span class="pt-goal-num">5</span><span class="pt-goal-text">How to <strong>make and defend a claim</strong> from a genetic report</span></div>
+          </div>
+        </div>
+
+        <div class="concept-intro">
+          A <strong>proto-oncogene</strong> is a normal, healthy gene that tells a cell to grow and divide <em>when it's supposed to</em>. It only becomes a dangerous <strong>oncogene</strong> when a mutation leaves it stuck in the "on" position. There are three main ways that happens.
+        </div>
+
+        <table class="mech-table">
+          <caption>Table 1. Three ways a proto-oncogene becomes an oncogene</caption>
+          <thead>
+            <tr><th scope="col">How it happens</th><th scope="col">What changes</th><th scope="col">Real example</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mech-name"><span class="mech-icon" aria-hidden="true">✏️</span>Point mutation</td>
+              <td>A single DNA base is changed. The protein's shape changes so it can't switch itself off.</td>
+              <td><strong>RAS</strong> genes. One letter change locks the RAS protein in its "divide" setting. RAS mutations are found in many childhood leukemias, including Maya's.</td>
+            </tr>
+            <tr>
+              <td class="mech-name"><span class="mech-icon" aria-hidden="true">📑</span>Gene amplification</td>
+              <td>The cell makes many extra copies of the gene. The protein is normal, but there is far too much of it.</td>
+              <td><strong>MYCN</strong> in neuroblastoma, a nerve-tissue cancer of young children. Tumors with many MYCN copies tend to grow more aggressively.</td>
+            </tr>
+            <tr>
+              <td class="mech-name"><span class="mech-icon" aria-hidden="true">🔀</span>Chromosomal translocation</td>
+              <td>Pieces of two different chromosomes break and swap places, fusing two genes into one hybrid gene that is always on.</td>
+              <td><strong>BCR-ABL1</strong> (the "Philadelphia chromosome"), found in some cases of ALL. The fused protein sends a nonstop growth signal.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="font-size:16px;color:var(--navy);margin:24px 0 12px;">Why one hit is enough for an oncogene, but not for a tumor suppressor</h3>
+        <div class="info-grid">
+          <div class="info-card gold-top">
+            <h3>Oncogene = Dominant at the cell level</h3>
+            <p>You have two copies of every gene. If <strong>one</strong> copy of a proto-oncogene becomes stuck "on," it keeps sending growth signals no matter what the normal copy does. One broken copy is enough. That's a <strong>gain of function</strong>.</p>
+          </div>
+          <div class="info-card red-top">
+            <h3>Tumor suppressor = Recessive at the cell level</h3>
+            <p>If one copy of a tumor suppressor breaks, the <strong>other copy</strong> can still make enough brake protein. The cell only loses control when <strong>both</strong> copies are lost. That's a <strong>loss of function</strong>, and it's why tumor suppressors need two hits.</p>
+          </div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Analyze</div>
+          <div class="quiz-q">A lab finds tumor cells that carry 60 extra copies of the MYCN gene. Each copy is normal, but the cells are flooded with MYCN protein and divide nonstop. Which statement best describes what happened?</div>
+          <div class="quiz-options" id="q0-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'A','B')"><div class="opt-letter">A</div><div>A tumor suppressor lost both copies through two separate hits</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'B','B')"><div class="opt-letter">B</div><div>A proto-oncogene was activated by gene amplification, a gain-of-function change</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'C','B')"><div class="opt-letter">C</div><div>A point mutation changed the shape of the MYCN protein</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'D','B')"><div class="opt-letter">D</div><div>A chromosomal translocation fused MYCN to another gene</div></div>
+          </div>
+          <div class="quiz-feedback" id="q0-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters">
+          <div class="wm-icon" aria-hidden="true">💡</div>
+          <div class="wm-body">
+            <div class="wm-label">Why this matters</div>
+            <p>Knowing <em>how</em> an oncogene was switched on tells doctors what to aim at. The BCR-ABL1 fusion protein, for example, can be blocked by a <strong>targeted drug</strong> that fits into the hybrid protein like a key jammed into a lock. Children with this kind of ALL now get that drug alongside chemotherapy. You'll design treatments like this yourself in <strong>Lesson 4</strong>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-nav">
+        <button class="nav-btn secondary" disabled>← Back</button>
+        <span class="slide-counter">Section 1 of 6</span>
+        <button class="nav-btn primary" onclick="goSlide(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ══ SLIDE 1: TWO-HIT EVIDENCE ══ -->
+    <div class="slide-card" id="slide-1">
+      <div class="slide-header">
+        <div class="slide-tag">Section 2 of 6</div>
+        <h1>The Two-Hit Hypothesis: Weighing the Evidence</h1>
+        <p>A hypothesis is only as strong as the evidence behind it. Let's look at the data that convinced scientists.</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro">
+          In 1971, a physician-scientist named <strong>Alfred Knudson</strong> studied children with <strong>retinoblastoma</strong>, a rare cancer of the retina that usually appears before age 5. Some of these children had a parent who'd had the same cancer. Most did not. Knudson compared the two groups and noticed a pattern.
+        </div>
+
+        <table class="evidence-table">
+          <caption class="sr-only" style="position:absolute;left:-9999px;">Comparison of hereditary and non-hereditary retinoblastoma</caption>
+          <thead>
+            <tr><th scope="col">Observation</th><th scope="col">Hereditary cases</th><th scope="col">Non-hereditary cases</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Share of all cases</th><td>About 4 in 10</td><td>About 6 in 10</td></tr>
+            <tr><th scope="row">Eyes affected</th><td>Usually <strong>both</strong> eyes</td><td>Usually <strong>one</strong> eye</td></tr>
+            <tr><th scope="row">Number of tumors</th><td>Often <strong>several</strong></td><td>Usually <strong>one</strong></td></tr>
+            <tr><th scope="row">Typical age at diagnosis</th><td><strong>Earlier</strong>, often in the first year</td><td><strong>Later</strong>, often around age 2</td></tr>
+            <tr><th scope="row">Family history</th><td>Often present</td><td>Rarely present</td></tr>
+          </tbody>
+        </table>
+        <p class="evidence-note">Patterns described by Knudson (1971) and later retinoblastoma studies. Values are rounded to show the pattern.</p>
+
+        <div class="callout teal">
+          <strong>Knudson's reasoning:</strong> Suppose a child inherits one broken copy of a "retinoblastoma gene" in <em>every</em> cell. Then any single retinal cell needs just <strong>one more hit</strong> to lose both copies. With millions of retinal cells, that's likely to happen early, more than once, and in both eyes. A child born with two working copies needs <strong>two hits in the same cell</strong>, which is much rarer. That would explain why those tumors show up later, and usually only once.
+        </div>
+
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="f2t f2d">
+            <title id="f2t">Figure 3.1: Two paths to losing both copies of a tumor suppressor gene</title>
+            <desc id="f2d">Top row, hereditary path: the child is born with one broken copy in every cell, so one more hit in any retinal cell produces a tumor, early and often in both eyes. Bottom row, non-hereditary path: the child is born with two working copies, so two hits must land in the same cell, which is rare and happens later.</desc>
+            <defs>
+              <marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748B"/></marker>
+            </defs>
+            <!-- Row labels -->
+            <text x="12" y="38" font-size="13" font-weight="700" fill="#92400E">HEREDITARY PATH</text>
+            <text x="12" y="222" font-size="13" font-weight="700" fill="#1A3A5C">NON-HEREDITARY PATH</text>
+            <!-- ===== Row 1 ===== -->
+            <g transform="translate(70,100)">
+              <circle r="44" fill="#FFF7E6" stroke="#F0A500" stroke-width="2.5"/>
+              <rect x="-26" y="-18" width="52" height="11" rx="5" fill="#C8102E"/>
+              <text x="0" y="-9" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✗ hit 1</text>
+              <rect x="-26" y="6" width="52" height="11" rx="5" fill="#0E7C86"/>
+              <text x="0" y="15" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✓ works</text>
+              <text x="0" y="66" font-size="12" text-anchor="middle" fill="#1E293B" font-weight="700">Born with 1 hit</text>
+              <text x="0" y="81" font-size="11" text-anchor="middle" fill="#64748B">in every cell</text>
+            </g>
+            <line x1="125" y1="100" x2="300" y2="100" stroke="#64748B" stroke-width="2" marker-end="url(#ar2)"/>
+            <text x="212" y="90" font-size="11.5" text-anchor="middle" fill="#92400E" font-weight="700">1 more hit needed</text>
+            <text x="212" y="118" font-size="11" text-anchor="middle" fill="#64748B">in ANY one retinal cell</text>
+            <g transform="translate(360,100)">
+              <circle r="44" fill="#FFE4E8" stroke="#C8102E" stroke-width="2.5"/>
+              <rect x="-26" y="-18" width="52" height="11" rx="5" fill="#C8102E"/>
+              <text x="0" y="-9" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✗ hit 1</text>
+              <rect x="-26" y="6" width="52" height="11" rx="5" fill="#C8102E"/>
+              <text x="0" y="15" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✗ hit 2</text>
+              <text x="0" y="66" font-size="12" text-anchor="middle" fill="#1E293B" font-weight="700">Both copies lost</text>
+            </g>
+            <line x1="415" y1="100" x2="520" y2="100" stroke="#64748B" stroke-width="2" marker-end="url(#ar2)"/>
+            <rect x="530" y="62" width="218" height="76" rx="10" fill="#C8102E"/>
+            <text x="639" y="88" font-size="13" text-anchor="middle" fill="#fff" font-weight="700">Tumor: LIKELY</text>
+            <text x="639" y="106" font-size="11" text-anchor="middle" fill="#FFE4E8">earlier · often both eyes</text>
+            <text x="639" y="122" font-size="11" text-anchor="middle" fill="#FFE4E8">often several tumors</text>
+            <!-- divider -->
+            <line x1="12" y1="190" x2="748" y2="190" stroke="#D1E4F0" stroke-width="1.5" stroke-dasharray="6,5"/>
+            <!-- ===== Row 2 ===== -->
+            <g transform="translate(70,290)">
+              <circle r="44" fill="#EEF5FB" stroke="#0E7C86" stroke-width="2.5"/>
+              <rect x="-26" y="-18" width="52" height="11" rx="5" fill="#0E7C86"/>
+              <text x="0" y="-9" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✓ works</text>
+              <rect x="-26" y="6" width="52" height="11" rx="5" fill="#0E7C86"/>
+              <text x="0" y="15" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✓ works</text>
+              <text x="0" y="62" font-size="12" text-anchor="middle" fill="#1E293B" font-weight="700">Born with 0 hits</text>
+            </g>
+            <line x1="125" y1="290" x2="185" y2="290" stroke="#64748B" stroke-width="2" marker-end="url(#ar2)"/>
+            <g transform="translate(240,290)">
+              <circle r="44" fill="#FFF7E6" stroke="#F0A500" stroke-width="2.5"/>
+              <rect x="-26" y="-18" width="52" height="11" rx="5" fill="#C8102E"/>
+              <text x="0" y="-9" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✗ hit 1</text>
+              <rect x="-26" y="6" width="52" height="11" rx="5" fill="#0E7C86"/>
+              <text x="0" y="15" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✓ works</text>
+              <text x="0" y="62" font-size="12" text-anchor="middle" fill="#1E293B" font-weight="700">Hit 1 (rare)</text>
+            </g>
+            <line x1="295" y1="290" x2="355" y2="290" stroke="#64748B" stroke-width="2" marker-end="url(#ar2)"/>
+            <text x="325" y="278" font-size="10.5" text-anchor="middle" fill="#64748B">same cell</text>
+            <g transform="translate(410,290)">
+              <circle r="44" fill="#FFE4E8" stroke="#C8102E" stroke-width="2.5"/>
+              <rect x="-26" y="-18" width="52" height="11" rx="5" fill="#C8102E"/>
+              <text x="0" y="-9" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✗ hit 1</text>
+              <rect x="-26" y="6" width="52" height="11" rx="5" fill="#C8102E"/>
+              <text x="0" y="15" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">✗ hit 2</text>
+              <text x="0" y="62" font-size="12" text-anchor="middle" fill="#1E293B" font-weight="700">Hit 2 (rare)</text>
+            </g>
+            <line x1="465" y1="290" x2="520" y2="290" stroke="#64748B" stroke-width="2" marker-end="url(#ar2)"/>
+            <rect x="530" y="252" width="218" height="76" rx="10" fill="#1A3A5C"/>
+            <text x="639" y="278" font-size="13" text-anchor="middle" fill="#fff" font-weight="700">Tumor: UNLIKELY</text>
+            <text x="639" y="296" font-size="11" text-anchor="middle" fill="#D0E8F8">later · usually one eye</text>
+            <text x="639" y="312" font-size="11" text-anchor="middle" fill="#D0E8F8">usually one tumor</text>
+          </svg>
+          <figcaption><strong>Figure 3.1.</strong> Two paths to losing both copies of a tumor suppressor gene. Red bars (✗) are broken copies; teal bars (✓) are working copies. The same ✓/✗ checkpoint symbols from Lessons 1 and 2 are used here.</figcaption>
+        </figure>
+
+        <div class="callout gold">
+          <strong>The prediction came true.</strong> Knudson's idea was a <em>prediction</em>: there should be a single gene whose two copies both have to be lost. Fifteen years later, in 1986, researchers found it: <strong>RB1</strong>, the first tumor suppressor gene ever identified. A prediction confirmed by later, independent evidence is one of the strongest kinds of support a hypothesis can get.
+        </div>
+
+        <div class="paradox">
+          <div class="px-label">🤔 Think about it</div>
+          <div class="px-q">Wait. If tumor suppressors are recessive (both copies must break), why does hereditary retinoblastoma run in families like a <em>dominant</em> trait, showing up in about half the children of an affected parent?</div>
+          <button class="reveal-btn" onclick="toggleReveal('px1', this)" aria-expanded="false" aria-controls="px1">Reveal the explanation</button>
+          <div class="reveal-body" id="px1">
+            What's inherited is <strong>one broken copy</strong>, which passes to each child with a 50% chance, just like any dominant trait. But a child who inherits it has millions of retinal cells, each one only a single hit away from losing both copies. A second hit in <em>at least one</em> of those cells is almost certain, so about 9 in 10 carriers develop retinoblastoma. The <strong>risk</strong> is inherited in a dominant pattern, while the <strong>gene</strong> still acts recessively inside each cell.
+          </div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Evaluate</div>
+          <div class="quiz-q">Which observation provides the <em>strongest</em> support for the two-hit hypothesis?</div>
+          <div class="quiz-options" id="q1-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'A','C')"><div class="opt-letter">A</div><div>Retinoblastoma is a rare cancer</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'B','C')"><div class="opt-letter">B</div><div>Retinoblastoma affects the retina, which has millions of cells</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'C','C')"><div class="opt-letter">C</div><div>Children who inherit one broken copy develop tumors earlier, more often in both eyes, and in greater numbers than children without an inherited copy</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'D','C')"><div class="opt-letter">D</div><div>Some adults also develop cancers of the eye</div></div>
+          </div>
+          <div class="quiz-feedback" id="q1-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters">
+          <div class="wm-icon" aria-hidden="true">💡</div>
+          <div class="wm-body">
+            <div class="wm-label">Why this matters</div>
+            <p>Knudson's logic is still how researchers spot inherited cancer risk today. When cancers appear <strong>unusually early</strong>, in <strong>more than one place</strong>, or in <strong>several relatives</strong>, it's a signal that a first hit may have been inherited. That's exactly the pattern doctors look for in <strong>Li-Fraumeni syndrome</strong>, the inherited TP53 condition you met in Lesson 2.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-nav">
+        <button class="nav-btn secondary" onclick="goSlide(0)">← Back</button>
+        <span class="slide-counter">Section 2 of 6</span>
+        <button class="nav-btn primary" onclick="goSlide(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ══ SLIDE 2: GERMLINE VS SOMATIC ══ -->
+    <div class="slide-card" id="slide-2">
+      <div class="slide-header teal">
+        <div class="slide-tag">Section 3 of 6</div>
+        <h1>Inherited or Acquired? Germline vs. Somatic</h1>
+        <p>Where a mutation happens decides who it affects: one person's tumor, or a whole family.</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro">
+          Every mutation happens in a cell. The key question is <strong>which cell</strong>. A mutation in an egg or sperm ends up in every cell of the child who develops from it. A mutation in one body cell later in life stays in that cell and the cells it divides into.
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card red-top">
+            <h3>🧬 Germline mutation</h3>
+            <ul>
+              <li>Present in the egg or sperm, so it's there <strong>from conception</strong></li>
+              <li>Found in <strong>every cell</strong> of the body</li>
+              <li><strong>Can be passed</strong> to children (50% chance per child)</li>
+              <li>Shows up in normal tissue like skin, saliva, or blood</li>
+            </ul>
+          </div>
+          <div class="info-card green-top">
+            <h3>🔬 Somatic mutation</h3>
+            <ul>
+              <li>Happens in <strong>one body cell</strong> after conception</li>
+              <li>Found only in that cell and its descendants, such as the tumor</li>
+              <li><strong>Cannot be passed</strong> to children</li>
+              <li>Shows up in the tumor but <strong>not</strong> in normal tissue</li>
+            </ul>
+          </div>
+        </div>
+
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="f3t f3d">
+            <title id="f3t">Figure 3.2: Germline versus somatic mutations</title>
+            <desc id="f3d">Left panel: a germline mutation appears in all 24 cells of the body, including egg or sperm cells, so it can be passed to children. Right panel: a somatic mutation appears only in a cluster of 5 tumor cells; the other 19 cells and the egg or sperm cells are normal, so it cannot be passed on.</desc>
+            <text x="190" y="24" font-size="14" font-weight="700" text-anchor="middle" fill="#C8102E">GERMLINE</text>
+            <text x="570" y="24" font-size="14" font-weight="700" text-anchor="middle" fill="#16A34A">SOMATIC</text>
+            <line x1="380" y1="10" x2="380" y2="240" stroke="#D1E4F0" stroke-width="1.5"/>
+            <g id="germ"></g>
+            <g id="soma"></g>
+            <text x="190" y="214" font-size="12" text-anchor="middle" fill="#1E293B">Mutation in <tspan font-weight="700">every cell</tspan></text>
+            <text x="190" y="232" font-size="12" text-anchor="middle" fill="#C8102E" font-weight="700">✗ Can be passed to children</text>
+            <text x="570" y="214" font-size="12" text-anchor="middle" fill="#1E293B">Mutation in <tspan font-weight="700">tumor cells only</tspan></text>
+            <text x="570" y="232" font-size="12" text-anchor="middle" fill="#16A34A" font-weight="700">✓ Not passed to children</text>
+          </svg>
+          <figcaption><strong>Figure 3.2.</strong> Each circle is a body cell; red cells carry the mutation. The gold-ringed cell in each panel is an egg or sperm cell, the only route to the next generation.</figcaption>
+        </figure>
+
+        <h3 style="font-size:16px;color:var(--navy);margin:22px 0 10px;">How doctors tell the difference</h3>
+        <div class="callout teal">
+          <strong>Tumor–normal sequencing.</strong> Doctors read the DNA from two samples: the <strong>tumor</strong>, and a sample of <strong>normal tissue</strong> from the same patient. A mutation found in <em>both</em> samples was there from the start, so it's germline. A mutation found <em>only</em> in the tumor was acquired, so it's somatic. For leukemia, the normal sample is usually <strong>skin or saliva</strong>, not blood, because blood is full of leukemia cells.
+        </div>
+
+        <div class="callout gold">
+          <strong>How common are inherited cancer genes in children?</strong> A large study that sequenced the genomes of more than 1,000 children with cancer (2015) found that roughly <strong>8 to 9 out of every 100</strong> carried a germline mutation in a cancer-risk gene. So for most children with cancer, the mutations that drove it were somatic. But for some, a first hit was inherited, and finding it changes care for the whole family.
+        </div>
+
+        <div class="paradox">
+          <div class="px-label">🤔 Present at birth ≠ inherited</div>
+          <div class="px-q">Some childhood leukemia mutations have been found in blood saved from a child's newborn screening test, years before the leukemia appeared. Does that mean they were inherited?</div>
+          <button class="reveal-btn" onclick="toggleReveal('px2', this)" aria-expanded="false" aria-controls="px2">Reveal the explanation</button>
+          <div class="reveal-body" id="px2">
+            Not necessarily. Those mutations arose in <strong>one developing blood cell</strong> while the baby was growing before birth. They were somatic: not in the parents, not in every cell, and not passable to the child's own future children. They were simply an early first hit. A later second hit was still needed before leukemia developed. <strong>"When"</strong> a mutation happened and <strong>"whether it was inherited"</strong> are two different questions.
+          </div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Analyze</div>
+          <div class="quiz-q">Tumor–normal sequencing finds the same TP53 mutation in a child's tumor cells <em>and</em> in a sample of their normal skin cells. What is the best conclusion?</div>
+          <div class="quiz-options" id="q2-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'A','B')"><div class="opt-letter">A</div><div>The mutation is somatic: it arose in the tumor and spread to the skin</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'B','B')"><div class="opt-letter">B</div><div>The mutation is germline: it was present from conception, so other family members may carry it too</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'C','B')"><div class="opt-letter">C</div><div>The mutation was caused by the child's cancer treatment</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'D','B')"><div class="opt-letter">D</div><div>The mutation must be in an oncogene, because it appears in two places</div></div>
+          </div>
+          <div class="quiz-feedback" id="q2-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters">
+          <div class="wm-icon" aria-hidden="true">💡</div>
+          <div class="wm-body">
+            <div class="wm-label">Why this matters</div>
+            <p>This one distinction decides whether a diagnosis stays with <strong>one patient</strong> or becomes a question for the <strong>whole family</strong>. When a germline mutation is found, a <strong>genetic counselor</strong> can offer testing to parents and siblings, and relatives who carry it can start regular screening to catch any cancer early, when it's most treatable.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-nav">
+        <button class="nav-btn secondary" onclick="goSlide(1)">← Back</button>
+        <span class="slide-counter">Section 3 of 6</span>
+        <button class="nav-btn primary" onclick="goSlide(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ══ SLIDE 3: DNA REPAIR ══ -->
+    <div class="slide-card" id="slide-3">
+      <div class="slide-header red">
+        <div class="slide-tag">Section 4 of 6</div>
+        <h1>Caretakers: When DNA Repair Breaks Down</h1>
+        <p>Some genes don't control division at all. They keep the DNA clean, and losing them speeds everything up.</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro">
+          Your DNA is damaged <strong>thousands of times a day</strong> in every cell, by copying mistakes, chemicals, and radiation such as UV light. Almost all of it gets fixed. That's the job of a team of <strong>DNA repair genes</strong>.
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card red-top">
+            <span class="role-pill gate">Gatekeepers</span>
+            <h3>Control division directly</h3>
+            <p>Genes like <strong>RB1</strong> and <strong>TP53</strong> decide whether a cell may pass a checkpoint. Losing them lets a damaged cell divide.</p>
+          </div>
+          <div class="info-card">
+            <span class="role-pill care">Caretakers</span>
+            <h3>Keep the DNA accurate</h3>
+            <p>DNA repair genes find and fix damage. Losing them doesn't cause division on its own. It makes <strong>new mutations pile up faster</strong>, so gatekeepers get hit sooner.</p>
+          </div>
+        </div>
+
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 760 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="f4t f4d">
+            <title id="f4t">Figure 3.3: Decision gates after DNA damage</title>
+            <desc id="f4d">DNA damage leads to a repair checkpoint. Path 1, check mark: repair genes fix the damage and the cell cycle continues normally. Path 2, X mark: the damage cannot be fixed, so p53 triggers apoptosis and the cell self-destructs. Path 3, double X: the repair genes themselves are broken, so the error is never fixed or reported, it is copied into both daughter cells, and mutations accumulate with every division.</desc>
+            <defs><marker id="ar4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748B"/></marker></defs>
+            <rect x="10" y="105" width="130" height="60" rx="10" fill="#1A3A5C"/>
+            <text x="75" y="131" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">DNA damage</text>
+            <text x="75" y="149" font-size="11" fill="#A8C8E8" text-anchor="middle">copying error, UV…</text>
+            <line x1="140" y1="135" x2="190" y2="135" stroke="#64748B" stroke-width="2" marker-end="url(#ar4)"/>
+            <polygon points="260,85 330,135 260,185 190,135" fill="#FFF7E6" stroke="#F0A500" stroke-width="2.5"/>
+            <text x="260" y="131" font-size="12" text-anchor="middle" fill="#92400E" font-weight="700">Repair</text>
+            <text x="260" y="147" font-size="12" text-anchor="middle" fill="#92400E" font-weight="700">check</text>
+            <!-- branches -->
+            <path d="M330,135 L370,135 L370,40 L410,40" fill="none" stroke="#64748B" stroke-width="2" marker-end="url(#ar4)"/>
+            <path d="M330,135 L410,135" fill="none" stroke="#64748B" stroke-width="2" marker-end="url(#ar4)"/>
+            <path d="M330,135 L370,135 L370,230 L410,230" fill="none" stroke="#64748B" stroke-width="2" marker-end="url(#ar4)"/>
+            <!-- outcome 1 -->
+            <circle cx="430" cy="40" r="16" fill="#16A34A"/><text x="430" y="46" font-size="16" fill="#fff" text-anchor="middle" font-weight="700">✓</text>
+            <rect x="455" y="14" width="295" height="52" rx="8" fill="#F0FFF4" stroke="#16A34A"/>
+            <text x="468" y="36" font-size="12.5" fill="#15803D" font-weight="700">Repaired</text>
+            <text x="468" y="54" font-size="11.5" fill="#1E293B">Cell cycle continues normally</text>
+            <!-- outcome 2 -->
+            <circle cx="430" cy="135" r="16" fill="#C8102E"/><text x="430" y="141" font-size="15" fill="#fff" text-anchor="middle" font-weight="700">✗</text>
+            <rect x="455" y="109" width="295" height="52" rx="8" fill="#FFF0F2" stroke="#C8102E"/>
+            <text x="468" y="131" font-size="12.5" fill="#C8102E" font-weight="700">Can't be fixed → p53 → apoptosis</text>
+            <text x="468" y="149" font-size="11.5" fill="#1E293B">Damaged cell self-destructs (safe outcome)</text>
+            <!-- outcome 3 -->
+            <circle cx="430" cy="230" r="16" fill="#7A0A1E"/><text x="430" y="236" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">✗✗</text>
+            <rect x="455" y="204" width="295" height="52" rx="8" fill="#7A0A1E"/>
+            <text x="468" y="226" font-size="12.5" fill="#fff" font-weight="700">Repair genes broken</text>
+            <text x="468" y="244" font-size="11.5" fill="#FFD6DC">Error copied into daughter cells, piling up</text>
+          </svg>
+          <figcaption><strong>Figure 3.3.</strong> The decision gate after DNA damage, using the same ✓/✗ checkpoint logic from Lessons 1 and 2. The third path is what happens when caretaker genes fail.</figcaption>
+        </figure>
+
+        <table class="mech-table">
+          <caption>Table 2. Three DNA repair systems and the genes that run them</caption>
+          <thead><tr><th scope="col">Repair system</th><th scope="col">What it fixes</th><th scope="col">Key genes</th></tr></thead>
+          <tbody>
+            <tr><td class="mech-name">Mismatch repair</td><td>Copying mistakes made during S phase. Think of it as spell-check for DNA replication.</td><td>MLH1, MSH2, MSH6, PMS2</td></tr>
+            <tr><td class="mech-name">Homologous recombination</td><td>Breaks through <em>both</em> strands of the DNA double helix, repaired using the matching chromosome as a template</td><td>BRCA1, BRCA2</td></tr>
+            <tr><td class="mech-name">Nucleotide excision repair</td><td>Bulky damage, such as kinks caused by UV light from the sun</td><td>XP genes (XPA, XPC, and others)</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Mini-model -->
+        <div class="accum" id="accum">
+          <div class="accum-head">
+            <div class="accum-title">🧪 Try it: Two cells, ten divisions</div>
+            <div class="accum-btns">
+              <button class="accum-btn go" id="accum-go" onclick="accumDivide()">Divide ▸</button>
+              <button class="accum-btn reset" onclick="accumReset()">Reset</button>
+            </div>
+          </div>
+          <div class="accum-sub">Each click is one round of cell division. Both cells make copying errors at the same rate. The difference is whether repair catches them. Watch which cell gets to <strong>3 unrepaired mutations</strong> first.</div>
+          <div class="lane">
+            <div class="lane-top"><span class="lane-name ok">Cell A · repair genes working</span><span class="lane-count" id="lane-a-count">Divisions: 0 · Mutations: 0</span></div>
+            <div class="lane-cells" id="lane-a"></div>
+            <div class="lane-warn" id="lane-a-warn">⚠ 3 mutations reached: high cancer risk</div>
+          </div>
+          <div class="lane">
+            <div class="lane-top"><span class="lane-name bad">Cell B · mismatch repair broken</span><span class="lane-count" id="lane-b-count">Divisions: 0 · Mutations: 0</span></div>
+            <div class="lane-cells" id="lane-b"></div>
+            <div class="lane-warn" id="lane-b-warn">⚠ 3 mutations reached: high cancer risk</div>
+          </div>
+          <div class="accum-foot">Simplified model for illustration. Real mutation rates are far smaller per division, but the gap between working and broken repair is just as dramatic. You'll explore this in depth in class with the DNA Repair Simulator.</div>
+        </div>
+
+        <div class="callout">
+          <strong>A pediatric example:</strong> In a rare condition called <strong>constitutional mismatch repair deficiency (CMMRD)</strong>, a child inherits a broken mismatch repair gene from <em>both</em> parents, so no cell in their body has working mismatch repair. These children have a very high risk of developing brain tumors, leukemia, or lymphoma during childhood, which is why they need frequent screening from a young age.
+        </div>
+
+        <h3 style="font-size:15px;color:var(--navy);margin:22px 0 10px;">Key Vocabulary Review</h3>
+        <div class="vocab-grid">
+          <div class="vocab-item"><div class="vocab-term">Gene amplification</div><div class="vocab-def">Extra copies of a gene, producing too much of a normal protein</div></div>
+          <div class="vocab-item"><div class="vocab-term">Chromosomal translocation</div><div class="vocab-def">Two chromosomes swap pieces, which can fuse two genes into an always-on hybrid</div></div>
+          <div class="vocab-item"><div class="vocab-term">Germline mutation</div><div class="vocab-def">A mutation present from conception in every cell; can be inherited and passed on</div></div>
+          <div class="vocab-item"><div class="vocab-term">Somatic mutation</div><div class="vocab-def">A mutation acquired in one body cell after conception; found only in that cell's descendants</div></div>
+          <div class="vocab-item"><div class="vocab-term">Caretaker gene</div><div class="vocab-def">A DNA repair gene that keeps the mutation rate low</div></div>
+          <div class="vocab-item"><div class="vocab-term">Tumor–normal sequencing</div><div class="vocab-def">Comparing DNA from a tumor and from normal tissue to sort germline from somatic mutations</div></div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Analyze</div>
+          <div class="quiz-q">Researchers grow a cell line with both copies of <strong>MSH2</strong> knocked out. Compared to normal cells, it builds up mutations about 100 times faster. Which is the best explanation?</div>
+          <div class="quiz-options" id="q3-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'A','D')"><div class="opt-letter">A</div><div>MSH2 is an oncogene that tells the cell to divide faster</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'B','D')"><div class="opt-letter">B</div><div>MSH2 is a germline mutation, so it is found in every cell</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'C','D')"><div class="opt-letter">C</div><div>Without MSH2, the cell can no longer copy its DNA during S phase</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'D','D')"><div class="opt-letter">D</div><div>Without MSH2, mismatch repair fails, so copying errors are never corrected and pass to every daughter cell</div></div>
+          </div>
+          <div class="quiz-feedback" id="q3-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters">
+          <div class="wm-icon" aria-hidden="true">💡</div>
+          <div class="wm-body">
+            <div class="wm-label">Why this matters</div>
+            <p>Here's a twist: tumors with broken mismatch repair carry <strong>so many mutations</strong> that they start to look "foreign" to the immune system. That makes them good candidates for <strong>immunotherapy</strong>, treatments that help the patient's own immune cells recognize and attack the cancer. A weakness in the cancer's DNA becomes a target. You'll see more of this in <strong>Lesson 4</strong>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-nav">
+        <button class="nav-btn secondary" onclick="goSlide(2)">← Back</button>
+        <span class="slide-counter">Section 4 of 6</span>
+        <button class="nav-btn primary" onclick="goSlide(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ══ SLIDE 4: MAYA'S REPORT + CER ══ -->
+    <div class="slide-card" id="slide-4">
+      <div class="slide-header amber">
+        <div class="slide-tag">Section 5 of 6 · Apply</div>
+        <h1>Make Your Claim: Maya's Genetic Report</h1>
+        <p>Time to answer Maya's mom. Read the evidence, then make and defend a claim.</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro">
+          Maya's care team ran <strong>tumor–normal sequencing</strong>. They compared DNA from her <strong>leukemia cells</strong> (bone marrow) with DNA from a small <strong>skin sample</strong>. Her leukemia has fewer chromosomes than normal, a subtype called <strong>low-hypodiploid ALL</strong>. TP53 mutations are common in this subtype, and in roughly <strong>4 out of 10</strong> of those children, the TP53 mutation turns out to be inherited.
+        </div>
+
+        <div class="report" role="region" aria-label="Maya's genetic report">
+          <div class="report-head">
+            <span class="rh-title">TUMOR–NORMAL SEQUENCING REPORT</span>
+            <span class="rh-meta">Patient: Maya R. · Age 12 · Diagnosis: B-cell ALL (low-hypodiploid)</span>
+          </div>
+          <table>
+            <thead><tr><th scope="col">Gene / finding</th><th scope="col">Gene type</th><th scope="col">Leukemia cells</th><th scope="col">Normal skin cells</th></tr></thead>
+            <tbody>
+              <tr><td><strong>TP53</strong> — copy 1, point mutation</td><td>Tumor suppressor</td><td class="det">Detected</td><td class="det">Detected</td></tr>
+              <tr><td><strong>TP53</strong> — copy 2, deleted</td><td>Tumor suppressor</td><td class="det">Detected</td><td class="nodet">Not detected (copy 2 normal)</td></tr>
+              <tr><td><strong>NRAS</strong> — activating point mutation</td><td>Proto-oncogene → oncogene</td><td class="det">Detected</td><td class="nodet">Not detected</td></tr>
+            </tbody>
+          </table>
+          <div class="report-foot">
+            <strong>Family history (from intake form):</strong> Maya's maternal grandmother was diagnosed with breast cancer at age 34. Her mother's brother was treated for a bone cancer (osteosarcoma) at age 15. No cancers reported on her father's side.
+          </div>
+        </div>
+
+        <div class="quiz-section" style="margin-top:8px;">
+          <div class="quiz-title"><span>📝</span> Read the Report · Analyze</div>
+          <div class="quiz-q">Look at the NRAS row. What can you conclude about Maya's NRAS mutation?</div>
+          <div class="quiz-options" id="q4-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'A','C')"><div class="opt-letter">A</div><div>It is germline, because it is an oncogene</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'B','C')"><div class="opt-letter">B</div><div>It needed a second hit in the other NRAS copy before it could have any effect</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'C','C')"><div class="opt-letter">C</div><div>It is somatic: it was acquired in a blood cell, it is not inherited, and one mutated copy is enough to switch the gene on</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'D','C')"><div class="opt-letter">D</div><div>Eli has a 50% chance of carrying it</div></div>
+          </div>
+          <div class="quiz-feedback" id="q4-fb" role="status"></div>
+        </div>
+
+        <h3 style="font-size:16px;color:var(--navy);margin:26px 0 6px;">Your turn: Claim · Evidence · Reasoning</h3>
+        <p style="font-size:14px;color:var(--gray);line-height:1.6;">Answer this question: <strong>Was Maya's first TP53 hit inherited or acquired?</strong> Use at least two pieces of evidence from the report.</p>
+
+        <div class="cer">
+          <div class="cer-row c">
+            <label for="cer-c">Claim</label>
+            <div class="cer-hint">One sentence that directly answers the question.</div>
+            <textarea id="cer-c" placeholder="Maya's first TP53 hit was…"></textarea>
+            <div class="starters">Starter: <code>Maya's first TP53 hit was ___ because ___.</code></div>
+          </div>
+          <div class="cer-row e">
+            <label for="cer-e">Evidence</label>
+            <div class="cer-hint">Two or more specific facts from the report or family history. Quote the rows.</div>
+            <textarea id="cer-e" placeholder="The report shows…"></textarea>
+            <div class="starters">Starters: <code>The report shows ___ in both ___ and ___.</code> <code>In contrast, ___ was only found in ___.</code></div>
+          </div>
+          <div class="cer-row r">
+            <label for="cer-r">Reasoning</label>
+            <div class="cer-hint">Explain <em>why</em> your evidence supports your claim. Use the words germline, somatic, and two-hit.</div>
+            <textarea id="cer-r" placeholder="This means… because…"></textarea>
+            <div class="starters">Starter: <code>A mutation found in normal cells must have been ___, which means ___.</code></div>
+          </div>
+        </div>
+        <div class="cer-check">
+          <button class="reveal-btn" id="model-btn" onclick="showModel()" aria-expanded="false" aria-controls="model-answer">Compare with a model answer</button>
+          <span style="font-size:12px;color:var(--muted);margin-left:8px;">Write your own CER first. The button unlocks after all three boxes have a response.</span>
+        </div>
+        <div class="model-answer" id="model-answer">
+          <h4>Model CER</h4>
+          <p><strong>Claim:</strong> Maya's first TP53 hit was <strong>inherited (germline)</strong>, and her second TP53 hit and her NRAS mutation were acquired (somatic).</p>
+          <p style="margin-top:6px;"><strong>Evidence:</strong> The TP53 copy-1 mutation was detected in <em>both</em> her leukemia cells and her normal skin cells. The TP53 copy-2 deletion and the NRAS mutation were found <em>only</em> in her leukemia cells. Her family history includes two relatives on her mother's side with cancer at unusually young ages (breast cancer at 34, osteosarcoma at 15).</p>
+          <p style="margin-top:6px;"><strong>Reasoning:</strong> Skin cells aren't cancer cells, so a mutation in skin must have been present in every cell from conception, which makes it germline. That means Maya was born with one hit, like the hereditary retinoblastoma children. Only one more hit (the copy-2 deletion) was needed in a single blood cell to lose the TP53 brake completely. The early cancers in her mother's family fit the pattern of an inherited TP53 mutation (Li-Fraumeni syndrome), though only testing her parents could confirm which parent carries it.</p>
+        </div>
+
+        <div class="why-matters">
+          <div class="wm-icon" aria-hidden="true">💡</div>
+          <div class="wm-body">
+            <div class="wm-label">Why this matters</div>
+            <p>What you just did is what a <strong>tumor board</strong> and a <strong>genetic counselor</strong> do for real families. Reading evidence carefully, separating what the data shows from what it only suggests, and explaining it clearly to a worried parent are core skills in cancer care, and they all come from understanding the biology you've built across three lessons.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-nav">
+        <button class="nav-btn secondary" onclick="goSlide(3)">← Back</button>
+        <span class="slide-counter">Section 5 of 6</span>
+        <button class="nav-btn primary" onclick="goSlide(5)">Proceed to Exit Ticket →</button>
+      </div>
+    </div>
+
+    <!-- ══ SLIDE 5: EXIT TICKET ══ -->
+    <div class="slide-card" id="slide-5">
+      <div class="slide-header" style="background:#0D2D47;">
+        <div class="slide-tag">Section 6 of 6 · Exit Ticket</div>
+        <h1>Exit Ticket — Before Class Tomorrow</h1>
+        <p>Your teacher will use these responses to plan tomorrow's modeling lab and family consult.</p>
+      </div>
+      <div class="slide-body">
+        <div class="exit-ticket-header">
+          <h3>🎯 Complete before your next class session</h3>
+          <p>Answer honestly. These responses tell your teacher what to review before the in-class activities.</p>
+        </div>
+
+        <div class="exit-q">
+          <div class="exit-q-num">Multiple Choice · Question 1 of 3</div>
+          <p>A tumor suppressor mutation is found in a child's tumor, but <em>not</em> in a sample of the child's saliva. What can you conclude?</p>
+          <div class="quiz-options" id="qet1-opts">
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'A','B')"><div class="opt-letter">A</div><div>The mutation is germline, so the child's siblings should be tested</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'B','B')"><div class="opt-letter">B</div><div>The mutation is somatic: it arose in a body cell after conception and was not inherited</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'C','B')"><div class="opt-letter">C</div><div>The mutation must actually be in an oncogene</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'D','B')"><div class="opt-letter">D</div><div>Both of the child's parents carry the mutation</div></div>
+          </div>
+          <div class="quiz-feedback" id="qet1-fb" role="status"></div>
+        </div>
+
+        <div class="exit-q" style="margin-top:16px;">
+          <div class="exit-q-num">Multiple Choice · Question 2 of 3</div>
+          <p>Which set of evidence <em>most strongly</em> suggests that a family carries an inherited cancer-risk mutation?</p>
+          <div class="quiz-options" id="qet2-opts">
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'A','C')"><div class="opt-letter">A</div><div>One grandparent was diagnosed with cancer at age 82</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'B','C')"><div class="opt-letter">B</div><div>A child's tumor carries many somatic mutations</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'C','C')"><div class="opt-letter">C</div><div>Several relatives across generations had cancer at unusually young ages, and the same mutation is found in a patient's normal cells</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'D','C')"><div class="opt-letter">D</div><div>A child's cancer responded well to chemotherapy</div></div>
+          </div>
+          <div class="quiz-feedback" id="qet2-fb" role="status"></div>
+        </div>
+
+        <div class="exit-q" style="margin-top:16px;" id="short-ans-section">
+          <div class="exit-q-num">Short Answer · Question 3 of 3</div>
+          <p class="short-answer-q">Maya's mom asked: <em>"Should Eli be tested?"</em> Write a response to her. Make a claim, support it with evidence from Maya's report, and explain what it would mean if Eli's test came back positive.</p>
+          <textarea class="short-ans" id="short-ans-input" placeholder="Think about: Which of Maya's mutations was germline? What's the chance a sibling inherits it? What would doctors do if Eli carries it?" oninput="updateCharCount()"></textarea>
+          <div class="char-count" id="char-count">0 / minimum 60 characters recommended</div>
+        </div>
+
+        <button class="submit-btn" id="submit-btn" onclick="submitExitTicket()">
+          <span class="spinner" id="submit-spinner"></span>
+          <span class="btn-label">Submit Exit Ticket →</span>
+        </button>
+        <div class="submit-error" id="submit-error" role="alert">
+          Could not reach the server. Please check your connection and try again, or copy the text below and email it to your teacher:
+          <pre id="fallback-text" style="margin-top:8px;font-size:12px;white-space:pre-wrap;background:#fff;padding:8px;border-radius:5px;border:1px solid #fca5a5;"></pre>
+        </div>
+
+        <div id="completion-wrap" style="display:none;">
+          <div class="completion-screen">
+            <div class="completion-icon">✅</div>
+            <h2>Exit Ticket Submitted!</h2>
+            <p>Your teacher will review these responses before class. The table below shows exactly what was sent.</p>
+            <div class="submitted-summary" id="submitted-summary"></div>
+            <div class="remind-box" style="margin-top:20px;">
+              <h4>📋 What to Expect in Class</h4>
+              <ul>
+                <li>🧪 <span>Run the <strong>DNA Repair Simulator</strong>: break repair genes and watch mutations pile up</span></li>
+                <li>👨‍👩‍👧 <span>Join a <strong>Family Genetics Consult</strong> team and build Maya's family pedigree</span></li>
+                <li>🧬 <span>Decide, with evidence, which relatives should be offered testing</span></li>
+              </ul>
+            </div>
+            <button onclick="printFullModule()" class="nav-btn" style="margin:20px auto 0;background:var(--navy);color:#fff;">🖨 Print / Save All Responses</button>
+          </div>
+        </div>
+      </div>
+      <div class="slide-nav">
+        <button class="nav-btn secondary" onclick="goSlide(4)">← Back</button>
+        <span class="slide-counter">Section 6 of 6</span>
+        <button class="nav-btn primary" disabled id="done-btn" onclick="showWhatNext()">Done ✓</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══ WHAT'S NEXT OVERLAY ══ -->
+<div id="whats-next-overlay" role="dialog" aria-modal="true" aria-labelledby="wn-title" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(13,27,42,.88);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:36px 40px;max-width:520px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.4);text-align:center;animation:slideUp .35s ease-out;">
+    <div style="font-size:48px;margin-bottom:12px;">🎉</div>
+    <h2 id="wn-title" style="font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px;">Lesson 3 Digital Lesson Complete!</h2>
+    <p style="font-size:14px;color:var(--gray);line-height:1.65;margin-bottom:28px;">Where would you like to go next?</p>
+    <a href="DNA_Repair_Simulator_Lesson3.html" style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--l3-dark);color:#fff;border-radius:10px;text-decoration:none;margin-bottom:12px;">
+      <div style="width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🧪</div>
+      <div style="text-align:left;"><div style="font-size:14px;font-weight:700;margin-bottom:2px;">Next: DNA Repair Simulator</div><div style="font-size:12px;opacity:.85;">Break the caretakers and see how fast mutations pile up</div></div>
+      <div style="margin-left:auto;font-size:18px;opacity:.8;">→</div>
+    </a>
+    <a href="module.html#lesson-3" style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--light);color:var(--navy);border:1.5px solid var(--border);border-radius:10px;text-decoration:none;">
+      <div style="width:40px;height:40px;border-radius:8px;background:rgba(26,58,92,.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏠</div>
+      <div style="text-align:left;"><div style="font-size:14px;font-weight:700;margin-bottom:2px;">Return to Module Home</div><div style="font-size:12px;color:var(--gray);">See all Lesson 3 resources</div></div>
+      <div style="margin-left:auto;font-size:18px;color:var(--muted);">→</div>
+    </a>
+    <button onclick="document.getElementById('whats-next-overlay').style.display='none'" style="margin-top:16px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;padding:4px 8px;">Stay on this page</button>
+  </div>
+</div>
+
+<script>
+let currentSlide = 0;
+const totalSlides = 6;
+const answered = {};
+
+function goSlide(n) {
+  if (window.ttsStop) window.ttsStop();
+  document.getElementById('slide-' + currentSlide).classList.remove('active');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  currentSlide = n;
+  document.getElementById('slide-' + n).classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems[n].classList.add('active');
+  for (let i = 0; i < n; i++) {
+    const dot = navItems[i].querySelector('.nav-dot');
+    dot.className = 'nav-dot completed'; dot.textContent = '✓';
+  }
+  navItems[n].querySelector('.nav-dot').className = 'nav-dot active';
+  const pct = Math.round(((n + 1) / totalSlides) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = (n + 1) + ' of ' + totalSlides;
+  window.scrollTo(0, 0);
+}
+
+const FB_RIGHT = {
+  q0:  '✓ Correct! The MYCN protein itself is normal. The problem is <strong>too much of it</strong>, caused by extra gene copies. That\'s gene amplification, a gain-of-function change that turns a proto-oncogene into an oncogene.',
+  q1:  '✓ Correct! Knudson\'s hypothesis made a specific prediction: one inherited hit should mean <strong>earlier, more frequent, two-eye</strong> tumors. The data matched that prediction, which is what makes it strong evidence.',
+  q2:  '✓ Correct! Skin cells are not cancer cells. A mutation present in normal tissue must have been there <strong>from conception</strong>, so it\'s germline, and parents or siblings may carry it too.',
+  q3:  '✓ Correct! MSH2 is a <strong>caretaker</strong> gene in the mismatch repair system. Without it, copying errors from S phase are never fixed, so every daughter cell inherits them and mutations pile up.',
+  q4:  '✓ Correct! NRAS appears in the leukemia cells only, so it\'s somatic. And because it\'s an oncogene, <strong>one</strong> activated copy is enough. No second hit required.',
+  qet1:'✓ Correct! Saliva is normal tissue. A mutation in the tumor but not in normal tissue was acquired after conception. It\'s somatic and not inherited.',
+  qet2:'✓ Correct! <strong>Early-onset</strong> cancers across <strong>generations</strong>, plus a mutation in <strong>normal cells</strong>, is the classic evidence pattern for an inherited predisposition.'
+};
+const FB_WRONG = {
+  q0:  '✗ Not quite. Look at the clue "60 extra copies" with each copy normal. Nothing was swapped or changed letter by letter. The gene was <strong>amplified</strong>, which makes it an oncogene (gain of function).',
+  q1:  '✗ Not quite. Strong evidence <em>tests</em> a prediction. The two-hit idea predicts that children who start with one hit get tumors <strong>earlier and in both eyes</strong>, and that\'s what the data showed.',
+  q2:  '✗ Not quite. Tumors don\'t "spread" mutations into normal skin. A mutation in <strong>normal tissue</strong> must have been present from conception, so it\'s germline.',
+  q3:  '✗ Not quite. MSH2 doesn\'t push division and doesn\'t do the copying itself. It\'s part of <strong>mismatch repair</strong>, the "spell-check" that corrects copying errors. Without it, errors pass to every daughter cell.',
+  q4:  '✗ Not quite. NRAS was found in leukemia cells but <strong>not</strong> in normal skin, so it\'s somatic and not inherited. And oncogenes only need <strong>one</strong> activated copy.',
+  qet1:'✗ Not quite. If the mutation is absent from normal tissue (saliva), it can\'t have been there from conception. It\'s <strong>somatic</strong>: acquired, not inherited.',
+  qet2:'✗ Not quite. Look for the pattern from Knudson\'s work: cancers at <strong>unusually young ages</strong>, in <strong>several relatives</strong>, plus a mutation in <strong>normal cells</strong>.'
+};
+
+function checkQuiz(id, el, chosen, correct) {
+  if (answered[id]) return;
+  answered[id] = chosen;
+  const opts = document.querySelectorAll('#' + id + '-opts .quiz-opt');
+  opts.forEach(o => o.classList.add('disabled'));
+  const fb = document.getElementById(id + '-fb');
+  const letters = ['A','B','C','D'];
+  if (chosen === correct) {
+    el.classList.add('correct');
+    fb.className = 'quiz-feedback correct';
+    fb.innerHTML = FB_RIGHT[id] || '✓ Correct!';
+  } else {
+    el.classList.add('incorrect');
+    opts[letters.indexOf(correct)].classList.add('correct');
+    fb.className = 'quiz-feedback incorrect';
+    fb.innerHTML = FB_WRONG[id] || '✗ Not quite.';
+  }
+  fb.style.display = 'block';
+}
+
+// Keyboard access for quiz options and sidebar items (WCAG 2.1.1)
+document.querySelectorAll('.quiz-opt, .nav-item').forEach(function(el) {
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('role', 'button');
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+  });
+});
+
+function toggleReveal(id, btn) {
+  const body = document.getElementById(id);
+  const open = body.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+  btn.textContent = open ? 'Hide the explanation' : 'Reveal the explanation';
+}
+
+/* ── Figure 3.2: draw the two cell grids ── */
+(function drawGermSoma() {
+  const NS = 'http://www.w3.org/2000/svg';
+  function grid(gId, x0, mutFn) {
+    const g = document.getElementById(gId);
+    let k = 0;
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 6; c++) {
+        const cx = x0 + c * 46, cy = 52 + r * 36;
+        const circ = document.createElementNS(NS, 'circle');
+        circ.setAttribute('cx', cx); circ.setAttribute('cy', cy); circ.setAttribute('r', 14);
+        const isMut = mutFn(r, c);
+        circ.setAttribute('fill', isMut ? '#C8102E' : '#D0E8F8');
+        circ.setAttribute('stroke', (r === 3 && c === 5) ? '#F0A500' : (isMut ? '#7A0A1E' : '#8FB3D0'));
+        circ.setAttribute('stroke-width', (r === 3 && c === 5) ? 4 : 1.5);
+        g.appendChild(circ);
+        k++;
+      }
+    }
+  }
+  grid('germ', 75, function() { return true; });
+  const tumor = { '0,1':1, '0,2':1, '1,1':1, '1,2':1, '1,3':1 };
+  grid('soma', 455, function(r, c) { return !!tumor[r + ',' + c]; });
+})();
+
+/* ── Mutation accumulation mini-model ──
+   Illustrative probabilities: working repair lets ~1 in 12 divisions
+   keep a new mutation; broken mismatch repair lets ~2 in 3 through. */
+const ACCUM = { a: { d:0, m:0, p:0.08 }, b: { d:0, m:0, p:0.65 }, max: 10 };
+function accumDivide() {
+  ['a','b'].forEach(function(k) {
+    const s = ACCUM[k];
+    if (s.d >= ACCUM.max) return;
+    s.d++;
+    const mut = Math.random() < s.p;
+    if (mut) s.m++;
+    const cell = document.createElement('span');
+    cell.className = 'lc' + (mut ? ' mut' : '');
+    cell.title = 'Division ' + s.d + (mut ? ': unrepaired mutation' : ': no new mutation');
+    document.getElementById('lane-' + k).appendChild(cell);
+    document.getElementById('lane-' + k + '-count').textContent = 'Divisions: ' + s.d + ' · Mutations: ' + s.m;
+    if (s.m >= 3) document.getElementById('lane-' + k + '-warn').style.display = 'block';
+  });
+  if (ACCUM.a.d >= ACCUM.max) {
+    const b = document.getElementById('accum-go');
+    b.disabled = true; b.textContent = 'Done ✓'; b.style.opacity = .6;
+  }
+}
+function accumReset() {
+  ['a','b'].forEach(function(k) {
+    ACCUM[k].d = 0; ACCUM[k].m = 0;
+    document.getElementById('lane-' + k).innerHTML = '';
+    document.getElementById('lane-' + k + '-count').textContent = 'Divisions: 0 · Mutations: 0';
+    document.getElementById('lane-' + k + '-warn').style.display = 'none';
+  });
+  const b = document.getElementById('accum-go');
+  b.disabled = false; b.textContent = 'Divide ▸'; b.style.opacity = 1;
+}
+
+/* ── CER model answer: unlocks only after all three boxes are attempted ── */
+function showModel() {
+  const ok = ['cer-c','cer-e','cer-r'].every(function(id) {
+    return document.getElementById(id).value.trim().length >= 10;
+  });
+  if (!ok) {
+    alert('Write your own Claim, Evidence, and Reasoning first, at least a sentence in each box. Then compare.');
+    return;
+  }
+  const m = document.getElementById('model-answer');
+  m.classList.add('open');
+  document.getElementById('model-btn').setAttribute('aria-expanded', 'true');
+  m.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function updateCharCount() {
+  const len = document.getElementById('short-ans-input').value.length;
+  const el = document.getElementById('char-count');
+  el.textContent = len + ' / minimum 60 characters recommended';
+  el.style.color = len >= 60 ? '#16A34A' : '#64748B';
+}
+
+function showWhatNext() { document.getElementById('whats-next-overlay').style.display = 'flex'; }
+
+// ══════════════════════════════════════════════════════════════
+//  EXIT TICKET SUBMISSION — same setup as Lessons 1–2.
+//  Paste a Google Apps Script web-app URL or Formspree endpoint
+//  below. Leave '' to use the on-screen / clipboard fallback.
+// ══════════════════════════════════════════════════════════════
+const SUBMIT_URL = (window.CDGW_CONFIG && window.CDGW_CONFIG.SUBMIT_URL) || '';   // ← PASTE YOUR URL HERE
+
+function escHTML(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function submitExitTicket() {
+  const nameEl = document.getElementById('student-name');
+  const name = nameEl.value.trim();
+  const period = document.getElementById('student-period').value.trim();
+  const q1 = answered['qet1'], q2 = answered['qet2'];
+  const sa = document.getElementById('short-ans-input').value.trim();
+  nameEl.classList.remove('error');
+  if (!name) {
+    goSlide(0); nameEl.classList.add('error'); nameEl.focus();
+    alert('Please enter your name on Section 1 so your teacher can match this to you.');
+    return;
+  }
+  if (!q1 || !q2) { alert('Please answer both multiple choice questions before submitting.'); return; }
+  if (sa.length < 30) { alert('Please write a short answer response before submitting (at least two sentences).'); return; }
+
+  const payload = {
+    timestamp: new Date().toLocaleString(), name: name, period: period || '—',
+    q1: q1, q1Correct: q1 === 'B' ? 'Yes ✓' : 'No ✗',
+    q2: q2, q2Correct: q2 === 'C' ? 'Yes ✓' : 'No ✗',
+    shortAnswer: sa,
+    cerClaim: document.getElementById('cer-c').value.trim(),
+    module: 'Lesson 3 — The Genetics of Cancer'
+  };
+  const btn = document.getElementById('submit-btn');
+  btn.classList.add('loading'); btn.disabled = true;
+  document.getElementById('submit-error').style.display = 'none';
+  if (SUBMIT_URL) {
+    try {
+      await fetch(SUBMIT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(Object.assign({ classCode: (window.CDGW_CONFIG || {}).CLASS_CODE || '' }, payload)), mode: SUBMIT_URL.includes('formspree') ? 'cors' : 'no-cors' });
+      showCompletion(payload);
+    } catch (err) { showNetworkError(payload); }
+  } else {
+    showCompletion(payload);
+    console.warn('SUBMIT_URL not set. Data was not sent to a server.');
+  }
+  btn.classList.remove('loading'); btn.disabled = false;
+}
+
+function showCompletion(p) {
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('short-ans-section').style.opacity = '0.6';
+  document.getElementById('completion-wrap').style.display = 'block';
+  document.getElementById('done-btn').removeAttribute('disabled');
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete ✓';
+  const c1 = p.q1 === 'B' ? 'ss-correct' : 'ss-incorrect';
+  const c2 = p.q2 === 'C' ? 'ss-correct' : 'ss-incorrect';
+  document.getElementById('submitted-summary').innerHTML =
+    '<div class="ss-row"><span class="ss-label">Name</span><span class="ss-val">' + escHTML(p.name) + '</span></div>' +
+    '<div class="ss-row"><span class="ss-label">Period</span><span class="ss-val">' + escHTML(p.period) + '</span></div>' +
+    '<div class="ss-row"><span class="ss-label">Q1</span><span class="ss-val">Choice ' + p.q1 + ' — <span class="' + c1 + '">' + p.q1Correct + '</span></span></div>' +
+    '<div class="ss-row"><span class="ss-label">Q2</span><span class="ss-val">Choice ' + p.q2 + ' — <span class="' + c2 + '">' + p.q2Correct + '</span></span></div>' +
+    '<div class="ss-row"><span class="ss-label">Short Ans.</span><span class="ss-val">' + escHTML(p.shortAnswer) + '</span></div>' +
+    '<div class="ss-row"><span class="ss-label">Sent at</span><span class="ss-val">' + escHTML(p.timestamp) + '</span></div>';
+  window.scrollTo(0, 0);
+}
+
+function showNetworkError(p) {
+  const txt = ['Name: ' + p.name, 'Period: ' + p.period, 'Q1: ' + p.q1 + ' (' + p.q1Correct + ')', 'Q2: ' + p.q2 + ' (' + p.q2Correct + ')', 'Short Answer: ' + p.shortAnswer, 'Submitted: ' + p.timestamp].join('\n');
+  document.getElementById('fallback-text').textContent = txt;
+  const err = document.getElementById('submit-error');
+  err.style.display = 'block';
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(function(){});
+  err.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+/* ── FULL-LESSON PRINT ── */
+function printFullModule() {
+  const name = document.getElementById('student-name').value || '(not entered)';
+  const period = document.getElementById('student-period').value || '—';
+  function getChoice(id) {
+    const opts = document.querySelectorAll('#' + id + '-opts .quiz-opt');
+    const L = ['A','B','C','D'];
+    for (let i = 0; i < opts.length; i++) {
+      if (opts[i].classList.contains('incorrect') || (opts[i].classList.contains('correct') && answered[id] === L[i])) {
+        const t = opts[i].querySelector('div:last-child');
+        return L[i] + '. ' + (t ? t.textContent.trim() : '') + (answered[id] === L[i] && opts[i].classList.contains('correct') ? ' ✓' : ' ✗');
+      }
+    }
+    return '(not answered)';
+  }
+  function row(l, q, a) { return '<tr><td class="pm-qlabel">' + l + '</td><td>' + escHTML(q) + '</td><td class="pm-answer">' + escHTML(a) + '</td></tr>'; }
+  function val(id) { return (document.getElementById(id) || {}).value || '(not answered)'; }
+  const html = [
+    '<h1>The Genetics of Cancer — Student Responses</h1>',
+    '<div class="pm-meta"><strong>Name:</strong> ' + escHTML(name) + ' &nbsp;|&nbsp; <strong>Period:</strong> ' + escHTML(period) + ' &nbsp;|&nbsp; <strong>Printed:</strong> ' + new Date().toLocaleString() + '</div>',
+    '<h2>Section 1 · Two Kinds of Cancer Genes</h2><table>', row('Q1','A cell carries 60 extra normal copies of MYCN. What happened?', getChoice('q0')), '</table>',
+    '<h2>Section 2 · The Two-Hit Evidence</h2><table>', row('Q2','Strongest support for the two-hit hypothesis?', getChoice('q1')), '</table>',
+    '<h2>Section 3 · Germline vs. Somatic</h2><table>', row('Q3','Same TP53 mutation in tumor and normal skin. Conclusion?', getChoice('q2')), '</table>',
+    '<h2>Section 4 · DNA Repair</h2><table>', row('Q4','Why does an MSH2-knockout cell accumulate mutations faster?', getChoice('q3')), '</table>',
+    '<h2>Section 5 · Maya’s Report</h2><table>', row('Q5','What can you conclude about Maya’s NRAS mutation?', getChoice('q4')), '</table>',
+    '<div class="pm-salabel">Claim</div><div class="pm-sa">' + escHTML(val('cer-c')) + '</div>',
+    '<div class="pm-salabel">Evidence</div><div class="pm-sa">' + escHTML(val('cer-e')) + '</div>',
+    '<div class="pm-salabel">Reasoning</div><div class="pm-sa">' + escHTML(val('cer-r')) + '</div>',
+    '<h2>Section 6 · Exit Ticket</h2><table>',
+    row('ET Q1','Mutation in tumor but not saliva. Conclusion?', getChoice('qet1')),
+    row('ET Q2','Strongest evidence of an inherited cancer-risk mutation?', getChoice('qet2')), '</table>',
+    '<div class="pm-salabel">Short Answer: Should Eli be tested?</div><div class="pm-sa">' + escHTML(val('short-ans-input')) + '</div>',
+    '<div class="pm-footer">Cell Division Gone Wrong · Lesson 3 · LaShaudra Cox Learning Design · Grades 9–10</div>'
+  ].join('');
+  let modal = document.getElementById('print-modal');
+  if (!modal) { modal = document.createElement('div'); modal.id = 'print-modal'; document.body.appendChild(modal); }
+  modal.innerHTML = html;
+  document.body.classList.add('printing');
+  function cleanup() { document.body.classList.remove('printing'); window.removeEventListener('afterprint', cleanup); }
+  window.addEventListener('afterprint', cleanup);
+  window.print();
+}
+</script>
+
+<!-- ── LANGUAGE TRANSLATION WIDGET ── -->
+<div id="translate-bar">
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
+</div>
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+}
+function triggerTranslate(lang) {
+  var combo = document.querySelector('.goog-te-combo');
+  if (!combo) { setTimeout(function() { triggerTranslate(lang); }, 600); return; }
+  combo.value = lang;
+  var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', false, true); combo.dispatchEvent(evt);
+  if (lang === '') document.getElementById('lang-select').value = '';
+}
+document.getElementById('lang-select').addEventListener('change', function() { triggerTranslate(this.value); });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<!-- Read Aloud Bar -->
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon" title="Read Aloud">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&#215;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&#215;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none"><div class="tts-pulse"></div><span id="tts-status-text">Reading&hellip;</span></div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 (single instance) ═══
+   Reads the active section block by block with 500 ms pauses and
+   a teal outline on the block being read. */
+(function() {
+  var synth = window.speechSynthesis;
+  var _rate = 1.0, _playing = false, _paused = false, _sections = [], _idx = 0, _timer = null;
+
+  function extract(rootEl) {
+    var clone = rootEl.cloneNode(true);
+    ['button','select','svg','script','style','input','textarea','[aria-hidden="true"]','.slide-nav','.accum-btns']
+      .forEach(function(sel) { clone.querySelectorAll(sel).forEach(function(n) { n.remove(); }); });
+    var BLOCK = {DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,LI:1,TD:1,TH:1,TR:1,CAPTION:1,BLOCKQUOTE:1,FIGCAPTION:1,LABEL:1};
+    var parts = [];
+    (function walk(node) {
+      if (node.nodeType === 3) { var t = node.nodeValue.replace(/\s+/g,' '); if (t.trim()) parts.push(t); return; }
+      if (node.nodeType !== 1) return;
+      var before = parts.length;
+      node.childNodes.forEach(walk);
+      if (BLOCK[node.tagName] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) { if (!/[.!?:;—,]$/.test(seg)) seg += '.'; parts.push(seg + ' '); }
+      }
+    })(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  }
+  function getSections() {
+    var a = document.querySelector('.slide-card.active');
+    if (!a) return [];
+    var hdr = a.querySelector('.slide-header');
+    var body = a.querySelector('.slide-body');
+    var list = hdr ? [hdr] : [];
+    if (body) Array.from(body.children).forEach(function(el) {
+      if (el.offsetParent !== null && (el.textContent || '').trim().length > 15) list.push(el);
+    });
+    return list;
+  }
+  function clearHL() { document.querySelectorAll('.tts-reading').forEach(function(el) { el.classList.remove('tts-reading'); }); }
+  function readAt(i) {
+    clearTimeout(_timer);
+    if (i >= _sections.length) { done(); return; }
+    _idx = i; clearHL();
+    var sec = _sections[i];
+    sec.classList.add('tts-reading');
+    try { sec.scrollIntoView({ behavior:'smooth', block:'nearest' }); } catch(e) {}
+    var txt = extract(sec);
+    if (!txt) { readAt(i + 1); return; }
+    var u = new SpeechSynthesisUtterance(txt);
+    u.rate = _rate;
+    u.lang = (document.documentElement.lang || 'en');
+    u.onend = function() { if (_playing) _timer = setTimeout(function() { if (_playing && !_paused) readAt(i + 1); }, 500); };
+    u.onerror = function(e) { if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(i + 1); };
+    synth.speak(u);
+    _playing = true; _paused = false; ui();
+  }
+  function done() { _playing = false; _paused = false; clearHL(); clearTimeout(_timer); ui(); }
+  function ui() {
+    var play = document.getElementById('tts-play'), pause = document.getElementById('tts-pause'),
+        stop = document.getElementById('tts-stop'), st = document.getElementById('tts-status'),
+        stx = document.getElementById('tts-status-text');
+    if (_playing) {
+      play.innerHTML = '&#8635; Restart'; pause.disabled = false; stop.disabled = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      st.style.display = 'flex';
+      stx.textContent = _paused ? 'Paused' : 'Block ' + (_idx + 1) + ' of ' + _sections.length;
+    } else {
+      play.innerHTML = '&#9654; Play'; pause.disabled = true; stop.disabled = true; st.style.display = 'none';
+    }
+  }
+  window.ttsPlay = function() { synth.cancel(); clearTimeout(_timer); _sections = getSections(); if (_sections.length) readAt(0); };
+  window.ttsPauseResume = function() { if (!_playing) return; if (_paused) { synth.resume(); _paused = false; } else { synth.pause(); _paused = true; } ui(); };
+  window.ttsStop = function() { synth.cancel(); clearTimeout(_timer); _playing = false; _paused = false; clearHL(); ui(); };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) { b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r); });
+    if (_playing && !_paused) { var ri = _idx; synth.cancel(); clearTimeout(_timer); _timer = setTimeout(function() { readAt(ri); }, 100); }
+  };
+  document.addEventListener('visibilitychange', function() { if (document.hidden) window.ttsStop(); });
+})();
+</script>
+</body>
+</html>

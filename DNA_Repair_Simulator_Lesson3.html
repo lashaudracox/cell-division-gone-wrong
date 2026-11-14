@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNA Repair Simulator | Lesson 3 | LaShaudra Cox Learning Design</title>
+<style>
+  :root {
+    --navy: #1A3A5C;
+    --teal: #0E7C86;
+    --red: #C8102E;
+    --gold: #F0A500;
+    --light: #EEF5FB;
+    --white: #FFFFFF;
+    --gray: #64748B;
+    --dark: #1E293B;
+    --green: #16A34A;
+    --purple: #7C3AED;
+    --muted: #94A3B8;
+    --border: #D1E4F0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #F0F4F8; color: var(--dark); min-height: 100vh; 
+  padding-top: 38px;}
+
+  /* TOP NAV */
+  .topbar {
+    background: var(--navy);
+    color: white;
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .org-badge { background: #C8102E; color: white; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 2px 7px; border-radius: 3px; margin-right: 6px; }
+  .topbar-title { font-size: 15px; font-weight: 600; color: #A8C8E8; }
+  .progress-wrap { display: flex; align-items: center; gap: 10px; }
+  .progress-label { font-size: 12px; color: #7FA8C8; }
+  .progress-bar-outer { width: 160px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
+  .progress-bar-inner { height: 100%; background: var(--teal); border-radius: 3px; transition: width 0.4s ease; }
+
+  /* LAYOUT */
+  .layout { display: flex; min-height: calc(100vh - 56px); }
+  .sidebar {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .sidebar-heading {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--muted);
+    padding: 0 20px 12px;
+    text-transform: uppercase;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+    font-size: 13.5px;
+    color: var(--gray);
+  }
+  .nav-item:hover { background: var(--light); }
+  .nav-item.active { background: #EEF5FF; border-left-color: var(--teal); color: var(--navy); font-weight: 600; }
+  .nav-item.completed { color: var(--green); }
+  .nav-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .nav-dot.active { background: var(--teal); color: white; }
+  .nav-dot.completed { background: var(--green); color: white; }
+  .nav-dot.locked { background: #E2E8F0; color: var(--muted); }
+  .nav-dot.default { background: var(--light); color: var(--gray); border: 1px solid var(--border); }
+
+  /* MAIN CONTENT */
+  .main { flex: 1; max-width: 860px; padding: 36px 40px; }
+
+  /* SLIDE CARD */
+  .slide-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow: hidden;
+    margin-bottom: 28px;
+    display: none;
+  }
+  .slide-card.active { display: block; }
+  .slide-header {
+    background: var(--navy);
+    padding: 24px 32px 20px;
+    color: white;
+    position: relative;
+  }
+  .slide-header.teal { background: var(--teal); }
+  .slide-header.red { background: var(--red); }
+  .slide-header.gold { background: var(--gold); }
+  .slide-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .slide-header h1 { font-size: 24px; font-weight: 700; line-height: 1.2; }
+  .slide-header p { margin-top: 6px; font-size: 14px; color: rgba(255,255,255,0.75); }
+  .slide-body { padding: 32px; }
+
+  /* CONTENT ELEMENTS */
+  .concept-intro {
+    background: var(--light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .concept-intro strong { color: var(--teal); }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .info-card {
+    background: var(--light);
+    border-radius: 8px;
+    padding: 18px;
+    border-top: 3px solid var(--teal);
+  }
+  .info-card.red-top { border-top-color: var(--red); }
+  .info-card.gold-top { border-top-color: var(--gold); }
+  .info-card.green-top { border-top-color: var(--green); }
+  .info-card h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--teal); margin-bottom: 8px; }
+  .info-card.red-top h3 { color: var(--red); }
+  .info-card.gold-top h3 { color: var(--gold); }
+  .info-card.green-top h3 { color: var(--green); }
+  .info-card p, .info-card ul { font-size: 13.5px; line-height: 1.6; color: var(--dark); }
+  .info-card ul { padding-left: 16px; }
+  .info-card ul li { margin-bottom: 4px; }
+
+  /* CELL CYCLE DIAGRAM */
+  .cell-cycle-container { text-align: center; padding: 20px 0; }
+  .cell-cycle-svg { max-width: 420px; margin: 0 auto; display: block; }
+
+  /* CHECKPOINT TABLE */
+  .checkpoint-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+  .checkpoint-table th {
+    background: var(--navy);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .checkpoint-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .checkpoint-table tr:nth-child(even) td { background: #F8FBFF; }
+  .checkpoint-table tr:last-child td { border-bottom: none; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .badge-teal { background: #D0F0F2; color: #0E7C86; }
+  .badge-red { background: #FFE4E8; color: var(--red); }
+  .badge-gold { background: #FFF3CD; color: #B07500; }
+
+  /* DEFINITION BOX */
+  .definition {
+    background: #FFF9E6;
+    border: 1px solid #F0D878;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .definition strong { color: #8A6000; }
+
+  /* CALLOUT */
+  .callout {
+    background: #FFF0F2;
+    border-left: 4px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .callout.teal { background: #EDF9FA; border-left-color: var(--teal); }
+  .callout.gold { background: #FFF8EC; border-left-color: var(--gold); }
+  .callout strong { color: var(--red); }
+  .callout.teal strong { color: var(--teal); }
+  .callout.gold strong { color: #8A6000; }
+
+  /* ANALOGY BOX */
+  .analogy {
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin: 22px 0;
+  }
+  .analogy-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7FA8C8; font-weight: 700; margin-bottom: 8px; }
+  .analogy p { font-size: 15px; line-height: 1.7; color: #D0E8F8; }
+  .analogy em { color: #7FD4D8; font-style: normal; font-weight: 600; }
+
+  /* ── CAR ANALOGY ILLUSTRATION ──────────────────────────────────
+     Visual reinforcement of the oncogene/tumor-suppressor analogy.
+     Added in response to Tawfik feedback: "Consider having an image
+     to reinforce your analogy." An SVG gas pedal and brake pedal
+     provide a concrete dual-coding anchor for the abstract concept
+     (Mayer's multimedia principle). */
+  .analogy-illustration {
+    display: flex;
+    gap: 18px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.12);
+    flex-wrap: wrap;
+  }
+  .pedal-panel {
+    flex: 1;
+    min-width: 220px;
+    background: rgba(255,255,255,.04);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .pedal-panel.accelerator { border: 1px solid rgba(240,165,0,.4); }
+  .pedal-panel.brake { border: 1px solid rgba(200,16,46,.4); }
+  .pedal-svg { flex-shrink: 0; }
+  .pedal-info { flex: 1; }
+  .pedal-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .pedal-panel.accelerator .pedal-label { color: var(--gold); }
+  .pedal-panel.brake .pedal-label { color: #FF8090; }
+  .pedal-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .pedal-caption {
+    font-size: 12px;
+    color: #B8CFE3;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  /* ── PRE-TRAINING BLOCK ────────────────────────────────────────
+     "What you will learn" block at the top of the lesson. Directly
+     applies Mayer's pre-training principle — introducing names and
+     characteristics of key concepts before they appear in context
+     reduces intrinsic cognitive load during the main instruction. */
+  .pre-training {
+    background: linear-gradient(135deg, #F8FAFD 0%, #EEF5FB 100%);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .pre-training::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--gold) 100%);
+    border-radius: 4px 0 0 4px;
+  }
+  .pre-training .pt-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .pre-training .pt-label .pt-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .pre-training h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .pre-training .pt-intro {
+    font-size: 13.5px;
+    color: var(--gray);
+    margin-bottom: 14px;
+    line-height: 1.55;
+  }
+  .pre-training .pt-goals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .pre-training .pt-goal {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid var(--border);
+  }
+  .pre-training .pt-goal-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .pre-training .pt-goal-text {
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .pre-training .pt-goal-text strong { color: var(--navy); }
+
+  /* ── WHY THIS MATTERS (REFLECTION) ─────────────────────────────
+     Placed after each Check Your Understanding. Keller's ARCS
+     Satisfaction — closes the loop between effort and meaning by
+     connecting the just-learned concept to a real-world purpose. */
+  .why-matters {
+    background: #FFFAF0;
+    border: 1.5px solid #F5D9A8;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0 6px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .why-matters .wm-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .why-matters .wm-body { flex: 1; }
+  .why-matters .wm-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #B87800;
+    margin-bottom: 4px;
+  }
+  .why-matters p {
+    font-size: 13.5px;
+    color: var(--dark);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .why-matters p strong { color: #8A6000; }
+
+  /* QUIZ */
+  .quiz-section {
+    background: #F0F9FF;
+    border: 2px solid var(--teal);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 28px;
+  }
+  .quiz-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--teal); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+  }
+  .quiz-q { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 14px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+    cursor: pointer; transition: all 0.15s; font-size: 14px; line-height: 1.4;
+  }
+  .quiz-opt:hover { border-color: var(--teal); background: #EDF9FA; }
+  .quiz-opt.correct { border-color: var(--green); background: #F0FFF4; }
+  .quiz-opt.incorrect { border-color: var(--red); background: #FFF0F2; }
+  .quiz-opt.disabled { pointer-events: none; opacity: 0.7; }
+  .opt-letter {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--light); font-size: 11px; font-weight: 700;
+    color: var(--gray); flex-shrink: 0;
+  }
+  .quiz-feedback {
+    margin-top: 14px; padding: 12px 16px; border-radius: 8px;
+    font-size: 14px; line-height: 1.55; display: none;
+  }
+  .quiz-feedback.correct { background: #F0FFF4; border: 1px solid var(--green); color: #15803D; }
+  .quiz-feedback.incorrect { background: #FFF0F2; border: 1px solid var(--red); color: var(--red); }
+
+  /* SHORT ANSWER */
+  .short-answer-wrap { margin-top: 20px; }
+  .short-answer-label { font-size: 13px; font-weight: 600; color: var(--gray); margin-bottom: 8px; display: block; }
+  .short-answer-q { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  textarea.short-ans {
+    width: 100%; min-height: 90px; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px; font-size: 14px; resize: vertical;
+    font-family: inherit; color: var(--dark);
+    transition: border 0.15s;
+  }
+  textarea.short-ans:focus { outline: none; border-color: var(--teal); }
+  .char-count { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; }
+
+  /* NAVIGATION */
+  .slide-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 32px;
+    border-top: 1px solid var(--border);
+    background: #FAFCFF;
+  }
+  .nav-btn {
+    padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn.primary { background: var(--teal); color: white; }
+  .nav-btn.primary:hover { background: #0A6870; }
+  .nav-btn.secondary { background: var(--light); color: var(--navy); border: 1px solid var(--border); }
+  .nav-btn.secondary:hover { background: #DDE9F5; }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .slide-counter { font-size: 13px; color: var(--muted); }
+
+  /* EXIT TICKET */
+  .exit-ticket-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #0E3A6B 100%);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 20px; color: white;
+  }
+  .exit-ticket-header h3 { font-size: 18px; font-weight: 700; }
+  .exit-ticket-header p { font-size: 13px; color: #A8C8E8; margin-top: 4px; }
+  .exit-q { background: white; border-radius: 8px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
+  .exit-q-num { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .exit-q p { font-size: 14.5px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  /* STUDENT IDENTITY FIELDS */
+  .student-id-row {
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px;
+    background: white; border-radius: 8px; border: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+  .sid-field { display: flex; flex-direction: column; gap: 5px; }
+  .sid-field.wide { flex: 2; min-width: 180px; }
+  .sid-field.narrow { flex: 1; min-width: 100px; }
+  .sid-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .sid-input {
+    padding: 9px 12px; border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 14px; font-family: inherit;
+    color: var(--dark); outline: none; transition: border-color .15s;
+  }
+  .sid-input:focus { border-color: var(--teal); }
+  .sid-input.error { border-color: var(--red); }
+
+  /* SUBMIT / LOADING */
+  .submit-btn {
+    width: 100%; padding: 14px; background: var(--red); color: white;
+    border: none; border-radius: 8px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s, opacity .15s; margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .submit-btn:hover:not(:disabled) { background: #A00024; }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .spinner {
+    width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.35);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin .7s linear infinite; display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  .submit-btn.loading .spinner { display: inline-block; }
+  .submit-btn.loading .btn-label { display: none; }
+
+  /* ERROR BANNER */
+  .submit-error {
+    display: none; background: #FDE8EC; border: 1.5px solid var(--red);
+    border-radius: 8px; padding: 12px 16px; margin-top: 10px;
+    font-size: 13px; color: #8B0014; line-height: 1.5;
+  }
+
+  /* COMPLETION — updated to show what was sent */
+  .submitted-summary {
+    background: var(--light); border-radius: 8px; padding: 14px 18px;
+    margin: 16px auto 0; max-width: 500px; text-align: left;
+    border: 1px solid var(--border); font-size: 13px;
+  }
+  .submitted-summary .ss-row { display: flex; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .submitted-summary .ss-row:last-child { border-bottom: none; }
+  .submitted-summary .ss-label { font-weight: 700; color: var(--navy); min-width: 80px; }
+  .submitted-summary .ss-val { color: var(--gray); flex: 1; }
+  .ss-correct { color: #16A34A; font-weight: 700; }
+  .ss-incorrect { color: var(--red); font-weight: 700; }
+
+  /* COMPLETE STATE */
+  .completion-screen {
+    text-align: center; padding: 48px 32px;
+  }
+  .completion-icon { font-size: 64px; margin-bottom: 16px; }
+  .completion-screen h2 { font-size: 26px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .completion-screen p { font-size: 15px; color: var(--gray); max-width: 440px; margin: 0 auto 24px; line-height: 1.6; }
+  .remind-box {
+    background: var(--light); border-radius: 10px; padding: 20px 24px;
+    max-width: 500px; margin: 0 auto; text-align: left;
+  }
+  .remind-box h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .remind-box ul { list-style: none; padding: 0; }
+  .remind-box ul li { font-size: 14px; color: var(--dark); padding: 5px 0; display: flex; gap: 8px; }
+
+  /* KEY VOCAB GLOSSARY */
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .vocab-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .vocab-term { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 4px; }
+  .vocab-def { font-size: 12.5px; color: var(--gray); line-height: 1.5; }
+
+  @media (max-width: 700px) {
+    .sidebar { display: none; }
+    .main { padding: 20px 16px; }
+    .info-grid, .vocab-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
+  /* Fixed bottom-right: clears every file's top bar & print buttons */
+  #translate-bar {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 99999;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+  }
+  #translate-bar .tb-label {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+  }
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
+
+  /* ── FULL-MODULE PRINT ──────────────────────────────────────
+     When body has class 'printing', hide everything except
+     #print-modal which contains the formatted response doc.
+     window.print() is called directly — no popup, no iframe.  */
+  @media print {
+    body.printing > * { display: none !important; }
+    body.printing #print-modal { display: block !important; }
+  }
+  #print-modal {
+    display: none;
+    font-family: Arial, sans-serif;
+    padding: 24px;
+    color: #1E293B;
+  }
+  #print-modal h1  { font-size: 18px; color: #1A3A5C; margin: 0 0 4px; }
+  #print-modal .pm-meta { font-size: 12px; color: #64748B; margin-bottom: 20px; }
+  #print-modal h2  {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #0E7C86;
+    margin: 20px 0 6px; padding-bottom: 4px;
+    border-bottom: 2px solid #0E7C86;
+  }
+  #print-modal table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+  #print-modal td {
+    padding: 10px 12px; border-bottom: 1px solid #E2EAF0;
+    font-size: 12px; vertical-align: top;
+  }
+  #print-modal .pm-qlabel {
+    font-size: 10px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px;
+    white-space: nowrap; width: 90px;
+  }
+  #print-modal .pm-answer { font-weight: 600; color: #1A3A5C; }
+  #print-modal .pm-sa {
+    background: #F8FBFF; border: 1px solid #D1E4F0; border-radius: 6px;
+    padding: 10px 14px; font-size: 12.5px; line-height: 1.6;
+    white-space: pre-wrap; margin-bottom: 8px;
+  }
+  #print-modal .pm-salabel {
+    font-size: 11px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px; margin: 10px 0 5px;
+  }
+  #print-modal .pm-footer {
+    margin-top: 28px; font-size: 10px; color: #94A3B8;
+    border-top: 1px solid #E2EAF0; padding-top: 10px;
+  }
+
+  /* ── TTS Read-Aloud Bar ─────────────────────────────── */
+  #tts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1A3A5C;
+    color: #fff;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9997;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
+  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
+  .tts-btn {
+    border: none; border-radius: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: background .15s;
+  }
+  .tts-primary { background: #0E7C86; color: #fff; }
+  .tts-primary:hover { background: #0A6870; }
+  .tts-secondary {
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 5px 10px; font-size: 13px;
+  }
+  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .tts-secondary:disabled { opacity: .35; cursor: default; }
+  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
+                   text-transform: uppercase; letter-spacing: .5px; }
+  .tts-speed-btn {
+    background: rgba(255,255,255,.1); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 4px 8px; font-size: 11px; cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: background .12s;
+  }
+  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
+  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
+  .tts-status {
+    font-size: 11px; color: #A8C8E8; margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tts-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* Reading highlight */
+  .tts-reading {
+    outline: 2.5px solid #0E7C86 !important;
+    outline-offset: 4px;
+    border-radius: 6px;
+    transition: outline .2s;
+  }
+
+
+  /* ── Module Nav Bar ─────────────────────────────── */
+  #module-nav {
+    background: #0D2438;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .mn-home {
+    font-size: 11px; font-weight: 700; color: #7FD4D8;
+    text-decoration: none; white-space: nowrap; margin-right: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mn-home:hover { color: #fff; }
+  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
+  .mn-lessons {
+    display: flex; gap: 2px; align-items: center;
+  }
+  .mn-lesson {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
+    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
+    transition: all .12s; border: 1px solid transparent;
+  }
+  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
+  .mn-lesson.mn-active {
+    color: #fff; border-color: rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+  }
+  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
+  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
+  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
+  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
+  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── TOOLBAR ── */
+  .toolbar{position:sticky;top:0;z-index:200;background:#0D2240;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.4);}
+  .tb-left{font-size:12px;color:#A8C8E8;font-weight:600;}
+  .tb-right{display:flex;gap:8px;align-items:center;}
+  .save-msg{font-size:11px;color:#7FD4D8;font-style:italic;opacity:0;transition:opacity .4s;margin-right:8px;}
+  .save-msg.show{opacity:1;}
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .btn-save{background:var(--teal);color:#fff;} .btn-save:hover{background:#0A6870;}
+  .btn-print{background:var(--red);color:#fff;} .btn-print:hover{background:#A00024;}
+  .btn-clear{background:rgba(255,255,255,.08);color:#A8C8E8;border:1px solid rgba(255,255,255,.15);} .btn-clear:hover{background:rgba(255,255,255,.18);}
+
+  
+/* ── ELL SENTENCE STARTERS ─────────────────────────────────── */
+  details.ell-starter {
+    margin-top: 6px;
+    border-radius: 7px;
+    border: 1.5px solid #C4B5FD;
+    overflow: hidden;
+    background: #F5F3FF;
+  }
+  details.ell-starter summary {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5B21B6;
+    letter-spacing: .5px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  details.ell-starter summary::-webkit-details-marker { display: none; }
+  details.ell-starter summary::before {
+    content: '▶';
+    font-size: 9px;
+    transition: transform .15s;
+  }
+  details.ell-starter[open] summary::before { transform: rotate(90deg); }
+  .ell-body {
+    padding: 10px 14px 12px;
+    font-size: 12.5px;
+    color: #3730A3;
+    line-height: 1.65;
+    border-top: 1px solid #C4B5FD;
+    background: #FAF5FF;
+  }
+  .ell-body em {
+    background: rgba(167,139,250,.2);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-style: normal;
+    font-weight: 600;
+    color: #4C1D95;
+  }
+  .ell-fill {
+    display: inline-block;
+    min-width: 120px;
+    border-bottom: 1.5px solid #7C3AED;
+    color: #7C3AED;
+    font-style: italic;
+  }
+
+  
+  /* ── Module-wide additions (L3/L4 build) ── */
+  :root { --acc: #F0A500; --acc-dark: #92400E; --acc-soft: #FFF7E6; }
+  body { padding-bottom: 64px; }
+  #translate-bar { bottom: 58px; }
+  .sec-bar.amber { background: #92400E; }
+  .sec-bar.violet { background: #5B21B6; }
+  .badge.acc { background: var(--acc-dark); }
+  .doc-header.acc { background: linear-gradient(135deg, var(--navy) 0%, var(--acc-dark) 140%); }
+  .sr-only { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  :focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+  @media print { #tts-bar, #translate-bar, #module-nav { display:none !important; } }
+
+  body { background:#0B1A2B; color:#E2ECF5; padding-top:0; }
+  .sim-head { background:linear-gradient(90deg,#0F2740,#1A3A5C); border-bottom:3px solid #F0A500; padding:16px 24px; display:flex; align-items:center; gap:14px; }
+  .sim-tag { background:#92400E; color:#fff; font-size:11px; font-weight:800; letter-spacing:1.5px; padding:4px 10px; border-radius:4px; }
+  .sim-head h1 { font-size:19px; color:#fff; }
+  .sim-head p { font-size:13px; color:#A8C8E8; }
+  .sim-head .ph-btn { margin-left:auto; background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.2); border-radius:6px; padding:7px 12px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .grid3 { display:grid; grid-template-columns:270px 1fr 270px; min-height:calc(100vh - 140px); }
+  .panel { padding:18px 18px 30px; border-right:1px solid rgba(255,255,255,.08); }
+  .panel.right { border-right:none; border-left:1px solid rgba(255,255,255,.08); }
+  .p-h { font-size:10.5px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:#7FA8C8; margin:4px 0 10px; }
+  .p-in { width:100%; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.15); color:#fff; border-radius:6px; padding:9px 10px; font-family:inherit; font-size:13px; margin-bottom:8px; }
+  .p-in::placeholder { color:#6B8AA6; }
+  .gate-pill { border:1.5px solid #F0A500; color:#FDE68A; border-radius:6px; padding:7px 10px; font-size:12px; font-weight:700; text-align:center; margin:4px 0 12px; }
+  .gate-pill.done { border-color:#16A34A; color:#86EFAC; }
+  .sc-card { background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.1); border-radius:9px; padding:12px 13px; margin-bottom:10px; cursor:pointer; transition:all .15s; position:relative; }
+  .sc-card:hover { border-color:rgba(240,165,0,.6); }
+  .sc-card.sel { border-color:#F0A500; background:rgba(240,165,0,.08); }
+  .sc-card h3 { font-size:14px; color:#fff; margin-bottom:2px; padding-right:62px; }
+  .sc-card .sub { font-size:11.5px; font-weight:600; margin-bottom:6px; }
+  .sc-card p { font-size:12px; color:#B8CFE3; line-height:1.5; }
+  .sc-card .cnt { position:absolute; top:10px; right:10px; font-size:10.5px; font-weight:700; background:rgba(255,255,255,.08); color:#A8C8E8; border-radius:10px; padding:2px 8px; }
+  .sc-card .cnt.ok { background:#14532D; color:#86EFAC; }
+  .custom-box { display:none; margin-top:8px; font-size:12px; color:#D0E8F8; }
+  .sc-card.sel .custom-box { display:block; }
+  .custom-box label { display:flex; gap:8px; align-items:center; padding:3px 0; cursor:pointer; }
+  .center { padding:18px 22px 30px; }
+  .banner { background:linear-gradient(135deg,#0E7C86,#0A5A62); border-radius:10px; padding:14px 18px; display:flex; gap:14px; align-items:center; margin-bottom:16px; }
+  .banner .num { width:36px; height:36px; border-radius:50%; background:#fff; color:#0E7C86; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .banner b { color:#fff; } .banner span { font-size:13.5px; color:#E0F5F6; line-height:1.5; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+  .stat { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:9px; padding:10px 12px; }
+  .stat .v { font-size:24px; font-weight:800; color:#fff; font-variant-numeric:tabular-nums; }
+  .stat .l { font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#7FA8C8; font-weight:700; }
+  .stat.status .v { font-size:15px; padding-top:6px; }
+  .genome { display:grid; grid-template-columns:1fr 1.4fr; gap:12px; margin-bottom:14px; }
+  .box { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:12px 14px; }
+  .box h4 { font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:#7FA8C8; margin-bottom:10px; }
+  .rep { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.06); font-size:12.5px; }
+  .rep:last-child { border-bottom:none; }
+  .chip-ok { background:#14532D; color:#86EFAC; font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px; }
+  .chip-bad { background:#7A0A1E; color:#FECDD3; font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px; }
+  .gene { display:flex; align-items:center; gap:10px; padding:6px 0; }
+  .gene .gn { width:118px; font-size:12.5px; font-weight:700; color:#fff; }
+  .gene .gn small { display:block; font-weight:500; color:#7FA8C8; font-size:10.5px; }
+  .copy { flex:1; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; transition:background .25s; }
+  .copy.ok { background:#0E7C86; color:#fff; } .copy.lost { background:#C8102E; color:#fff; } .copy.inh { background:#7A0A1E; color:#FECDD3; outline:2px dashed #FCA5A5; outline-offset:-3px; }
+  .copy.off { background:#1E3A55; color:#A8C8E8; } .copy.on { background:#F0A500; color:#3B2300; }
+  .lineage { display:flex; flex-wrap:wrap; gap:2px; min-height:24px; padding:6px; background:rgba(0,0,0,.2); border-radius:6px; }
+  .lg { width:8px; height:14px; border-radius:2px; background:#2E5578; }
+  .lg.m { background:#E2556B; } .lg.d { background:#F0A500; } .lg.a { background:#7FD4D8; } .lg.x { background:#FF1F4B; box-shadow:0 0 0 2px #fff; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; font-size:11px; color:#A8C8E8; margin-top:8px; }
+  .legend i { display:inline-block; width:9px; height:12px; border-radius:2px; margin-right:5px; vertical-align:-2px; }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
+  .cbtn { border:none; border-radius:7px; padding:10px 14px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .cbtn.pri { background:#F0A500; color:#3B2300; } .cbtn.sec { background:rgba(255,255,255,.1); color:#fff; }
+  .cbtn.teal { background:#0E7C86; color:#fff; }
+  .cbtn:disabled { opacity:.4; cursor:not-allowed; }
+  .feed { font-size:12px; line-height:1.55; max-height:150px; overflow:auto; font-family:ui-monospace,Menlo,Consolas,monospace; color:#C6D8E8; }
+  .feed div { padding:2px 0; border-bottom:1px dashed rgba(255,255,255,.06); }
+  .feed .bad { color:#FCA5A5; } .feed .good { color:#86EFAC; } .feed .drv { color:#FDE68A; font-weight:700; }
+  .outcome { display:none; border-radius:10px; padding:14px 18px; margin:12px 0; font-size:13.5px; line-height:1.6; }
+  .outcome.cancer { display:block; background:#4C0519; border:1.5px solid #FB7185; }
+  .outcome.safe { display:block; background:#052E2B; border:1.5px solid #2DD4BF; }
+  .outcome h3 { font-size:15px; color:#fff; margin-bottom:4px; }
+  table.log { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:8px; }
+  table.log th { text-align:left; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#7FA8C8; padding:7px 8px; border-bottom:1px solid rgba(255,255,255,.15); }
+  table.log td { padding:6px 8px; border-bottom:1px solid rgba(255,255,255,.06); }
+  .sum-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
+  .sum { background:rgba(255,255,255,.04); border-radius:8px; padding:10px; text-align:center; border:1px solid rgba(255,255,255,.08); }
+  .sum .t { font-size:11px; color:#A8C8E8; font-weight:700; } .sum .big { font-size:22px; font-weight:800; color:#fff; } .sum .s { font-size:11px; color:#7FA8C8; }
+  .analysis { margin-top:18px; }
+  .locked { text-align:center; padding:26px; border:1.5px dashed rgba(255,255,255,.2); border-radius:10px; color:#A8C8E8; font-size:13.5px; }
+  .aq { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:14px 16px; margin-bottom:12px; }
+  .aq .lvl { font-size:10px; font-weight:800; letter-spacing:1.5px; color:#FDE68A; margin-bottom:4px; }
+  .aq p { font-size:13.5px; color:#fff; font-weight:600; line-height:1.5; margin-bottom:8px; }
+  .aq textarea { width:100%; min-height:72px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.18); border-radius:7px; color:#fff; padding:10px; font-family:inherit; font-size:13px; }
+  .aq details.ell-starter { background:#1E1B4B; border-color:#4C1D95; } .aq .ell-body { background:#2E1065; color:#DDD6FE; } .aq details.ell-starter summary { color:#C4B5FD; }
+  .ell-fill { border-bottom-color:#A78BFA !important; }
+  .step-li { display:flex; gap:10px; align-items:center; font-size:12.5px; color:#B8CFE3; padding:6px 0; }
+  .step-li .n { width:22px; height:22px; border-radius:50%; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+  .step-li.on .n { background:#F0A500; color:#3B2300; } .step-li.done .n { background:#16A34A; color:#fff; }
+  .ref { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:9px; padding:11px 13px; margin-bottom:10px; }
+  .ref h5 { font-size:11px; letter-spacing:1.3px; text-transform:uppercase; margin-bottom:5px; }
+  .ref p { font-size:12px; color:#B8CFE3; line-height:1.5; }
+  details.rules { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:9px; padding:10px 13px; font-size:12px; color:#B8CFE3; line-height:1.55; }
+  details.rules summary { cursor:pointer; font-weight:700; color:#FDE68A; }
+  details.rules li { margin:4px 0 4px 16px; }
+  .note { font-size:11px; color:#7FA8C8; font-style:italic; margin-top:6px; }
+  @media (max-width: 1100px) { .grid3 { grid-template-columns:1fr; } .panel, .panel.right { border:none; } .stats, .sum-grid { grid-template-columns:repeat(2,1fr); } .genome { grid-template-columns:1fr; } }
+  @media print {
+    body { background:#fff; color:#000; }
+    .panel, .controls, .banner, .genome, .stats, .lineage, .legend, .sim-head .ph-btn, #feed-box { display:none !important; }
+    .grid3 { display:block; } .center { padding:0; }
+    table.log td, table.log th, .aq p, .sum .big, .sum .t, .aq textarea { color:#000 !important; }
+    .aq, .sum, .box { background:#fff !important; border-color:#999 !important; }
+    .aq textarea { border:1px solid #999; min-height:0; }
+    #print-head { display:block !important; }
+  }
+
+</style>
+</head>
+<body>
+<nav id="module-nav" aria-label="Module navigation">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons"><a href="module.html#lesson-1" class="mn-lesson mn-l1">L1</a><a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a><a href="module.html#lesson-3" class="mn-lesson mn-l3 mn-active" aria-current="page">L3</a><a href="module.html#lesson-4" class="mn-lesson mn-l4">L4</a></div>
+  <span class="mn-crumb">Lesson 3 · DNA Repair Simulator</span>
+</nav>
+
+<div class="sim-head">
+  <span class="sim-tag">IN CLASS · INTERACTIVE</span>
+  <div><h1>DNA Repair Simulator</h1><p>Lesson 3 · Run a cell lineage with broken caretaker genes and watch mutations pile up</p></div>
+  <button class="ph-btn" onclick="window.print()">🖨 Print Data &amp; Answers</button>
+</div>
+<div id="print-head" style="display:none;padding:10px 0;color:#000;">
+  <h2>DNA Repair Simulator · Data &amp; Analysis</h2><p id="print-meta"></p>
+</div>
+
+<div class="grid3">
+  <!-- LEFT -->
+  <aside class="panel" aria-label="Scenarios">
+    <div class="p-h">Your Information</div>
+    <input class="p-in" id="s-name" placeholder="Full Name" aria-label="Full name">
+    <input class="p-in" id="s-period" placeholder="Class Period (e.g. 3rd)" aria-label="Class period">
+    <div class="p-h" style="margin-top:12px;">Step 1 · Choose a scenario</div>
+    <div class="gate-pill" id="gate-pill">0 / 4 scenarios with 3+ trials</div>
+    <div class="sc-card" data-sc="healthy" role="button" tabindex="0" aria-pressed="false">
+  <span class="cnt" id="cnt-healthy">0 trials</span>
+  <h3>✅ Healthy Cell</h3><div class="sub" style="color:#86EFAC">All repair systems working</div><p>All three repair systems are working and both TP53 copies are intact. This is your control.</p></div><div class="sc-card" data-sc="mmr" role="button" tabindex="0" aria-pressed="false">
+  <span class="cnt" id="cnt-mmr">0 trials</span>
+  <h3>🔤 Mismatch Repair Broken</h3><div class="sub" style="color:#FCA5A5">MSH2 lost: caretaker failure</div><p>Both copies of MSH2 are knocked out in this cell. Copying mistakes from S phase are no longer corrected.</p></div><div class="sc-card" data-sc="brca2" role="button" tabindex="0" aria-pressed="false">
+  <span class="cnt" id="cnt-brca2">0 trials</span>
+  <h3>✂️ BRCA2 Broken</h3><div class="sub" style="color:#FDBA74">HR repair lost: caretaker failure</div><p>Homologous recombination can't fix double-strand breaks. Other repair systems still work.</p></div><div class="sc-card" data-sc="maya" role="button" tabindex="0" aria-pressed="false">
+  <span class="cnt" id="cnt-maya">0 trials</span>
+  <h3>👧 Maya's Blood Cell</h3><div class="sub" style="color:#FDE68A">Inherited TP53 hit (germline)</div><p>Every cell in Maya's body started with one broken TP53 copy. All repair systems work normally.</p></div><div class="sc-card" data-sc="custom" role="button" tabindex="0" aria-pressed="false">
+  <span class="cnt" id="cnt-custom">0 trials</span>
+  <h3>🧪 Custom Lab (optional)</h3><div class="sub" style="color:#C4B5FD">Design your own experiment</div>
+  <p>Choose which systems work and test your own prediction.</p>
+  <div class="custom-box" onclick="event.stopPropagation()">
+    <label><input type="checkbox" id="cu-mmr" checked> Mismatch repair working</label>
+    <label><input type="checkbox" id="cu-hr" checked> BRCA2 / HR repair working</label>
+    <label><input type="checkbox" id="cu-ner" checked> NER (UV) repair working</label>
+    <label><input type="checkbox" id="cu-tp53"> Inherited TP53 hit</label>
+  </div></div>
+  </aside>
+
+  <!-- CENTER -->
+  <main class="center page">
+    <div class="banner" id="banner"><div class="num">1</div><span><b>First step: choose a scenario</b> in the left panel. Then press <b>Next Division</b> to watch one generation at a time, or <b>Run to End</b> to watch up to 200 divisions.</span></div>
+
+    <div class="stats">
+      <div class="stat"><div class="v" id="v-gen">0</div><div class="l">Divisions (of 200)</div></div>
+      <div class="stat"><div class="v" id="v-mut">0</div><div class="l">Unrepaired mutations</div></div>
+      <div class="stat"><div class="v" id="v-apop">0</div><div class="l">Cells removed by p53</div></div>
+      <div class="stat status"><div class="v" id="v-status">—</div><div class="l">Cell status</div></div>
+    </div>
+
+    <div class="genome">
+      <div class="box"><h4>Caretakers · DNA repair systems</h4>
+        <div class="rep"><span>Mismatch repair <small style="color:#7FA8C8">(MSH2)</small></span><span id="r-mmr" class="chip-ok">WORKING</span></div>
+        <div class="rep"><span>Homologous recomb. <small style="color:#7FA8C8">(BRCA2)</small></span><span id="r-hr" class="chip-ok">WORKING</span></div>
+        <div class="rep"><span>Excision repair <small style="color:#7FA8C8">(XP genes)</small></span><span id="r-ner" class="chip-ok">WORKING</span></div>
+      </div>
+      <div class="box"><h4>Gatekeepers &amp; growth genes</h4>
+        <div class="gene"><div class="gn">TP53<small>tumor suppressor</small></div><div class="copy ok" id="g-t1">copy 1 ✓</div><div class="copy ok" id="g-t2">copy 2 ✓</div></div>
+        <div class="gene"><div class="gn">NRAS<small>proto-oncogene</small></div><div class="copy off" id="g-n">normal (off unless signaled)</div></div>
+        <div class="note">Cancer in this model = NRAS switched ON <b>and</b> both TP53 copies lost.</div>
+      </div>
+    </div>
+
+    <div class="box"><h4>Cell lineage · one bar per division</h4>
+      <div class="lineage" id="lineage" aria-label="Cell lineage visualization"></div>
+      <div class="legend"><span><i style="background:#2E5578"></i>no new mutation</span><span><i style="background:#E2556B"></i>passenger mutation</span><span><i style="background:#F0A500"></i>driver gene hit</span><span><i style="background:#7FD4D8"></i>damaged cell removed by p53</span><span><i style="background:#FF1F4B"></i>cancer</span></div>
+    </div>
+
+    <div class="controls">
+      <button class="cbtn sec" id="b-step" onclick="stepOnce()" disabled>▶ Next Division</button>
+      <button class="cbtn pri" id="b-run" onclick="runToEnd()" disabled>⏩ Run to End</button>
+      <button class="cbtn sec" id="b-pause" onclick="pauseRun()" disabled>⏸ Pause</button>
+      <button class="cbtn sec" id="b-reset" onclick="resetCell()" disabled>↺ New Trial</button>
+      <button class="cbtn teal" id="b-batch" onclick="runBatch(10)" disabled>🔁 Run 10 Quick Trials</button>
+    </div>
+
+    <div class="outcome" id="outcome" role="status"></div>
+
+    <div class="box" id="feed-box"><h4>Event feed</h4><div class="feed" id="feed" aria-live="polite"><div>Choose a scenario to begin.</div></div></div>
+
+    <div class="box" style="margin-top:14px;"><h4>Step 2 · Your data</h4>
+      <div class="sum-grid" id="sum-grid"></div>
+      <table class="log"><thead><tr><th>#</th><th>Scenario</th><th>Result</th><th>Divisions</th><th>Mutations</th><th>p53 removals</th></tr></thead><tbody id="log-body"><tr><td colspan="6" style="color:#7FA8C8">No trials yet.</td></tr></tbody></table>
+      <div class="note">Copy these results into the Simulator Data Log in your Lesson 3 Guided Notes.</div>
+    </div>
+
+    <div class="analysis"><div class="p-h">Step 3 · Analysis questions</div>
+      <div class="locked" id="locked">🔒 Run at least <b>3 trials in each of the 4 main scenarios</b> to unlock the analysis questions. Quick trials count.</div>
+      <div id="aq-wrap" style="display:none;"><div class="aq"><div class="lvl">ANALYZE · Question 1 of 4</div><p>Compare the <b>Healthy Cell</b> and <b>Mismatch Repair Broken</b> scenarios. Using the numbers in your summary, how much faster or more often did the MSH2-broken lineage become cancerous? Explain why, using the word <i>caretaker</i>.</p><textarea id="aq1" aria-label="ANALYZE · Question 1 of 4"></textarea><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">The MSH2-broken lineage reached cancer in about <span class="ell-fill">&nbsp;</span> divisions compared with <span class="ell-fill">&nbsp;</span>. This happened because without mismatch repair, <span class="ell-fill">&nbsp;</span>.</div></details></div><div class="aq"><div class="lvl">ANALYZE · Question 2 of 4</div><p>Compare <b>Maya's Blood Cell</b> with the <b>Healthy Cell</b>. Which transformed more often? Use the two-hit hypothesis to explain the difference. Then explain why Maya's lineage did <i>not</i> become cancerous in every trial.</p><textarea id="aq2" aria-label="ANALYZE · Question 2 of 4"></textarea><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">Maya's cells transformed <span class="ell-fill">&nbsp;</span> often because she started with <span class="ell-fill">&nbsp;</span>. Her lineage didn't always transform because her second TP53 copy <span class="ell-fill">&nbsp;</span>.</div></details></div><div class="aq"><div class="lvl">EVALUATE · Question 3 of 4</div><p>Watch the <b>Cells removed by p53</b> counter. Evaluate this claim: <i>"p53 is the most important protection against cancer in this model."</i> Use data from at least two scenarios. Bonus: test a prediction in the Custom Lab and report the result.</p><textarea id="aq3" aria-label="EVALUATE · Question 3 of 4"></textarea><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">I agree / disagree because in the <span class="ell-fill">&nbsp;</span> scenario, p53 removed <span class="ell-fill">&nbsp;</span> cells, but <span class="ell-fill">&nbsp;</span>.</div></details></div><div class="aq"><div class="lvl">EVALUATE · Question 4 of 4</div><p>Every model simplifies reality. Name <b>one</b> way this simulator is simpler than a real cell. Predict how adding that detail might change the results.</p><textarea id="aq4" aria-label="EVALUATE · Question 4 of 4"></textarea><details class="ell-starter"><summary>Sentence starters</summary><div class="ell-body">One simplification is <span class="ell-fill">&nbsp;</span>. If the model included it, I predict the results would <span class="ell-fill">&nbsp;</span> because <span class="ell-fill">&nbsp;</span>.</div></details></div></div>
+    </div>
+  </main>
+
+  <!-- RIGHT -->
+  <aside class="panel right" aria-label="Reference">
+    <div class="p-h">Simulation Steps</div>
+    <div class="step-li on" id="st1"><span class="n">1</span>Choose a scenario</div>
+    <div class="step-li" id="st2"><span class="n">2</span>Run trials and watch the lineage</div>
+    <div class="step-li" id="st3"><span class="n">3</span>Collect 3+ trials per scenario</div>
+    <div class="step-li" id="st4"><span class="n">4</span>Answer the analysis questions</div>
+    <div class="p-h" style="margin-top:16px;">Key Genes</div>
+    <div class="ref"><h5 style="color:#7FD4D8">MSH2 · Mismatch repair</h5><p>Caretaker. Proofreads newly copied DNA after S phase and fixes mismatched bases.</p></div>
+    <div class="ref"><h5 style="color:#FDBA74">BRCA2 · Homologous recombination</h5><p>Caretaker. Repairs breaks through both DNA strands using the matching chromosome.</p></div>
+    <div class="ref"><h5 style="color:#C4B5FD">XP genes · Excision repair</h5><p>Caretakers. Cut out bulky damage such as UV kinks and fill in the gap.</p></div>
+    <div class="ref"><h5 style="color:#FCA5A5">TP53 · Gatekeeper</h5><p>If damage gets past repair, p53 can trigger apoptosis. One working copy is enough to keep this protection.</p></div>
+    <div class="ref"><h5 style="color:#FDE68A">NRAS · Proto-oncogene</h5><p>One activating mutation locks it ON, sending a nonstop "divide" signal.</p></div>
+    <details class="rules"><summary>How this model works</summary>
+      <ul>
+        <li>Each division: 1 copying error, plus a 30% chance of a DNA break and a 30% chance of UV damage.</li>
+        <li>A working repair system fixes its kind of damage 95% of the time. A broken one fixes none.</li>
+        <li>If damage isn't repaired and at least one TP53 copy works, p53 removes the cell 35% of the time. A healthy sister cell carries on.</li>
+        <li>Otherwise the damage becomes a permanent mutation. 1 in 5 mutations hits a driver gene (TP53 copy 1, TP53 copy 2, or NRAS).</li>
+        <li>Real rates are far lower per division, but real tissues have billions of cells dividing for years.</li>
+      </ul>
+    </details>
+  </aside>
+</div>
+<!-- ── LANGUAGE TRANSLATION WIDGET ── -->
+<div id="translate-bar">
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
+</div>
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+}
+function triggerTranslate(lang) {
+  var combo = document.querySelector('.goog-te-combo');
+  if (!combo) { setTimeout(function() { triggerTranslate(lang); }, 600); return; }
+  combo.value = lang;
+  var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', false, true); combo.dispatchEvent(evt);
+  if (lang === '') document.getElementById('lang-select').value = '';
+}
+document.getElementById('lang-select').addEventListener('change', function() { triggerTranslate(this.value); });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>window.TTS_SECTIONS = function() { var c=document.querySelector('.center'); if(!c) return [];
+return Array.from(c.querySelectorAll('.banner, .outcome, .locked, .aq p')).filter(function(e){return e.offsetParent!==null;}); };</script>
+<!-- Read Aloud Bar -->
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon" title="Read Aloud">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&#215;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&#215;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none"><div class="tts-pulse"></div><span id="tts-status-text">Reading&hellip;</span></div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 (single instance) ═══
+   Reads the active section block by block with 500 ms pauses and
+   a teal outline on the block being read. */
+(function() {
+  var synth = window.speechSynthesis;
+  var _rate = 1.0, _playing = false, _paused = false, _sections = [], _idx = 0, _timer = null;
+
+  function extract(rootEl) {
+    var clone = rootEl.cloneNode(true);
+    ['button','select','svg','script','style','input','textarea','[aria-hidden="true"]','.slide-nav','.accum-btns']
+      .forEach(function(sel) { clone.querySelectorAll(sel).forEach(function(n) { n.remove(); }); });
+    var BLOCK = {DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,LI:1,TD:1,TH:1,TR:1,CAPTION:1,BLOCKQUOTE:1,FIGCAPTION:1,LABEL:1};
+    var parts = [];
+    (function walk(node) {
+      if (node.nodeType === 3) { var t = node.nodeValue.replace(/\s+/g,' '); if (t.trim()) parts.push(t); return; }
+      if (node.nodeType !== 1) return;
+      var before = parts.length;
+      node.childNodes.forEach(walk);
+      if (BLOCK[node.tagName] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) { if (!/[.!?:;—,]$/.test(seg)) seg += '.'; parts.push(seg + ' '); }
+      }
+    })(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  }
+  function getSections() {
+    if (window.TTS_SECTIONS) return window.TTS_SECTIONS();
+    var a = document.querySelector('.slide-card.active');
+    if (!a) return [];
+    var hdr = a.querySelector('.slide-header');
+    var body = a.querySelector('.slide-body');
+    var list = hdr ? [hdr] : [];
+    if (body) Array.from(body.children).forEach(function(el) {
+      if (el.offsetParent !== null && (el.textContent || '').trim().length > 15) list.push(el);
+    });
+    return list;
+  }
+  function clearHL() { document.querySelectorAll('.tts-reading').forEach(function(el) { el.classList.remove('tts-reading'); }); }
+  function readAt(i) {
+    clearTimeout(_timer);
+    if (i >= _sections.length) { done(); return; }
+    _idx = i; clearHL();
+    var sec = _sections[i];
+    sec.classList.add('tts-reading');
+    try { sec.scrollIntoView({ behavior:'smooth', block:'nearest' }); } catch(e) {}
+    var txt = extract(sec);
+    if (!txt) { readAt(i + 1); return; }
+    var u = new SpeechSynthesisUtterance(txt);
+    u.rate = _rate;
+    u.lang = (document.documentElement.lang || 'en');
+    u.onend = function() { if (_playing) _timer = setTimeout(function() { if (_playing && !_paused) readAt(i + 1); }, 500); };
+    u.onerror = function(e) { if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(i + 1); };
+    synth.speak(u);
+    _playing = true; _paused = false; ui();
+  }
+  function done() { _playing = false; _paused = false; clearHL(); clearTimeout(_timer); ui(); }
+  function ui() {
+    var play = document.getElementById('tts-play'), pause = document.getElementById('tts-pause'),
+        stop = document.getElementById('tts-stop'), st = document.getElementById('tts-status'),
+        stx = document.getElementById('tts-status-text');
+    if (_playing) {
+      play.innerHTML = '&#8635; Restart'; pause.disabled = false; stop.disabled = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      st.style.display = 'flex';
+      stx.textContent = _paused ? 'Paused' : 'Block ' + (_idx + 1) + ' of ' + _sections.length;
+    } else {
+      play.innerHTML = '&#9654; Play'; pause.disabled = true; stop.disabled = true; st.style.display = 'none';
+    }
+  }
+  window.ttsPlay = function() { synth.cancel(); clearTimeout(_timer); _sections = getSections(); if (_sections.length) readAt(0); };
+  window.ttsPauseResume = function() { if (!_playing) return; if (_paused) { synth.resume(); _paused = false; } else { synth.pause(); _paused = true; } ui(); };
+  window.ttsStop = function() { synth.cancel(); clearTimeout(_timer); _playing = false; _paused = false; clearHL(); ui(); };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) { b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r); });
+    if (_playing && !_paused) { var ri = _idx; synth.cancel(); clearTimeout(_timer); _timer = setTimeout(function() { readAt(ri); }, 100); }
+  };
+  document.addEventListener('visibilitychange', function() { if (document.hidden) window.ttsStop(); });
+})();
+</script>
+
+<script>
+/* ── Autosave: every input/textarea/select with an id inside .page ──
+   Stored per-browser only (localStorage). Wrapped in try/catch because
+   storage can be blocked; Print / Save PDF is always the reliable backup. */
+(function() {
+  var KEY = 'cdgw_l3_sim';
+  function fields() { return Array.from(document.querySelectorAll('.page input[id], .page textarea[id], .page select[id]')); }
+  window.saveWork = function(quiet) {
+    var data = {};
+    fields().forEach(function(el) { data[el.id] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value; });
+    try {
+      localStorage.setItem(KEY, JSON.stringify(data));
+      if (!quiet) { var m = document.getElementById('saveMsg'); if (m) { m.textContent = '✓ Saved at ' + new Date().toLocaleTimeString(); m.classList.add('show'); setTimeout(function() { m.classList.remove('show'); }, 3000); } }
+    } catch (e) { if (!quiet) alert('Could not save in this browser. Use Print / Save PDF to keep your work.'); }
+  };
+  window.clearAll = function() {
+    if (!confirm('Clear all of your answers on this page?')) return;
+    fields().forEach(function(el) { if (el.type === 'checkbox' || el.type === 'radio') el.checked = false; else el.value = ''; });
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    if (window.onClearAll) window.onClearAll();
+  };
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) { var d = JSON.parse(raw); fields().forEach(function(el) { if (!(el.id in d)) return; if (el.type === 'checkbox' || el.type === 'radio') el.checked = d[el.id]; else el.value = d[el.id]; }); }
+  } catch (e) {}
+  var t; document.addEventListener('input', function() { clearTimeout(t); t = setTimeout(function() { window.saveWork(true); }, 800); });
+  document.addEventListener('change', function() { window.saveWork(true); });
+})();
+</script>
+
+<script>
+const SCEN = {
+  healthy: { name:'Healthy Cell', mmr:1, hr:1, ner:1, tp53:[1,1] },
+  mmr:     { name:'Mismatch Repair Broken', mmr:0, hr:1, ner:1, tp53:[1,1] },
+  brca2:   { name:'BRCA2 Broken', mmr:1, hr:0, ner:1, tp53:[1,1] },
+  maya:    { name:"Maya's Blood Cell", mmr:1, hr:1, ner:1, tp53:[0,1], inherited:true }
+};
+const P = { fix:0.95, dsb:0.30, uv:0.30, apop:0.35, driver:0.20, cap:200 };
+let cur = null, st = null, timer = null, trials = [], tid = 0;
+
+function cfg(k) {
+  if (k !== 'custom') return SCEN[k];
+  const c = id => document.getElementById(id).checked;
+  const t = c('cu-tp53');
+  const parts = [];
+  if (!c('cu-mmr')) parts.push('MMR✗'); if (!c('cu-hr')) parts.push('HR✗'); if (!c('cu-ner')) parts.push('NER✗'); if (t) parts.push('TP53 inherited');
+  return { name:'Custom' + (parts.length ? ' (' + parts.join(', ') + ')' : ' (all working)'), mmr:+c('cu-mmr'), hr:+c('cu-hr'), ner:+c('cu-ner'), tp53: t ? [0,1] : [1,1], inherited:t };
+}
+function fresh(k) { const c = cfg(k); return { c, gen:0, mut:0, apop:0, t:c.tp53.slice(), nras:0, done:false, cancer:false }; }
+
+/* One division. Returns {kind, txt, cls, bar} for the visual log. */
+function divide(s) {
+  s.gen++;
+  let bar = '', notes = [];
+  const events = [['copying error', 1, s.c.mmr, 'mismatch repair'], ['DNA break', P.dsb, s.c.hr, 'BRCA2/HR'], ['UV damage', P.uv, s.c.ner, 'excision repair']];
+  for (const [kind, p, ok, sys] of events) {
+    if (Math.random() >= p) continue;
+    if (ok && Math.random() < P.fix) continue;
+    if ((s.t[0] || s.t[1]) && Math.random() < P.apop) { s.apop++; bar = bar || 'a'; notes.push(['good', kind + ' not repaired → p53 removed the cell']); continue; }
+    s.mut++;
+    if (Math.random() < P.driver) {
+      const slot = [0, 1, 2][Math.floor(Math.random() * 3)];
+      if (slot < 2 && s.t[slot]) { s.t[slot] = 0; bar = 'd'; notes.push(['drv', kind + ' → TP53 copy ' + (slot + 1) + ' LOST']); }
+      else if (slot === 2 && !s.nras) { s.nras = 1; bar = 'd'; notes.push(['drv', kind + ' → NRAS switched ON (oncogene)']); }
+      else { if (bar !== 'd') bar = 'm'; notes.push(['bad', kind + ' → hit a gene that was already broken']); }
+    } else { if (!bar || bar === 'a') bar = 'm'; notes.push(['bad', kind + ' not repaired → passenger mutation']); }
+  }
+  if (s.nras && !s.t[0] && !s.t[1]) { s.cancer = true; s.done = true; bar = 'x'; notes.push(['drv', '⚠ NRAS ON + no working TP53 → CANCER CELL']); }
+  else if (s.gen >= P.cap) s.done = true;
+  return { bar, notes };
+}
+
+function el(id) { return document.getElementById(id); }
+function render() {
+  el('v-gen').textContent = st.gen; el('v-mut').textContent = st.mut; el('v-apop').textContent = st.apop;
+  el('v-status').innerHTML = st.cancer ? '<span style="color:#FB7185">CANCER</span>' : (st.done ? '<span style="color:#2DD4BF">No cancer</span>' : 'Dividing…');
+  const rep = (id, ok) => { const e = el(id); e.className = ok ? 'chip-ok' : 'chip-bad'; e.textContent = ok ? 'WORKING' : 'BROKEN'; };
+  rep('r-mmr', st.c.mmr); rep('r-hr', st.c.hr); rep('r-ner', st.c.ner);
+  [0, 1].forEach(i => {
+    const e = el('g-t' + (i + 1));
+    const inh = st.c.inherited && i === 0;
+    e.className = 'copy ' + (st.t[i] ? 'ok' : (inh ? 'inh' : 'lost'));
+    e.textContent = 'copy ' + (i + 1) + (st.t[i] ? ' ✓' : (inh ? ' ✗ inherited' : ' ✗ lost'));
+  });
+  const n = el('g-n'); n.className = 'copy ' + (st.nras ? 'on' : 'off'); n.textContent = st.nras ? 'ON: stuck "divide" signal' : 'normal (off unless signaled)';
+}
+function feed(notes) {
+  const f = el('feed');
+  if (!notes.length) return;
+  notes.forEach(([c, t]) => { const d = document.createElement('div'); d.className = c; d.textContent = 'Div ' + st.gen + ': ' + t; f.prepend(d); });
+  while (f.children.length > 60) f.lastChild.remove();
+}
+function addBar(b) { const d = document.createElement('span'); d.className = 'lg' + (b ? ' ' + b : ''); el('lineage').appendChild(d); }
+
+function selectSc(k) {
+  pauseRun(); cur = k;
+  document.querySelectorAll('.sc-card').forEach(c => { const on = c.dataset.sc === k; c.classList.toggle('sel', on); c.setAttribute('aria-pressed', on); });
+  ['b-step', 'b-run', 'b-reset', 'b-batch'].forEach(id => el(id).disabled = false);
+  el('banner').innerHTML = '<div class="num">2</div><span><b>' + cfg(k).name + ' loaded.</b> Press <b>Next Division</b> to step, <b>Run to End</b> to watch, or <b>Run 10 Quick Trials</b> to collect data fast.</span>';
+  setStep(2); resetCell();
+}
+function resetCell() {
+  pauseRun(); st = fresh(cur); el('lineage').innerHTML = ''; el('feed').innerHTML = '<div>New trial: ' + st.c.name + '</div>';
+  el('outcome').className = 'outcome'; el('b-step').disabled = false; el('b-run').disabled = false; render();
+}
+function stepOnce() {
+  if (!st || st.done) return;
+  const r = divide(st); addBar(r.bar); feed(r.notes); render();
+  if (st.done) finish();
+}
+function runToEnd() {
+  if (!st || st.done) return;
+  el('b-pause').disabled = false; el('b-run').disabled = true; el('b-step').disabled = true;
+  timer = setInterval(() => { stepOnce(); if (st.done) pauseRun(); }, 35);
+}
+function pauseRun() { clearInterval(timer); timer = null; if (el('b-pause')) el('b-pause').disabled = true; if (st && !st.done) { el('b-run').disabled = false; el('b-step').disabled = false; } }
+function finish() {
+  el('b-step').disabled = true; el('b-run').disabled = true; pauseRun();
+  const o = el('outcome');
+  if (st.cancer) { o.className = 'outcome cancer'; o.innerHTML = '<h3>⚠ Cancer cell after ' + st.gen + ' divisions</h3>This lineage switched NRAS on and lost both TP53 copies. It collected ' + st.mut + ' unrepaired mutations along the way, and p53 removed ' + st.apop + ' damaged cells before it was lost.'; }
+  else { o.className = 'outcome safe'; o.innerHTML = '<h3>✓ No cancer in 200 divisions</h3>Repair and p53 kept this lineage under control. It collected ' + st.mut + ' unrepaired mutations, and p53 removed ' + st.apop + ' damaged cells.'; }
+  logTrial(st);
+}
+function logTrial(s) {
+  trials.push({ id: ++tid, k: cur, name: s.c.name, cancer: s.cancer, gen: s.gen, mut: s.mut, apop: s.apop });
+  updateData();
+}
+function runBatch(n) {
+  pauseRun();
+  for (let i = 0; i < n; i++) { const s = fresh(cur); while (!s.done) divide(s); trials.push({ id: ++tid, k: cur, name: s.c.name, cancer: s.cancer, gen: s.gen, mut: s.mut, apop: s.apop }); }
+  updateData();
+  el('feed').insertAdjacentHTML('afterbegin', '<div class="good">Ran ' + n + ' quick trials of ' + cfg(cur).name + '. See Your Data below.</div>');
+}
+function median(a) { if (!a.length) return null; const b = a.slice().sort((x, y) => x - y); const m = Math.floor(b.length / 2); return b.length % 2 ? b[m] : Math.round((b[m - 1] + b[m]) / 2); }
+function updateData() {
+  const body = el('log-body');
+  body.innerHTML = trials.slice(-40).reverse().map(t => '<tr><td>' + t.id + '</td><td>' + t.name + '</td><td style="color:' + (t.cancer ? '#FB7185' : '#2DD4BF') + ';font-weight:700">' + (t.cancer ? 'Cancer' : 'No cancer') + '</td><td>' + (t.cancer ? t.gen : '200+') + '</td><td>' + t.mut + '</td><td>' + t.apop + '</td></tr>').join('') +
+    (trials.length > 40 ? '<tr><td colspan="6" style="color:#7FA8C8">Showing the 40 most recent of ' + trials.length + ' trials. Summary cards include all trials.</td></tr>' : '');
+  el('sum-grid').innerHTML = Object.keys(SCEN).map(k => {
+    const ts = trials.filter(t => t.k === k), c = ts.filter(t => t.cancer);
+    const pct = ts.length ? Math.round(100 * c.length / ts.length) + '%' : '—';
+    const md = median(c.map(t => t.gen));
+    return '<div class="sum"><div class="t">' + SCEN[k].name + '</div><div class="big">' + pct + '</div><div class="s">became cancer · ' + ts.length + ' trials</div><div class="s">median ' + (md ? md + ' divisions' : '—') + '</div></div>';
+  }).join('');
+  let ready = 0;
+  Object.keys(SCEN).concat(['custom']).forEach(k => {
+    const n = trials.filter(t => t.k === k).length, c = el('cnt-' + k);
+    c.textContent = n + (n === 1 ? ' trial' : ' trials'); c.classList.toggle('ok', k !== 'custom' && n >= 3);
+    if (k !== 'custom' && n >= 3) ready++;
+  });
+  const g = el('gate-pill'); g.textContent = ready + ' / 4 scenarios with 3+ trials' + (ready === 4 ? ' ✓' : ''); g.classList.toggle('done', ready === 4);
+  if (trials.length) setStep(3);
+  if (ready === 4) { el('locked').style.display = 'none'; el('aq-wrap').style.display = 'block'; setStep(4); }
+}
+function setStep(n) { for (let i = 1; i <= 4; i++) { const s = el('st' + i); s.className = 'step-li' + (i < n ? ' done' : (i === n ? ' on' : '')); } }
+
+document.querySelectorAll('.sc-card').forEach(c => {
+  c.addEventListener('click', () => selectSc(c.dataset.sc));
+  c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSc(c.dataset.sc); } });
+});
+['cu-mmr', 'cu-hr', 'cu-ner', 'cu-tp53'].forEach(id => el(id).addEventListener('change', () => { if (cur === 'custom') resetCell(); }));
+window.addEventListener('beforeprint', () => { el('print-meta').textContent = 'Name: ' + (el('s-name').value || '—') + ' · Period: ' + (el('s-period').value || '—') + ' · ' + new Date().toLocaleString(); });
+updateData();
+</script>
+
+</body>
+</html>

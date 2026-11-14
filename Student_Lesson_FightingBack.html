@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fighting Back: Lab to Patient | Lesson 4 | LaShaudra Cox Learning Design</title>
+<style>
+  :root {
+    --navy: #1A3A5C;
+    --teal: #0E7C86;
+    --red: #C8102E;
+    --gold: #F0A500;
+    --light: #EEF5FB;
+    --white: #FFFFFF;
+    --gray: #64748B;
+    --dark: #1E293B;
+    --green: #16A34A;
+    --purple: #7C3AED;
+    --muted: #94A3B8;
+    --border: #D1E4F0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #F0F4F8; color: var(--dark); min-height: 100vh; 
+  padding-top: 38px;}
+
+  /* TOP NAV */
+  .topbar {
+    background: var(--navy);
+    color: white;
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .org-badge { background: #C8102E; color: white; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 2px 7px; border-radius: 3px; margin-right: 6px; }
+  .topbar-title { font-size: 15px; font-weight: 600; color: #A8C8E8; }
+  .progress-wrap { display: flex; align-items: center; gap: 10px; }
+  .progress-label { font-size: 12px; color: #7FA8C8; }
+  .progress-bar-outer { width: 160px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
+  .progress-bar-inner { height: 100%; background: var(--teal); border-radius: 3px; transition: width 0.4s ease; }
+
+  /* LAYOUT */
+  .layout { display: flex; min-height: calc(100vh - 56px); }
+  .sidebar {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .sidebar-heading {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--muted);
+    padding: 0 20px 12px;
+    text-transform: uppercase;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+    font-size: 13.5px;
+    color: var(--gray);
+  }
+  .nav-item:hover { background: var(--light); }
+  .nav-item.active { background: #EEF5FF; border-left-color: var(--teal); color: var(--navy); font-weight: 600; }
+  .nav-item.completed { color: var(--green); }
+  .nav-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .nav-dot.active { background: var(--teal); color: white; }
+  .nav-dot.completed { background: var(--green); color: white; }
+  .nav-dot.locked { background: #E2E8F0; color: var(--muted); }
+  .nav-dot.default { background: var(--light); color: var(--gray); border: 1px solid var(--border); }
+
+  /* MAIN CONTENT */
+  .main { flex: 1; max-width: 860px; padding: 36px 40px; }
+
+  /* SLIDE CARD */
+  .slide-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow: hidden;
+    margin-bottom: 28px;
+    display: none;
+  }
+  .slide-card.active { display: block; }
+  .slide-header {
+    background: var(--navy);
+    padding: 24px 32px 20px;
+    color: white;
+    position: relative;
+  }
+  .slide-header.teal { background: var(--teal); }
+  .slide-header.red { background: var(--red); }
+  .slide-header.gold { background: var(--gold); }
+  .slide-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .slide-header h1 { font-size: 24px; font-weight: 700; line-height: 1.2; }
+  .slide-header p { margin-top: 6px; font-size: 14px; color: rgba(255,255,255,0.75); }
+  .slide-body { padding: 32px; }
+
+  /* CONTENT ELEMENTS */
+  .concept-intro {
+    background: var(--light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .concept-intro strong { color: var(--teal); }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .info-card {
+    background: var(--light);
+    border-radius: 8px;
+    padding: 18px;
+    border-top: 3px solid var(--teal);
+  }
+  .info-card.red-top { border-top-color: var(--red); }
+  .info-card.gold-top { border-top-color: var(--gold); }
+  .info-card.green-top { border-top-color: var(--green); }
+  .info-card h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--teal); margin-bottom: 8px; }
+  .info-card.red-top h3 { color: var(--red); }
+  .info-card.gold-top h3 { color: var(--gold); }
+  .info-card.green-top h3 { color: var(--green); }
+  .info-card p, .info-card ul { font-size: 13.5px; line-height: 1.6; color: var(--dark); }
+  .info-card ul { padding-left: 16px; }
+  .info-card ul li { margin-bottom: 4px; }
+
+  /* CELL CYCLE DIAGRAM */
+  .cell-cycle-container { text-align: center; padding: 20px 0; }
+  .cell-cycle-svg { max-width: 420px; margin: 0 auto; display: block; }
+
+  /* CHECKPOINT TABLE */
+  .checkpoint-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+  .checkpoint-table th {
+    background: var(--navy);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .checkpoint-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .checkpoint-table tr:nth-child(even) td { background: #F8FBFF; }
+  .checkpoint-table tr:last-child td { border-bottom: none; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .badge-teal { background: #D0F0F2; color: #0E7C86; }
+  .badge-red { background: #FFE4E8; color: var(--red); }
+  .badge-gold { background: #FFF3CD; color: #B07500; }
+
+  /* DEFINITION BOX */
+  .definition {
+    background: #FFF9E6;
+    border: 1px solid #F0D878;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .definition strong { color: #8A6000; }
+
+  /* CALLOUT */
+  .callout {
+    background: #FFF0F2;
+    border-left: 4px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .callout.teal { background: #EDF9FA; border-left-color: var(--teal); }
+  .callout.gold { background: #FFF8EC; border-left-color: var(--gold); }
+  .callout strong { color: var(--red); }
+  .callout.teal strong { color: var(--teal); }
+  .callout.gold strong { color: #8A6000; }
+
+  /* ANALOGY BOX */
+  .analogy {
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin: 22px 0;
+  }
+  .analogy-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7FA8C8; font-weight: 700; margin-bottom: 8px; }
+  .analogy p { font-size: 15px; line-height: 1.7; color: #D0E8F8; }
+  .analogy em { color: #7FD4D8; font-style: normal; font-weight: 600; }
+
+  /* ── CAR ANALOGY ILLUSTRATION ──────────────────────────────────
+     Visual reinforcement of the oncogene/tumor-suppressor analogy.
+     Added in response to Tawfik feedback: "Consider having an image
+     to reinforce your analogy." An SVG gas pedal and brake pedal
+     provide a concrete dual-coding anchor for the abstract concept
+     (Mayer's multimedia principle). */
+  .analogy-illustration {
+    display: flex;
+    gap: 18px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.12);
+    flex-wrap: wrap;
+  }
+  .pedal-panel {
+    flex: 1;
+    min-width: 220px;
+    background: rgba(255,255,255,.04);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .pedal-panel.accelerator { border: 1px solid rgba(240,165,0,.4); }
+  .pedal-panel.brake { border: 1px solid rgba(200,16,46,.4); }
+  .pedal-svg { flex-shrink: 0; }
+  .pedal-info { flex: 1; }
+  .pedal-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .pedal-panel.accelerator .pedal-label { color: var(--gold); }
+  .pedal-panel.brake .pedal-label { color: #FF8090; }
+  .pedal-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .pedal-caption {
+    font-size: 12px;
+    color: #B8CFE3;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  /* ── PRE-TRAINING BLOCK ────────────────────────────────────────
+     "What you will learn" block at the top of the lesson. Directly
+     applies Mayer's pre-training principle — introducing names and
+     characteristics of key concepts before they appear in context
+     reduces intrinsic cognitive load during the main instruction. */
+  .pre-training {
+    background: linear-gradient(135deg, #F8FAFD 0%, #EEF5FB 100%);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .pre-training::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--gold) 100%);
+    border-radius: 4px 0 0 4px;
+  }
+  .pre-training .pt-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .pre-training .pt-label .pt-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .pre-training h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .pre-training .pt-intro {
+    font-size: 13.5px;
+    color: var(--gray);
+    margin-bottom: 14px;
+    line-height: 1.55;
+  }
+  .pre-training .pt-goals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .pre-training .pt-goal {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1px solid var(--border);
+  }
+  .pre-training .pt-goal-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .pre-training .pt-goal-text {
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .pre-training .pt-goal-text strong { color: var(--navy); }
+
+  /* ── WHY THIS MATTERS (REFLECTION) ─────────────────────────────
+     Placed after each Check Your Understanding. Keller's ARCS
+     Satisfaction — closes the loop between effort and meaning by
+     connecting the just-learned concept to a real-world purpose. */
+  .why-matters {
+    background: #FFFAF0;
+    border: 1.5px solid #F5D9A8;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0 6px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .why-matters .wm-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .why-matters .wm-body { flex: 1; }
+  .why-matters .wm-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #B87800;
+    margin-bottom: 4px;
+  }
+  .why-matters p {
+    font-size: 13.5px;
+    color: var(--dark);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .why-matters p strong { color: #8A6000; }
+
+  /* QUIZ */
+  .quiz-section {
+    background: #F0F9FF;
+    border: 2px solid var(--teal);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 28px;
+  }
+  .quiz-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--teal); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+  }
+  .quiz-q { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 14px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+    cursor: pointer; transition: all 0.15s; font-size: 14px; line-height: 1.4;
+  }
+  .quiz-opt:hover { border-color: var(--teal); background: #EDF9FA; }
+  .quiz-opt.correct { border-color: var(--green); background: #F0FFF4; }
+  .quiz-opt.incorrect { border-color: var(--red); background: #FFF0F2; }
+  .quiz-opt.disabled { pointer-events: none; opacity: 0.7; }
+  .opt-letter {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--light); font-size: 11px; font-weight: 700;
+    color: var(--gray); flex-shrink: 0;
+  }
+  .quiz-feedback {
+    margin-top: 14px; padding: 12px 16px; border-radius: 8px;
+    font-size: 14px; line-height: 1.55; display: none;
+  }
+  .quiz-feedback.correct { background: #F0FFF4; border: 1px solid var(--green); color: #15803D; }
+  .quiz-feedback.incorrect { background: #FFF0F2; border: 1px solid var(--red); color: var(--red); }
+
+  /* SHORT ANSWER */
+  .short-answer-wrap { margin-top: 20px; }
+  .short-answer-label { font-size: 13px; font-weight: 600; color: var(--gray); margin-bottom: 8px; display: block; }
+  .short-answer-q { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  textarea.short-ans {
+    width: 100%; min-height: 90px; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px; font-size: 14px; resize: vertical;
+    font-family: inherit; color: var(--dark);
+    transition: border 0.15s;
+  }
+  textarea.short-ans:focus { outline: none; border-color: var(--teal); }
+  .char-count { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; }
+
+  /* NAVIGATION */
+  .slide-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 32px;
+    border-top: 1px solid var(--border);
+    background: #FAFCFF;
+  }
+  .nav-btn {
+    padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn.primary { background: var(--teal); color: white; }
+  .nav-btn.primary:hover { background: #0A6870; }
+  .nav-btn.secondary { background: var(--light); color: var(--navy); border: 1px solid var(--border); }
+  .nav-btn.secondary:hover { background: #DDE9F5; }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .slide-counter { font-size: 13px; color: var(--muted); }
+
+  /* EXIT TICKET */
+  .exit-ticket-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #0E3A6B 100%);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 20px; color: white;
+  }
+  .exit-ticket-header h3 { font-size: 18px; font-weight: 700; }
+  .exit-ticket-header p { font-size: 13px; color: #A8C8E8; margin-top: 4px; }
+  .exit-q { background: white; border-radius: 8px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
+  .exit-q-num { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .exit-q p { font-size: 14.5px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  /* STUDENT IDENTITY FIELDS */
+  .student-id-row {
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px;
+    background: white; border-radius: 8px; border: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+  .sid-field { display: flex; flex-direction: column; gap: 5px; }
+  .sid-field.wide { flex: 2; min-width: 180px; }
+  .sid-field.narrow { flex: 1; min-width: 100px; }
+  .sid-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .sid-input {
+    padding: 9px 12px; border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 14px; font-family: inherit;
+    color: var(--dark); outline: none; transition: border-color .15s;
+  }
+  .sid-input:focus { border-color: var(--teal); }
+  .sid-input.error { border-color: var(--red); }
+
+  /* SUBMIT / LOADING */
+  .submit-btn {
+    width: 100%; padding: 14px; background: var(--red); color: white;
+    border: none; border-radius: 8px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s, opacity .15s; margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .submit-btn:hover:not(:disabled) { background: #A00024; }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .spinner {
+    width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.35);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin .7s linear infinite; display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  .submit-btn.loading .spinner { display: inline-block; }
+  .submit-btn.loading .btn-label { display: none; }
+
+  /* ERROR BANNER */
+  .submit-error {
+    display: none; background: #FDE8EC; border: 1.5px solid var(--red);
+    border-radius: 8px; padding: 12px 16px; margin-top: 10px;
+    font-size: 13px; color: #8B0014; line-height: 1.5;
+  }
+
+  /* COMPLETION — updated to show what was sent */
+  .submitted-summary {
+    background: var(--light); border-radius: 8px; padding: 14px 18px;
+    margin: 16px auto 0; max-width: 500px; text-align: left;
+    border: 1px solid var(--border); font-size: 13px;
+  }
+  .submitted-summary .ss-row { display: flex; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .submitted-summary .ss-row:last-child { border-bottom: none; }
+  .submitted-summary .ss-label { font-weight: 700; color: var(--navy); min-width: 80px; }
+  .submitted-summary .ss-val { color: var(--gray); flex: 1; }
+  .ss-correct { color: #16A34A; font-weight: 700; }
+  .ss-incorrect { color: var(--red); font-weight: 700; }
+
+  /* COMPLETE STATE */
+  .completion-screen {
+    text-align: center; padding: 48px 32px;
+  }
+  .completion-icon { font-size: 64px; margin-bottom: 16px; }
+  .completion-screen h2 { font-size: 26px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .completion-screen p { font-size: 15px; color: var(--gray); max-width: 440px; margin: 0 auto 24px; line-height: 1.6; }
+  .remind-box {
+    background: var(--light); border-radius: 10px; padding: 20px 24px;
+    max-width: 500px; margin: 0 auto; text-align: left;
+  }
+  .remind-box h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .remind-box ul { list-style: none; padding: 0; }
+  .remind-box ul li { font-size: 14px; color: var(--dark); padding: 5px 0; display: flex; gap: 8px; }
+
+  /* KEY VOCAB GLOSSARY */
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .vocab-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .vocab-term { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 4px; }
+  .vocab-def { font-size: 12.5px; color: var(--gray); line-height: 1.5; }
+
+  @media (max-width: 700px) {
+    .sidebar { display: none; }
+    .main { padding: 20px 16px; }
+    .info-grid, .vocab-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── LANGUAGE TRANSLATION WIDGET ───────────────────────────── */
+  /* Fixed bottom-right: clears every file's top bar & print buttons */
+  #translate-bar {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 99999;
+    background: rgba(26,58,92,.97);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+  }
+  #translate-bar .tb-label {
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  /* Native <select> — scrolls automatically on every OS/browser */
+  #lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,.08);
+    color: #D0E8F8;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    min-width: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8C8E8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+  }
+  #lang-select:focus { border-color: rgba(14,124,134,.8); }
+  #lang-select option { background: #1A3A5C; color: #D0E8F8; }
+  /* Suppress the Google Translate top banner (it shifts page content down) */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none !important; }
+
+  /* ── FULL-MODULE PRINT ──────────────────────────────────────
+     When body has class 'printing', hide everything except
+     #print-modal which contains the formatted response doc.
+     window.print() is called directly — no popup, no iframe.  */
+  @media print {
+    body.printing > * { display: none !important; }
+    body.printing #print-modal { display: block !important; }
+  }
+  #print-modal {
+    display: none;
+    font-family: Arial, sans-serif;
+    padding: 24px;
+    color: #1E293B;
+  }
+  #print-modal h1  { font-size: 18px; color: #1A3A5C; margin: 0 0 4px; }
+  #print-modal .pm-meta { font-size: 12px; color: #64748B; margin-bottom: 20px; }
+  #print-modal h2  {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #0E7C86;
+    margin: 20px 0 6px; padding-bottom: 4px;
+    border-bottom: 2px solid #0E7C86;
+  }
+  #print-modal table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+  #print-modal td {
+    padding: 10px 12px; border-bottom: 1px solid #E2EAF0;
+    font-size: 12px; vertical-align: top;
+  }
+  #print-modal .pm-qlabel {
+    font-size: 10px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px;
+    white-space: nowrap; width: 90px;
+  }
+  #print-modal .pm-answer { font-weight: 600; color: #1A3A5C; }
+  #print-modal .pm-sa {
+    background: #F8FBFF; border: 1px solid #D1E4F0; border-radius: 6px;
+    padding: 10px 14px; font-size: 12.5px; line-height: 1.6;
+    white-space: pre-wrap; margin-bottom: 8px;
+  }
+  #print-modal .pm-salabel {
+    font-size: 11px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: .8px; margin: 10px 0 5px;
+  }
+  #print-modal .pm-footer {
+    margin-top: 28px; font-size: 10px; color: #94A3B8;
+    border-top: 1px solid #E2EAF0; padding-top: 10px;
+  }
+
+  /* ── TTS Read-Aloud Bar ─────────────────────────────── */
+  #tts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1A3A5C;
+    color: #fff;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9997;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+  .tts-icon { font-size: 17px; flex-shrink: 0; line-height: 1; user-select: none; }
+  .tts-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+                text-transform: uppercase; color: #7FD4D8; flex-shrink: 0; }
+  .tts-btn {
+    border: none; border-radius: 5px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    transition: background .15s;
+  }
+  .tts-primary { background: #0E7C86; color: #fff; }
+  .tts-primary:hover { background: #0A6870; }
+  .tts-secondary {
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 5px 10px; font-size: 13px;
+  }
+  .tts-secondary:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .tts-secondary:disabled { opacity: .35; cursor: default; }
+  .tts-divider { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+  .tts-speed-row { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tts-speed-lbl { font-size: 10px; color: #A8C8E8; font-weight: 600;
+                   text-transform: uppercase; letter-spacing: .5px; }
+  .tts-speed-btn {
+    background: rgba(255,255,255,.1); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 4px 8px; font-size: 11px; cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: background .12s;
+  }
+  .tts-speed-btn:hover { background: rgba(255,255,255,.2); }
+  .tts-speed-btn.tts-speed-active { background: #0E7C86; font-weight: 700; }
+  .tts-status {
+    font-size: 11px; color: #A8C8E8; margin-left: auto;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tts-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #16A34A; animation: ttsPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ttsPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* Reading highlight */
+  .tts-reading {
+    outline: 2.5px solid #0E7C86 !important;
+    outline-offset: 4px;
+    border-radius: 6px;
+    transition: outline .2s;
+  }
+
+
+  /* ── Module Nav Bar ─────────────────────────────── */
+  #module-nav {
+    background: #0D2438;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .mn-home {
+    font-size: 11px; font-weight: 700; color: #7FD4D8;
+    text-decoration: none; white-space: nowrap; margin-right: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mn-home:hover { color: #fff; }
+  .mn-sep { color: rgba(255,255,255,.25); font-size: 12px; margin: 0 8px; }
+  .mn-lessons {
+    display: flex; gap: 2px; align-items: center;
+  }
+  .mn-lesson {
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px;
+    text-decoration: none; color: rgba(255,255,255,.5); white-space: nowrap;
+    transition: all .12s; border: 1px solid transparent;
+  }
+  .mn-lesson:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.08); }
+  .mn-lesson.mn-active {
+    color: #fff; border-color: rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+  }
+  .mn-lesson.mn-l1.mn-active { color: #7FD4D8; border-color: #0E7C86; }
+  .mn-lesson.mn-l2.mn-active { color: #FCA5A5; border-color: #C8102E; }
+  .mn-lesson.mn-l3.mn-active { color: #FDE68A; border-color: #F0A500; }
+  .mn-lesson.mn-l4.mn-active { color: #C4B5FD; border-color: #7C3AED; }
+  .mn-crumb { color: rgba(255,255,255,.4); font-size: 11px; margin-left: auto;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ══ LESSON 3 ADDITIONS ══════════════════════════════════════
+     Lesson 3 accent = amber/gold (matches module nav L3 color).
+     Dark amber (#92400E) is used for header fills so white text
+     meets WCAG AA contrast; bright gold stays an accent color.  */
+  :root { --l3: #F0A500; --l3-dark: #92400E; --l3-soft: #FFF7E6; }
+  .slide-header.amber { background: var(--l3-dark); }
+  .org-badge.l3 { background: var(--l3-dark); }
+  .progress-bar-inner.l3 { background: var(--l3); }
+
+  /* Bridge from previous lesson */
+  .bridge {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 22px; font-size: 13.5px; line-height: 1.6;
+  }
+  .bridge .br-tag {
+    flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #fff; background: var(--red);
+    padding: 3px 8px; border-radius: 4px; margin-top: 2px;
+  }
+
+  /* Maya hook card */
+  .maya-hook {
+    background: linear-gradient(135deg, #1A3A5C 0%, #24507A 100%);
+    color: #fff; border-radius: 12px; padding: 22px 24px; margin: 0 0 24px;
+    display: flex; gap: 18px; align-items: flex-start;
+  }
+  .maya-hook .mh-avatar {
+    width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+    background: var(--l3); color: var(--navy); font-size: 22px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .maya-hook .mh-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #FDE68A; font-weight: 700; margin-bottom: 6px; }
+  .maya-hook blockquote { font-size: 16px; line-height: 1.6; font-style: italic; color: #E6F0FA; margin-bottom: 8px; }
+  .maya-hook p { font-size: 13.5px; line-height: 1.6; color: #B8CFE3; }
+  .maya-hook strong { color: #FDE68A; }
+
+  /* Mechanism table */
+  .mech-table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 13.5px; }
+  .mech-table caption { text-align: left; font-size: 12px; color: var(--gray); padding-bottom: 8px; }
+  .mech-table th { background: var(--l3-dark); color: #fff; padding: 10px 12px; text-align: left; font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase; }
+  .mech-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  .mech-table tr:nth-child(even) td { background: #FFFBF2; }
+  .mech-table .mech-name { font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .mech-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+
+  /* Figures */
+  figure.lesson-fig { margin: 22px 0; background: #FAFCFF; border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  figure.lesson-fig svg { width: 100%; height: auto; display: block; }
+  figure.lesson-fig figcaption { font-size: 12.5px; color: var(--gray); margin-top: 10px; line-height: 1.5; }
+  figure.lesson-fig figcaption strong { color: var(--navy); }
+
+  /* Evidence data table */
+  .evidence-table { width: 100%; border-collapse: collapse; margin: 16px 0 6px; font-size: 13.5px; }
+  .evidence-table th, .evidence-table td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+  .evidence-table thead th { background: var(--navy); color: #fff; font-size: 11.5px; text-transform: uppercase; letter-spacing: .5px; }
+  .evidence-table tbody th { background: #F1F5F9; font-weight: 700; color: var(--navy); width: 32%; }
+  .evidence-note { font-size: 11.5px; color: var(--muted); margin-bottom: 18px; }
+
+  /* Paradox / think-about-it box */
+  .paradox {
+    border: 2px solid var(--l3); background: var(--l3-soft); border-radius: 10px;
+    padding: 18px 20px; margin: 22px 0;
+  }
+  .paradox .px-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--l3-dark); margin-bottom: 6px; }
+  .paradox .px-q { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.45; }
+  .reveal-btn {
+    background: var(--l3-dark); color: #fff; border: none; border-radius: 6px;
+    padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .reveal-btn:hover { background: #7A3509; }
+  .reveal-body { display: none; margin-top: 12px; font-size: 14px; line-height: 1.65; }
+  .reveal-body.open { display: block; }
+
+  /* Gatekeeper vs caretaker */
+  .role-pill { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; }
+  .role-pill.gate { background: #FFE4E8; color: var(--red); }
+  .role-pill.care { background: #D0F0F2; color: var(--teal); }
+
+  /* Mutation accumulation mini-model */
+  .accum {
+    background: #0F2740; color: #fff; border-radius: 12px; padding: 20px 22px; margin: 22px 0;
+  }
+  .accum-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .accum-title { font-size: 15px; font-weight: 700; }
+  .accum-sub { font-size: 12px; color: #A8C8E8; margin-bottom: 14px; line-height: 1.5; }
+  .accum-btns { display: flex; gap: 8px; }
+  .accum-btn { border: none; border-radius: 6px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .accum-btn.go { background: var(--l3); color: #3B2300; }
+  .accum-btn.reset { background: rgba(255,255,255,.12); color: #fff; }
+  .lane { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+  .lane-top { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 8px; }
+  .lane-name { font-weight: 700; }
+  .lane-name.ok { color: #7FD4D8; }
+  .lane-name.bad { color: #FCA5A5; }
+  .lane-count { color: #D0E8F8; }
+  .lane-cells { display: flex; flex-wrap: wrap; gap: 4px; min-height: 18px; }
+  .lc { width: 14px; height: 14px; border-radius: 50%; background: #3B6A94; }
+  .lc.mut { background: var(--red); box-shadow: 0 0 0 2px rgba(200,16,46,.35); }
+  .lane-warn { font-size: 12px; color: #FDE68A; margin-top: 8px; display: none; }
+  .accum-foot { font-size: 11px; color: #7FA8C8; margin-top: 8px; font-style: italic; }
+
+  /* Genetic report */
+  .report {
+    border: 1.5px solid #CBD5E1; border-radius: 10px; overflow: hidden; margin: 20px 0;
+    font-size: 13.5px; background: #fff;
+  }
+  .report-head { background: #F1F5F9; padding: 14px 18px; border-bottom: 1px solid #CBD5E1; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .report-head .rh-title { font-weight: 800; color: var(--navy); font-size: 14px; letter-spacing: .3px; }
+  .report-head .rh-meta { font-size: 12px; color: var(--gray); }
+  .report table { width: 100%; border-collapse: collapse; }
+  .report th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: var(--gray); padding: 10px 14px; border-bottom: 1px solid var(--border); background: #FAFCFF; }
+  .report td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .report tr:last-child td { border-bottom: none; }
+  .det { font-weight: 700; color: var(--red); }
+  .nodet { font-weight: 600; color: var(--green); }
+  .report-foot { padding: 12px 18px; background: #FFFBF2; border-top: 1px solid #F5D9A8; font-size: 12.5px; line-height: 1.55; }
+
+  /* CER builder */
+  .cer { display: grid; gap: 12px; margin-top: 16px; }
+  .cer-row { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .cer-row label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .cer-row .cer-hint { font-size: 12.5px; color: var(--gray); margin-bottom: 8px; line-height: 1.5; }
+  .cer-row.c label { color: var(--navy); }
+  .cer-row.e label { color: var(--teal); }
+  .cer-row.r label { color: var(--l3-dark); }
+  .cer-row textarea { width: 100%; min-height: 64px; border: 1.5px solid var(--border); border-radius: 7px; padding: 10px; font-size: 14px; font-family: inherit; resize: vertical; }
+  .cer-row textarea:focus { outline: none; border-color: var(--teal); }
+  .cer-check { margin-top: 10px; }
+  .model-answer { display: none; margin-top: 14px; background: #F0FFF4; border: 1px solid var(--green); border-radius: 8px; padding: 14px 16px; font-size: 13.5px; line-height: 1.65; }
+  .model-answer.open { display: block; }
+  .model-answer h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #15803D; margin-bottom: 6px; }
+
+  /* Starter chips (ELL support) */
+  .starters { font-size: 12.5px; color: var(--gray); margin-top: 6px; }
+  .starters code { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 1px 6px; font-family: inherit; color: var(--dark); }
+
+  @media (max-width: 700px) {
+    .maya-hook { flex-direction: column; }
+    .mech-table .mech-name { white-space: normal; }
+  }
+  /* Keep fixed bars from covering content */
+  body { padding-bottom: 64px; }
+  #translate-bar { bottom: 58px; }
+
+  /* Lesson 4 accent: violet (matches module nav L4). Overrides the L3 amber variables. */
+  :root { --l3: #7C3AED; --l3-dark: #5B21B6; --l3-soft: #F5F3FF; }
+  .maya-hook .mh-label, .maya-hook strong { color: #DDD6FE; }
+  .maya-hook .mh-avatar { background: #C4B5FD; }
+  .reveal-btn:hover { background: #4C1D95; }
+
+
+  /* Publisher identity: LaShaudra Cox Learning Design (deep purple + gold) */
+  .org-badge, .org-badge.l3 { background:#4C1D95 !important; color:#F5C542 !important; letter-spacing:1.5px; }
+</style>
+<script src="cdgw-config.js"></script>
+</head>
+<body>
+<nav id="module-nav" aria-label="Module navigation">
+  <a href="module.html" class="mn-home">🔬 <span>Cell Division</span></a>
+  <span class="mn-sep">›</span>
+  <div class="mn-lessons">
+    <a href="module.html#lesson-1" class="mn-lesson mn-l1">L1</a>
+    <a href="module.html#lesson-2" class="mn-lesson mn-l2">L2</a>
+    <a href="module.html#lesson-3" class="mn-lesson mn-l3">L3</a>
+    <a href="module.html#lesson-4" class="mn-lesson mn-l4 mn-active" aria-current="page">L4</a>
+  </div>
+  <span class="mn-crumb">Lesson 4 · Digital Lesson</span>
+</nav>
+
+<div class="topbar">
+  <div class="topbar-left"><span class="org-badge l3">LC</span><span class="topbar-title">Fighting Back: Lab to Patient</span></div>
+  <div class="progress-wrap"><span class="progress-label" id="prog-label">1 of 6</span><div class="progress-bar-outer"><div class="progress-bar-inner l3" id="prog-bar" style="width:17%"></div></div></div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Lesson sections">
+    <div class="sidebar-heading">Lesson 4 Contents</div>
+    <div class="nav-item active" onclick="goSlide(0)"><div class="nav-dot active">1</div>Chemo &amp; the Cell Cycle</div>
+    <div class="nav-item" onclick="goSlide(1)"><div class="nav-dot default">2</div>Targeted Therapy</div>
+    <div class="nav-item" onclick="goSlide(2)"><div class="nav-dot default">3</div>CAR-T Immunotherapy</div>
+    <div class="nav-item" onclick="goSlide(3)"><div class="nav-dot default">4</div>Genomic Data Portals</div>
+    <div class="nav-item" onclick="goSlide(4)"><div class="nav-dot default">5</div>From Lab to Patient</div>
+    <div class="nav-item" onclick="goSlide(5)"><div class="nav-dot locked">✓</div>Exit Ticket</div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ══ SLIDE 0: CHEMO ══ -->
+    <div class="slide-card active" id="slide-0">
+      <div class="slide-header amber">
+        <div class="slide-tag">Section 1 of 6 · Lesson 4</div>
+        <h1>Chemotherapy: Attacking the Cell Cycle</h1>
+        <p>The oldest cancer drugs target the same cell cycle phases you learned in Lesson 1.</p>
+      </div>
+      <div class="slide-body">
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 20px;align-items:flex-end;">
+          <div style="flex:2;min-width:160px;"><label for="student-name" class="sid-label" style="display:block;margin-bottom:5px;">Full Name <span style="color:var(--red)">*</span></label><input id="student-name" class="sid-input" style="width:100%;" type="text" placeholder="First Last" autocomplete="name" required></div>
+          <div style="flex:1;min-width:100px;"><label for="student-period" class="sid-label" style="display:block;margin-bottom:5px;">Class Period</label><input id="student-period" class="sid-input" style="width:100%;" type="text" placeholder="e.g. 3rd" autocomplete="off"></div>
+        </div>
+
+        <div class="bridge"><span class="br-tag" style="background:#92400E;">From L3</span><span>In Lesson 3 you found that Maya was born with one broken TP53 copy, lost the second in one blood cell, and gained an activated NRAS gene. Her leukemia cells have <strong>no working p53 brake</strong> and a <strong>stuck accelerator</strong>. Now the question is: <strong>how do doctors fight back?</strong></span></div>
+
+        <div class="maya-hook">
+          <div class="mh-avatar" aria-hidden="true">M</div>
+          <div>
+            <div class="mh-label">Maya's update</div>
+            <blockquote>"The chemo worked at first. My doctors said the leukemia was gone. Then my checkup eight months later found it had come back."</blockquote>
+            <p>When leukemia returns after treatment, it's called a <strong>relapse</strong>. By the end of this lesson you'll understand <strong>why</strong> Maya's leukemia came back, and what newer treatments could do that chemotherapy couldn't. In class, you'll design her next treatment plan.</p>
+          </div>
+        </div>
+
+        <div class="pre-training">
+          <div class="pt-label"><span class="pt-icon">📍</span>Start Here</div>
+          <h3>What you'll learn in this lesson</h3>
+          <p class="pt-intro">You've spent three lessons learning what goes wrong in a cancer cell. This lesson flips the question: how does each kind of treatment use that biology against the cancer?</p>
+          <div class="pt-goals">
+            <div class="pt-goal"><span class="pt-goal-num">1</span><span class="pt-goal-text">How <strong>chemotherapy</strong> targets cell cycle phases, and why it can fail</span></div>
+            <div class="pt-goal"><span class="pt-goal-num">2</span><span class="pt-goal-text">How <strong>targeted therapy</strong> blocks a specific broken protein</span></div>
+            <div class="pt-goal"><span class="pt-goal-num">3</span><span class="pt-goal-text">How <strong>CAR-T immunotherapy</strong> turns a patient's immune cells into cancer hunters</span></div>
+            <div class="pt-goal"><span class="pt-goal-num">4</span><span class="pt-goal-text">How researchers use shared <strong>genomic data</strong> and <strong>clinical trials</strong> to move discoveries from lab to patient</span></div>
+          </div>
+        </div>
+
+        <div class="concept-intro">
+          Cancer cells divide constantly, so many chemotherapy drugs attack <strong>dividing cells</strong>. Each drug strikes at a different point in the cell cycle. Doctors combine several drugs so that cells caught in any phase get hit.
+        </div>
+
+        <table class="mech-table">
+          <caption>Table 4.1. Three chemotherapy strategies used in childhood ALL</caption>
+          <thead><tr><th scope="col">Drug (example)</th><th scope="col">Where it strikes</th><th scope="col">How it works</th></tr></thead>
+          <tbody>
+            <tr><td class="mech-name"><span class="mech-icon" aria-hidden="true">🧬</span>Methotrexate</td><td><span class="badge badge-teal">S phase</span></td><td>Blocks the cell from making the building blocks of DNA, so it can't copy its chromosomes.</td></tr>
+            <tr><td class="mech-name"><span class="mech-icon" aria-hidden="true">🕸️</span>Vincristine</td><td><span class="badge badge-red">M phase</span></td><td>Stops spindle fibers from forming, so chromosomes can't be pulled apart. This is the spindle checkpoint from Lesson 1.</td></tr>
+            <tr><td class="mech-name"><span class="mech-icon" aria-hidden="true">💊</span>Steroids (dexamethasone)</td><td><span class="badge badge-gold">Apoptosis</span></td><td>Signal immature white blood cells (lymphoblasts) to self-destruct.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="info-grid">
+          <div class="info-card gold-top">
+            <h3>Why chemo has side effects</h3>
+            <p>Chemo can't tell cancer cells from <strong>healthy cells that also divide fast</strong>: hair follicles, the lining of the gut, and bone marrow. That's why patients may lose hair, feel sick, and get infections more easily.</p>
+          </div>
+          <div class="info-card red-top">
+            <h3>Why chemo can stop working</h3>
+            <p>Many chemo drugs work by <strong>damaging DNA or jamming division</strong>, which signals <strong>p53</strong> to trigger apoptosis. A cell with <strong>no working p53</strong> may ignore that signal and survive. The survivors keep dividing, and the leukemia comes back.</p>
+          </div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Analyze</div>
+          <div class="quiz-q">Maya's leukemia cells have lost both TP53 copies. Which explanation best fits why her leukemia relapsed after chemotherapy?</div>
+          <div class="quiz-options" id="q0-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'A','C')"><div class="opt-letter">A</div><div>Chemotherapy only works on solid tumors, not leukemia</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'B','C')"><div class="opt-letter">B</div><div>The NRAS mutation makes cells divide too fast for chemo to reach them</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'C','C')"><div class="opt-letter">C</div><div>Many chemo drugs rely on p53 to trigger apoptosis in damaged cells, so leukemia cells without p53 can survive and regrow</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q0',this,'D','C')"><div class="opt-letter">D</div><div>Her germline TP53 mutation was passed to the chemotherapy drug</div></div>
+          </div>
+          <div class="quiz-feedback" id="q0-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters"><div class="wm-icon" aria-hidden="true">💡</div><div class="wm-body"><div class="wm-label">Why this matters</div>
+          <p>Combination chemotherapy is why most children with ALL survive today. But it's a <strong>one-size-fits-all</strong> attack on dividing cells. For children like Maya, whose cancer has a mutation that blunts chemo, doctors need treatments aimed at <strong>what's specifically broken</strong>, or treatments that don't depend on p53 at all.</p></div></div>
+      </div>
+      <div class="slide-nav"><button class="nav-btn secondary" disabled>← Back</button><span class="slide-counter">Section 1 of 6</span><button class="nav-btn primary" onclick="goSlide(1)">Next →</button></div>
+    </div>
+
+    <!-- ══ SLIDE 1: TARGETED ══ -->
+    <div class="slide-card" id="slide-1">
+      <div class="slide-header">
+        <div class="slide-tag">Section 2 of 6</div>
+        <h1>Targeted Therapy: Fit the Broken Part</h1>
+        <p>If you know exactly which protein is broken, can you design a drug that blocks only that protein?</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro">A <strong>targeted therapy</strong> is a drug designed to fit one specific abnormal protein, like a key made for one lock. Because healthy cells don't have that abnormal protein, targeted drugs can hit cancer cells harder while sparing more healthy cells.</div>
+
+        <div class="analogy">
+          <div class="analogy-label">🏎 Back to the car analogy</div>
+          <p>An oncogene is a <em>stuck gas pedal</em>. A targeted drug is like <em>cutting the fuel line to that one pedal</em>: the car stops accelerating, and the rest of the engine keeps working. A missing brake (a lost tumor suppressor) is harder. You can't block a part that isn't there.</p>
+        </div>
+
+        <div class="callout gold"><strong>A success story: BCR-ABL1.</strong> Remember the Philadelphia chromosome from Lesson 3? The fused BCR-ABL1 protein is a signaling enzyme stuck in the "on" position. Drugs called <strong>tyrosine kinase inhibitors</strong> (such as imatinib) fit into the enzyme's active site and switch it off. When imatinib was added to chemotherapy for children with Philadelphia-chromosome ALL, survival for that group nearly doubled.</div>
+
+        <h3 style="font-size:16px;color:var(--navy);margin:22px 0 12px;">Which mutations make good drug targets?</h3>
+        <div class="info-grid">
+          <div class="info-card green-top"><h3>✓ Easier: gain of function</h3><p>An <strong>overactive</strong> protein (oncogene) can be blocked. Examples: BCR-ABL1 (very successful), and RAS. RAS was called "undruggable" for decades until the first drug against one form of KRAS was approved in 2021, for lung cancer.</p></div>
+          <div class="info-card red-top"><h3>✗ Harder: loss of function</h3><p>A <strong>missing</strong> protein (lost tumor suppressor) can't be blocked, because there's nothing to block. Restoring a missing brake like p53 is an active research area, but there is no approved drug that does it yet.</p></div>
+        </div>
+
+        <div class="callout teal"><strong>What about Maya's NRAS?</strong> There is no approved drug that blocks NRAS directly yet. Researchers are testing drugs that block the <strong>next step</strong> in the RAS signaling chain (called <strong>MEK inhibitors</strong>) in clinical trials for children with RAS-mutant leukemia.</div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Evaluate</div>
+          <div class="quiz-q">A research team can afford to develop only one new targeted drug. Based on the biology, which mutation is the <em>most promising</em> target?</div>
+          <div class="quiz-options" id="q1-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'A','B')"><div class="opt-letter">A</div><div>Deletion of both TP53 copies</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'B','B')"><div class="opt-letter">B</div><div>A fusion gene that makes an always-on signaling enzyme</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'C','B')"><div class="opt-letter">C</div><div>Deletion of both RB1 copies</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q1',this,'D','B')"><div class="opt-letter">D</div><div>A broken mismatch repair gene</div></div>
+          </div>
+          <div class="quiz-feedback" id="q1-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters"><div class="wm-icon" aria-hidden="true">💡</div><div class="wm-body"><div class="wm-label">Why this matters</div>
+          <p>This is why <strong>tumor–normal sequencing</strong> matters for treatment, not just for families. A child's genetic report tells the care team whether there is a targetable "stuck pedal." It's the same report you read in Lesson 3, now used to choose medicine.</p></div></div>
+      </div>
+      <div class="slide-nav"><button class="nav-btn secondary" onclick="goSlide(0)">← Back</button><span class="slide-counter">Section 2 of 6</span><button class="nav-btn primary" onclick="goSlide(2)">Next →</button></div>
+    </div>
+
+    <!-- ══ SLIDE 2: CAR-T ══ -->
+    <div class="slide-card" id="slide-2">
+      <div class="slide-header teal">
+        <div class="slide-tag">Section 3 of 6</div>
+        <h1>CAR-T: Training the Immune System to Hunt</h1>
+        <p>What if the treatment didn't need the cancer cell's p53 at all?</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro"><strong>T cells</strong> are immune cells that destroy infected or abnormal cells. Leukemia cells often slip past them. <strong>CAR-T therapy</strong> gives a patient's own T cells a new receptor (a <strong>chimeric antigen receptor</strong>, or CAR) that locks onto a marker on the leukemia cells.</div>
+
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="f43t f43d">
+            <title id="f43t">Figure 4.3: The five steps of CAR-T cell therapy</title>
+            <desc id="f43d">Step 1: collect T cells from the patient's blood. Step 2: in the lab, add a gene that codes for a CAR receptor targeting CD19. Step 3: grow millions of CAR-T cells. Step 4: infuse them back into the patient. Step 5: CAR-T cells bind CD19 on leukemia cells and destroy them.</desc>
+            <defs><marker id="a43" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748B"/></marker></defs>
+            <g font-family="Segoe UI, Arial" font-size="11.5" fill="#1E293B" text-anchor="middle">
+              <g transform="translate(76,80)"><circle r="40" fill="#EEF5FB" stroke="#1A3A5C" stroke-width="2"/><text y="-4" font-size="22">🩸</text><text y="18" font-size="10.5" fill="#1A3A5C" font-weight="700">T cells</text>
+                <text y="62" font-weight="700">1 · Collect</text><text y="77" fill="#64748B">from Maya's blood</text></g>
+              <line x1="120" y1="80" x2="180" y2="80" stroke="#64748B" stroke-width="2" marker-end="url(#a43)"/>
+              <g transform="translate(228,80)"><circle r="40" fill="#F5F3FF" stroke="#5B21B6" stroke-width="2"/><text y="-2" font-size="22">🧬</text><text y="18" font-size="10.5" fill="#5B21B6" font-weight="700">CAR gene</text>
+                <text y="62" font-weight="700">2 · Engineer</text><text y="77" fill="#64748B">CAR targets CD19</text></g>
+              <line x1="272" y1="80" x2="332" y2="80" stroke="#64748B" stroke-width="2" marker-end="url(#a43)"/>
+              <g transform="translate(380,80)"><circle r="40" fill="#F0FFF4" stroke="#16A34A" stroke-width="2"/>
+                <g fill="#16A34A"><circle cx="-14" cy="-10" r="7"/><circle cx="2" cy="-14" r="7"/><circle cx="16" cy="-4" r="7"/><circle cx="-6" cy="6" r="7"/><circle cx="10" cy="12" r="7"/></g>
+                <text y="62" font-weight="700">3 · Multiply</text><text y="77" fill="#64748B">millions of copies</text></g>
+              <line x1="424" y1="80" x2="484" y2="80" stroke="#64748B" stroke-width="2" marker-end="url(#a43)"/>
+              <g transform="translate(532,80)"><circle r="40" fill="#EDF9FA" stroke="#0E7C86" stroke-width="2"/><text y="-2" font-size="22">💉</text><text y="18" font-size="10.5" fill="#0E7C86" font-weight="700">IV infusion</text>
+                <text y="62" font-weight="700">4 · Infuse</text><text y="77" fill="#64748B">back into Maya</text></g>
+              <line x1="576" y1="80" x2="636" y2="80" stroke="#64748B" stroke-width="2" marker-end="url(#a43)"/>
+              <g transform="translate(686,80)"><circle r="40" fill="#FFF0F2" stroke="#C8102E" stroke-width="2"/>
+                <circle cx="-12" cy="0" r="12" fill="#16A34A"/><circle cx="14" cy="0" r="14" fill="#C8102E"/><text x="14" y="4" font-size="9" fill="#fff" font-weight="700">CD19</text><line x1="0" y1="0" x2="2" y2="0" stroke="#fff" stroke-width="3"/>
+                <text y="62" font-weight="700">5 · Seek &amp; destroy</text><text y="77" fill="#64748B">binds CD19, kills cell</text></g>
+            </g>
+          </svg>
+          <figcaption><strong>Figure 4.3.</strong> The five steps of CAR-T therapy. CD19 is a protein on the surface of B cells. Because Maya has <em>B-cell</em> ALL, her leukemia cells carry CD19.</figcaption>
+        </figure>
+
+        <div class="callout teal"><strong>Why CAR-T can work when chemo fails:</strong> A CAR-T cell kills by releasing proteins that directly switch on the leukemia cell's self-destruct machinery. It doesn't need the leukemia cell to sense damage and activate p53. So a leukemia cell with <strong>no working TP53</strong> can still be destroyed, as long as it carries CD19.</div>
+
+        <div class="info-grid">
+          <div class="info-card green-top"><h3>The evidence</h3><p>In a global clinical trial, <strong>61 of 75</strong> children and young adults (81%) whose B-cell ALL had relapsed or resisted treatment went into remission after a single CAR-T infusion. In 2017 this became the <strong>first CAR-T therapy approved</strong> by the U.S. FDA.</p></div>
+          <div class="info-card red-top"><h3>The trade-offs</h3><ul><li><strong>Cytokine release syndrome:</strong> a strong immune reaction (fever, low blood pressure) in about 3 of 4 trial patients. Usually treatable.</li><li>CAR-T cells also destroy <strong>healthy B cells</strong>, so patients may need antibody infusions to help fight infections.</li></ul></div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Analyze</div>
+          <div class="quiz-q">Why might CD19 CAR-T therapy work for Maya even though her leukemia survived chemotherapy?</div>
+          <div class="quiz-options" id="q2-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'A','D')"><div class="opt-letter">A</div><div>CAR-T cells repair the TP53 gene inside the leukemia cells</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'B','D')"><div class="opt-letter">B</div><div>CAR-T cells block the NRAS protein</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'C','D')"><div class="opt-letter">C</div><div>CAR-T cells only attack cells in S phase</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q2',this,'D','D')"><div class="opt-letter">D</div><div>CAR-T cells recognize CD19 on the cell surface and trigger death directly, without needing the leukemia cell's p53</div></div>
+          </div>
+          <div class="quiz-feedback" id="q2-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters"><div class="wm-icon" aria-hidden="true">💡</div><div class="wm-body"><div class="wm-label">Why this matters</div>
+          <p>CAR-T is a direct application of what you know: <strong>which cell type</strong> the cancer came from (B cell) decides which surface marker can be targeted, and <strong>which gene is broken</strong> (TP53) helps explain why older treatments failed. One question to carry into class: would CD19 CAR-T work for every kind of leukemia?</p></div></div>
+      </div>
+      <div class="slide-nav"><button class="nav-btn secondary" onclick="goSlide(1)">← Back</button><span class="slide-counter">Section 3 of 6</span><button class="nav-btn primary" onclick="goSlide(3)">Next →</button></div>
+    </div>
+
+    <!-- ══ SLIDE 3: PORTALS ══ -->
+    <div class="slide-card" id="slide-3">
+      <div class="slide-header red">
+        <div class="slide-tag">Section 4 of 6</div>
+        <h1>Genomic Data Portals: Thousands of Patients, One Question</h1>
+        <p>One child's genetic report helps one child. Thousands of reports, shared safely, can help every child.</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro">After tumor–normal sequencing, many families agree to let their child's genetic data be shared for research, with names and identifying details removed. Researchers combine these data into <strong>genomic data portals</strong>: searchable databases that anyone can use to ask questions across thousands of patients.</div>
+
+        <div class="info-grid" style="grid-template-columns:1fr 1fr 1fr;">
+          <div class="info-card"><h3>🔍 Find patterns</h3><p>Which genes are mutated most often in each type of childhood cancer?</p></div>
+          <div class="info-card gold-top"><h3>🎯 Find targets</h3><p>How many patients have a mutation that an existing drug can block?</p></div>
+          <div class="info-card green-top"><h3>👥 Find "patients like mine"</h3><p>How did other children with the same mutations respond to treatment?</p></div>
+        </div>
+
+        <div class="callout"><strong>Privacy and consent:</strong> Data in research portals are <strong>de-identified</strong> (no names, addresses, or birthdays) and shared only with family permission. Access to the most detailed data usually requires researchers to apply and agree to strict rules.</div>
+
+        <div class="callout gold"><strong>Real portals you can look at:</strong> The U.S. National Cancer Institute's <strong>Childhood Cancer Data Initiative</strong> and the open-source <strong>cBioPortal</strong> both host pediatric cancer genomic data. Several children's cancer research hospitals also run their own public data portals.</div>
+
+        <div class="callout teal" style="display:flex;gap:16px;align-items:center;">
+          <div style="font-size:34px;" aria-hidden="true">🖥️</div>
+          <div><strong>Your turn: explore a teaching portal.</strong> Before class, open the <a href="Genomic_Data_Portal_Lesson4.html" style="color:var(--teal);font-weight:700;">Genomic Data Portal Explorer</a>. It is a simplified portal with 600 simulated patient records modeled on published childhood leukemia data. Answer its five investigation questions. You'll need them for the treatment design challenge.</div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Analyze</div>
+          <div class="quiz-q">A portal shows that a gene is mutated in 60% of children with T-cell ALL but in almost no children with B-cell ALL. What is the most reasonable conclusion?</div>
+          <div class="quiz-options" id="q3-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'A','A')"><div class="opt-letter">A</div><div>The gene may be an important driver specifically in T-cell ALL, so it's worth testing as a treatment target for that subtype</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'B','A')"><div class="opt-letter">B</div><div>The gene causes all leukemia</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'C','A')"><div class="opt-letter">C</div><div>Every child with that mutation will develop T-cell ALL</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q3',this,'D','A')"><div class="opt-letter">D</div><div>The portal data must be wrong because B-cell ALL is more common</div></div>
+          </div>
+          <div class="quiz-feedback" id="q3-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters"><div class="wm-icon" aria-hidden="true">💡</div><div class="wm-body"><div class="wm-label">Why this matters</div>
+          <p>Childhood cancers are rare, so no single hospital sees enough children with one subtype to find patterns alone. Shared data is how researchers learned which genes drive each subtype, including the TP53 pattern in Maya's subtype you read about in Lesson 3.</p></div></div>
+      </div>
+      <div class="slide-nav"><button class="nav-btn secondary" onclick="goSlide(2)">← Back</button><span class="slide-counter">Section 4 of 6</span><button class="nav-btn primary" onclick="goSlide(4)">Next →</button></div>
+    </div>
+
+    <!-- ══ SLIDE 4: LAB TO PATIENT ══ -->
+    <div class="slide-card" id="slide-4">
+      <div class="slide-header amber">
+        <div class="slide-tag">Section 5 of 6</div>
+        <h1>From Lab to Patient</h1>
+        <p>How a discovery becomes a treatment, and how that journey changed childhood leukemia.</p>
+      </div>
+      <div class="slide-body">
+        <div class="concept-intro">A new treatment idea starts in the lab and must pass through <strong>clinical trials</strong> (carefully monitored studies with patients who volunteer) before doctors can use it routinely.</div>
+
+        <table class="mech-table">
+          <caption>Table 4.2. The path from discovery to treatment</caption>
+          <thead><tr><th scope="col">Stage</th><th scope="col">Main question</th></tr></thead>
+          <tbody>
+            <tr><td class="mech-name">🔬 Lab research</td><td>Does the idea work in cells and animal models? (For example, do CAR-T cells kill CD19 cells in a dish?)</td></tr>
+            <tr><td class="mech-name">Phase 1 trial</td><td>Is it safe? What dose is right? (Small group of patients)</td></tr>
+            <tr><td class="mech-name">Phase 2 trial</td><td>Does it work for this cancer? (A larger group, like the 75-patient CAR-T trial)</td></tr>
+            <tr><td class="mech-name">Phase 3 trial</td><td>Is it better than the current best treatment? (Often hundreds of patients, compared head to head)</td></tr>
+            <tr><td class="mech-name">✅ Approval</td><td>Regulators review all the evidence. Doctors keep tracking long-term effects.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout gold"><strong>What clinical trials did for childhood ALL:</strong> In the early 1960s, childhood ALL was almost always fatal. By the late 1960s, about 1 in 10 children were cured. In a study of more than 21,000 children treated in clinical trials, <strong>5-year survival rose from 83.7% (1990–1994) to 90.4% (2000–2005)</strong>. Most of that gain came from using existing drugs more wisely, one trial at a time.</div>
+
+        <div class="callout teal" style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="font-size:34px;" aria-hidden="true">🎥</div>
+          <div><strong>Researcher spotlight (about 1 minute).</strong> Watch a cancer researcher explain how CAR-T cell therapy works: <a id="video-link" href="https://www.mskcc.org/videos/car-cell-therapy-how-it-works" target="_blank" rel="noopener" style="color:var(--teal);font-weight:700;">CAR T Cell Therapy: What It Is and How It Works ↗</a>
+            <br><span style="font-size:12.5px;color:var(--gray);">Your teacher may assign a different researcher video. As you watch, listen for one thing that surprised you.</span>
+            <div style="margin-top:10px;"><label for="video-notes" class="sid-label" style="display:block;margin-bottom:4px;">One thing that surprised me</label><textarea id="video-notes" class="short-ans" style="min-height:60px;" placeholder="I was surprised that…"></textarea></div></div>
+        </div>
+
+        <div class="quiz-section">
+          <div class="quiz-title"><span>📝</span> Check Your Understanding · Evaluate</div>
+          <div class="quiz-q">A new drug works very well in leukemia cells grown in a lab dish. A news headline says: "Cure for childhood leukemia found!" Evaluate the headline.</div>
+          <div class="quiz-options" id="q4-opts">
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'A','C')"><div class="opt-letter">A</div><div>Accurate. If it works in cells, it will work in patients</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'B','C')"><div class="opt-letter">B</div><div>Accurate, as long as the lab was at a hospital</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'C','C')"><div class="opt-letter">C</div><div>Overstated. The drug still has to prove it is safe and effective in patients through Phase 1, 2, and 3 trials</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('q4',this,'D','C')"><div class="opt-letter">D</div><div>Overstated, because leukemia can never be cured</div></div>
+          </div>
+          <div class="quiz-feedback" id="q4-fb" role="status"></div>
+        </div>
+
+        <div class="why-matters"><div class="wm-icon" aria-hidden="true">💡</div><div class="wm-body"><div class="wm-label">Why this matters</div>
+          <p>Every number in this module, from the 81% CAR-T remission rate to the 90% survival rate, exists because children and families chose to join clinical trials. In class you'll put all four lessons together and design a treatment strategy the way a care team would.</p></div></div>
+      </div>
+      <div class="slide-nav"><button class="nav-btn secondary" onclick="goSlide(3)">← Back</button><span class="slide-counter">Section 5 of 6</span><button class="nav-btn primary" onclick="goSlide(5)">Proceed to Exit Ticket →</button></div>
+    </div>
+
+    <!-- ══ SLIDE 5: EXIT ══ -->
+    <div class="slide-card" id="slide-5">
+      <div class="slide-header" style="background:#0D2D47;">
+        <div class="slide-tag">Section 6 of 6 · Exit Ticket</div>
+        <h1>Exit Ticket — Before Class Tomorrow</h1>
+        <p>Your teacher will use these responses to form treatment design teams.</p>
+      </div>
+      <div class="slide-body">
+        <div class="exit-ticket-header"><h3>🎯 Complete before your next class session</h3><p>No trick questions. Tell your teacher what you actually think.</p></div>
+
+        <div class="exit-q">
+          <div class="exit-q-num">Multiple Choice · Question 1 of 3</div>
+          <p>Vincristine stops spindle fibers from forming. In which phase of the cell cycle would a cancer cell get stuck?</p>
+          <div class="quiz-options" id="qet1-opts">
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'A','D')"><div class="opt-letter">A</div><div>G1</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'B','D')"><div class="opt-letter">B</div><div>S</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'C','D')"><div class="opt-letter">C</div><div>G2</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet1',this,'D','D')"><div class="opt-letter">D</div><div>M (mitosis)</div></div>
+          </div>
+          <div class="quiz-feedback" id="qet1-fb" role="status"></div>
+        </div>
+
+        <div class="exit-q" style="margin-top:16px;">
+          <div class="exit-q-num">Multiple Choice · Question 2 of 3</div>
+          <p>A child has leukemia driven by the BCR-ABL1 fusion protein. Which treatment is designed for that specific mutation?</p>
+          <div class="quiz-options" id="qet2-opts">
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'A','B')"><div class="opt-letter">A</div><div>Radiation therapy</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'B','B')"><div class="opt-letter">B</div><div>A tyrosine kinase inhibitor such as imatinib</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'C','B')"><div class="opt-letter">C</div><div>Genetic counseling for the family</div></div>
+            <div class="quiz-opt" onclick="checkQuiz('qet2',this,'D','B')"><div class="opt-letter">D</div><div>A drug that restores p53</div></div>
+          </div>
+          <div class="quiz-feedback" id="qet2-fb" role="status"></div>
+        </div>
+
+        <div class="exit-q" style="margin-top:16px;" id="short-ans-section">
+          <div class="exit-q-num">Short Answer · Question 3 of 3</div>
+          <p class="short-answer-q">Maya's leukemia relapsed after chemotherapy. Name <strong>one</strong> treatment you would consider next and explain <strong>how it works at the cellular level</strong>. Why might it succeed where chemo didn't?</p>
+          <textarea class="short-ans" id="short-ans-input" placeholder="Think about: p53, CD19, B cells, how the treatment kills the cell…" oninput="updateCharCount()"></textarea>
+          <div class="char-count" id="char-count">0 / minimum 60 characters recommended</div>
+        </div>
+
+        <button class="submit-btn" id="submit-btn" onclick="submitExitTicket()"><span class="spinner" id="submit-spinner"></span><span class="btn-label">Submit Exit Ticket →</span></button>
+        <div class="submit-error" id="submit-error" role="alert">Could not reach the server. Please check your connection and try again, or copy the text below and email it to your teacher:
+          <pre id="fallback-text" style="margin-top:8px;font-size:12px;white-space:pre-wrap;background:#fff;padding:8px;border-radius:5px;border:1px solid #fca5a5;"></pre></div>
+
+        <div id="completion-wrap" style="display:none;">
+          <div class="completion-screen">
+            <div class="completion-icon">✅</div>
+            <h2>Exit Ticket Submitted!</h2>
+            <p>Your teacher will review these before class. Here is exactly what was sent.</p>
+            <div class="submitted-summary" id="submitted-summary"></div>
+            <div class="remind-box" style="margin-top:20px;">
+              <h4>📋 What to Expect in Class</h4>
+              <ul>
+                <li>🧩 <span>Work in a team with the <strong>Treatment Strategy Designer</strong> to build plans for three patients</span></li>
+                <li>🖥️ <span>Bring your answers from the <strong>Genomic Data Portal Explorer</strong></span></li>
+                <li>📄 <span>Then write your <strong>Research Brief</strong> for a brand-new patient: your module capstone</span></li>
+              </ul>
+            </div>
+            <button onclick="printFullModule()" class="nav-btn" style="margin:20px auto 0;background:var(--navy);color:#fff;">🖨 Print / Save All Responses</button>
+          </div>
+        </div>
+      </div>
+      <div class="slide-nav"><button class="nav-btn secondary" onclick="goSlide(4)">← Back</button><span class="slide-counter">Section 6 of 6</span><button class="nav-btn primary" disabled id="done-btn" onclick="showWhatNext()">Done ✓</button></div>
+    </div>
+
+  </main>
+</div>
+
+<div id="whats-next-overlay" role="dialog" aria-modal="true" aria-labelledby="wn-title" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(13,27,42,.88);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:36px 40px;max-width:520px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.4);text-align:center;animation:slideUp .35s ease-out;">
+    <div style="font-size:48px;margin-bottom:12px;">🎉</div>
+    <h2 id="wn-title" style="font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px;">Lesson 4 Digital Lesson Complete!</h2>
+    <p style="font-size:14px;color:var(--gray);line-height:1.65;margin-bottom:28px;">Where would you like to go next?</p>
+    <a href="Genomic_Data_Portal_Lesson4.html" style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--l3-dark);color:#fff;border-radius:10px;text-decoration:none;margin-bottom:12px;">
+      <div style="width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🖥️</div>
+      <div style="text-align:left;"><div style="font-size:14px;font-weight:700;margin-bottom:2px;">Next: Genomic Data Portal Explorer</div><div style="font-size:12px;opacity:.85;">Investigate 600 simulated patient records before class</div></div>
+      <div style="margin-left:auto;font-size:18px;opacity:.8;">→</div></a>
+    <a href="module.html#lesson-4" style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--light);color:var(--navy);border:1.5px solid var(--border);border-radius:10px;text-decoration:none;">
+      <div style="width:40px;height:40px;border-radius:8px;background:rgba(26,58,92,.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏠</div>
+      <div style="text-align:left;"><div style="font-size:14px;font-weight:700;margin-bottom:2px;">Return to Module Home</div><div style="font-size:12px;color:var(--gray);">See all Lesson 4 resources</div></div>
+      <div style="margin-left:auto;font-size:18px;color:var(--muted);">→</div></a>
+    <button onclick="document.getElementById('whats-next-overlay').style.display='none'" style="margin-top:16px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;padding:4px 8px;">Stay on this page</button>
+  </div>
+</div>
+
+<script>
+let currentSlide = 0;
+const totalSlides = 6;
+const answered = {};
+
+function goSlide(n) {
+  if (window.ttsStop) window.ttsStop();
+  document.getElementById('slide-' + currentSlide).classList.remove('active');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  currentSlide = n;
+  document.getElementById('slide-' + n).classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems[n].classList.add('active');
+  for (let i = 0; i < n; i++) {
+    const dot = navItems[i].querySelector('.nav-dot');
+    dot.className = 'nav-dot completed'; dot.textContent = '✓';
+  }
+  navItems[n].querySelector('.nav-dot').className = 'nav-dot active';
+  const pct = Math.round(((n + 1) / totalSlides) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = (n + 1) + ' of ' + totalSlides;
+  window.scrollTo(0, 0);
+}
+
+const FB_RIGHT = {
+  q0:  '✓ Correct! Many chemo drugs cause damage that a healthy cell answers by activating <strong>p53</strong> and self-destructing. Without p53, some leukemia cells ignore the signal, survive, and regrow.',
+  q1:  '✓ Correct! An <strong>always-on enzyme</strong> is a gain-of-function target. A drug can block it, the way imatinib blocks BCR-ABL1. A missing protein is much harder to fix.',
+  q2:  '✓ Correct! CAR-T cells find <strong>CD19</strong> on the surface and switch on the cell\'s self-destruct machinery directly. The leukemia cell\'s missing p53 doesn\'t protect it.',
+  q3:  '✓ Correct! A gene mutated mostly in <strong>one subtype</strong> is a likely driver of that subtype, which makes it a candidate target. (That gene is NOTCH1. You\'ll see it in the portal.)',
+  q4:  '✓ Correct! Lab results are only the first step. Many drugs that work in a dish fail in <strong>Phase 1–3 trials</strong> because they are unsafe or don\'t work in people.',
+  qet1:'✓ Correct! No spindle means chromosomes can\'t be pulled apart, so the cell is stuck in <strong>M phase</strong>, the spindle checkpoint from Lesson 1.',
+  qet2:'✓ Correct! A <strong>tyrosine kinase inhibitor</strong> fits into the BCR-ABL1 enzyme and switches it off: targeted therapy.'
+};
+const FB_WRONG = {
+  q0:  '✗ Not quite. Think about what p53 does when a cell is damaged: it triggers <strong>apoptosis</strong>. Many chemo drugs depend on that response. Maya\'s leukemia cells don\'t have it.',
+  q1:  '✗ Not quite. Lost genes (TP53, RB1, repair genes) leave <strong>nothing to block</strong>. An always-on fusion enzyme is a gain-of-function target a drug can switch off.',
+  q2:  '✗ Not quite. CAR-T doesn\'t fix genes or block NRAS. It recognizes <strong>CD19</strong> on B cells and kills the cell directly, with no p53 needed.',
+  q3:  '✗ Not quite. Portal data show <strong>patterns</strong>, not guarantees. A gene mutated mainly in one subtype is likely a driver of that subtype and worth testing as a target.',
+  q4:  '✗ Not quite. Results in a dish don\'t prove a drug is safe or effective in people. That\'s what <strong>Phase 1, 2, and 3 clinical trials</strong> test.',
+  qet1:'✗ Not quite. Spindle fibers pull chromosomes apart during <strong>mitosis (M phase)</strong>. Without them, the cell can\'t finish dividing.',
+  qet2:'✗ Not quite. BCR-ABL1 is an always-on enzyme. A <strong>tyrosine kinase inhibitor</strong> (like imatinib) is the targeted therapy that blocks it.'
+};
+
+function checkQuiz(id, el, chosen, correct) {
+  if (answered[id]) return;
+  answered[id] = chosen;
+  const opts = document.querySelectorAll('#' + id + '-opts .quiz-opt');
+  opts.forEach(o => o.classList.add('disabled'));
+  const fb = document.getElementById(id + '-fb');
+  const letters = ['A','B','C','D'];
+  if (chosen === correct) {
+    el.classList.add('correct');
+    fb.className = 'quiz-feedback correct';
+    fb.innerHTML = FB_RIGHT[id] || '✓ Correct!';
+  } else {
+    el.classList.add('incorrect');
+    opts[letters.indexOf(correct)].classList.add('correct');
+    fb.className = 'quiz-feedback incorrect';
+    fb.innerHTML = FB_WRONG[id] || '✗ Not quite.';
+  }
+  fb.style.display = 'block';
+}
+
+// Keyboard access for quiz options and sidebar items (WCAG 2.1.1)
+document.querySelectorAll('.quiz-opt, .nav-item').forEach(function(el) {
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('role', 'button');
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+  });
+});
+
+function toggleReveal(id, btn) {
+  const body = document.getElementById(id);
+  const open = body.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+  btn.textContent = open ? 'Hide the explanation' : 'Reveal the explanation';
+}
+
+function updateCharCount() {
+  const len = document.getElementById('short-ans-input').value.length;
+  const el = document.getElementById('char-count');
+  el.textContent = len + ' / minimum 60 characters recommended';
+  el.style.color = len >= 60 ? '#16A34A' : '#64748B';
+}
+
+function showWhatNext() { document.getElementById('whats-next-overlay').style.display = 'flex'; }
+
+// ══════════════════════════════════════════════════════════════
+//  EXIT TICKET SUBMISSION — same setup as Lessons 1–2.
+//  Paste a Google Apps Script web-app URL or Formspree endpoint
+//  below. Leave '' to use the on-screen / clipboard fallback.
+// ══════════════════════════════════════════════════════════════
+const SUBMIT_URL = (window.CDGW_CONFIG && window.CDGW_CONFIG.SUBMIT_URL) || '';   // ← PASTE YOUR URL HERE
+
+function escHTML(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function submitExitTicket() {
+  const nameEl = document.getElementById('student-name');
+  const name = nameEl.value.trim();
+  const period = document.getElementById('student-period').value.trim();
+  const q1 = answered['qet1'], q2 = answered['qet2'];
+  const sa = document.getElementById('short-ans-input').value.trim();
+  nameEl.classList.remove('error');
+  if (!name) {
+    goSlide(0); nameEl.classList.add('error'); nameEl.focus();
+    alert('Please enter your name on Section 1 so your teacher can match this to you.');
+    return;
+  }
+  if (!q1 || !q2) { alert('Please answer both multiple choice questions before submitting.'); return; }
+  if (sa.length < 30) { alert('Please write a short answer response before submitting (at least two sentences).'); return; }
+
+  const payload = {
+    timestamp: new Date().toLocaleString(), name: name, period: period || '—',
+    q1: q1, q1Correct: q1 === 'D' ? 'Yes ✓' : 'No ✗',
+    q2: q2, q2Correct: q2 === 'B' ? 'Yes ✓' : 'No ✗',
+    shortAnswer: sa,
+    videoNotes: document.getElementById('video-notes').value.trim(),
+    module: 'Lesson 4 — Fighting Back: Lab to Patient'
+  };
+  const btn = document.getElementById('submit-btn');
+  btn.classList.add('loading'); btn.disabled = true;
+  document.getElementById('submit-error').style.display = 'none';
+  if (SUBMIT_URL) {
+    try {
+      await fetch(SUBMIT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(Object.assign({ classCode: (window.CDGW_CONFIG || {}).CLASS_CODE || '' }, payload)), mode: SUBMIT_URL.includes('formspree') ? 'cors' : 'no-cors' });
+      showCompletion(payload);
+    } catch (err) { showNetworkError(payload); }
+  } else {
+    showCompletion(payload);
+    console.warn('SUBMIT_URL not set. Data was not sent to a server.');
+  }
+  btn.classList.remove('loading'); btn.disabled = false;
+}
+
+function showCompletion(p) {
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('short-ans-section').style.opacity = '0.6';
+  document.getElementById('completion-wrap').style.display = 'block';
+  document.getElementById('done-btn').removeAttribute('disabled');
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete ✓';
+  const c1 = p.q1 === 'D' ? 'ss-correct' : 'ss-incorrect';
+  const c2 = p.q2 === 'B' ? 'ss-correct' : 'ss-incorrect';
+  document.getElementById('submitted-summary').innerHTML =
+    '<div class="ss-row"><span class="ss-label">Name</span><span class="ss-val">' + escHTML(p.name) + '</span></div>' +
+    '<div class="ss-row"><span class="ss-label">Period</span><span class="ss-val">' + escHTML(p.period) + '</span></div>' +
+    '<div class="ss-row"><span class="ss-label">Q1</span><span class="ss-val">Choice ' + p.q1 + ' — <span class="' + c1 + '">' + p.q1Correct + '</span></span></div>' +
+    '<div class="ss-row"><span class="ss-label">Q2</span><span class="ss-val">Choice ' + p.q2 + ' — <span class="' + c2 + '">' + p.q2Correct + '</span></span></div>' +
+    '<div class="ss-row"><span class="ss-label">Short Ans.</span><span class="ss-val">' + escHTML(p.shortAnswer) + '</span></div>' +
+    '<div class="ss-row"><span class="ss-label">Sent at</span><span class="ss-val">' + escHTML(p.timestamp) + '</span></div>';
+  window.scrollTo(0, 0);
+}
+
+function showNetworkError(p) {
+  const txt = ['Name: ' + p.name, 'Period: ' + p.period, 'Q1: ' + p.q1 + ' (' + p.q1Correct + ')', 'Q2: ' + p.q2 + ' (' + p.q2Correct + ')', 'Short Answer: ' + p.shortAnswer, 'Submitted: ' + p.timestamp].join('\n');
+  document.getElementById('fallback-text').textContent = txt;
+  const err = document.getElementById('submit-error');
+  err.style.display = 'block';
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(function(){});
+  err.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+/* ── FULL-LESSON PRINT ── */
+function printFullModule() {
+  const name = document.getElementById('student-name').value || '(not entered)';
+  const period = document.getElementById('student-period').value || '—';
+  function getChoice(id) {
+    const opts = document.querySelectorAll('#' + id + '-opts .quiz-opt');
+    const L = ['A','B','C','D'];
+    for (let i = 0; i < opts.length; i++) {
+      if (opts[i].classList.contains('incorrect') || (opts[i].classList.contains('correct') && answered[id] === L[i])) {
+        const t = opts[i].querySelector('div:last-child');
+        return L[i] + '. ' + (t ? t.textContent.trim() : '') + (answered[id] === L[i] && opts[i].classList.contains('correct') ? ' ✓' : ' ✗');
+      }
+    }
+    return '(not answered)';
+  }
+  function row(l, q, a) { return '<tr><td class="pm-qlabel">' + l + '</td><td>' + escHTML(q) + '</td><td class="pm-answer">' + escHTML(a) + '</td></tr>'; }
+  function val(id) { return (document.getElementById(id) || {}).value || '(not answered)'; }
+  const html = [
+    '<h1>Fighting Back: Lab to Patient — Student Responses</h1>',
+    '<div class="pm-meta"><strong>Name:</strong> ' + escHTML(name) + ' &nbsp;|&nbsp; <strong>Period:</strong> ' + escHTML(period) + ' &nbsp;|&nbsp; <strong>Printed:</strong> ' + new Date().toLocaleString() + '</div>',
+    '<h2>Section 1 · Chemotherapy</h2><table>', row('Q1','Why did Maya\u2019s leukemia relapse after chemo?', getChoice('q0')), '</table>',
+    '<h2>Section 2 · Targeted Therapy</h2><table>', row('Q2','Most promising target for a new drug?', getChoice('q1')), '</table>',
+    '<h2>Section 3 · CAR-T</h2><table>', row('Q3','Why might CD19 CAR-T work for Maya?', getChoice('q2')), '</table>',
+    '<h2>Section 4 · Genomic Data Portals</h2><table>', row('Q4','Gene mutated in 60% of T-ALL but almost no B-ALL?', getChoice('q3')), '</table>',
+    '<h2>Section 5 · From Lab to Patient</h2><table>', row('Q5','Evaluate the "cure found" headline', getChoice('q4')), '</table>',
+    '<div class="pm-salabel">Researcher video: one thing that surprised me</div><div class="pm-sa">' + escHTML(val('video-notes')) + '</div>',
+    '<h2>Section 6 · Exit Ticket</h2><table>',
+    row('ET Q1','Vincristine blocks spindle fibers. Which phase?', getChoice('qet1')),
+    row('ET Q2','Targeted treatment for BCR-ABL1?', getChoice('qet2')), '</table>',
+    '<div class="pm-salabel">Short Answer: Maya\u2019s next treatment</div><div class="pm-sa">' + escHTML(val('short-ans-input')) + '</div>',
+    '<div class="pm-footer">Cell Division Gone Wrong · Lesson 4 · LaShaudra Cox Learning Design · Grades 9–10</div>'
+  ].join('');
+  let modal = document.getElementById('print-modal');
+  if (!modal) { modal = document.createElement('div'); modal.id = 'print-modal'; document.body.appendChild(modal); }
+  modal.innerHTML = html;
+  document.body.classList.add('printing');
+  function cleanup() { document.body.classList.remove('printing'); window.removeEventListener('afterprint', cleanup); }
+  window.addEventListener('afterprint', cleanup);
+  window.print();
+}
+</script>
+
+<!-- ── LANGUAGE TRANSLATION WIDGET ── -->
+<div id="translate-bar">
+  <span class="tb-label">🌐</span>
+  <select id="lang-select" aria-label="Select language">
+    <option value="">Language</option>
+    <option value="es">Español</option>
+    <option value="zh-CN">中文 (简体)</option>
+    <option value="zh-TW">中文 (繁體)</option>
+    <option value="ar">العربية</option>
+    <option value="fr">Français</option>
+    <option value="vi">Tiếng Việt</option>
+    <option value="ko">한국어</option>
+    <option value="pt">Português</option>
+    <option value="ru">Русский</option>
+    <option value="hi">हिंदी</option>
+    <option value="ht">Kreyòl Ayisyen</option>
+    <option value="tl">Filipino</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+    <option value="so">Somali</option>
+    <option value="am">አማርኛ</option>
+    <option value="ur">اردو</option>
+    <option value="bn">বাংলা</option>
+    <option value="fa">فارسی</option>
+  </select>
+</div>
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+}
+function triggerTranslate(lang) {
+  var combo = document.querySelector('.goog-te-combo');
+  if (!combo) { setTimeout(function() { triggerTranslate(lang); }, 600); return; }
+  combo.value = lang;
+  var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', false, true); combo.dispatchEvent(evt);
+  if (lang === '') document.getElementById('lang-select').value = '';
+}
+document.getElementById('lang-select').addEventListener('change', function() { triggerTranslate(this.value); });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<!-- Read Aloud Bar -->
+<div id="tts-bar" role="toolbar" aria-label="Read Aloud Controls">
+  <span class="tts-icon" title="Read Aloud">&#128266;</span>
+  <span class="tts-label">Read Aloud</span>
+  <button id="tts-play" class="tts-btn tts-primary" onclick="ttsPlay()" title="Read current section">&#9654; Play</button>
+  <button id="tts-pause" class="tts-btn tts-secondary" onclick="ttsPauseResume()" disabled title="Pause / Resume">&#9646;&#9646;</button>
+  <button id="tts-stop" class="tts-btn tts-secondary" onclick="ttsStop()" disabled title="Stop">&#9632;</button>
+  <div class="tts-divider"></div>
+  <div class="tts-speed-row">
+    <span class="tts-speed-lbl">Speed</span>
+    <button class="tts-speed-btn" data-rate="0.8" onclick="ttsSetRate(0.8)">0.8&#215;</button>
+    <button class="tts-speed-btn tts-speed-active" data-rate="1" onclick="ttsSetRate(1)">1&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.25" onclick="ttsSetRate(1.25)">1.25&#215;</button>
+    <button class="tts-speed-btn" data-rate="1.5" onclick="ttsSetRate(1.5)">1.5&#215;</button>
+  </div>
+  <div class="tts-status" id="tts-status" style="display:none"><div class="tts-pulse"></div><span id="tts-status-text">Reading&hellip;</span></div>
+</div>
+
+<script>
+/* ═══ Read-Aloud Engine v2 (single instance) ═══
+   Reads the active section block by block with 500 ms pauses and
+   a teal outline on the block being read. */
+(function() {
+  var synth = window.speechSynthesis;
+  var _rate = 1.0, _playing = false, _paused = false, _sections = [], _idx = 0, _timer = null;
+
+  function extract(rootEl) {
+    var clone = rootEl.cloneNode(true);
+    ['button','select','svg','script','style','input','textarea','[aria-hidden="true"]','.slide-nav','.accum-btns']
+      .forEach(function(sel) { clone.querySelectorAll(sel).forEach(function(n) { n.remove(); }); });
+    var BLOCK = {DIV:1,P:1,H1:1,H2:1,H3:1,H4:1,LI:1,TD:1,TH:1,TR:1,CAPTION:1,BLOCKQUOTE:1,FIGCAPTION:1,LABEL:1};
+    var parts = [];
+    (function walk(node) {
+      if (node.nodeType === 3) { var t = node.nodeValue.replace(/\s+/g,' '); if (t.trim()) parts.push(t); return; }
+      if (node.nodeType !== 1) return;
+      var before = parts.length;
+      node.childNodes.forEach(walk);
+      if (BLOCK[node.tagName] && parts.length > before) {
+        var seg = parts.splice(before).join('').trim().replace(/\s+/g,' ');
+        if (seg) { if (!/[.!?:;—,]$/.test(seg)) seg += '.'; parts.push(seg + ' '); }
+      }
+    })(clone);
+    return parts.join('').replace(/\.{2,}/g,'.').replace(/\s+/g,' ').trim();
+  }
+  function getSections() {
+    var a = document.querySelector('.slide-card.active');
+    if (!a) return [];
+    var hdr = a.querySelector('.slide-header');
+    var body = a.querySelector('.slide-body');
+    var list = hdr ? [hdr] : [];
+    if (body) Array.from(body.children).forEach(function(el) {
+      if (el.offsetParent !== null && (el.textContent || '').trim().length > 15) list.push(el);
+    });
+    return list;
+  }
+  function clearHL() { document.querySelectorAll('.tts-reading').forEach(function(el) { el.classList.remove('tts-reading'); }); }
+  function readAt(i) {
+    clearTimeout(_timer);
+    if (i >= _sections.length) { done(); return; }
+    _idx = i; clearHL();
+    var sec = _sections[i];
+    sec.classList.add('tts-reading');
+    try { sec.scrollIntoView({ behavior:'smooth', block:'nearest' }); } catch(e) {}
+    var txt = extract(sec);
+    if (!txt) { readAt(i + 1); return; }
+    var u = new SpeechSynthesisUtterance(txt);
+    u.rate = _rate;
+    u.lang = (document.documentElement.lang || 'en');
+    u.onend = function() { if (_playing) _timer = setTimeout(function() { if (_playing && !_paused) readAt(i + 1); }, 500); };
+    u.onerror = function(e) { if (e.error !== 'interrupted' && e.error !== 'canceled') readAt(i + 1); };
+    synth.speak(u);
+    _playing = true; _paused = false; ui();
+  }
+  function done() { _playing = false; _paused = false; clearHL(); clearTimeout(_timer); ui(); }
+  function ui() {
+    var play = document.getElementById('tts-play'), pause = document.getElementById('tts-pause'),
+        stop = document.getElementById('tts-stop'), st = document.getElementById('tts-status'),
+        stx = document.getElementById('tts-status-text');
+    if (_playing) {
+      play.innerHTML = '&#8635; Restart'; pause.disabled = false; stop.disabled = false;
+      pause.innerHTML = _paused ? '&#9654;' : '&#9646;&#9646;';
+      st.style.display = 'flex';
+      stx.textContent = _paused ? 'Paused' : 'Block ' + (_idx + 1) + ' of ' + _sections.length;
+    } else {
+      play.innerHTML = '&#9654; Play'; pause.disabled = true; stop.disabled = true; st.style.display = 'none';
+    }
+  }
+  window.ttsPlay = function() { synth.cancel(); clearTimeout(_timer); _sections = getSections(); if (_sections.length) readAt(0); };
+  window.ttsPauseResume = function() { if (!_playing) return; if (_paused) { synth.resume(); _paused = false; } else { synth.pause(); _paused = true; } ui(); };
+  window.ttsStop = function() { synth.cancel(); clearTimeout(_timer); _playing = false; _paused = false; clearHL(); ui(); };
+  window.ttsSetRate = function(r) {
+    _rate = r;
+    document.querySelectorAll('.tts-speed-btn').forEach(function(b) { b.classList.toggle('tts-speed-active', parseFloat(b.dataset.rate) === r); });
+    if (_playing && !_paused) { var ri = _idx; synth.cancel(); clearTimeout(_timer); _timer = setTimeout(function() { readAt(ri); }, 100); }
+  };
+  document.addEventListener('visibilitychange', function() { if (document.hidden) window.ttsStop(); });
+})();
+</script>
+</body>
+</html>
