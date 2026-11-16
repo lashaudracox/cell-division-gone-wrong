@@ -68,7 +68,7 @@ This module asks high school biology students to think like pediatric cancer res
 | `Scaffolded_Diagram_Lesson2.html` | HTML | Pre-annotated cell cycle · discreet differentiation support |
 | `Extension_Activity_Lesson2.html` | HTML | TP53 mutation rate data analysis · early finishers |
 | `Exit_Ticket_Lesson2.html` | HTML | 2 MC + 1 short answer · Google Sheet auto-capture |
-| `Teacher_Facilitation_Guide_v3.docx` | DOCX | v3 · Tumor Board protocol · triage table · exemplars · signals |
+| `Teacher_Facilitation_Guide_Lesson2.docx` | DOCX | Tumor Board protocol · triage table · exemplars · signals |
 | `Teacher_Classroom_Deck_Lesson2.pptx` | PPTX | 10-slide projector deck · synced to facilitation timeline |
 | `Student_Digital_Lesson.pdf` | PDF | Print edition of the digital lesson |
 
